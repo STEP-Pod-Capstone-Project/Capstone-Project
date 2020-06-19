@@ -1,4 +1,3 @@
-
 package com.google.sps.data;
  
 /**
@@ -6,7 +5,7 @@ package com.google.sps.data;
  *
  * Note: The private variables in this class are converted into JSON.
  */
-public final class Book {
+public class Book {
     
   private final long id;
   private final long userID;
@@ -27,39 +26,35 @@ public final class Book {
  
   /** Constructor for a Book Object */
   public Book(long id, long userID, String gbookID){
-    Book(id, userID, gbookID, false, -1, null)
+    this(id, userID, gbookID, false, -1, "");
   }
  
   public long getID() {
     return id;
   }
  
-  public void setID(long id) {
-    this.id = id;
-  }
- 
   public long getUserID() {
     return this.userID;
   }
  
-  public void setUserID(long userID) {
-    this.userID = userID;
-  }
- 
-  public long getGbookID() {
+  public String getGbookID() {
     return this.gbookID;
-  }
- 
-  public void setGbookID(long gbookID) {
-    this.gbookID = gbookID;
   }
  
   public boolean hasRead() {
     return this.hasRead;
   }
+
+  public void read(int rating, String review) {
+    hasRead = true;
+    this.rating = rating;
+    this.review = review;
+  }
  
-  public boolean setHasRead(boolean hasRead) {
-    this.hasRead = hasRead;
+  public void unRead() {
+    hasRead = false;
+    rating = -1;
+    review = "";
   }
  
   public int getRating() {
