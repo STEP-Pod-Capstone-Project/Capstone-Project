@@ -19,5 +19,5 @@ jobs:
       with:
         java-version: 1.8
     - run: cd capstone-backend
-    - run: mvn package appengine:stage
     - run: mvn test
+    - run: mvn package appengine:stage
