@@ -5,5 +5,5 @@ tasks:
   - init: mvn appengine init
     command: cd capstone-backend; mvn package appengine:stage
 
-  - init: npm init run
+  - init: npm run init
     command: cd capstone-frontend; npm install; npm run build
