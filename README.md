@@ -1,6 +1,6 @@
 # BookBook - Capstone Project
 
-### Build Instructions:
+### Deployment Build Instructions:
 
 1. ### Backend Repo
 - mvn package appengine:deploy 
