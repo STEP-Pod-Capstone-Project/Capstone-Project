@@ -7,3 +7,6 @@ tasks:
 
   - init: npm run init
     command: cd capstone-frontend; npm install; npm run build
+vscode:
+  extensions:
+    - dsznajder.es7-react-js-snippets@2.7.1:adU40EmL4YfIciiaLc7LVQ==
