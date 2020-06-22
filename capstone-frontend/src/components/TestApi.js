@@ -10,19 +10,28 @@ export class TestApi extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
     console.log("Mounted");
 
-    console.log(fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/testData", {mode: 'cors'}));
+    // fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/testData", { credentials: 'include' })
+    //   .then(response => response.json())
+    //   .then(testData => this.setState({ testData }));
 
-    // fetch("/https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/testData").then(response => response.json()).then(testData => {
+    // fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/testData", { credentials: 'include' })
+    //   .then(response => response.json())
+    //   .then(testData => console.log(testData));
 
-    //   if (testData){
-    //     console.log("Got Here");
-    //   }
 
-    // });
+    fetch("/api/testData")
+      .then(response => response.json())
+      .then(testData => this.setState({ testData }));
+
+    fetch("/api/testData")
+      .then(response => response.json())
+      .then(testData => {
+        console.log(testData);
+      });
   }
 
 
@@ -30,8 +39,7 @@ export class TestApi extends Component {
     return (
       <div>
         <h1>Testing Api</h1>
-        <p>Fetch Data: </p>
-        <div id="test-data"></div>
+        <p>Fetch Data: {this.state.testData}</p>
       </div>
     )
   }
