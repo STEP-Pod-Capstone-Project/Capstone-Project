@@ -1,5 +1,5 @@
 runtime: nodejs12
-service: reactapp # Name of Service, instead of default
+service: default
 
 handlers:
 - url: /static/js/(.*)
