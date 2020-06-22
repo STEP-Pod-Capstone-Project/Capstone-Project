@@ -1,11 +1,14 @@
 package com.google.sps;
 
+<<<<<<< HEAD
 import com.google.sps.data.Club;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
+=======
+>>>>>>> creates Club object, basic tests
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,6 +16,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+
+import com.google.sps.data.Club;
+
+/** */
+>>>>>>> creates Club object, basic tests
 @RunWith(JUnit4.class)
 public final class ClubTest {
   private Club club;
@@ -78,12 +91,18 @@ public final class ClubTest {
   public void testPost() {
     club.post(POST_ONE);
     Assert.assertEquals(club.getPosts().size(), 1);
+<<<<<<< HEAD
 
+=======
+>>>>>>> creates Club object, basic tests
     List<String> list = new ArrayList<>(club.getPosts());
     Assert.assertEquals(list.get(0), POST_ONE);
 
     club.post(POST_TWO);
+<<<<<<< HEAD
 
+=======
+>>>>>>> creates Club object, basic tests
     Assert.assertEquals(club.getPosts().size(), 2);
     list = new ArrayList<>(club.getPosts());
     Assert.assertEquals(list.get(0), POST_ONE);
@@ -94,11 +113,16 @@ public final class ClubTest {
   public void testClearPost() {
     club.post(POST_ONE);
     club.post(POST_TWO);
+<<<<<<< HEAD
 
     Assert.assertEquals(club.getPosts().size(), 2);
 
     club.clearPosts();
 
+=======
+    Assert.assertEquals(club.getPosts().size(), 2);
+    club.clearPosts();
+>>>>>>> creates Club object, basic tests
     Assert.assertEquals(club.getPosts().size(), 0);
   }
 
@@ -111,13 +135,19 @@ public final class ClubTest {
   @Test
   public void testInvite() {
     club.invite(MEMBER_ONE);
+<<<<<<< HEAD
 
+=======
+>>>>>>> creates Club object, basic tests
     Assert.assertEquals(club.getInviteIDs().size(), 1);
     List<Long> list = new ArrayList<>(club.getInviteIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
 
     club.invite(MEMBER_TWO);
+<<<<<<< HEAD
 
+=======
+>>>>>>> creates Club object, basic tests
     Assert.assertEquals(club.getInviteIDs().size(), 2);
     list = new ArrayList<>(club.getInviteIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
@@ -127,7 +157,10 @@ public final class ClubTest {
   @Test
   public void testInviteList() {
     club.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO)));
+<<<<<<< HEAD
 
+=======
+>>>>>>> creates Club object, basic tests
     Assert.assertEquals(club.getInviteIDs().size(), 2);
     List<Long> list = new ArrayList<>(club.getInviteIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
@@ -139,7 +172,10 @@ public final class ClubTest {
     club.invite(MEMBER_ONE);
     club.invite(MEMBER_TWO);
     club.uninvite(MEMBER_TWO);
+<<<<<<< HEAD
 
+=======
+>>>>>>> creates Club object, basic tests
     Assert.assertEquals(club.getInviteIDs().size(), 1);
     List<Long> list = new ArrayList<>(club.getInviteIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
@@ -149,7 +185,10 @@ public final class ClubTest {
   public void testUninviteList() {
     club.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE)));
     club.uninvite(new ArrayList<>(Arrays.asList(MEMBER_TWO, MEMBER_THREE)));
+<<<<<<< HEAD
 
+=======
+>>>>>>> creates Club object, basic tests
     Assert.assertEquals(club.getInviteIDs().size(), 1);
     List<Long> list = new ArrayList<>(club.getInviteIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
@@ -164,8 +203,15 @@ public final class ClubTest {
     Assert.assertEquals(b, true);
     Assert.assertEquals(club.getInviteIDs().size(), 1);
     Assert.assertEquals(club.getMemberIDs().size(), 1);
+<<<<<<< HEAD
     List<Long> list = new ArrayList<>(club.getInviteIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_TWO));
+=======
+
+    List<Long> list = new ArrayList<>(club.getInviteIDs());
+    Assert.assertEquals(list.get(0), new Long(MEMBER_TWO));
+
+>>>>>>> creates Club object, basic tests
     list = new ArrayList<>(club.getMemberIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
   }
@@ -179,6 +225,10 @@ public final class ClubTest {
     Assert.assertEquals(b, false);
     Assert.assertEquals(club.getInviteIDs().size(), 2);
     Assert.assertEquals(club.getMemberIDs().size(), 0);
+<<<<<<< HEAD
+=======
+
+>>>>>>> creates Club object, basic tests
     List<Long> list = new ArrayList<>(club.getInviteIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
     Assert.assertEquals(list.get(1), new Long(MEMBER_TWO));
@@ -190,11 +240,16 @@ public final class ClubTest {
     club.addMember(MEMBER_ONE);
     club.addMember(MEMBER_TWO);
     club.addMember(MEMBER_THREE);
+<<<<<<< HEAD
 
     Assert.assertEquals(club.getMemberIDs().size(), 3);
 
     club.removeMember(MEMBER_TWO);
 
+=======
+    Assert.assertEquals(club.getMemberIDs().size(), 3);
+    club.removeMember(MEMBER_TWO);
+>>>>>>> creates Club object, basic tests
     Assert.assertEquals(club.getMemberIDs().size(), 2);
     List<Long> list = new ArrayList<>(club.getMemberIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
@@ -207,11 +262,16 @@ public final class ClubTest {
     club.addMember(MEMBER_ONE);
     club.addMember(MEMBER_TWO);
     club.addMember(MEMBER_THREE);
+<<<<<<< HEAD
 
     Assert.assertEquals(club.getMemberIDs().size(), 3);
 
     club.removeMembers(new ArrayList(Arrays.asList(MEMBER_ONE, MEMBER_TWO)));
 
+=======
+    Assert.assertEquals(club.getMemberIDs().size(), 3);
+    club.removeMembers(new ArrayList(Arrays.asList(MEMBER_ONE, MEMBER_TWO)));
+>>>>>>> creates Club object, basic tests
     Assert.assertEquals(club.getMemberIDs().size(), 1);
     List<Long> list = new ArrayList<>(club.getMemberIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_THREE));
