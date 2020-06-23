@@ -61,9 +61,6 @@ class Navbar extends Component {
                 <Link className="dropdown-item" to="/myreads">My Reads</Link>
                 <Link className="dropdown-item" to="/mylists">My Lists</Link>
                 <Link className="dropdown-item" to="/myclubs">My Clubs</Link>
-                <Link className="dropdown-item" to="/myrecs">My Recs</Link>
-                <Link className="dropdown-item" to="/myfriends">My Friends</Link>
-                <Link className="dropdown-item" to="/myaccount">My Account</Link>
               </div>
             </li>
 
