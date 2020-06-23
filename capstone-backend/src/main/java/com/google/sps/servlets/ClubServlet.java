@@ -1,5 +1,7 @@
 package com.google.sps.servlets;
 
+import com.google.sps.data.Club;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -11,14 +13,13 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 
-import com.google.sps.data.Club;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -65,10 +66,6 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setHeader("Access-Control-Allow-Methods", "GET");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
-
     String name = request.getParameter("name");
     String description = request.getParameter("description");
     long ownerID = Long.parseLong(request.getParameter("ownerID"));
@@ -83,7 +80,6 @@ public class ClubServlet extends HttpServlet {
       for(String s : request.getParameterValues("inviteIDs")) {
         inviteIDs.add(Long.parseLong(s));
       } 
-    }
 
     String gbookID = "";
     if (request.getParameter("gbookID") != null) {
