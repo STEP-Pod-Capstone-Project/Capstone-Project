@@ -1,0 +1,88 @@
+package com.google.sps;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.google.sps.data.BookList;
+
+@RunWith(JUnit4.class)
+public final class BookListTest {
+
+  private BookList bookList1;
+  private BookList bookList2;
+
+  private final String BOOKSHELF_ID_1 = "bookshelfID_1";
+  private final String BOOKSHELF_ID_2 = "bookshelfID_2";
+
+  private final Long USER_ID_1 = Long.valueOf(12345);
+  private final Long USER_ID_2 = Long.valueOf(67890);
+
+  private final ArrayList<Long> COLLABORATORS_IDs_1 = new ArrayList<>(
+      Arrays.asList((long) 123, (long) 321, (long) 345, (long) 543, (long) 234));
+
+  private final ArrayList<Long> COLLABORATORS_IDs_2 = new ArrayList<>(
+      Arrays.asList((long) 678, (long) 876, (long) 8910, (long) 789, (long) 1098));
+
+  @Before
+  public void setUp() {
+    bookList1 = new BookList(USER_ID_1, BOOKSHELF_ID_1, COLLABORATORS_IDs_1);
+    bookList2 = new BookList(USER_ID_2, BOOKSHELF_ID_2);
+  }
+
+  @Test
+  public void testContructors() {
+    assertNotEquals(bookList1, bookList2);
+    assertNotEquals(bookList1.getId(), bookList2.getId());
+  }
+
+  @Test
+  public void testGetters() {
+    assertEquals(USER_ID_1, bookList1.getUserID());
+    assertEquals(BOOKSHELF_ID_1, bookList1.getBookshelfID());
+    assertEquals(COLLABORATORS_IDs_1, bookList1.getCollaboratorsIDs());
+
+    assertEquals(USER_ID_2, bookList2.getUserID());
+    assertEquals(BOOKSHELF_ID_2, bookList2.getBookshelfID());
+    assertEquals(true, bookList2.getCollaboratorsIDs().isEmpty());
+  }
+
+  @Test
+  public void testSetters() {
+
+    bookList2.setUserID(USER_ID_1);
+    bookList2.setBookshelf(BOOKSHELF_ID_1);
+    bookList2.setCollaboratorsIDs(COLLABORATORS_IDs_2);
+
+    assertEquals(BOOKSHELF_ID_1, bookList2.getBookshelfID());
+    assertEquals(COLLABORATORS_IDs_2, bookList2.getCollaboratorsIDs());
+    assertEquals(USER_ID_1, bookList2.getUserID());
+  }
+
+  @Test
+  public void testIsEmptyAndClear() {
+
+    assertEquals(false, bookList1.isEmpty());
+
+    bookList1.clear();
+
+    assertEquals(true, bookList1.isEmpty());
+    assertNull(bookList1.getUserID());
+    assertEquals("", bookList1.getBookshelfID());
+    assertEquals(true, bookList1.getCollaboratorsIDs().isEmpty());
+
+    assertNotNull(bookList1.getId());
+
+    bookList2.clear();
+    assertEquals(bookList1.isEmpty(), bookList2.isEmpty());
+  }
+}

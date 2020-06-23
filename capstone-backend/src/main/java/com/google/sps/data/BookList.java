@@ -6,21 +6,27 @@ import java.util.Random;
 /**
  * The Book List object stores userID and bookshelfID.
  * 
- * These IDs variables are meant to be fetch from the Frontend,
- * to extract a User's data using the Google Books API.
+ * These IDs variables are meant to be fetch from the Frontend, to extract a
+ * User's data using the Google Books API.
  * 
- * Additionally, the Book List object also stores collaboratorsIDs. 
+ * Additionally, the Book List object also stores collaboratorsIDs.
  * 
  * The 'collaboratorsIDs' variable purpose is to allow the implemation of a
- * sharing feature between Book Lists. 
+ * sharing feature between Book Lists.
  * 
  */
-public class BookList {
+public final class BookList {
 
   private final long id = new Random().nextLong();
-  private String bookshelfID;
-  private long userID = -1;
+  private String bookshelfID = "";
+  private Long userID;
   private ArrayList<Long> collaboratorsIDs = new ArrayList<Long>();
+
+  public BookList(Long userID, String bookshelfID, ArrayList<Long> collaboratorsIDs) {
+    this.userID = userID;
+    this.bookshelfID = bookshelfID;
+    this.collaboratorsIDs = collaboratorsIDs;
+  }
 
   public BookList(Long userID, String bookshelfID) {
     this.userID = userID;
@@ -31,21 +37,25 @@ public class BookList {
     this.bookshelfID = bookshelfID;
   }
 
-  public void setUserID(long userID) {
+  public void setUserID(Long userID) {
     this.userID = userID;
   }
 
+  public void setCollaboratorsIDs(ArrayList<Long> collaboratorsIDs) {
+    this.collaboratorsIDs = collaboratorsIDs;
+  }
+
   public boolean isEmpty() {
-    return (userID == -1) && bookshelfID.equals("") && collaboratorsIDs.isEmpty();
+    return userID == null && bookshelfID.equals("") && collaboratorsIDs.isEmpty();
   }
 
   public void clear() {
-    userID = -1;
-    bookshelfID = null;
-    collaboratorsIDs.clear();    
+    userID = null;
+    bookshelfID = "";
+    collaboratorsIDs.clear();
   }
 
-  public long getUserID() {
+  public Long getUserID() {
     return userID;
   }
 
