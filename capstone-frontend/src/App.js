@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import CreateClub from './components/CreateClub.js';
+
 function App() {
   return (
     <div className="App">
