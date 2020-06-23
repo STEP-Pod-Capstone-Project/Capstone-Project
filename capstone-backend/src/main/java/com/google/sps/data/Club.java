@@ -21,31 +21,26 @@ public class Club {
   private Collection<Long> memberIDs;
   private Collection<Long> inviteIDs;
   private String gbookID;
- 
-  /** Constructor for a User Object */
-  public Club(long id, String name, String description, long ownerID, Collection<Long> inviteIDs, String gbookID){
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.announcement = "";
-    this.posts = new ArrayList<String>();
-    this.ownerID = ownerID;
-    this.memberIDs = new HashSet<Long>();
-    this.inviteIDs = inviteIDs;
-    this.gbookID = gbookID;
+
+  public Club(long id, String name, String description, String announcement, Collection<String> posts, 
+      long ownerID, Collection<Long> memberIDs, Collection<Long> inviteIDs, String gbookID) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.announcement = announcement;
+        this.posts = posts;
+        this.ownerID = ownerID;
+        this.memberIDs = memberIDs;
+        this.inviteIDs = inviteIDs;
+        this.gbookID = gbookID;
   }
 
-    /** Constructor for a User Object */
-  public Club(long id, String name, String description, long ownerID, String gbookID){
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.announcement = "";
-    this.posts = new ArrayList<String>();
-    this.ownerID = ownerID;
-    this.memberIDs = new HashSet<Long>();
-    this.inviteIDs = new HashSet<Long>();
-    this.gbookID = gbookID;
+  public Club(long id, String name, String description, String announcement, long ownerID, String gbookID){
+    this(id, name, description, announcement, new ArrayList<String>(), ownerID, new HashSet<Long>(), new HashSet<Long>(), gbookID);
+  }
+
+  public Club(long id, String name, String description, long ownerID, String gbookID) {
+    this(id, name, description, "", ownerID, gbookID);
   }
  
   public long getID() {
