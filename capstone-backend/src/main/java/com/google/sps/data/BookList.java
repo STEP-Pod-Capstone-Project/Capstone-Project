@@ -1,163 +1,60 @@
 package com.google.sps.data;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.FetchOptions;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * The Book List object stores userID and bookshelfID.
+ * 
+ * These IDs variables are meant to be fetch from the Frontend,
+ * to extract a User's data using the Google Books API.
+ * 
+ * Additionally, the Book List object also stores collaboratorsIDs. 
+ * 
+ * The 'collaboratorsIDs' variable purpose is to allow the implemation of a
+ * sharing feature between Book Lists. 
+ * 
+ */
 public class BookList {
 
   private final long id = new Random().nextLong();
-  private ArrayList<String> bookshelfIDs = new ArrayList<String>();
-  private ArrayList<Long> usersIDs = new ArrayList<Long>();
-  Entity bookListEntity = new Entity("BookList");
+  private String bookshelfID;
+  private long userID = -1;
+  private ArrayList<Long> collaboratorsIDs = new ArrayList<Long>();
 
-  public BookList(ArrayList<String> bookshelfIDs, ArrayList<Long> usersIDs) {
-    this.bookshelfIDs = bookshelfIDs;
-    this.usersIDs = usersIDs;
-
-    if (this.isEmpty()) {
-      bookListEntity.setProperty("id", id);
-
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-      for (String bookShelfID : bookshelfIDs) {
-
-        Entity bookshelfIdEntity = new Entity("BookShelf", bookListEntity.getKey());
-        bookshelfIdEntity.setProperty("id", bookShelfID);
-        datastore.put(bookListEntity);
-      }
-
-      for (long userID : usersIDs) {
-
-        Entity userIdEntity = new Entity("User", bookListEntity.getKey());
-        userIdEntity.setProperty("id", userID);
-        datastore.put(userIdEntity);
-      }
-
-      datastore.put(bookListEntity);
-    }
+  public BookList(Long userID, String bookshelfID) {
+    this.userID = userID;
+    this.bookshelfID = bookshelfID;
   }
 
-  public void addBookshelf(String bookshelfID) {
-    bookshelfIDs.add(bookshelfID);
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    Entity bookshelfIdEntity = new Entity("BookShelf", bookListEntity.getKey());
-    bookshelfIdEntity.setProperty("id", bookshelfID);
-    datastore.put(bookshelfIdEntity);
+  public void setBookshelf(String bookshelfID) {
+    this.bookshelfID = bookshelfID;
   }
 
-  public void addUser(long userID) {
-    usersIDs.add(userID);
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    Entity userIdEntity = new Entity("User", bookListEntity.getKey());
-    userIdEntity.setProperty("id", userID);
-    datastore.put(userIdEntity);
-  }
-
-  public boolean removeBookshelf(String bookshelfID) {
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    Query query = new Query(bookListEntity.getKey());
-    PreparedQuery results = datastore.prepare(query);
-
-    while (results.countEntities(FetchOptions.Builder.withLimit(5000)) != 0) {
-
-      for (Entity entity : results.asIterable()) {
-        if (entity.getKind().equals("BookShelf")) {
-
-          if ((String) entity.getProperty("id") == bookshelfID) {
-            datastore.delete(entity.getKey());
-          }
-        }
-      }
-    }
-
-    return bookshelfIDs.remove(bookshelfID);
-  }
-
-  public boolean removeUser(long userID) {
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    Query query = new Query(bookListEntity.getKey());
-    PreparedQuery results = datastore.prepare(query);
-
-    while (results.countEntities(FetchOptions.Builder.withLimit(5000)) != 0) {
-
-      for (Entity entity : results.asIterable()) {
-        if (entity.getKind().equals("User")) {
-
-          if ((long) entity.getProperty("id") == userID) {
-            datastore.delete(entity.getKey());
-          }
-        }
-      }
-    }
-
-    return usersIDs.remove(userID);
-  }
-
-  public boolean containsBookshelf(String bookshelfID) {
-    return bookshelfIDs.contains(bookshelfID);
-  }
-
-  public boolean containsUser(long userID) {
-    return usersIDs.contains(userID);
+  public void setUserID(long userID) {
+    this.userID = userID;
   }
 
   public boolean isEmpty() {
-    return bookshelfIDs.isEmpty() && usersIDs.isEmpty();
+    return (userID == -1) && bookshelfID.equals("") && collaboratorsIDs.isEmpty();
   }
 
   public void clear() {
-    bookshelfIDs.clear();
-    usersIDs.clear();
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    Query query = new Query(bookListEntity.getKey());
-    PreparedQuery results = datastore.prepare(query);
-
-    while (results.countEntities(FetchOptions.Builder.withLimit(5000)) != 0) {
-
-      for (Entity entity : results.asIterable()) {
-        datastore.delete(entity.getKey());
-      }
-    }
-  }
-
-  public int sizeBookshelfIDs() {
-    return bookshelfIDs.size();
-  }
-
-  public int sizeUsersIDs() {
-    return usersIDs.size();
+    userID = -1;
+    bookshelfID = null;
+    collaboratorsIDs.clear();    
   }
 
   public long getUserID() {
-    return usersIDs.get(0);
-  }
-
-  public long getUserID(int index) {
-    return usersIDs.get(index);
+    return userID;
   }
 
   public String getBookshelfID() {
-    return bookshelfIDs.get(0);
+    return bookshelfID;
   }
 
-  public String getBookshelfID(int index) {
-    return bookshelfIDs.get(index);
+  public ArrayList<Long> getCollaboratorsIDs() {
+    return collaboratorsIDs;
   }
 
   public long getId() {

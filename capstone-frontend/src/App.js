@@ -8,7 +8,6 @@ function App() {
   return (
     <div id="testApiID">
       <TestApi />
-      <TestBookList />
     </div>
   );
 }
