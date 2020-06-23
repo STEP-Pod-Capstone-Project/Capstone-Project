@@ -12,8 +12,6 @@ export class TestApi extends Component {
 
   componentDidMount() {
 
-    console.log("Mounted");
-
     // fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/testData", { credentials: 'include' })
     //   .then(response => response.json())
     //   .then(testData => this.setState({ testData }));
@@ -23,15 +21,15 @@ export class TestApi extends Component {
     //   .then(testData => console.log(testData));
 
 
-    fetch("/api/testData")
-      .then(response => response.json())
-      .then(testData => this.setState({ testData }));
+    // fetch("/api/testData")
+    //   .then(response => response.json())
+    //   .then(testData => this.setState({ testData }));
 
-    fetch("/api/testData")
-      .then(response => response.json())
-      .then(testData => {
-        console.log(testData);
-      });
+    // fetch("/api/testData")
+    //   .then(response => response.json())
+    //   .then(testData => {
+    //     console.log(testData);
+    //   });
   }
 
 
