@@ -1,0 +1,16 @@
+[debug] [2020-06-24T21:01:32.441Z] ----------------------------------------------------------------------
+[debug] [2020-06-24T21:01:32.443Z] Command:       /usr/local/bin/firebase /home/stevensolar/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase login
+[debug] [2020-06-24T21:01:32.443Z] CLI Version:   8.4.3
+[debug] [2020-06-24T21:01:32.443Z] Platform:      linux
+[debug] [2020-06-24T21:01:32.444Z] Node Version:  v12.16.1
+[debug] [2020-06-24T21:01:32.444Z] Time:          Wed Jun 24 2020 21:01:32 GMT+0000 (Coordinated Universal Time)
+[debug] [2020-06-24T21:01:32.444Z] ----------------------------------------------------------------------
+[debug] [2020-06-24T21:01:32.444Z] 
+[info] i  Firebase optionally collects CLI usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you.
+ 
+[info] i  To change your data collection preference at any time, run `firebase logout` and log in again. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=821269329&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...
