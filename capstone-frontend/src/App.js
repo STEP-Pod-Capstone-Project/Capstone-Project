@@ -2,6 +2,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Login } from './components/Login'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+
 
 function App() {
   return (
@@ -20,6 +23,11 @@ function App() {
           Learn React
         </a>
       </header>
+      <body>
+        <Router>
+          <Route path='/login' component={Login} />
+        </Router>
+      </body>
     </div>
   );
 }
