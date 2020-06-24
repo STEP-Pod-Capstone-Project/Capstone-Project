@@ -27,6 +27,9 @@ public final class BookListTest {
   private final Long USER_ID_1 = Long.valueOf(12345);
   private final Long USER_ID_2 = Long.valueOf(67890);
 
+  private final Long ID_1 = Long.valueOf(123456789);
+  private final Long ID_2 = Long.valueOf(987654321);
+
   private final ArrayList<Long> COLLABORATORS_IDs_1 = new ArrayList<>(
       Arrays.asList((long) 123, (long) 321, (long) 345, (long) 543, (long) 234));
 
@@ -35,7 +38,7 @@ public final class BookListTest {
 
   @Before
   public void setUp() {
-    bookList1 = new BookList(USER_ID_1, BOOKSHELF_ID_1, COLLABORATORS_IDs_1);
+    bookList1 = new BookList(USER_ID_1, BOOKSHELF_ID_1, COLLABORATORS_IDs_1, ID_1);
     bookList2 = new BookList(USER_ID_2, BOOKSHELF_ID_2);
   }
 
@@ -50,10 +53,12 @@ public final class BookListTest {
     assertEquals(USER_ID_1, bookList1.getUserID());
     assertEquals(BOOKSHELF_ID_1, bookList1.getBookshelfID());
     assertEquals(COLLABORATORS_IDs_1, bookList1.getCollaboratorsIDs());
+    assertEquals(ID_1, bookList1.getId());
 
     assertEquals(USER_ID_2, bookList2.getUserID());
     assertEquals(BOOKSHELF_ID_2, bookList2.getBookshelfID());
     assertEquals(true, bookList2.getCollaboratorsIDs().isEmpty());
+    assertNull(bookList2.getId());
   }
 
   @Test

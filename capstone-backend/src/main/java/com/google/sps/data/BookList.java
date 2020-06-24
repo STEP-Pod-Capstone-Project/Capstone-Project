@@ -1,7 +1,6 @@
 package com.google.sps.data;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * The Book List object stores userID and bookshelfID.
@@ -11,26 +10,30 @@ import java.util.Random;
  * 
  * Additionally, the Book List object also stores collaboratorsIDs.
  * 
- * The 'collaboratorsIDs' variable purpose is to allow the implemation of a
+ * The 'collaboratorsIDs' variable purpose is to allow the implementation of a
  * sharing feature between Book Lists.
  * 
  */
 public final class BookList {
 
-  private final long id = new Random().nextLong();
-  private String bookshelfID = "";
+  private Long id;
+  private String bookshelfID;
   private Long userID;
-  private ArrayList<Long> collaboratorsIDs = new ArrayList<Long>();
+  private ArrayList<Long> collaboratorsIDs;
 
-  public BookList(Long userID, String bookshelfID, ArrayList<Long> collaboratorsIDs) {
+  public BookList(Long userID, String bookshelfID, ArrayList<Long> collaboratorsIDs, Long id) {
     this.userID = userID;
     this.bookshelfID = bookshelfID;
     this.collaboratorsIDs = collaboratorsIDs;
+    this.id = id;
   }
 
-  public BookList(Long userID, String bookshelfID) {
-    this.userID = userID;
-    this.bookshelfID = bookshelfID;
+  public BookList(Long userID, String bookshelfID, ArrayList<Long> collaboratorsIDs) {
+    this(userID, bookshelfID, collaboratorsIDs, null);
+  }
+
+  public BookList(Long userID, String bookshelfID){
+    this(userID, bookshelfID, null, null);
   }
 
   public void setBookshelf(String bookshelfID) {
@@ -43,6 +46,10 @@ public final class BookList {
 
   public void setCollaboratorsIDs(ArrayList<Long> collaboratorsIDs) {
     this.collaboratorsIDs = collaboratorsIDs;
+  }
+
+  public void setID(Long id){
+    this.id = id;
   }
 
   public boolean isEmpty() {
@@ -67,7 +74,23 @@ public final class BookList {
     return collaboratorsIDs;
   }
 
-  public long getId() {
+  public void addCollaborator(Long collaborator){
+    collaboratorsIDs.add(collaborator);
+  }
+
+  public void addCollaborator(int index, Long collaborator){
+    collaboratorsIDs.add(index, collaborator);
+  }
+
+  public boolean removeCollaborator(Long collaborator){
+    return collaboratorsIDs.remove(collaborator);
+  }
+
+  public Long removeCollaborator(int index){
+    return collaboratorsIDs.remove(index);
+  }
+
+  public Long getId() {
     return this.id;
   }
 }
