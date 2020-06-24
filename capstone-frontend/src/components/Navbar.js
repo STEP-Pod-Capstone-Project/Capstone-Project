@@ -39,7 +39,7 @@ class Navbar extends Component {
     const navLibClassTwo = "dropdown-menu " + showLib;
 
     return (
-      <nav className="navbar navbar-expand-md navbar-dark bg-primary fixed-top text-center">
+      <nav id="navbar" className="navbar navbar-expand-md navbar-dark bg-primary fixed-top text-center">
         <button type="button" onClick={this.toggleNavbar} className={`${navClassTwo}`}>
           <span className="navbar-toggler-icon"></span>
         </button>

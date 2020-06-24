@@ -37,16 +37,12 @@
   }
 }
 
-body {
-  padding-top: 28px;
-}
-
 #body-row {
-  margin-left:0;
-  margin-right:0;
+  margin-top: 56px;
 }
 
 #sidebar-container {
+  margin-top: 56px;
   min-height: 100vh;   
   background-color: #333;
   padding: 0;
