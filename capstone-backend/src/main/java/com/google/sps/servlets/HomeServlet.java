@@ -19,8 +19,7 @@ public class HomeServlet extends HttpServlet {
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader("Access-Control-Allow-Origin",
         "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/");
-
-    response.getWriter().println("<p>Working.</p>");
+        
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
