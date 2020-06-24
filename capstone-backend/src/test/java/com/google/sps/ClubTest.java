@@ -79,6 +79,7 @@ public final class ClubTest {
     club.post(POST_ONE);
 
     Assert.assertEquals(club.getPosts().size(), 1);
+
     List<String> list = new ArrayList<>(club.getPosts());
     Assert.assertEquals(list.get(0), POST_ONE);
 
@@ -166,7 +167,6 @@ public final class ClubTest {
     Assert.assertEquals(club.getMemberIDs().size(), 1);
     List<Long> list = new ArrayList<>(club.getInviteIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_TWO));
-
     list = new ArrayList<>(club.getMemberIDs());
     Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
   }
@@ -191,10 +191,6 @@ public final class ClubTest {
     club.addMember(MEMBER_ONE);
     club.addMember(MEMBER_TWO);
     club.addMember(MEMBER_THREE);
-
-    Assert.assertEquals(club.getMemberIDs().size(), 3);
-
-    club.removeMember(MEMBER_TWO);
 
     Assert.assertEquals(club.getMemberIDs().size(), 3);
 

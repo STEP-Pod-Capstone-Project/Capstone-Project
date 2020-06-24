@@ -31,10 +31,6 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setHeader("Access-Control-Allow-Methods", "GET");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
-    
     String stringID = request.getParameter("id");
     Query query = new Query("Club");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
