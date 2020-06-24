@@ -18,7 +18,7 @@ public final class BookList {
 
   private Long id;
   private Long userID;
-  private String bookshelfID = "";
+  private String bookshelfID;
   private ArrayList<Long> collaboratorsIDs;
 
   public BookList(Long userID, String bookshelfID, ArrayList<Long> collaboratorsIDs, Long id) {
