@@ -27,6 +27,9 @@ public final class BookListTest {
   private final Long USER_ID_1 = Long.valueOf(12345);
   private final Long USER_ID_2 = Long.valueOf(67890);
 
+  private final Long COLLABORATOR_ID_1 = Long.valueOf(1111);
+  private final Long COLLABORATOR_ID_2 = Long.valueOf(2222);
+
   private final Long ID_1 = Long.valueOf(123456789);
   private final Long ID_2 = Long.valueOf(987654321);
 
@@ -44,12 +47,22 @@ public final class BookListTest {
 
   @Test
   public void testContructors() {
+
     assertNotEquals(bookList1, bookList2);
-    assertNotEquals(bookList1.getId(), bookList2.getId());
+
+    // Test Diff
+    assertNotEquals(bookList1.getUserID(), bookList2.getUserID());
+    assertNotEquals(bookList1.getBookshelfID(), bookList2.getBookshelfID());
+
+    assertNotEquals(bookList1.getBookshelfID(), bookList2.getBookshelfID());
+
+    assertNotNull(bookList1.getId());
+    assertNull(bookList2.getId());
   }
 
   @Test
   public void testGetters() {
+
     assertEquals(USER_ID_1, bookList1.getUserID());
     assertEquals(BOOKSHELF_ID_1, bookList1.getBookshelfID());
     assertEquals(COLLABORATORS_IDs_1, bookList1.getCollaboratorsIDs());
@@ -67,10 +80,29 @@ public final class BookListTest {
     bookList2.setUserID(USER_ID_1);
     bookList2.setBookshelf(BOOKSHELF_ID_1);
     bookList2.setCollaboratorsIDs(COLLABORATORS_IDs_2);
+    bookList2.setID(ID_2);
 
     assertEquals(BOOKSHELF_ID_1, bookList2.getBookshelfID());
-    assertEquals(COLLABORATORS_IDs_2, bookList2.getCollaboratorsIDs());
     assertEquals(USER_ID_1, bookList2.getUserID());
+    assertEquals(COLLABORATORS_IDs_2, bookList2.getCollaboratorsIDs());
+    assertEquals(ID_2, bookList2.getId());
+  }
+
+  @Test
+  public void testAddRemoveContainsCollaborators(){
+
+    bookList1.addCollaborator(COLLABORATOR_ID_2);
+    assertEquals(true, bookList1.containsCollaborator(COLLABORATOR_ID_2));
+
+    bookList2.addCollaborator(0, COLLABORATOR_ID_1);
+    assertEquals(COLLABORATOR_ID_1, bookList2.getCollaborator(0));
+
+    bookList1.removeCollaborator(COLLABORATOR_ID_2);
+    assertEquals(false, bookList1.containsCollaborator(COLLABORATOR_ID_2));
+
+    bookList2.removeCollaborator(0);
+    assertEquals(false, bookList2.containsCollaborator(COLLABORATOR_ID_1));
+
   }
 
   @Test

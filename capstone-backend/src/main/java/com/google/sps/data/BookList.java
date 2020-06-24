@@ -17,8 +17,8 @@ import java.util.ArrayList;
 public final class BookList {
 
   private Long id;
-  private String bookshelfID;
   private Long userID;
+  private String bookshelfID = "";
   private ArrayList<Long> collaboratorsIDs;
 
   public BookList(Long userID, String bookshelfID, ArrayList<Long> collaboratorsIDs, Long id) {
@@ -33,7 +33,7 @@ public final class BookList {
   }
 
   public BookList(Long userID, String bookshelfID){
-    this(userID, bookshelfID, null, null);
+    this(userID, bookshelfID, new ArrayList<Long>(), null);
   }
 
   public void setBookshelf(String bookshelfID) {
@@ -74,20 +74,28 @@ public final class BookList {
     return collaboratorsIDs;
   }
 
-  public void addCollaborator(Long collaborator){
-    collaboratorsIDs.add(collaborator);
+  public Long getCollaborator(int index){
+    return collaboratorsIDs.get(index);
   }
 
-  public void addCollaborator(int index, Long collaborator){
-    collaboratorsIDs.add(index, collaborator);
+  public void addCollaborator(Long collaboratorID){
+    collaboratorsIDs.add(collaboratorID);
   }
 
-  public boolean removeCollaborator(Long collaborator){
-    return collaboratorsIDs.remove(collaborator);
+  public void addCollaborator(int index, Long collaboratorID){
+    collaboratorsIDs.add(index, collaboratorID);
+  }
+
+  public boolean removeCollaborator(Long collaboratorID){
+    return collaboratorsIDs.remove(collaboratorID);
   }
 
   public Long removeCollaborator(int index){
     return collaboratorsIDs.remove(index);
+  }
+
+  public boolean containsCollaborator(Long collaboratorID){
+    return collaboratorsIDs.contains(collaboratorID);
   }
 
   public Long getId() {
