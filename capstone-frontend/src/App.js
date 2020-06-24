@@ -24,10 +24,8 @@ function App() {
             Learn React
         </a>
         </header>
-        <body>
 
-          <Route path='/login' component={Login} />
-        </body>
+        <Route path='/login' component={Login} />
 
       </div>
     </Router>
