@@ -1,4 +1,4 @@
-package com.google.sps;
+package com.google.sps.data;
 
 import org.junit.Before;
 import org.junit.Test;
