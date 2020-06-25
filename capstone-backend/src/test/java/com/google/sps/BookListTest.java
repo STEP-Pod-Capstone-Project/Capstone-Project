@@ -10,7 +10,8 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Arrays;
 
 import com.google.sps.data.BookList;
@@ -33,10 +34,10 @@ public final class BookListTest {
   private final Long ID_1 = Long.valueOf(123456789);
   private final Long ID_2 = Long.valueOf(987654321);
 
-  private final ArrayList<Long> COLLABORATORS_IDs_1 = new ArrayList<>(
+  private final Collection<Long> COLLABORATORS_IDs_1 = new HashSet<Long>(
       Arrays.asList((long) 123, (long) 321, (long) 345, (long) 543, (long) 234));
 
-  private final ArrayList<Long> COLLABORATORS_IDs_2 = new ArrayList<>(
+  private final Collection<Long> COLLABORATORS_IDs_2 = new HashSet<Long>(
       Arrays.asList((long) 678, (long) 876, (long) 8910, (long) 789, (long) 1098));
 
   @Before
@@ -94,13 +95,13 @@ public final class BookListTest {
     bookList1.addCollaborator(COLLABORATOR_ID_2);
     assertEquals(true, bookList1.containsCollaborator(COLLABORATOR_ID_2));
 
-    bookList2.addCollaborator(0, COLLABORATOR_ID_1);
-    assertEquals(COLLABORATOR_ID_1, bookList2.getCollaborator(0));
+    bookList2.addCollaborator(COLLABORATOR_ID_1);
+    assertEquals(true, bookList2.containsCollaborator(COLLABORATOR_ID_1));
 
     bookList1.removeCollaborator(COLLABORATOR_ID_2);
     assertEquals(false, bookList1.containsCollaborator(COLLABORATOR_ID_2));
 
-    bookList2.removeCollaborator(0);
+    bookList2.removeCollaborator(COLLABORATOR_ID_1);
     assertEquals(false, bookList2.containsCollaborator(COLLABORATOR_ID_1));
 
   }

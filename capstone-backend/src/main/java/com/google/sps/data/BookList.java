@@ -1,6 +1,7 @@
 package com.google.sps.data;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * The Book List object stores userID and bookshelfID.
@@ -19,21 +20,21 @@ public final class BookList {
   private Long id;
   private Long userID;
   private String bookshelfID;
-  private ArrayList<Long> collaboratorsIDs;
+  private Collection<Long> collaboratorsIDs;
 
-  public BookList(Long userID, String bookshelfID, ArrayList<Long> collaboratorsIDs, Long id) {
+  public BookList(Long userID, String bookshelfID, Collection<Long> collaboratorsIDs, Long id) {
     this.userID = userID;
     this.bookshelfID = bookshelfID;
     this.collaboratorsIDs = collaboratorsIDs;
     this.id = id;
   }
 
-  public BookList(Long userID, String bookshelfID, ArrayList<Long> collaboratorsIDs) {
+  public BookList(Long userID, String bookshelfID, Collection<Long> collaboratorsIDs) {
     this(userID, bookshelfID, collaboratorsIDs, null);
   }
 
   public BookList(Long userID, String bookshelfID){
-    this(userID, bookshelfID, new ArrayList<Long>(), null);
+    this(userID, bookshelfID, new HashSet<Long>(), null);
   }
 
   public void setBookshelf(String bookshelfID) {
@@ -44,7 +45,7 @@ public final class BookList {
     this.userID = userID;
   }
 
-  public void setCollaboratorsIDs(ArrayList<Long> collaboratorsIDs) {
+  public void setCollaboratorsIDs(Collection<Long> collaboratorsIDs) {
     this.collaboratorsIDs = collaboratorsIDs;
   }
 
@@ -70,28 +71,16 @@ public final class BookList {
     return bookshelfID;
   }
 
-  public ArrayList<Long> getCollaboratorsIDs() {
+  public Collection<Long> getCollaboratorsIDs() {
     return collaboratorsIDs;
-  }
-
-  public Long getCollaborator(int index){
-    return collaboratorsIDs.get(index);
   }
 
   public void addCollaborator(Long collaboratorID){
     collaboratorsIDs.add(collaboratorID);
   }
 
-  public void addCollaborator(int index, Long collaboratorID){
-    collaboratorsIDs.add(index, collaboratorID);
-  }
-
   public boolean removeCollaborator(Long collaboratorID){
     return collaboratorsIDs.remove(collaboratorID);
-  }
-
-  public Long removeCollaborator(int index){
-    return collaboratorsIDs.remove(index);
   }
 
   public boolean containsCollaborator(Long collaboratorID){
