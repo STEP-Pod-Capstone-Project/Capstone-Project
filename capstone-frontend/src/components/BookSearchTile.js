@@ -8,7 +8,7 @@ class BookSearchTile extends Component {
         <img className="book-img-med" src={this.props.thumbnailLink} alt={this.props.title}/>
         <div>
           <div className="title"> {this.props.title} </div>
-          <div className="author"> {this.props.author} </div>
+          <div className="author"> {this.props.author.join()} </div>
         </div>
       </div>
     );
