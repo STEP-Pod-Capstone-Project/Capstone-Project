@@ -25,22 +25,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that allows users to post and get comments. */
+/** Servlet that allows users to post and get clubs. */
 @WebServlet("/api/clubs")
 public class ClubServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String stringID = request.getParameter("id");
     Query query = new Query("Club");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    long id = Long.parseLong(stringID);
-
     PreparedQuery results = datastore.prepare(query);
-    
     List<Entity> entities = results.asList(FetchOptions.Builder.withLimit(5));
+
     List<Club> clubs = new ArrayList<>();
     for(Entity e : entities) {
+      long id = (long) e.getKey().getId();
       String name = (String) e.getProperty("name");
       String description = (String) e.getProperty("description");
       String announcement = (String) e.getProperty("announcement");
