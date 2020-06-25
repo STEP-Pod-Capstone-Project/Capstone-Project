@@ -1,7 +1,7 @@
 
 import React from 'react';
 import {
-  Route, 
+  Route,
   BrowserRouter as Router
 } from 'react-router-dom';
 
@@ -17,7 +17,6 @@ import Navbar from './components/Navbar';
 import LeftSideBar from './components/LeftSideBar';
 import RightSideBar from './components/RightSideBar';
 
-import { Login } from './components/Login'
 
 function App() {
   return (
@@ -35,10 +34,8 @@ function App() {
           <Route path='/listdetails' render={(props) => <ListPage {...props} />} />
         </div>
         <RightSideBar />
-
-        <Route path='/' component={Login} />
       </div>
-    </Router> 
+    </Router>
   );
 }
 

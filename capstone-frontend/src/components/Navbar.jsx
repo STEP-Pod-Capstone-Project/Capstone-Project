@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Login } from "./Login"
 import '../App.css';
 
 class Navbar extends Component {
@@ -15,7 +16,7 @@ class Navbar extends Component {
 
   toggleNavbar() {
     this.setState({
-    navCollapsed: !this.state.navCollapsed,
+      navCollapsed: !this.state.navCollapsed,
       navLibraryCollapsed: true
     });
   }
@@ -63,6 +64,7 @@ class Navbar extends Component {
             </li>
           </ul>
         </div>
+        <Login />
       </nav>
     );
   }
