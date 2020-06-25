@@ -10,9 +10,8 @@ import {
   BrowserRouter as Router, 
   Link
 } from 'react-router-dom'; 
-import { getByTestId } from "@testing-library/react";
 
-var container = document.createElement("div");
+const container = document.createElement("div");
 document.body.appendChild(container);
 
 test('renders sidebar test', () => {

@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class BookPage extends Component {
-  render() {
-    return (
-      <div> render a book's info- picture, author, title, description, etc </div>
-    );
-  }
-}
+const BookPage = () => {
+  return (
+    <div> render a book's info- picture, author, title, description, etc </div>
+  );
+};
 
 export default BookPage;

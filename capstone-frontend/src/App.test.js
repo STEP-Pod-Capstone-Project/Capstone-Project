@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import App from './App';
 
-var container = document.createElement("div");
+const container = document.createElement("div");
 document.body.appendChild(container);
 
 test('renders sidebar', () => {
