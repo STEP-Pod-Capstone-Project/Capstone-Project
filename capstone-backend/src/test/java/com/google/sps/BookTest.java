@@ -21,13 +21,12 @@ public final class BookTest {
   private static final String GBOOK_ID1 = "gbookID_1";
   private static final String GBOOK_ID2 = "gbookID_2";
 
-
   @Before
   public void setUp() {
     bookOne = new Book(1, 11, GBOOK_ID1, true, 3, ORIGINAL_REVIEW);
     bookTwo = new Book(2, 22, GBOOK_ID2);
   }
-  
+
   @Test
   public void testConstructor() {
     Assert.assertEquals(bookOne.getID(), 1);
@@ -45,7 +44,7 @@ public final class BookTest {
     Assert.assertEquals(bookTwo.getReview(), "");
   }
 
-  @Test 
+  @Test
   public void testUnRead() {
     bookOne.unRead();
     Assert.assertEquals(bookOne.hasRead(), false);
@@ -53,7 +52,7 @@ public final class BookTest {
     Assert.assertEquals(bookOne.getReview(), "");
   }
 
-  @Test 
+  @Test
   public void testRead() {
     bookTwo.read(2, NEW_REVIEW);
     Assert.assertEquals(bookTwo.hasRead(), true);
