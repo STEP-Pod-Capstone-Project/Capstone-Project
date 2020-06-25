@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+#body-row {
+  margin-top: 56px;
+}
+
+.sidebar-container {
+  margin-top: 56px;
+  min-height: 100vh;   
+  background-color: #333;
+}
