@@ -50,26 +50,49 @@ export class Login extends Component {
 
 
             <div className={this.state.profileMenuCollapsed ? "dropdown-menu show" : "dropdown-menu"}>
-
               <a className="dropdown-item" href="/">
                 <GoogleLogout
                   buttonText="Logout"
                   onLogoutSuccess={this.logoutResponse}
                   isSignedIn={false} />
-
               </a>
-
             </div>
 
 
           </div>
 
-          : <GoogleLogin
+          : 
+          
+          <div>
+
+
+            <button className="dropdown-toggle" type="button" onClick={this.toggleProfileMenu}>
+
+              <img id="profile-pic"
+                className="img-responsive rounded-circle"
+                src={"/images/default_account.png"}
+                alt="Default Profile" />
+
+            </button>
+
+
+            <div className={this.state.profileMenuCollapsed ? "dropdown-menu show" : "dropdown-menu"}>
+              <a className="dropdown-item" href="/">
+                <GoogleLogin
             clientId="962122785123-r4ps71sg5eobh9riec89s9kas6dpvraj.apps.googleusercontent.com"
             buttonText="Login"
             onSuccess={this.loginResponseSuccess}
             isSignedIn={true}
-            cookiePolicy={"single_host_origin"} />}
+            cookiePolicy={"single_host_origin"} />
+                
+              </a>
+            </div>
+
+
+          </div>
+          
+          
+          }
       </div>
     )
   }
