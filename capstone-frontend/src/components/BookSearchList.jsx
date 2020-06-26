@@ -9,13 +9,12 @@ class BookSearchList extends Component {
     this.state = {
       bookList: []
     }
-    this.searchQuery = "Lord of the Flies";
     this.getData = this.getData.bind(this);
   }
 
-
   getData() {
-    fetch(`https://8080-cs-60845877040-default.us-central1.cloudshell.dev/search?searchTerm={${this.searchQuery}}`, {credentials: 'include'})
+    console.log("getting data for " + this.props.searchQuery);
+    fetch(`/api/search?searchTerm=${this.props.searchQuery}`, {credentials: 'include'})
       .then(response => response.json())
       .then(res => this.setState({ bookList: res }))
       .catch(err => console.log(err));

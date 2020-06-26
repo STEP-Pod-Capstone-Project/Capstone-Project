@@ -1,29 +1,61 @@
-import React from 'react';
-import logo from './logo.svg';
+
+import React, { Component } from 'react';
+import { Redirect } from 'react-router'
+import {
+  Route, 
+  BrowserRouter as Router,
+  withRouter
+} from 'react-router-dom';
+
 import './App.css';
+import Home from './components/Home';
+import Browse from './components/Browse';
+import MyBooks from './components/MyBooks';
+import MyLists from './components/MyLists';
+import MyClubs from './components/MyClubs';
+import BookPage from './components/BookPage';
+import ListPage from './components/ListPage';
 
-import SearchView from './components/pages/SearchView';
+import Navbar from './components/Navbar';
+import LeftSideBar from './components/LeftSideBar';
+import RightSideBar from './components/RightSideBar';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <SearchView />
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchQuery: ""
+    };
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onChange(value) {
+    if (value !== this.state.searchQuery) {
+      this.setState({ searchQuery:value });
+      console.log("state " + this.state.searchQuery);
+    }
+  }
+
+  render() {
+    return (
+      <Router>
+        <Navbar setSearchQuery={this.onChange} />
+        <div className="row">
+          <LeftSideBar />
+          <div className="col-12 col-md-8" id="body-row">
+            <Route exact path='/' component={Home} />
+            <Route path='/browse/:query' component={Browse} />
+            <Route path='/mybooks' component={MyBooks} />
+            <Route path='/mylists' component={MyLists} />
+            <Route path='/myclubs' component={MyClubs} />
+            <Route path='/bookdetails' render={(props) => <BookPage {...props} />} />
+            <Route path='/listdetails' render={(props) => <ListPage {...props} />} />
+          </div>
+          <RightSideBar />
+        </div>
+      </Router> 
+    );
+  }
 }
 
 export default App;

@@ -1,0 +1,9 @@
+# Rules for dispatch file...
+# Put specific cases at the top.
+dispatch:
+# Route the urls that point to the Java backend's API calls
+  - url: "*/api/*"
+    service: backend
+# Route all other urls to the React.js frontend
+  - url: "*/*"
+    service: default

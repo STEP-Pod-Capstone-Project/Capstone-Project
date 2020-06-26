@@ -2,7 +2,6 @@ package com.google.sps;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -23,13 +22,12 @@ public final class UserTest {
   private static final String USERNAME_TWO = "usernameTwo";
   private static final String NEW_USERNAME = "newUsername";
 
-
   @Before
   public void setUp() {
     userOne = new User(1, EMAIL_ONE, USERNAME_ONE);
     userTwo = new User(2, EMAIL_TWO, USERNAME_TWO);
   }
-  
+
   @Test
   public void testConstructor() {
     Assert.assertEquals(userOne.getID(), 1);
@@ -43,21 +41,21 @@ public final class UserTest {
     Assert.assertEquals(userTwo.getFriends().size(), 0);
   }
 
-  @Test 
+  @Test
   public void testEmail() {
     userOne.setEmail(NEW_EMAIL);
     Assert.assertEquals(userOne.getEmail(), NEW_EMAIL);
     Assert.assertEquals(userTwo.getEmail(), EMAIL_TWO);
   }
 
-  @Test 
+  @Test
   public void testUsername() {
     userOne.setUsername(NEW_USERNAME);
     Assert.assertEquals(userOne.getUsername(), NEW_USERNAME);
     Assert.assertEquals(userTwo.getUsername(), USERNAME_TWO);
   }
 
-  @Test 
+  @Test
   public void testAddFriend() {
     userOne.addFriend(new Long(3));
     Assert.assertEquals(userOne.getFriends().size(), 1);
@@ -67,7 +65,7 @@ public final class UserTest {
     Assert.assertEquals(userTwo.getFriends().size(), 0);
   }
 
-  @Test 
+  @Test
   public void testClearFriends() {
     userOne.addFriend(new Long(3));
     userOne.addFriend(new Long(4));

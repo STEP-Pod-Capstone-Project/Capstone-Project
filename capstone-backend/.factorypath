@@ -1,0 +1,5 @@
+<factorypath>
+    <factorypathentry kind="VARJAR" id="M2_REPO/javax/servlet/javax.servlet-api/4.0.1/javax.servlet-api-4.0.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/appengine/appengine-api-1.0-sdk/1.9.59/appengine-api-1.0-sdk-1.9.59.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>

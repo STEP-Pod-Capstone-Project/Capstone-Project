@@ -45,8 +45,6 @@ public class SearchServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response = addHeadersToResponse(response);
-    
     String fullOutput = "";
     String searchTerm = request.getParameter("searchTerm");
     int maxResults = parseNaturalNumber(request.getParameter("maxResults"));
@@ -58,7 +56,7 @@ public class SearchServlet extends HttpServlet {
     searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
 
     try {
-      String formattedURL = String.format("https://www.googleapis.com/books/v1/volumes?q={%s}&maxResults=%d",
+      String formattedURL = String.format("https://www.googleapis.com/books/v1/volumes?q={%s}&maxResults=%d&country=US",
         searchTerm, maxResults);
 		  URL url = new URL(formattedURL);
 		  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -83,7 +81,7 @@ public class SearchServlet extends HttpServlet {
       e.printStackTrace();
     }
     
-    response.setContentType("text/json;");
+    response.setContentType("application/json;");
     Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
     response.getWriter().println(gson.toJson(convertResponseToVolumeData(fullOutput)));
@@ -151,7 +149,7 @@ public class SearchServlet extends HttpServlet {
   public static HttpServletResponse addHeadersToResponse(HttpServletResponse response) {
     response.setHeader("Access-Control-Allow-Methods", "GET");
     response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin", "https://3001-cs-60845877040-default.us-central1.cloudshell.dev");
+    response.setHeader("Access-Control-Allow-Origin", "https://antoniolinhart-step2020.appspot.com");
     response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
     
     return response;
