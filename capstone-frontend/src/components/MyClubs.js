@@ -14,8 +14,7 @@ class MyClubs extends Component {
   }
 
   getMyClubs = () => {
-    fetch("https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/clubs", 
-    {credentials: "include"}).then(response => response.json()).then(res => {
+    fetch("/api/clubs").then(response => response.json()).then(res => {
       this.setState({clubs: res});
     });
   }
