@@ -1,38 +1,76 @@
 import React, { Component } from 'react';
-import '../App.css';
+import { Redirect } from 'react-router-dom';
+import '../styles/Clubs.css';
+
+import $ from 'jquery'; 
 
 class CreateClub extends Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(e) {
+    console.log("work");
+    e.preventDefault();
+    const form = $("#createclub-form");
+    const data = form.serialize();
+    const id = data.id;
+
+    $.ajax({
+        url: 'https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/clubs',
+        type: 'post',
+        data: data,
+        success: function(data) {
+          console.log("success");
+          return <Redirect to={`/clubpage/${id}`} />
+        },
+        error: function(data) {
+          alert("Looks like our database is having some trouble, hang tight!");
+        }
+    });    
+  }
+
   render() {
     return (
-      <form action="/api/clubs" method="post">
-        <div> 
-          <label for="name"> Club Name </label> 
-        </div>
-        <div>
-          <input type="text" id="name" name="name" />
-        </div>
-        <div>
-          <label for="description"> Club Description </label>
-        </div>
-        <div>
-          <textarea rows="5" cols="75" type="text" id="description" name="description" />
-        </div>
-        <div>
-          <label for="ownerID"> ownerID </label>
-        </div>
-        <div>
-          <input type="text" id="ownerID" name="ownerID" />
-        </div>
-        <div>
-          <label for="gbookID"> gbookID </label>
-        </div>
-        <div>
-          <input type="text" id="gbookID" name="gbookID" />
-        </div>
-        <div>
-          <input type="submit" value="Submit" id="submit" />
-        </div>
-      </form>
+      <div className="page-container">
+        <div className="title"> Create a Club </div>
+        <form onSubmit={this.handleSubmit} id="createclub-form">
+          <div> 
+            <label htmlFor="name"> Club Name </label> 
+          </div>
+          <div>
+            <input type="text" id="name" name="name" />
+          </div>
+          <div>
+            <label htmlFor="description"> Club Description </label>
+          </div>
+          <div>
+            <textarea rows="5" cols="75" type="text" id="description" name="description" />
+          </div>
+          <div> 
+            <label htmlFor="id"> Club ID </label> 
+          </div>
+          <div>
+            <input type="text" id="id" name="id" />
+          </div>
+          <div>
+            <label htmlFor="ownerID"> ownerID </label>
+          </div>
+          <div>
+            <input type="text" id="ownerID" name="ownerID" />
+          </div>
+          <div>
+            <label htmlFor="gbookID"> gbookID </label>
+          </div>
+          <div>
+            <input type="text" id="gbookID" name="gbookID" />
+          </div>
+          <div>
+              <input id="createclub" type="submit" value="Create your Club!" />
+          </div>
+        </form>
+      </div>
     );
   }
 }
