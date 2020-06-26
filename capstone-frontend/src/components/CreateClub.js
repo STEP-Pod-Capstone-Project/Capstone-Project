@@ -15,17 +15,16 @@ class CreateClub extends Component {
     e.preventDefault();
     const form = $("#createclub-form");
     const data = form.serialize();
-    const id = data.id;
 
     $.ajax({
-        url: 'https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/clubs',
+        url: '/api/clubs',
         type: 'post',
         data: data,
         success: function(data) {
           console.log("success");
-          return <Redirect to={`/clubpage/${id}`} />
+          return <Redirect to={`/clubpage/${data.id}`} />
         },
-        error: function(data) {
+        error: function() {
           alert("Looks like our database is having some trouble, hang tight!");
         }
     });    
