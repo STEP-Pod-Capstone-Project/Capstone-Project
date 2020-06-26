@@ -26,7 +26,7 @@ export class Login extends Component {
     console.log("ProfileObj", this.state.profileObj);
   }
 
-  logoutResponse = () => {
+  logoutResponseSuccess = () => {
     this.setState({ isLogin: false });
     this.setState({ profileObj: {} });
   }
@@ -49,7 +49,7 @@ export class Login extends Component {
               <a className="dropdown-item" href="/">
                 <GoogleLogout
                   buttonText="Logout"
-                  onLogoutSuccess={this.logoutResponse}
+                  onLogoutSuccess={this.logoutResponseSuccess}
                   isSignedIn={false} />
               </a>
             </div>
