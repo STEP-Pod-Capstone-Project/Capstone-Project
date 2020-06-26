@@ -1,3 +1,10 @@
+.login button {
+  background: none;
+  border: none;
+  padding: 0px;
+  margin: 0px;
+}
+
 .login img {
   width: 20%;
   margin-left: 10px;

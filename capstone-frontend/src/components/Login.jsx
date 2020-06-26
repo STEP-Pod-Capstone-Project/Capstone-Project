@@ -10,8 +10,13 @@ export class Login extends Component {
 
     this.state = {
       isLogin: false,
-      profileObj: {}
+      profileObj: {},
+      profileMenuCollapsed: false
     };
+  }
+
+  toggleProfileMenu = () => {
+    this.setState({ profileMenuCollapsed: !this.state.profileMenuCollapsed });
   }
 
   loginResponseSuccess = (response) => {
@@ -32,15 +37,31 @@ export class Login extends Component {
         {this.state.isLogin
           ?
           <div>
-            <GoogleLogout
-              buttonText="Logout"
-              onLogoutSuccess={this.logoutResponse}
-              isSignedIn={false} />
 
-            <img id="profile-pic"
-              className="img-responsive rounded-circle"
-              src={this.state.profileObj.imageUrl}
-              alt={this.state.profileObj.name} />
+
+            <button className="dropdown-toggle" type="button" onClick={this.toggleProfileMenu}>
+
+              <img id="profile-pic"
+                className="img-responsive rounded-circle"
+                src={this.state.profileObj.imageUrl}
+                alt={this.state.profileObj.name} />
+
+            </button>
+
+
+            <div className={this.state.profileMenuCollapsed ? "dropdown-menu show" : "dropdown-menu"}>
+
+              <a className="dropdown-item" href="/">
+                <GoogleLogout
+                  buttonText="Logout"
+                  onLogoutSuccess={this.logoutResponse}
+                  isSignedIn={false} />
+
+              </a>
+
+            </div>
+
+
           </div>
 
           : <GoogleLogin
