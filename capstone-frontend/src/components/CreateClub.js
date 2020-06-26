@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../styles/Clubs.css';
-
-import $ from 'jquery'; 
 
 class CreateClub extends Component {
   constructor(props) {
@@ -11,23 +9,23 @@ class CreateClub extends Component {
   }
 
   handleSubmit(e) {
-    console.log("work");
+    const history = this.props.history;
     e.preventDefault();
-    const form = $("#createclub-form");
-    const data = form.serialize();
-
-    $.ajax({
-        url: '/api/clubs',
-        type: 'post',
-        data: data,
-        success: function(data) {
-          console.log("success");
-          return <Redirect to={`/clubpage/${data.id}`} />
-        },
-        error: function() {
-          alert("Looks like our database is having some trouble, hang tight!");
-        }
-    });    
+    let data = {};
+    const formElements = document.getElementById("createclub-form").elements;
+    for (let i = 0; i < formElements.length; i++) {
+      if (formElements[i].type !== "submit") {
+        data[formElements[i].name] = formElements[i].value;
+      }
+    }
+    fetch("/api/clubs", 
+        {method: "post", body: JSON.stringify(data)})
+        .then(function() {
+          history.push(`/clubpage/${data.id}`);
+        })
+        .catch(function() {
+          alert("Looks like we're having trouble connecting to our database, hang tight!");
+        });  
   }
 
   render() {
@@ -74,4 +72,4 @@ class CreateClub extends Component {
   }
 }
 
-export default CreateClub;
+export default withRouter(CreateClub);
