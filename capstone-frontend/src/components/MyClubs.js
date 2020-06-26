@@ -11,21 +11,13 @@ class MyClubs extends Component {
     this.state = {
       clubs: []
     }
-    this.getMyClubs = this.getMyClubs.bind(this);
   }
 
-  getMyClubs() {
-    let clubArray = [];
-    for (let i = 0; i < 8; i++) {
-      clubArray.push({
-        "id": i,
-        "name": `Club${i}`,
-        "description": `Description${i} Description${i} Description${i} Description${i} Description${i}`,
-        "ownerID": i+i,
-        "gbookID": i*i
-      });
-    }
-    this.setState({clubs: clubArray});
+  getMyClubs = () => {
+    fetch("https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/clubs", 
+    {credentials: "include"}).then(response => response.json()).then(res => {
+      this.setState({clubs: res});
+    });
   }
 
   componentDidMount() {
@@ -34,13 +26,15 @@ class MyClubs extends Component {
 
   render() {
     let clubArray = [];
-    this.state.clubs.forEach(c => {
+    [...this.state.clubs].forEach(c => {
       clubArray.push(<ClubGridItem key={c.id} id={c.id} name={c.name} description={c.description} ownerID={c.ownerID} gbookID={c.gbookID} />);
     });
     return (
-      <div className="row page-container">
-        <div className="col-12 title"> My Clubs </div>
-        <div> 
+      <div className="page-container">
+        <div className="row">
+          <div className="col-12 title"> My Clubs </div>
+        </div>
+        <div className="row"> 
           <Link id="createclub" className="col-12" to="/createclub"> Create New Club </Link> 
         </div>
         <div className="clubslist-container row"> {clubArray} </div>

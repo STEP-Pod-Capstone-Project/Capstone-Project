@@ -90,7 +90,7 @@ public class ClubServlet extends HttpServlet {
       clubs.add(club);
     }
     Gson gson = new Gson();
-    response.setContentType("application/json;");
+    response.setContentType("text/json;");
     response.getWriter().println(gson.toJson(clubs));
   }
 

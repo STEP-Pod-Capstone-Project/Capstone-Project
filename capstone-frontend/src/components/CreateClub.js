@@ -3,12 +3,7 @@ import { withRouter } from 'react-router-dom';
 import '../styles/Clubs.css';
 
 class CreateClub extends Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     const history = this.props.history;
     e.preventDefault();
     let data = {};
@@ -18,14 +13,13 @@ class CreateClub extends Component {
         data[formElements[i].name] = formElements[i].value;
       }
     }
-    fetch("/api/clubs", 
-        {method: "post", body: JSON.stringify(data)})
-        .then(function() {
-          history.push(`/clubpage/${data.id}`);
-        })
-        .catch(function() {
-          alert("Looks like we're having trouble connecting to our database, hang tight!");
-        });  
+    fetch("/api/clubs", {method: "post", body: JSON.stringify(data)})
+      .then(function() {
+        history.push(`/clubpage/${data.id}`);
+      })
+      .catch(function() {
+        alert("Looks like we're having trouble connecting to our database, hang tight!");
+      });  
   }
 
   render() {
