@@ -13,8 +13,7 @@ class BookSearchList extends Component {
   }
 
   getData() {
-    console.log("getting data for " + this.props.searchQuery);
-    fetch(`/api/search?searchTerm=${this.props.searchQuery}`, {credentials: 'include'})
+    fetch(`/api/search?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
       .then(res => this.setState({ bookList: res }))
       .catch(err => console.log(err));

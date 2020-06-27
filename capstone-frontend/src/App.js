@@ -26,20 +26,18 @@ class App extends Component {
     this.state = {
       searchQuery: ""
     };
-    this.onChange = this.onChange.bind(this);
   }
 
-  onChange(value) {
+  setSearchQuery = (value) => {
     if (value !== this.state.searchQuery) {
       this.setState({ searchQuery:value });
-      console.log("state " + this.state.searchQuery);
     }
   }
 
   render() {
     return (
       <Router>
-        <Navbar setSearchQuery={this.onChange} />
+        <Navbar setSearchQuery={this.setSearchQuery} />
         <div className="row">
           <LeftSideBar />
           <div className="col-12 col-md-8" id="body-row">
