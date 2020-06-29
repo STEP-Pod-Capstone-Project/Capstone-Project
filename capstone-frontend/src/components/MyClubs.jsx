@@ -25,7 +25,7 @@ class MyClubs extends Component {
 
   render() {
     let clubArray = [];
-    [...this.state.clubs].forEach(c => {
+    this.state.clubs.forEach(c => {
       clubArray.push(<ClubGridItem key={c.id} id={c.id} name={c.name} description={c.description} ownerID={c.ownerID} gbookID={c.gbookID} />);
     });
     return (
