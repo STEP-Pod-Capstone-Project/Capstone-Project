@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import ClubGridItem from './ClubGridItem.js';
+import ClubGridItem from './ClubGridItem.jsx';
 
 import '../styles/Clubs.css';
 
