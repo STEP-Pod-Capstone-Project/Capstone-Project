@@ -3,7 +3,7 @@ import BookSearchList from './BookSearchList';
 
 const Browse = (props) => {
   return (
-    <BookSearchList key={props.match.params.query}/>
+    <BookSearchList searchQuery={props.match.params.query} key={props.match.params.query}/>
   );
 }
 
