@@ -5,6 +5,18 @@
   margin: 0px;
 }
 
+/* .login div {
+  display: contents;
+} */
+
+.login div div {
+  position: relative;
+}
+
+.login div div a {
+  display: inline;
+}
+
 .login img {
   width: 20%;
   margin-left: 10px;
