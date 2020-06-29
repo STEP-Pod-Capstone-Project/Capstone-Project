@@ -10,6 +10,12 @@ import org.junit.runners.JUnit4;
 public final class BookTest {
   private Book bookOne;
   private Book bookTwo;
+  
+  private static final String ID_ONE = "idOne";
+  private static final String ID_TWO = "idTwo";
+
+  private static final String USER_ID_ONE = "userIdOne";
+  private static final String USER_ID_TWO = "UserIdTwo";
 
   private static final String ORIGINAL_REVIEW = "originalReview";
   private static final String NEW_REVIEW = "newReview";
@@ -19,21 +25,21 @@ public final class BookTest {
 
   @Before
   public void setUp() {
-    bookOne = new Book(1, 11, GBOOK_ID1, true, 3, ORIGINAL_REVIEW);
-    bookTwo = new Book(2, 22, GBOOK_ID2);
+    bookOne = new Book(ID_ONE, USER_ID_ONE, GBOOK_ID1, true, 3, ORIGINAL_REVIEW);
+    bookTwo = new Book(ID_TWO, USER_ID_TWO, GBOOK_ID2);
   }
 
   @Test
   public void testConstructor() {
-    Assert.assertEquals(bookOne.getID(), 1);
-    Assert.assertEquals(bookOne.getUserID(), 11);
+    Assert.assertEquals(bookOne.getID(), ID_ONE);
+    Assert.assertEquals(bookOne.getUserID(), USER_ID_ONE);
     Assert.assertEquals(bookOne.getGbookID(), GBOOK_ID1);
     Assert.assertEquals(bookOne.hasRead(), true);
     Assert.assertEquals(bookOne.getRating(), 3);
     Assert.assertEquals(bookOne.getReview(), ORIGINAL_REVIEW);
 
-    Assert.assertEquals(bookTwo.getID(), 2);
-    Assert.assertEquals(bookTwo.getUserID(), 22);
+    Assert.assertEquals(bookTwo.getID(), ID_TWO);
+    Assert.assertEquals(bookTwo.getUserID(), USER_ID_TWO);
     Assert.assertEquals(bookTwo.getGbookID(), GBOOK_ID2);
     Assert.assertEquals(bookTwo.hasRead(), false);
     Assert.assertEquals(bookTwo.getRating(), -1);
