@@ -11,12 +11,12 @@
   margin: 15px 0px;
 }
 
-.clubslist-container {
+.groups-list-container {
   margin: 40px 0px;
   justify-content: center;
 }
 
-#createclub {
+#create-group {
   color: #20bf6b;
   font-weight: 500;
   font-size: 16px;
@@ -26,7 +26,7 @@
   transition: all 0.3s ease 0s;
 }
 
-#createclub:hover {
+#create-group:hover {
   background: #20bf6b;
   color: white;
   border-radius: 50px;
@@ -35,7 +35,7 @@
   text-decoration: none;
 }
 
-.club-container {
+.group-container {
   margin: 10px;
   padding: 5px;
   border: 2px solid black;

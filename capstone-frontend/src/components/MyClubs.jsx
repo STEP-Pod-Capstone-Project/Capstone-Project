@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import ClubGridItem from './ClubGridItem.js';
+import ClubGridItem from './ClubGridItem';
 
-import '../styles/Clubs.css';
+import '../styles/Groups.css';
 
 class MyClubs extends Component {
   constructor(props) {
@@ -41,9 +41,9 @@ class MyClubs extends Component {
       <div className="row page-container">
         <div className="col-12 title"> My Clubs </div>
         <div> 
-          <Link id="createclub" className="col-12" to="/createclub"> Create New Club </Link> 
+          <Link id="create-group" className="col-12" to="/createclub"> Create New Club </Link> 
         </div>
-        <div className="clubslist-container row"> {clubArray} </div>
+        <div className="groups-list-container row"> {clubArray} </div>
       </div>
       
     );
