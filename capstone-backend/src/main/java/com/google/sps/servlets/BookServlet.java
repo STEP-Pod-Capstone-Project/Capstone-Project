@@ -95,7 +95,6 @@ public class BookServlet extends HttpServlet {
         document = future.get();
         if (document.exists()) {
           book = document.toObject(Book.class);
-          System.out.println(book);
         } else {
           System.out.println("no such document!");
         }
@@ -110,7 +109,6 @@ public class BookServlet extends HttpServlet {
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (QueryDocumentSnapshot document : documents) {
           bookList.add(document.toObject(Book.class));
-          System.out.println(document.getId() + " => " + document.toObject(Book.class));
         }
       } catch (Exception e) {
         System.out.println("Error: " + e);
@@ -124,8 +122,8 @@ public class BookServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    System.out.println("post");
     JsonObject jsonObject = createRequestBodyJson(request);
+    System.out.println(jsonObject);
     String id = jsonObject.get("id").getAsString();
     String userID = jsonObject.get("userID").getAsString();
     String gbookID = jsonObject.get("gbookID").getAsString();
