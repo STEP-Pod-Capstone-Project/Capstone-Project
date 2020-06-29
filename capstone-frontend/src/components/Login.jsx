@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import { Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap'
 import "../styles/Login.css"
 
 
@@ -33,47 +34,39 @@ export class Login extends Component {
 
   render() {
     return (
-      <div className="login">
+      <div id="login">
         {this.state.isLogin
           ?
           <div>
-            <button className="dropdown-toggle" type="button" onClick={this.toggleProfileMenu}>
 
-              <img id="profile-pic"
+            <DropdownButton as={ButtonGroup} title={
+
+              <img id="profile_img"
                 className="img-responsive rounded-circle"
                 src={this.state.profileObj.imageUrl}
-                alt={this.state.profileObj.name} />
-            </button>
+                alt={this.state.profileObj.name} />}
 
-            <div className={this.state.profileMenuCollapsed ? "dropdown-menu show" : "dropdown-menu"}>
-              <a className="dropdown-item" href="/">
+              id="bg-vertical-dropdown-1">
+
+              <Dropdown.Item eventKey="1">
                 <GoogleLogout
                   buttonText="Logout"
                   onLogoutSuccess={this.logoutResponseSuccess}
                   isSignedIn={false} />
-              </a>
-            </div>
+              </Dropdown.Item>
+            </DropdownButton>
+
           </div>
           :
           <div>
-            <button className="dropdown-toggle" type="button" onClick={this.toggleProfileMenu}>
 
-              <img id="profile-pic"
-                className="img-responsive rounded-circle"
-                src={"/images/default_account.png"}
-                alt="Default Profile" />
-            </button>
-            
-            <div className={this.state.profileMenuCollapsed ? "dropdown-menu show" : "dropdown-menu"}>
-              <a className="dropdown-item" href="/">
-                <GoogleLogin
-                  clientId="962122785123-r4ps71sg5eobh9riec89s9kas6dpvraj.apps.googleusercontent.com"
-                  buttonText="Login"
-                  onSuccess={this.loginResponseSuccess}
-                  isSignedIn={true}
-                  cookiePolicy={"single_host_origin"} />
-              </a>
-            </div>
+            <GoogleLogin 
+              clientId="962122785123-r4ps71sg5eobh9riec89s9kas6dpvraj.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={this.loginResponseSuccess}
+              isSignedIn={true}
+              cookiePolicy={"single_host_origin"} />
+
           </div>}
       </div>
     )

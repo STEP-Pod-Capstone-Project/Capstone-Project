@@ -1,23 +1,19 @@
-.login button {
+/* Logout Dropdown button */
+#login div div button {
   background: none;
   border: none;
+  margin: 0px;
   padding: 0px;
+  text-align: center;
+}
+
+/* Login Button */
+#login div button {
+  background: none;
+  border-width: 0px !important;
   margin: 0px;
 }
 
-/* .login div {
-  display: contents;
-} */
-
-.login div div {
-  position: relative;
+#profile_img {
+  width: 35%;
 }
-
-.login div div a {
-  display: inline;
-}
-
-.login img {
-  width: 20%;
-  margin-left: 10px;
-} 
