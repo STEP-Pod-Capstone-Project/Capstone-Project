@@ -3,28 +3,26 @@ package com.google.sps.data;
 import java.util.Collection;
 import java.util.HashSet;
 
- 
-/**
- * Class representing a User.
- *
- * Note: The private variables in this class are converted into JSON.
- */
+
 public class User {
   
-  private final long id;
+  private final String id;
   private String email;
   private String username;
-  private Collection<Long> friendIDs;
+  private Collection<String> friendIDs;
  
-  /** Constructor for a User Object */
-  public User(long id, String email, String username){
+  public User(String id, String email, String username){
     this.id = id;
     this.email = email;
     this.username = username;
-    this.friendIDs = new HashSet<Long>();
+    this.friendIDs = new HashSet<String>();
+  }
+
+  public User() {
+    this("", "", "");
   }
  
-  public long getID() {
+  public String getID() {
     return id;
   }
  
@@ -44,11 +42,11 @@ public class User {
     this.username = username;
   }
  
-  public Collection<Long> getFriends() {
+  public Collection<String> getFriends() {
     return friendIDs;
   }
  
-  public void addFriend(Long friendID) {
+  public void addFriend(String friendID) {
     friendIDs.add(friendID);
   }
  
