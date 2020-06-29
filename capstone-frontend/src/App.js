@@ -1,10 +1,8 @@
 
 import React, { Component } from 'react';
-import { Redirect } from 'react-router'
 import {
   Route, 
-  BrowserRouter as Router,
-  withRouter
+  BrowserRouter as Router
 } from 'react-router-dom';
 
 import './App.css';
