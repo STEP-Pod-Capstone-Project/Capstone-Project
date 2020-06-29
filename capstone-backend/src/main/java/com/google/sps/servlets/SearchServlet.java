@@ -14,7 +14,6 @@
 
 package com.google.sps.servlets;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -24,12 +23,12 @@ import com.google.gson.JsonParser;
 import com.google.sps.data.VolumeData;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.servlet.annotation.WebServlet;
@@ -47,14 +46,17 @@ public class SearchServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String fullOutput = "";
     String searchTerm = request.getParameter("searchTerm");
+    if (searchTerm == null || searchTerm.isEmpty()) return;
+    searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
+
     int maxResults = parseNaturalNumber(request.getParameter("maxResults"));
+    if (request.getParameter("maxResults") != null) { 
+      maxResults = parseNaturalNumber(request.getParameter("maxResults"));
+    } 
     if (maxResults == -1) {
       maxResults = DEFAULT_MAX_RESULTS;
     }
     
-    if (searchTerm == null || searchTerm.isEmpty()) return;
-    searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
-
     try {
       String formattedURL = String.format("https://www.googleapis.com/books/v1/volumes?q={%s}&maxResults=%d&country=US",
         searchTerm, maxResults);
@@ -63,17 +65,25 @@ public class SearchServlet extends HttpServlet {
 		  conn.setRequestMethod("GET");
 		  conn.setRequestProperty("Accept", "application/json");
 
+      Reader streamReader = null;
       if (conn.getResponseCode() != 200) {
-        throw new RuntimeException("Failed : error code : "
-            + conn.getResponseCode());
+        streamReader = new InputStreamReader(conn.getErrorStream());
+      } else {
+        streamReader = new InputStreamReader(conn.getInputStream());
       }
-      BufferedReader br = new BufferedReader(new InputStreamReader(
-        (conn.getInputStream())));
-      
+      BufferedReader br = new BufferedReader(streamReader);
+
       String output;
       while ((output = br.readLine()) != null) {
         fullOutput += output;
       }
+
+      if (conn.getResponseCode() != 200) {
+        System.err.println(output);
+        throw new RuntimeException("Failed : error code : "
+          + conn.getResponseCode());
+      }
+
       conn.disconnect();
     } catch (MalformedURLException e) {
       e.printStackTrace();
@@ -92,13 +102,11 @@ public class SearchServlet extends HttpServlet {
    * @param output the response from the Books API
    * @return a Collection of the books from the API call, in VolumeData form
    */
-  @VisibleForTesting
   static Collection<VolumeData> convertResponseToVolumeData(String output) {
     ArrayList<VolumeData> volumes = new ArrayList<>();
 
     // Parse data into json object
-    JsonParser parser = new JsonParser();
-    JsonElement data = parser.parse(output);
+    JsonElement data = JsonParser.parseString(output);
     JsonObject dataInfo = data.getAsJsonObject();
 
     // Get the items element from the output and convert it into the array of book jsons
@@ -141,18 +149,6 @@ public class SearchServlet extends HttpServlet {
       volumes.add(new VolumeData(id, title, authorNames.toArray(new String[0]), description, thumbnailLink));
     }
     return volumes;
-  }
-
-  /*
-   * Adds headers to a HttpServletResponse object to enable it to be accessed by the frontend resources.
-   */
-  public static HttpServletResponse addHeadersToResponse(HttpServletResponse response) {
-    response.setHeader("Access-Control-Allow-Methods", "GET");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin", "https://antoniolinhart-step2020.appspot.com");
-    response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
-    
-    return response;
   }
 
   /*

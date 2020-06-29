@@ -2,10 +2,8 @@ package com.google.sps.servlets;
  
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.sps.data.VolumeData;
-import com.google.sps.servlets.SearchServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,7 +11,6 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.mock;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +27,6 @@ public class SearchServletTest {
 
   private SearchServlet searchServlet;
   private String jsonResponse;
-  private JsonParser parser = new JsonParser();
   private static final String artificialJsonResponse = "{\"items\": [{\"id\":\"ABCDEFG\",\"volumeInfo\":" +
     "{\"title\":\"BookTitle\",\"authors\":[\"Name1\",\"Name2\"],\"imageLinks\":{\"thumbnail\":" +
     "\"link\"}}},{\"id\":\"LMNOP\",\"volumeInfo\":{\"title\":\"BookTitle2\",\"authors\":" +
@@ -82,7 +78,7 @@ public class SearchServletTest {
   public void ensureDefaultNumberOfBooksInResponse() {
     // Response should contain the number of default results, since there was no parameter included
     
-    JsonElement data = parser.parse(jsonResponse);
+    JsonElement data = JsonParser.parseString(jsonResponse);
     JsonArray books = data.getAsJsonArray();
     int expectedResults = SearchServlet.DEFAULT_MAX_RESULTS;
 
@@ -95,7 +91,7 @@ public class SearchServletTest {
     
     int numResults = 10;
     String customJsonResponse = populateServletResponse(numResults);
-    JsonElement data = parser.parse(customJsonResponse);
+    JsonElement data = JsonParser.parseString(customJsonResponse);
     JsonArray books = data.getAsJsonArray();
     int expectedResults = numResults;
 
