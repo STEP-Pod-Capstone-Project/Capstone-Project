@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Route,
@@ -12,6 +11,8 @@ import MyLists from './components/MyLists';
 import MyClubs from './components/MyClubs';
 import BookPage from './components/BookPage';
 import ListPage from './components/ListPage';
+import ClubPage from './components/ClubPage';
+import CreateClub from './components/CreateClub';
 
 import Navbar from './components/Navbar';
 import LeftSideBar from './components/LeftSideBar';
@@ -30,8 +31,10 @@ function App() {
           <Route path='/mybooks' component={MyBooks} />
           <Route path='/mylists' component={MyLists} />
           <Route path='/myclubs' component={MyClubs} />
-          <Route path='/bookdetails' render={(props) => <BookPage {...props} />} />
-          <Route path='/listdetails' render={(props) => <ListPage {...props} />} />
+          <Route path='/bookpage/:id' component={BookPage} />
+          <Route path='/listpage/:id' component={ListPage} />
+          <Route path='/clubpage/:id' component={ClubPage} />
+          <Route path='/createclub' component={CreateClub} />
         </div>
         <RightSideBar />
       </div>
