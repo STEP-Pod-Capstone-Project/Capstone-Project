@@ -67,8 +67,8 @@ public final class UserTest {
   public void testAddFriend() {
     userOne.addFriend(ID_THREE);
     Assert.assertEquals(userOne.getFriends().size(), 1);
-    for (String l : userOne.getFriends()) {
-      Assert.assertEquals(l, ID_THREE);
+    for (String friendID : userOne.getFriends()) {
+      Assert.assertEquals(friendID, ID_THREE);
     }
     Assert.assertEquals(userTwo.getFriends().size(), 0);
   }
