@@ -1,7 +1,6 @@
 package com.google.sps.servlets;
 
 import com.google.api.core.ApiFuture;
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -10,9 +9,6 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteResult;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.FirestoreClient;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,15 +39,10 @@ public class BookServlet extends HttpServlet {
   private CollectionReference books;
 
   public BookServlet() throws IOException {
-    GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
-    FirebaseOptions options = new FirebaseOptions.Builder()
-        .setCredentials(credentials)
-        .setProjectId("sopa-capstone-step-2020")
-        .build();
-    FirebaseApp.initializeApp(options);
-    db = FirestoreClient.getFirestore();
+    db = (new FirestoreSetup()).getFirestoreDb();
     books = db.collection("books");
   }
+
 
   private JsonObject createRequestBodyJson(HttpServletRequest request) {
     JsonObject jsonObject = new JsonObject();
