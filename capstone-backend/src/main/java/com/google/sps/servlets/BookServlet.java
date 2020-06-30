@@ -39,33 +39,8 @@ public class BookServlet extends HttpServlet {
   private CollectionReference books;
 
   public BookServlet() throws IOException {
-    db = (new FirestoreSetup()).getFirestoreDb();
+    db = Utility.getFirestoreDb();
     books = db.collection("books");
-  }
-
-
-  private JsonObject createRequestBodyJson(HttpServletRequest request) {
-    JsonObject jsonObject = new JsonObject();
-    StringBuffer jb = new StringBuffer();
-    String line = null;
-    try {
-      BufferedReader reader = new BufferedReader(new InputStreamReader((request.getInputStream())));
-      while ((line = reader.readLine()) != null) {
-       jb.append(line);
-      }
-    } catch (Exception e) { 
-      System.err.println("Error: " + e);
-    }
-    try {
-      Gson gson = new Gson();
-      JsonParser parser = new JsonParser();
-      JsonElement data = parser.parse(jb.toString());
-      jsonObject = data.getAsJsonObject();
-    } catch (Exception e) {
-      System.err.println("Error parsing JSON request string");
-    }
-
-    return jsonObject;
   }
 
   @Override
@@ -107,7 +82,7 @@ public class BookServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    JsonObject jsonObject = createRequestBodyJson(request);
+    JsonObject jsonObject = Utility.createRequestBodyJson(request);
     String id = jsonObject.get("id").getAsString();
     String userID = jsonObject.get("userID").getAsString();
     String gbookID = jsonObject.get("gbookID").getAsString();
@@ -138,7 +113,7 @@ public class BookServlet extends HttpServlet {
 
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    JsonObject jsonObject = createRequestBodyJson(request);
+    JsonObject jsonObject = Utility.createRequestBodyJson(request);
     String id = jsonObject.get("id").getAsString();
     Map<String, Object> update = new HashMap<>();
 
