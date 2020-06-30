@@ -108,7 +108,6 @@ public class BookServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     JsonObject jsonObject = createRequestBodyJson(request);
-    System.out.println(jsonObject);
     String id = jsonObject.get("id").getAsString();
     String userID = jsonObject.get("userID").getAsString();
     String gbookID = jsonObject.get("gbookID").getAsString();
