@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
-
 import LeftSideBar from "./components/LeftSideBar.jsx";
 import App from "./App.jsx";
 import {
