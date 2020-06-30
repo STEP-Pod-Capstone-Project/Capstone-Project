@@ -28,8 +28,6 @@ class MyClubs extends Component {
     this.state.clubs.forEach(c => {
       clubArray.push(<ClubGridItem key={c.id} id={c.id} name={c.name} description={c.description} ownerID={c.ownerID} gbookID={c.gbookID} />);
     });
-    for (let i = 0; i < 5; i++)
-    clubArray.push(<ClubGridItem key={i} id={i} name={i} description={i} ownerID={i} gbookID={i} />);
     return (
       <div className="page-container">
         <div className="row">
