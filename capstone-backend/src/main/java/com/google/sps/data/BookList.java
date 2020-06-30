@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * The Book List object stores userID and bookshelfID.
+ * The Book List object stores userID and gbookIDs.
  * 
  * These IDs variables are meant to be fetch from the Frontend, to extract a
  * User's data using the Google Books API.
@@ -19,26 +19,26 @@ public final class BookList {
 
   private String id;
   private String userID;
-  private String bookshelfID;
+  private Collection<String> gbookIDs;
   private Collection<String> collaboratorsIDs;
 
-  public BookList(String userID, String bookshelfID, Collection<String> collaboratorsIDs, String id) {
-    this.userID = userID;
-    this.bookshelfID = bookshelfID;
-    this.collaboratorsIDs = collaboratorsIDs;
+  public BookList(String id, String userID, Collection<String> gbookIDs, Collection<String> collaboratorsIDs) {
     this.id = id;
+    this.userID = userID;
+    this.gbookIDs = gbookIDs;
+    this.collaboratorsIDs = collaboratorsIDs;
   }
 
-  public BookList(String userID, String bookshelfID, Collection<String> collaboratorsIDs) {
-    this(userID, bookshelfID, collaboratorsIDs, "");
+  public BookList(String userID, Collection<String> gbookIDs, Collection<String> collaboratorsIDs) {
+    this("", userID, gbookIDs, collaboratorsIDs);
   }
 
-  public BookList(String userID, String bookshelfID){
-    this(userID, bookshelfID, new HashSet<String>(), "");
+  public BookList(String userID, Collection<String> gbookIDs) {
+    this("", userID, gbookIDs, new HashSet<String>());
   }
 
-  public void setBookshelf(String bookshelfID) {
-    this.bookshelfID = bookshelfID;
+  public void setGbookIDs(Collection<String> gbookIDs) {
+    this.gbookIDs = gbookIDs;
   }
 
   public void setUserID(String userID) {
@@ -49,17 +49,17 @@ public final class BookList {
     this.collaboratorsIDs = collaboratorsIDs;
   }
 
-  public void setID(String id){
+  public void setID(String id) {
     this.id = id;
   }
 
   public boolean isEmpty() {
-    return userID.equals("") && bookshelfID.equals("") && collaboratorsIDs.isEmpty();
+    return userID.equals("") && gbookIDs.isEmpty() && collaboratorsIDs.isEmpty();
   }
 
   public void clear() {
     userID = "";
-    bookshelfID = "";
+    gbookIDs.clear();
     collaboratorsIDs.clear();
   }
 
@@ -67,23 +67,35 @@ public final class BookList {
     return userID;
   }
 
-  public String getBookshelfID() {
-    return bookshelfID;
+  public Collection<String> getGbookIDs() {
+    return gbookIDs;
+  }
+
+  public void addGbook(String gbookID) {
+    collaboratorsIDs.add(gbookID);
+  }
+
+  public boolean removeGbook(String gbookID) {
+    return collaboratorsIDs.remove(gbookID);
+  }
+
+  public boolean containsGbook(String gbookID) {
+    return collaboratorsIDs.contains(gbookID);
   }
 
   public Collection<String> getCollaboratorsIDs() {
     return collaboratorsIDs;
   }
 
-  public void addCollaborator(String collaboratorID){
+  public void addCollaborator(String collaboratorID) {
     collaboratorsIDs.add(collaboratorID);
   }
 
-  public boolean removeCollaborator(String collaboratorID){
+  public boolean removeCollaborator(String collaboratorID) {
     return collaboratorsIDs.remove(collaboratorID);
   }
 
-  public boolean containsCollaborator(String collaboratorID){
+  public boolean containsCollaborator(String collaboratorID) {
     return collaboratorsIDs.contains(collaboratorID);
   }
 
