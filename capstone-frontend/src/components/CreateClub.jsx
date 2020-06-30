@@ -13,13 +13,14 @@ class CreateClub extends Component {
         data[formElements[i].name] = formElements[i].value;
       }
     }
-    fetch("/api/clubs", {method: "post", body: JSON.stringify(data)})
-      .then(function() {
-        history.push(`/clubpage/${data.id}`);
-      })
-      .catch(function() {
-        alert("Looks like we're having trouble connecting to our database, hang tight!");
-      });  
+    fetch("/api/clubs", 
+        {method: "post", body: JSON.stringify(data)})
+        .then(function() {
+          history.push(`/clubpage/${data.id}`);
+        })
+        .catch(function() {
+          alert("Looks like we're having trouble connecting to our database, hang tight!");
+        });  
   }
 
   render() {
