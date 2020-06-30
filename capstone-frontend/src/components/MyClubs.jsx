@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import ClubGridItem from './ClubGridItem.jsx';
+import ClubGridItem from './ClubGridItem';
 
-import '../styles/Clubs.css';
+import '../styles/Groups.css';
 
 class MyClubs extends Component {
   constructor(props) {
@@ -28,15 +28,17 @@ class MyClubs extends Component {
     this.state.clubs.forEach(c => {
       clubArray.push(<ClubGridItem key={c.id} id={c.id} name={c.name} description={c.description} ownerID={c.ownerID} gbookID={c.gbookID} />);
     });
+    for (let i = 0; i < 5; i++)
+    clubArray.push(<ClubGridItem key={i} id={i} name={i} description={i} ownerID={i} gbookID={i} />);
     return (
       <div className="page-container">
         <div className="row">
           <div className="col-12 title"> My Clubs </div>
         </div>
         <div className="row"> 
-          <Link id="createclub" className="col-12" to="/createclub"> Create New Club </Link> 
+          <Link id="create-group" className="col-12" to="/createclub"> Create New Club </Link> 
         </div>
-        <div className="clubslist-container row"> {clubArray} </div>
+          <div className="groups-list-container row"> {clubArray} </div>
       </div>
       
     );

@@ -9,11 +9,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -22,9 +18,7 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 
@@ -51,8 +45,7 @@ public class ClubServlet extends HttpServlet {
     }
     try {
       Gson gson = new Gson();
-      JsonParser parser = new JsonParser();
-      JsonElement data = parser.parse(jb.toString());
+      JsonElement data = JsonParser.parseString(jb.toString());
       jsonObject = data.getAsJsonObject();
     } catch (Exception e) {
       System.err.println("Error parsing JSON request string");

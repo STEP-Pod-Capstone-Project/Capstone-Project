@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import '../styles/Clubs.css';
+import '../styles/Groups.css';
 
 class CreateClub extends Component {
   handleSubmit = (e) => {
     const history = this.props.history;
     e.preventDefault();
     let data = {};
-    const formElements = document.getElementById("createclub-form").elements;
+    const formElements = document.getElementById("create-club-form").elements;
     for (let i = 0; i < formElements.length; i++) {
       if (formElements[i].type !== "submit") {
         data[formElements[i].name] = formElements[i].value;
@@ -26,7 +26,7 @@ class CreateClub extends Component {
     return (
       <div className="page-container">
         <div className="title"> Create a Club </div>
-        <form onSubmit={this.handleSubmit} id="createclub-form">
+        <form onSubmit={this.handleSubmit} id="create-club-form">
           <div> 
             <label htmlFor="name"> Club Name </label> 
           </div>
@@ -58,7 +58,7 @@ class CreateClub extends Component {
             <input type="text" id="gbookID" name="gbookID" />
           </div>
           <div>
-            <input id="createclub" type="submit" value="Create your Club!" />
+            <input id="create-club" type="submit" value="Create your Club!" />
           </div>
         </form>
       </div>
