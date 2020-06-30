@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Login } from "./Login"
 import '../App.css';
 
@@ -8,6 +8,7 @@ class Navbar extends Component {
     super(props);
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.toggleNavbarLibrary = this.toggleNavbarLibrary.bind(this);
+
     this.state = {
       navCollapsed: true,
       navLibraryCollapsed: true
@@ -25,6 +26,13 @@ class Navbar extends Component {
     this.setState({
       navLibraryCollapsed: !this.state.navLibraryCollapsed,
     });
+  }
+
+  handleSearchInput = (e) => {
+    e.preventDefault();
+    const searchValue = document.getElementById("search").value;
+    this.props.setSearchQuery(searchValue);
+    this.props.history.push(`/browse/${searchValue}`);
   }
 
   render() {
@@ -70,4 +78,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+export default withRouter(Navbar);
