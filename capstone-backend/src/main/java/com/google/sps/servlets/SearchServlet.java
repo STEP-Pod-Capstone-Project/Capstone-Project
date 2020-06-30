@@ -79,7 +79,7 @@ public class SearchServlet extends HttpServlet {
       }
 
       if (conn.getResponseCode() != 200) {
-        System.err.println(output);
+        System.err.println(fullOutput);
         throw new RuntimeException("Failed : error code : "
           + conn.getResponseCode());
       }
