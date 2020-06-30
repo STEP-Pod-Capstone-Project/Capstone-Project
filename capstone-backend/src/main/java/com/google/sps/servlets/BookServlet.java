@@ -37,15 +37,16 @@ import javax.servlet.http.HttpServletResponse;
 public class BookServlet extends HttpServlet {
   private Firestore db; 
   private CollectionReference books;
+  private Gson gson;
 
   public BookServlet() throws IOException {
     db = Utility.getFirestoreDb();
     books = db.collection("books");
+    gson = new Gson();
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<Book> bookList = new ArrayList<>();
     if (request.getParameter("id") != null) {
       DocumentReference docRef = books.document(request.getParameter("id"));
       ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -56,14 +57,16 @@ public class BookServlet extends HttpServlet {
         if (document.exists()) {
           book = document.toObject(Book.class);
         } else {
-          System.out.println("no such document!");
+          System.err.println("Error: no such document!");
         }
       } catch (Exception e) {
-        System.out.println("Error: " + e);
+        System.err.println("Error: " + e);
       }
-      bookList.add(book);
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(book));
     }
     else {
+      List<Book> bookList = new ArrayList<>();
       ApiFuture<QuerySnapshot> future = books.get();
       try {
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
@@ -71,13 +74,11 @@ public class BookServlet extends HttpServlet {
           bookList.add(document.toObject(Book.class));
         }
       } catch (Exception e) {
-        System.out.println("Error: " + e);
+        System.err.println("Error: " + e);
       }
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(bookList));
     }
-
-    Gson gson = new Gson();
-    response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(bookList));
   }
 
   @Override
@@ -104,7 +105,7 @@ public class BookServlet extends HttpServlet {
     try {
       System.out.println("Update time : " + future.get().getUpdateTime());
     } catch (Exception e) {
-      System.out.println("Error: " + e);
+      System.err.println("Error: " + e);
     }
     Gson gson = new Gson();
     response.setContentType("application/json;");
@@ -131,7 +132,7 @@ public class BookServlet extends HttpServlet {
     try {
       System.out.println("Update time : " + writeResult.get().getUpdateTime());
     } catch (Exception e) {
-      System.out.println("Error: " + e);
+      System.err.println("Error: " + e);
     }
   }
 }
