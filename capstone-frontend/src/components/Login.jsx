@@ -23,6 +23,8 @@ export class Login extends Component {
   loginResponseSuccess = (response) => {
     this.setState({ isLogin: true });
     this.setState({ profileObj: response.profileObj });
+    console.log("Response: \n", response);
+    console.log("AuthResponse", response.getAuthResponse());
   }
 
   logoutResponseSuccess = () => {
