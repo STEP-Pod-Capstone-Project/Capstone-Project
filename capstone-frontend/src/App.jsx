@@ -1,10 +1,8 @@
 import React from 'react';
 import {
-  Route, 
+  Route,
   BrowserRouter as Router
 } from 'react-router-dom';
-
-import './App.css';
 
 import Home from './components/Home';
 import Browse from './components/Browse';
@@ -19,6 +17,7 @@ import CreateClub from './components/CreateClub';
 import Navbar from './components/Navbar';
 import LeftSideBar from './components/LeftSideBar';
 import RightSideBar from './components/RightSideBar';
+
 
 function App() {
   return (
@@ -39,7 +38,7 @@ function App() {
         </div>
         <RightSideBar />
       </div>
-    </Router> 
+    </Router>
   );
 }
 
