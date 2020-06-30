@@ -17,53 +17,53 @@ import java.util.HashSet;
  */
 public final class BookList {
 
-  private Long id;
-  private Long userID;
+  private String id;
+  private String userID;
   private String bookshelfID;
-  private Collection<Long> collaboratorsIDs;
+  private Collection<String> collaboratorsIDs;
 
-  public BookList(Long userID, String bookshelfID, Collection<Long> collaboratorsIDs, Long id) {
+  public BookList(String userID, String bookshelfID, Collection<String> collaboratorsIDs, String id) {
     this.userID = userID;
     this.bookshelfID = bookshelfID;
     this.collaboratorsIDs = collaboratorsIDs;
     this.id = id;
   }
 
-  public BookList(Long userID, String bookshelfID, Collection<Long> collaboratorsIDs) {
-    this(userID, bookshelfID, collaboratorsIDs, null);
+  public BookList(String userID, String bookshelfID, Collection<String> collaboratorsIDs) {
+    this(userID, bookshelfID, collaboratorsIDs, "");
   }
 
-  public BookList(Long userID, String bookshelfID){
-    this(userID, bookshelfID, new HashSet<Long>(), null);
+  public BookList(String userID, String bookshelfID){
+    this(userID, bookshelfID, new HashSet<String>(), "");
   }
 
   public void setBookshelf(String bookshelfID) {
     this.bookshelfID = bookshelfID;
   }
 
-  public void setUserID(Long userID) {
+  public void setUserID(String userID) {
     this.userID = userID;
   }
 
-  public void setCollaboratorsIDs(Collection<Long> collaboratorsIDs) {
+  public void setCollaboratorsIDs(Collection<String> collaboratorsIDs) {
     this.collaboratorsIDs = collaboratorsIDs;
   }
 
-  public void setID(Long id){
+  public void setID(String id){
     this.id = id;
   }
 
   public boolean isEmpty() {
-    return userID == null && bookshelfID.equals("") && collaboratorsIDs.isEmpty();
+    return userID.equals("") && bookshelfID.equals("") && collaboratorsIDs.isEmpty();
   }
 
   public void clear() {
-    userID = null;
+    userID = "";
     bookshelfID = "";
     collaboratorsIDs.clear();
   }
 
-  public Long getUserID() {
+  public String getUserID() {
     return userID;
   }
 
@@ -71,23 +71,23 @@ public final class BookList {
     return bookshelfID;
   }
 
-  public Collection<Long> getCollaboratorsIDs() {
+  public Collection<String> getCollaboratorsIDs() {
     return collaboratorsIDs;
   }
 
-  public void addCollaborator(Long collaboratorID){
+  public void addCollaborator(String collaboratorID){
     collaboratorsIDs.add(collaboratorID);
   }
 
-  public boolean removeCollaborator(Long collaboratorID){
+  public boolean removeCollaborator(String collaboratorID){
     return collaboratorsIDs.remove(collaboratorID);
   }
 
-  public boolean containsCollaborator(Long collaboratorID){
+  public boolean containsCollaborator(String collaboratorID){
     return collaboratorsIDs.contains(collaboratorID);
   }
 
-  public Long getId() {
+  public String getId() {
     return this.id;
   }
 }
