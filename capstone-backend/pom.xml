@@ -38,11 +38,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-<<<<<<< HEAD
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
       <version>1.9.5</version>
-=======
+    </dependency>
+    <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-firestore</artifactId>
       <version>1.9.0</version>
@@ -56,7 +56,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.25</version>
->>>>>>> firebase setup, book servlet.Does not seem to work yet
     </dependency>
   </dependencies>
 
