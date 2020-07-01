@@ -103,7 +103,6 @@ public class ClubServlet extends HttpServlet {
     } catch (Exception e) {
       System.err.println("Error: " + e);
     }
-    Gson gson = new Gson();
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(club));
   }
