@@ -1,4 +1,4 @@
-package com.google.sps;
+package com.google.sps.data;
 
 import com.google.sps.data.Club;
 
