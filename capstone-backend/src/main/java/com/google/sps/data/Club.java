@@ -1,8 +1,7 @@
 package com.google.sps.data;
 
-import java.util.Collection;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
 
 
 public class Club extends Group {
@@ -10,26 +9,24 @@ public class Club extends Group {
   private String gbookID;
 
   public Club(String id, String name, String description, String announcement,
-    Collection<String> posts, String ownerID, Collection<String> memberIDs,
-    Collection<String> inviteIDs, String gbookID) {
+    List<String> posts, String ownerID, List<String> memberIDs,
+    List<String> inviteIDs, String gbookID) {
       
     super(id, name, description, announcement, posts, ownerID, memberIDs, inviteIDs);
     this.gbookID = gbookID;
   }
 
-  public Club(String id, String name, String description, String announcement, String ownerID,
-    String gbookID){
-
-    this(id, name, description, announcement, new ArrayList<String>(), ownerID, new HashSet<String>(),
-      new HashSet<String>(), gbookID);
-  }
-
   public Club(String id, String name, String description, String ownerID, String gbookID) {
-    this(id, name, description, "", ownerID, gbookID);
+    this(id, name, description, "", new ArrayList<String>(), ownerID, new ArrayList<String>(),
+      new ArrayList<String>(), gbookID);
   }
 
-  public Club(String id, String name, String description, String ownerID) {
-    this(id, name, description, "", ownerID, "");
+  public Club(String id, String name, String ownerID, String gbookID) {
+    this(id, name, "", ownerID, gbookID);
+  }
+
+  public Club(String id, String name, String ownerID) {
+    this(id, name, "", ownerID, "");
   }
  
   public String getGbookID() {

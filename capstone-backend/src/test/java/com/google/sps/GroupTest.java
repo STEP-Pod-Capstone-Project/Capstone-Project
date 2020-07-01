@@ -1,11 +1,11 @@
 package com.google.sps;
 
 import com.google.sps.data.Club;
-import com.google.sps.data.Group;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +15,7 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public final class GroupTest {
-  private Group group;
+  private Club group;
 
   private static final String ORIGINAL_NAME = "originalName";
   private static final String NEW_NAME = "newName";
@@ -28,26 +28,27 @@ public final class GroupTest {
   private static final String POST_ONE = "postOne";
   private static final String POST_TWO = "postTwo";
 
-  private static final String ORIGINAL_OWNER = "1";
-  private static final String NEW_OWNER = "2";
+  private static final String ORIGINAL_OWNER = "originalOwner";
+  private static final String NEW_OWNER = "newOwner";
 
-  private static final String MEMBER_ONE = "1";
-  private static final String MEMBER_TWO = "2";
-  private static final String MEMBER_THREE = "3";
+  private static final String MEMBER_ONE = "memberOne";
+  private static final String MEMBER_TWO = "memberTwo";
+  private static final String MEMBER_THREE = "memberThree";
+
 
   @Before
   public void setUp() {
-    group = new Club("1", ORIGINAL_NAME, ORIGINAL_DESCRIPTION, ORIGINAL_OWNER);
+    group = new Club("id", ORIGINAL_NAME, ORIGINAL_DESCRIPTION, ORIGINAL_OWNER, "");
   }
   
   @Test
   public void testConstructor() {
-    Assert.assertEquals(group.getID(), "1");
+    Assert.assertEquals(group.getID(), "id");
     Assert.assertEquals(group.getName(), ORIGINAL_NAME);
     Assert.assertEquals(group.getDescription(), ORIGINAL_DESCRIPTION);
     Assert.assertEquals(group.getAnnouncement(), "");
     Assert.assertEquals(group.getPosts().size(), 0);
-    Assert.assertEquals(group.getOwnerID(), "1");
+    Assert.assertEquals(group.getOwnerID(), ORIGINAL_OWNER);
     Assert.assertEquals(group.getMemberIDs().size(), 0);
     Assert.assertEquals(group.getInviteIDs().size(), 0);
   }
@@ -110,25 +111,25 @@ public final class GroupTest {
     group.invite(MEMBER_ONE);
 
     Assert.assertEquals(group.getInviteIDs().size(), 1);
-    List<String> list = new ArrayList<>(group.getInviteIDs());
-    Assert.assertEquals(list.get(0), MEMBER_ONE);
+    List<String> list = group.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
 
     group.invite(MEMBER_TWO);
 
     Assert.assertEquals(group.getInviteIDs().size(), 2);
-    list = new ArrayList<>(group.getInviteIDs());
-    Assert.assertEquals(list.get(0), MEMBER_ONE);
-    Assert.assertEquals(list.get(1), MEMBER_TWO);
+    list = group.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertTrue(list.contains(MEMBER_TWO));
   }
 
   @Test
   public void testInviteList() {
-    group.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO)));
+    group.invite(Arrays.asList(MEMBER_ONE, MEMBER_TWO));
 
     Assert.assertEquals(group.getInviteIDs().size(), 2);
-    List<String> list = new ArrayList<>(group.getInviteIDs());
-    Assert.assertEquals(list.get(0), MEMBER_ONE);
-    Assert.assertEquals(list.get(1), MEMBER_TWO);
+    List<String> list = group.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertTrue(list.contains(MEMBER_TWO));
   }
 
   @Test
@@ -138,18 +139,18 @@ public final class GroupTest {
     group.uninvite(MEMBER_TWO);
 
     Assert.assertEquals(group.getInviteIDs().size(), 1);
-    List<String> list = new ArrayList<>(group.getInviteIDs());
-    Assert.assertEquals(list.get(0), MEMBER_ONE);
+    List<String> list = group.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
   }
 
   @Test
   public void testUninviteList() {
-    group.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE)));
-    group.uninvite(new ArrayList<>(Arrays.asList(MEMBER_TWO, MEMBER_THREE)));
+    group.invite(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE));
+    group.uninvite(Arrays.asList(MEMBER_TWO, MEMBER_THREE));
 
     Assert.assertEquals(group.getInviteIDs().size(), 1);
-    List<String> list = new ArrayList<>(group.getInviteIDs());
-    Assert.assertEquals(list.get(0), MEMBER_ONE);
+    List<String> list = group.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
   }
 
   @Test
@@ -161,10 +162,10 @@ public final class GroupTest {
     Assert.assertEquals(b, true);
     Assert.assertEquals(group.getInviteIDs().size(), 1);
     Assert.assertEquals(group.getMemberIDs().size(), 1);
-    List<String> list = new ArrayList<>(group.getInviteIDs());
-    Assert.assertEquals(list.get(0), MEMBER_TWO);
-    list = new ArrayList<>(group.getMemberIDs());
-    Assert.assertEquals(list.get(0), MEMBER_ONE);
+    List<String> list = group.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_TWO));
+    list = group.getMemberIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
   }
 
   @Test
@@ -176,14 +177,14 @@ public final class GroupTest {
     Assert.assertEquals(b, false);
     Assert.assertEquals(group.getInviteIDs().size(), 2);
     Assert.assertEquals(group.getMemberIDs().size(), 0);
-    List<String> list = new ArrayList<>(group.getInviteIDs());
-    Assert.assertEquals(list.get(0), MEMBER_ONE);
-    Assert.assertEquals(list.get(1), MEMBER_TWO);
+    List<String> list = group.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertTrue(list.contains(MEMBER_TWO));
   }
   
   @Test
   public void removeMember() {
-    group.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE)));
+    group.invite(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE));
     group.addMember(MEMBER_ONE);
     group.addMember(MEMBER_TWO);
     group.addMember(MEMBER_THREE);
@@ -193,25 +194,25 @@ public final class GroupTest {
     group.removeMember(MEMBER_TWO);
 
     Assert.assertEquals(group.getMemberIDs().size(), 2);
-    List<String> list = new ArrayList<>(group.getMemberIDs());
-    Assert.assertEquals(list.get(0), MEMBER_ONE);
-    Assert.assertEquals(list.get(1), MEMBER_THREE);
+    List<String> list = group.getMemberIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertTrue(list.contains(MEMBER_THREE));
   }
 
   @Test
   public void removeMembers() {
-    group.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE)));
+    group.invite(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE));
     group.addMember(MEMBER_ONE);
     group.addMember(MEMBER_TWO);
     group.addMember(MEMBER_THREE);
 
     Assert.assertEquals(group.getMemberIDs().size(), 3);
 
-    group.removeMembers(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO)));
+    group.removeMembers(Arrays.asList(MEMBER_ONE, MEMBER_TWO));
 
     Assert.assertEquals(group.getMemberIDs().size(), 1);
-    List<String> list = new ArrayList<>(group.getMemberIDs());
-    Assert.assertEquals(list.get(0), MEMBER_THREE);
+    List<String> list = group.getMemberIDs();
+    Assert.assertTrue(list.contains(MEMBER_THREE));
   }
 
 }

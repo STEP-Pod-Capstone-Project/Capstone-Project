@@ -1,6 +1,6 @@
 package com.google.sps.data;
 
-import java.util.Collection;
+import java.util.List;
 
  
 public abstract class Group {
@@ -9,13 +9,13 @@ public abstract class Group {
   private String name;
   private String description;
   private String announcement;
-  private Collection<String> posts;
+  private List<String> posts;
   private String ownerID;
-  private Collection<String> memberIDs;
-  private Collection<String> inviteIDs;
+  private List<String> memberIDs;
+  private List<String> inviteIDs;
 
-  public Group(String id, String name, String description, String announcement, Collection<String> posts, 
-      String ownerID, Collection<String> memberIDs, Collection<String> inviteIDs ) {
+  public Group(String id, String name, String description, String announcement, List<String> posts, 
+      String ownerID, List<String> memberIDs, List<String> inviteIDs) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -54,7 +54,7 @@ public abstract class Group {
     this.announcement = announcement;
   }
 
-  public Collection<String> getPosts() {
+  public List<String> getPosts() {
     return this.posts;
   }
 
@@ -74,7 +74,7 @@ public abstract class Group {
     this.ownerID = ownerID;
   }
  
-  public Collection<String> getMemberIDs() {
+  public List<String> getMemberIDs() {
     return this.memberIDs;
   }
 
@@ -82,11 +82,11 @@ public abstract class Group {
     this.memberIDs.remove(memberID);
   }
 
-  public void removeMembers(Collection<String> memberIDs) {
+  public void removeMembers(List<String> memberIDs) {
     this.memberIDs.removeAll(memberIDs);
   }
  
-  public Collection<String> getInviteIDs() {
+  public List<String> getInviteIDs() {
     return this.inviteIDs;
   }
 
@@ -94,7 +94,7 @@ public abstract class Group {
     this.inviteIDs.add(inviteID);
   }
 
-  public void invite(Collection<String> inviteIDs) {
+  public void invite(List<String> inviteIDs) {
     this.inviteIDs.addAll(inviteIDs);
   }
 
@@ -102,7 +102,7 @@ public abstract class Group {
     this.inviteIDs.remove(uninviteID);
   }
 
-  public void uninvite(Collection<String> uninviteIDs) {
+  public void uninvite(List<String> uninviteIDs) {
     this.inviteIDs.removeAll(uninviteIDs);
   }
 

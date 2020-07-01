@@ -1,20 +1,19 @@
 package com.google.sps.data;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 
 public class Community extends Group {
-  
-  // ID references to other communities and clubs
-  private Collection<String> communityIDs;
-  private Collection<String> clubIDs;
 
-  public Community(String id, String name, String description, String announcement,
-    Collection<String> posts, String ownerID, Collection<String> memberIDs,
-    Collection<String> inviteIDs, Collection<String> communityIDs, Collection<String> clubIDs) {
-     
+  // ID references to other communities and clubs
+  private List<String> communityIDs;
+  private List<String> clubIDs;
+
+  public Community(String id, String name, String description, String announcement, List<String> posts,
+      String ownerID, List<String> memberIDs, List<String> inviteIDs, List<String> communityIDs,
+      List<String> clubIDs) {
+
     super(id, name, description, announcement, posts, ownerID, memberIDs, inviteIDs);
     this.communityIDs = communityIDs;
     this.clubIDs = clubIDs;
@@ -22,15 +21,15 @@ public class Community extends Group {
 
   public Community(String id, String name, String description, String announcement, String ownerID) {
 
-    this(id, name, description, announcement, new ArrayList<String>(), ownerID, new HashSet<String>(),
-      new HashSet<String>(), new HashSet<String>(), new HashSet<String>());
+    this(id, name, description, announcement, new ArrayList<String>(), ownerID, new ArrayList<String>(),
+        new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
   }
 
   public Community(String id, String name, String description, String ownerID) {
     this(id, name, description, "", ownerID);
   }
 
-  public Collection<String> getCommunities() {
+  public List<String> getCommunityIDs() {
     return this.communityIDs;
   }
 
@@ -38,7 +37,7 @@ public class Community extends Group {
     this.communityIDs.add(communityID);
   }
 
-  public void addCommunityReferences(Collection<String> communityIDs) {
+  public void addCommunityReferences(List<String> communityIDs) {
     this.communityIDs.addAll(communityIDs);
   }
 
@@ -46,7 +45,7 @@ public class Community extends Group {
     this.communityIDs.remove(communityID);
   }
 
-  public void removeCommunityReferences(Collection<String> communityIDs) {
+  public void removeCommunityReferences(List<String> communityIDs) {
     this.communityIDs.removeAll(communityIDs);
   }
 
@@ -54,7 +53,7 @@ public class Community extends Group {
     this.communityIDs.clear();
   }
 
-  public Collection<String> getClubs() {
+  public List<String> getClubIDs() {
     return this.clubIDs;
   }
 
@@ -62,7 +61,7 @@ public class Community extends Group {
     this.clubIDs.add(clubID);
   }
 
-  public void addClubReferences(Collection<String> clubIDs) {
+  public void addClubReferences(List<String> clubIDs) {
     this.clubIDs.addAll(clubIDs);
   }
 
@@ -70,12 +69,12 @@ public class Community extends Group {
     this.clubIDs.remove(clubID);
   }
 
-  public void removeClubReferences(Collection<String> clubIDs) {
+  public void removeClubReferences(List<String> clubIDs) {
     this.clubIDs.removeAll(clubIDs);
   }
 
   public void clearClubs() {
     this.clubIDs.clear();
   }
-  
+
 }
