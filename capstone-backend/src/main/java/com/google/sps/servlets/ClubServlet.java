@@ -47,35 +47,7 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<Club> result = new ArrayList<>();
-    if (request.getParameter("id") != null) {
-      DocumentReference docRef = clubs.document(request.getParameter("id"));
-      ApiFuture<DocumentSnapshot> future = docRef.get();
-      DocumentSnapshot document = null;
-      Club club = null;
-      try {
-        document = future.get();
-        if (document.exists()) {
-          club = document.toObject(Club.class);
-        } else {
-          System.err.println("Error: no such document!");
-        }
-      } catch (Exception e) {
-        System.err.println("Error: " + e);
-      }
-      result.add(club);
-    }
-    else {
-      ApiFuture<QuerySnapshot> future = clubs.get();
-      try {
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        for (QueryDocumentSnapshot document : documents) {
-          result.add(document.toObject(Club.class));
-        }
-      } catch (Exception e) {
-        System.err.println("Error: " + e);
-      }
-    }
+    List<Club> result = Utility.get(clubs, request, new GenericClass(Club.class));
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(result));
   }
