@@ -119,8 +119,6 @@ public final class CommunityTest {
     Assert.assertEquals(expectedSize, community.getCommunityIDs().size());
   }
 
-  /////////////////////
-
   @Test
   public void testAddClubReference() {
     community.addClubReference(GROUP_ONE_ID);
