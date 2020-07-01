@@ -43,41 +43,7 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<Club> clubsRetrieved = new ArrayList<>();
-    if (request.getParameter("id") != null) {
-      DocumentReference docRef = clubs.document(request.getParameter("id"));
-      ApiFuture<DocumentSnapshot> asyncDocument = docRef.get();
-      DocumentSnapshot document = null;
-      Club club = null;
-      try {
-        document = asyncDocument.get();
-        if (document.exists()) {
-          club = document.toObject(Club.class);
-        } else {
-          System.err.println("Error: no such document!");
-          response.sendError(HttpServletResponse.SC_NOT_FOUND);
-          return;
-        }
-      } catch (Exception e) {
-        System.err.println("Error: " + e);
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        return;
-      }
-      clubsRetrieved.add(club);
-    }
-    else {
-      ApiFuture<QuerySnapshot> asyncDocument = clubs.get();
-      try {
-        List<QueryDocumentSnapshot> documents = asyncDocument.get().getDocuments();
-        for (QueryDocumentSnapshot document : documents) {
-          clubsRetrieved.add(document.toObject(Club.class));
-        }
-      } catch (Exception e) {
-        System.err.println("Error: " + e);
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        return;
-      }
-    }
+    List<Club> result = Utility.get(clubs, request, new GenericClass(Club.class));
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(clubsRetrieved));
   }
