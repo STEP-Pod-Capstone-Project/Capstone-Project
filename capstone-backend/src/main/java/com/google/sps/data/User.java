@@ -5,12 +5,7 @@ import java.util.Collection;
 
 import com.google.gson.JsonObject;
 
-/**
- * Class representing a User.
- *
- * Note: The private variables in this class are converted into JSON.
- */
-public class User {
+public final class User {
 
   private final String id; // Google Id
   private final String email;
