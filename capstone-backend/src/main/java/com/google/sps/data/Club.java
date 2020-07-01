@@ -1,29 +1,23 @@
 package com.google.sps.data;
 
-import java.util.Collection;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
 
- 
-/**
- * Class representing a Club.
- *
- * Note: The private variables in this class are converted into JSON.
- */
+
 public class Club {
   
-  private final long id;
+  private final String id;
   private String name;
   private String description;
   private String announcement;
-  private Collection<String> posts;
-  private long ownerID;
-  private Collection<Long> memberIDs;
-  private Collection<Long> inviteIDs;
+  private List<String> posts;
+  private String ownerID;
+  private List<String> memberIDs;
+  private List<String> inviteIDs;
   private String gbookID;
 
-  public Club(long id, String name, String description, String announcement, Collection<String> posts, 
-      long ownerID, Collection<Long> memberIDs, Collection<Long> inviteIDs, String gbookID) {
+  public Club(String id, String name, String description, String announcement, List<String> posts, 
+      String ownerID, List<String> memberIDs, List<String> inviteIDs, String gbookID) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -35,15 +29,23 @@ public class Club {
         this.gbookID = gbookID;
   }
 
-  public Club(long id, String name, String description, String announcement, long ownerID, String gbookID){
-    this(id, name, description, announcement, new ArrayList<String>(), ownerID, new HashSet<Long>(), new HashSet<Long>(), gbookID);
+  public Club(String id, String name, String description, String ownerID, String gbookID){
+    this(id, name, description, "", new ArrayList<String>(), ownerID, new ArrayList<String>(), new ArrayList<String>(), gbookID);
   }
 
-  public Club(long id, String name, String description, long ownerID, String gbookID) {
-    this(id, name, description, "", ownerID, gbookID);
+  public Club(String id, String name, String ownerID, String gbookID) {
+    this(id, name, "", ownerID, gbookID);
+  }
+
+  public Club(String id, String name, String ownerID) {
+    this(id, name, "", ownerID, "");
+  }
+
+  public Club() {
+    this("", "", "");
   }
  
-  public long getID() {
+  public String getID() {
     return this.id;
   }
  
@@ -71,7 +73,7 @@ public class Club {
     this.announcement = announcement;
   }
 
-  public Collection<String> getPosts() {
+  public List<String> getPosts() {
     return this.posts;
   }
 
@@ -83,53 +85,53 @@ public class Club {
     this.posts.clear();
   }
 
-  public long getOwnerID() {
+  public String getOwnerID() {
     return ownerID;
   }
 
-  public void setOwnerID(long ownerID) {
+  public void setOwnerID(String ownerID) {
     this.ownerID = ownerID;
   }
  
-  public Collection<Long> getMemberIDs() {
+  public List<String> getMemberIDs() {
     return this.memberIDs;
   }
 
-  public void removeMember(long memberID) {
+  public void removeMember(String memberID) {
     memberIDs.remove(memberID);
   }
 
-  public void removeMembers(Collection<Long> memberIDs) {
-    for (Long l : memberIDs) {
-      this.memberIDs.remove(l);
+  public void removeMembers(List<String> memberIDs) {
+    for (String m : memberIDs) {
+      this.memberIDs.remove(m);
     }
   }
  
-  public Collection<Long> getInviteIDs() {
+  public List<String> getInviteIDs() {
     return this.inviteIDs;
   }
 
-  public void invite(long inviteID) {
+  public void invite(String inviteID) {
     inviteIDs.add(inviteID);
   }
 
-  public void invite(Collection<Long> inviteIDs) {
-    for (Long l : inviteIDs) {
-      this.inviteIDs.add(l);
+  public void invite(List<String> inviteIDs) {
+    for (String i : inviteIDs) {
+      this.inviteIDs.add(i);
     }
   }
 
-  public void uninvite(Long uninviteID) {
+  public void uninvite(String uninviteID) {
     inviteIDs.remove(uninviteID);
   }
 
-  public void uninvite(Collection<Long> uninviteIDs) {
-    for (Long l : uninviteIDs) {
-      this.inviteIDs.remove(l);
+  public void uninvite(List<String> uninviteIDs) {
+    for (String u : uninviteIDs) {
+      this.inviteIDs.remove(u);
     }
   }
 
-  public boolean addMember(long memberID) {
+  public boolean addMember(String memberID) {
     if (inviteIDs.contains(memberID)) {
       inviteIDs.remove(memberID);
       memberIDs.add(memberID);
