@@ -142,7 +142,7 @@ public class ClubServlet extends HttpServlet {
 
     if (jsonObject.get("name") != null) {
       String name = jsonObject.get("name").getAsString();
-      club.setName(name)
+      club.setName(name);
       update.put("name", name);
     }
     if (jsonObject.get("description") != null) {
@@ -164,7 +164,7 @@ public class ClubServlet extends HttpServlet {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
-    
+
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(club));
   }
