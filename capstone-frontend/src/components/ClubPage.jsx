@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+
 class ClubPage extends Component {
   constructor(props) {
     super(props);
@@ -17,8 +18,10 @@ class ClubPage extends Component {
     this.fetchClubData();
   }
 
-  componentDidUpdate() {
-    this.fetchClubData();
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params.id !== prevProps.match.params.id) {
+      this.fetchClubData();
+    }
   }
 
   render() {
