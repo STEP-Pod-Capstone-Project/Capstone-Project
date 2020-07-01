@@ -1,6 +1,15 @@
 package com.google.sps.data;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,64 +20,78 @@ public final class UserTest {
   private User userOne;
   private User userTwo;
 
-  private static final String EMAIL_ONE = "emailOne";
-  private static final String EMAIL_TWO = "emailTwo";
-  private static final String NEW_EMAIL = "newEmail";
+  private final String ID_ONE = "123456789";
+  private final String ID_TWO = "987654321";
 
-  private static final String USERNAME_ONE = "usernameOne";
-  private static final String USERNAME_TWO = "usernameTwo";
-  private static final String NEW_USERNAME = "newUsername";
+  private final String EMAIL_ONE = "emailOne";
+  private final String EMAIL_TWO = "emailTwo";
+  private final String NEW_EMAIL = "newEmail";
+
+  private final String FULL_NAME_ONE = "fullNameOne";
+  private final String FULL_NAME_TWO = "fullNameTwo";
+  private final String NEW_FULL_NAME = "newFullName";
+
+  private JsonObject TOKEN_OBJ_ONE = new JsonObject();
+
+  private ArrayList<String> FRIEND_IDs_ONE = new ArrayList<String>();
+
+  private String FRIEND_ONE = "friendOne";
+  private String FRIEND_TWO = "friendTwo";
+  private String FRIEND_THREE = "friendThree";
 
   @Before
   public void setUp() {
-    userOne = new User(1, EMAIL_ONE, USERNAME_ONE);
-    userTwo = new User(2, EMAIL_TWO, USERNAME_TWO);
+
+    TOKEN_OBJ_ONE.add("access_token", JsonParser.parseString("test_access_token"));
+    TOKEN_OBJ_ONE.add("id_token", JsonParser.parseString("test_id_token_one"));
+
+    userOne = new User(ID_ONE, EMAIL_ONE, FULL_NAME_ONE, TOKEN_OBJ_ONE);
+    userTwo = new User(ID_TWO, EMAIL_TWO, FULL_NAME_TWO);
   }
 
   @Test
   public void testConstructor() {
-    Assert.assertEquals(userOne.getID(), 1);
-    Assert.assertEquals(userOne.getEmail(), EMAIL_ONE);
-    Assert.assertEquals(userOne.getUsername(), USERNAME_ONE);
-    Assert.assertEquals(userOne.getFriends().size(), 0);
+    assertEquals(ID_ONE, userOne.getID());
+    assertEquals(EMAIL_ONE, userOne.getEmail());
+    assertEquals(FULL_NAME_ONE, userOne.getfullName());
+    assertEquals(TOKEN_OBJ_ONE, userOne.getTokenObj());
+    assertTrue(userOne.getFriends().isEmpty());
 
-    Assert.assertEquals(userTwo.getID(), 2);
-    Assert.assertEquals(userTwo.getEmail(), EMAIL_TWO);
-    Assert.assertEquals(userTwo.getUsername(), USERNAME_TWO);
-    Assert.assertEquals(userTwo.getFriends().size(), 0);
+    assertEquals(ID_TWO, userTwo.getID());
+    assertEquals(EMAIL_TWO, userTwo.getEmail());
+    assertEquals(FULL_NAME_TWO, userTwo.getfullName());
+    assertEquals("{}", userTwo.getTokenObj().toString());
+    assertTrue(userTwo.getFriends().isEmpty());
   }
 
   @Test
-  public void testEmail() {
-    userOne.setEmail(NEW_EMAIL);
-    Assert.assertEquals(userOne.getEmail(), NEW_EMAIL);
-    Assert.assertEquals(userTwo.getEmail(), EMAIL_TWO);
-  }
-
-  @Test
-  public void testUsername() {
-    userOne.setUsername(NEW_USERNAME);
-    Assert.assertEquals(userOne.getUsername(), NEW_USERNAME);
-    Assert.assertEquals(userTwo.getUsername(), USERNAME_TWO);
+  public void testSetters() {
+    userTwo.setTokenObj(TOKEN_OBJ_ONE);
+    assertEquals(TOKEN_OBJ_ONE, userTwo.getTokenObj());
   }
 
   @Test
   public void testAddFriend() {
-    userOne.addFriend(new Long(3));
-    Assert.assertEquals(userOne.getFriends().size(), 1);
-    for (Long l : userOne.getFriends()) {
-      Assert.assertEquals(l, new Long(3));
-    }
-    Assert.assertEquals(userTwo.getFriends().size(), 0);
+    userOne.addFriend(FRIEND_ONE);
+    userTwo.addFriend(FRIEND_TWO);
+
+    assertFalse(userOne.getFriends().isEmpty());
+    assertFalse(userTwo.getFriends().isEmpty());
+
+    assertEquals(FRIEND_ONE, userOne.getFriends().toArray()[0]);
+    assertEquals(FRIEND_TWO, userTwo.getFriends().toArray()[0]);
   }
 
   @Test
   public void testClearFriends() {
-    userOne.addFriend(new Long(3));
-    userOne.addFriend(new Long(4));
-    userOne.addFriend(new Long(5));
-    Assert.assertEquals(userOne.getFriends().size(), 3);
+    userOne.addFriend(FRIEND_ONE);
+    userOne.addFriend(FRIEND_TWO);
+    userOne.addFriend(FRIEND_THREE);
+    assertTrue(userOne.getFriends().contains(FRIEND_ONE));
+    assertTrue(userOne.getFriends().contains(FRIEND_TWO));
+    assertTrue(userOne.getFriends().contains(FRIEND_THREE));
+
     userOne.clearFriends();
-    Assert.assertEquals(userOne.getFriends().size(), 0);
+    assertTrue(userOne.getFriends().isEmpty());
   }
 }

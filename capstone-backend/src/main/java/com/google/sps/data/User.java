@@ -1,7 +1,9 @@
 package com.google.sps.data;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+
+import com.google.gson.JsonObject;
 
 /**
  * Class representing a User.
@@ -10,44 +12,49 @@ import java.util.HashSet;
  */
 public class User {
 
-  private final long id;
-  private String email;
-  private String username;
-  private Collection<Long> friendIDs;
+  private final String id; // Google Id
+  private final String email;
+  private final String fullName;
+  private JsonObject tokenObj; // Needs to be updated every 60 days
+  private Collection<String> friendIDs;
 
-  /** Constructor for a User Object */
-  public User(long id, String email, String username) {
+  public User(String id, String email, String fullName, JsonObject tokenObj) {
     this.id = id;
     this.email = email;
-    this.username = username;
-    this.friendIDs = new HashSet<Long>();
+    this.fullName = fullName;
+    this.tokenObj = tokenObj;
+    this.friendIDs = new ArrayList<String>();
   }
 
-  public long getID() {
+  public User(String id, String email, String fullName) {
+    this(id, email, fullName, new JsonObject());
+  }
+
+  public String getID() {
     return id;
   }
 
   public String getEmail() {
-    return this.email;
+    return email;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public String getfullName() {
+    return fullName;
   }
 
-  public String getUsername() {
-    return this.username;
+  public JsonObject getTokenObj() {
+    return tokenObj;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setTokenObj(JsonObject tokenObj){
+    this.tokenObj = tokenObj;
   }
 
-  public Collection<Long> getFriends() {
+  public Collection<String> getFriends() {
     return friendIDs;
   }
 
-  public void addFriend(Long friendID) {
+  public void addFriend(String friendID) {
     friendIDs.add(friendID);
   }
 

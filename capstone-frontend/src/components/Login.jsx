@@ -26,9 +26,10 @@ export class Login extends Component {
     this.setState({ googleUser: response });
     this.setState({ profileObj: response.profileObj });
 
-    console.log("Response: \n", response);
-    console.log("GoogleUser", this.state.googleUser.profileObj.imageUrl)
-    console.log("AuthResponse", response.getAuthResponse());
+    console.log("GoogleUser\n", this.state.googleUser);
+    console.log("AuthResponse\n", this.state.googleUser.getAuthResponse());
+
+    // Store User in Firebase
   }
 
   logoutResponseSuccess = () => {
@@ -86,7 +87,7 @@ export class Login extends Component {
           <div>
 
             <GoogleLogin
-              clientId="962122785123-r4ps71sg5eobh9riec89s9kas6dpvraj.apps.googleusercontent.com"
+              clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
               buttonText="Login"
               onSuccess={this.loginResponseSuccess}
               isSignedIn={true}

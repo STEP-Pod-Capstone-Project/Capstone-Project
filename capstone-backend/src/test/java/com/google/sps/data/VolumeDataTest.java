@@ -1,12 +1,10 @@
-package com.google.sps;
+package com.google.sps.data;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.google.sps.data.VolumeData;
 
 /** Contains tests for the VolumeData model. */
 @RunWith(JUnit4.class)
