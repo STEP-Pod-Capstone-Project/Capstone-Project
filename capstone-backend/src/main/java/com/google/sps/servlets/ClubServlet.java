@@ -47,37 +47,43 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<Club> result = new ArrayList<>();
+    List<Club> clubsRetrieved = new ArrayList<>();
     if (request.getParameter("id") != null) {
       DocumentReference docRef = clubs.document(request.getParameter("id"));
-      ApiFuture<DocumentSnapshot> future = docRef.get();
+      ApiFuture<DocumentSnapshot> asyncDocument = docRef.get();
       DocumentSnapshot document = null;
       Club club = null;
       try {
-        document = future.get();
+        document = asyncDocument.get();
         if (document.exists()) {
           club = document.toObject(Club.class);
         } else {
           System.err.println("Error: no such document!");
+          response.sendError(HttpServletResponse.SC_NOT_FOUND);
+          return;
         }
       } catch (Exception e) {
         System.err.println("Error: " + e);
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
       }
-      result.add(club);
+      clubsRetrieved.add(club);
     }
     else {
-      ApiFuture<QuerySnapshot> future = clubs.get();
+      ApiFuture<QuerySnapshot> asyncDocument = clubs.get();
       try {
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        List<QueryDocumentSnapshot> documents = asyncDocument.get().getDocuments();
         for (QueryDocumentSnapshot document : documents) {
-          result.add(document.toObject(Club.class));
+          clubsRetrieved.add(document.toObject(Club.class));
         }
       } catch (Exception e) {
         System.err.println("Error: " + e);
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
       }
     }
     response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(result));
+    response.getWriter().println(gson.toJson(clubsRetrieved));
   }
 
   @Override
@@ -97,11 +103,13 @@ public class ClubServlet extends HttpServlet {
     }
 
     Club club = new Club(id, name, description, ownerID, gbookID);
-    ApiFuture<WriteResult> future = clubs.document(id).set(club);
+    ApiFuture<WriteResult> asyncDocument = clubs.document(id).set(club);
     try {
-      System.out.println("Update time : " + future.get().getUpdateTime());
+      System.out.println("Update time : " + asyncDocument.get().getUpdateTime());
     } catch (Exception e) {
       System.err.println("Error: " + e);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
     }
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(club));
@@ -112,15 +120,40 @@ public class ClubServlet extends HttpServlet {
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     String id = jsonObject.get("id").getAsString();
     Map<String, Object> update = new HashMap<>();
+    DocumentReference docRef = clubs.document(request.getParameter("id"));
+    ApiFuture<DocumentSnapshot> asyncDocument = docRef.get();
+    DocumentSnapshot document = null;
+    Club club = null;
+
+    try {
+      document = asyncDocument.get();
+      if (document.exists()) {
+        club = document.toObject(Club.class);
+      } else {
+        System.err.println("Error: no such document!");
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      }
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
 
     if (jsonObject.get("name") != null) {
-      update.put("name", jsonObject.get("name").getAsString());
+      String name = jsonObject.get("name").getAsString();
+      club.setName(name)
+      update.put("name", name);
     }
     if (jsonObject.get("description") != null) {
-      update.put("description", jsonObject.get("description").getAsInt());
+      String description = jsonObject.get("description").getAsString();
+      club.setDescription(description);
+      update.put("description", description);
     }
     if (jsonObject.get("gbookID") != null) {
-      update.put("gbookID", jsonObject.get("gbookID").getAsString());
+      String gbookID = jsonObject.get("gbookID").getAsString();
+      club.setGbookID(gbookID);
+      update.put("gbookID", gbookID);
     }
 
     ApiFuture<WriteResult> writeResult = clubs.document(id).set(update, SetOptions.merge());
@@ -128,6 +161,11 @@ public class ClubServlet extends HttpServlet {
       System.out.println("Update time : " + writeResult.get().getUpdateTime());
     } catch (Exception e) {
       System.err.println("Error: " + e);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
     }
+    
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(club));
   }
 }

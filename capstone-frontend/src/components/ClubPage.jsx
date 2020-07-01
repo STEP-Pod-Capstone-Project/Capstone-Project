@@ -4,24 +4,31 @@ class ClubPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      response: {}
+      club: {}
     }
   }
 
   fetchClubData = () => {
     fetch(`/api/clubs?id=${this.props.match.params.id}`)
-        .then(response => response.json()).then(res => this.setState({response: res[0]}));
+        .then(response => response.json()).then(res => this.setState({club: res[0]}));
+  }
+
+  componentDidMount() {
+    this.fetchClubData();
+  }
+
+  componentDidUpdate() {
+    this.fetchClubData();
   }
 
   render() {
-    this.fetchClubData();
     return (
       <div>
-        <div> Club Name: {this.state.response.name} </div>
+        <div> Club Name: {this.state.club.name} </div>
         <div> ID: {this.props.match.params.id} </div>
-        <div> Description: {this.state.response.description} </div>
-        <div> OwnerID: {this.state.response.ownerID} </div>
-        <div> GbookID: {this.state.response.gbookID} </div>
+        <div> Description: {this.state.club.description} </div>
+        <div> OwnerID: {this.state.club.ownerID} </div>
+        <div> GbookID: {this.state.club.gbookID} </div>
       </div>
     );
   }
