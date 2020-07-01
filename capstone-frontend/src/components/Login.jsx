@@ -59,7 +59,7 @@ export class Login extends Component {
           <div>
 
             <GoogleLogin 
-              clientId="962122785123-r4ps71sg5eobh9riec89s9kas6dpvraj.apps.googleusercontent.com"
+              clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
               buttonText="Login"
               onSuccess={this.loginResponseSuccess}
               isSignedIn={true}
