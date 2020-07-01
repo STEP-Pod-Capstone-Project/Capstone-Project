@@ -41,10 +41,6 @@ public class User {
   public void setUsername(String username) {
     this.username = username;
   }
-
-  public Collection<Long> getFriends() {
-    return friendIDs;
-  }
  
   public Collection<String> getFriends() {
     return friendIDs;
