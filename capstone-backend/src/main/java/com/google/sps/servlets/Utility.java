@@ -21,6 +21,8 @@ import com.google.gson.JsonParser;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,4 +60,38 @@ public class Utility {
     }
     return jsonObject;
   }
+
+  public static <T> List<T> get(CollectionReference collectionReference, HttpServletRequest request, GenericClass<T> genClass) throws IOException {
+    List<T> result = new ArrayList<>();
+    if (request.getParameter("id") != null) {
+      DocumentReference docRef = collectionReference.document(request.getParameter("id"));
+      ApiFuture<DocumentSnapshot> future = docRef.get();
+      DocumentSnapshot document = null;
+      T item = null;
+      try {
+        document = future.get();
+        if (document.exists()) {
+          item = document.toObject(genClass.getMyType());
+        } else {
+          System.err.println("Error: no such document!");
+        }
+      } catch (Exception e) {
+        System.err.println("Error: " + e);
+      }
+      result.add(item);
+    }
+    else {
+      ApiFuture<QuerySnapshot> future = collectionReference.get();
+      try {
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (QueryDocumentSnapshot document : documents) {
+          result.add(document.toObject(genClass.getMyType()));
+        }
+      } catch (Exception e) {
+        System.err.println("Error: " + e);
+      }
+    }
+    return result;
+  }
+
 }
