@@ -47,6 +47,7 @@ public class BookServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    List<Book> result = new ArrayList<>();
     if (request.getParameter("id") != null) {
       DocumentReference docRef = books.document(request.getParameter("id"));
       ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -62,23 +63,21 @@ public class BookServlet extends HttpServlet {
       } catch (Exception e) {
         System.err.println("Error: " + e);
       }
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(book));
+      result.add(book);
     }
     else {
-      List<Book> bookList = new ArrayList<>();
       ApiFuture<QuerySnapshot> future = books.get();
       try {
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (QueryDocumentSnapshot document : documents) {
-          bookList.add(document.toObject(Book.class));
+          result.add(document.toObject(Book.class));
         }
       } catch (Exception e) {
         System.err.println("Error: " + e);
       }
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(bookList));
     }
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(result));
   }
 
   @Override
