@@ -11,6 +11,12 @@ public final class UserTest {
   private User userOne;
   private User userTwo;
 
+  private static final String ID_ONE = "idOne";
+  private static final String ID_TWO = "idTwo";
+  private static final String ID_THREE = "idThree";
+  private static final String ID_FOUR = "idFour";
+  private static final String ID_FIVE = "idFive";
+
   private static final String EMAIL_ONE = "emailOne";
   private static final String EMAIL_TWO = "emailTwo";
   private static final String NEW_EMAIL = "newEmail";
@@ -21,18 +27,18 @@ public final class UserTest {
 
   @Before
   public void setUp() {
-    userOne = new User(1, EMAIL_ONE, USERNAME_ONE);
-    userTwo = new User(2, EMAIL_TWO, USERNAME_TWO);
+    userOne = new User(ID_ONE, EMAIL_ONE, USERNAME_ONE);
+    userTwo = new User(ID_TWO, EMAIL_TWO, USERNAME_TWO);
   }
 
   @Test
   public void testConstructor() {
-    Assert.assertEquals(userOne.getID(), 1);
+    Assert.assertEquals(userOne.getID(), ID_ONE);
     Assert.assertEquals(userOne.getEmail(), EMAIL_ONE);
     Assert.assertEquals(userOne.getUsername(), USERNAME_ONE);
     Assert.assertEquals(userOne.getFriends().size(), 0);
 
-    Assert.assertEquals(userTwo.getID(), 2);
+    Assert.assertEquals(userTwo.getID(), ID_TWO);
     Assert.assertEquals(userTwo.getEmail(), EMAIL_TWO);
     Assert.assertEquals(userTwo.getUsername(), USERNAME_TWO);
     Assert.assertEquals(userTwo.getFriends().size(), 0);
@@ -54,19 +60,19 @@ public final class UserTest {
 
   @Test
   public void testAddFriend() {
-    userOne.addFriend(new Long(3));
+    userOne.addFriend(ID_THREE);
     Assert.assertEquals(userOne.getFriends().size(), 1);
-    for (Long l : userOne.getFriends()) {
-      Assert.assertEquals(l, new Long(3));
+    for (String friendID : userOne.getFriends()) {
+      Assert.assertEquals(friendID, ID_THREE);
     }
     Assert.assertEquals(userTwo.getFriends().size(), 0);
   }
 
   @Test
   public void testClearFriends() {
-    userOne.addFriend(new Long(3));
-    userOne.addFriend(new Long(4));
-    userOne.addFriend(new Long(5));
+    userOne.addFriend(ID_THREE);
+    userOne.addFriend(ID_FOUR);
+    userOne.addFriend(ID_FIVE);
     Assert.assertEquals(userOne.getFriends().size(), 3);
     userOne.clearFriends();
     Assert.assertEquals(userOne.getFriends().size(), 0);

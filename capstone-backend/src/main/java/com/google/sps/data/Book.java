@@ -1,21 +1,17 @@
 package com.google.sps.data;
 
-/**
- * Class representing a Book.
- *
- * Note: The private variables in this class are converted into JSON.
- */
-public class Book {
 
-  private final long id;
-  private final long userID;
+public class Book {
+    
+  private final String id;
+  private final String userID;
   private final String gbookID;
   private boolean hasRead;
   private int rating;
   private String review;
 
-  /** Constructor for a Book Object */
-  public Book(long id, long userID, String gbookID, boolean hasRead, int rating, String review) {
+ 
+  public Book(String id, String userID, String gbookID, boolean hasRead, int rating, String review) {
     this.id = id;
     this.userID = userID;
     this.gbookID = gbookID;
@@ -23,17 +19,20 @@ public class Book {
     this.rating = rating;
     this.review = review;
   }
-
-  /** Constructor for a Book Object */
-  public Book(long id, long userID, String gbookID) {
+ 
+  public Book(String id, String userID, String gbookID) {
     this(id, userID, gbookID, false, -1, "");
   }
 
-  public long getID() {
-    return id;
+  public Book() {
+    this("", "", "", false, -1, "");
   }
 
-  public long getUserID() {
+  public String getID() {
+    return id;
+  }
+ 
+  public String getUserID() {
     return this.userID;
   }
 
