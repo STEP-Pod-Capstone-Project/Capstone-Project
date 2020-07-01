@@ -2,10 +2,7 @@ package com.google.sps.data;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -25,15 +22,12 @@ public final class UserTest {
 
   private final String EMAIL_ONE = "emailOne";
   private final String EMAIL_TWO = "emailTwo";
-  private final String NEW_EMAIL = "newEmail";
 
   private final String FULL_NAME_ONE = "fullNameOne";
   private final String FULL_NAME_TWO = "fullNameTwo";
-  private final String NEW_FULL_NAME = "newFullName";
 
   private JsonObject TOKEN_OBJ_ONE = new JsonObject();
 
-  private ArrayList<String> FRIEND_IDs_ONE = new ArrayList<String>();
 
   private String FRIEND_ONE = "friendOne";
   private String FRIEND_TWO = "friendTwo";

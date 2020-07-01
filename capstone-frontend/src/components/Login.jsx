@@ -30,6 +30,14 @@ export class Login extends Component {
     console.log("AuthResponse\n", this.state.googleUser.getAuthResponse());
 
     // Store User in Firebase
+
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user",
+      {
+        method: "POST",
+        body: JSON.stringify(this.state.googleUser),
+        credentials: 'include'
+      }).then(response => console.log("Data Sent", response));
+
   }
 
   logoutResponseSuccess = () => {

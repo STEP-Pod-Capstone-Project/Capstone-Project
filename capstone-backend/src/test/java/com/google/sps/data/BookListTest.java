@@ -14,8 +14,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Arrays;
 
-import com.google.sps.data.BookList;
-
 @RunWith(JUnit4.class)
 public final class BookListTest {
 
