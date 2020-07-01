@@ -11,6 +11,7 @@ export class Login extends Component {
 
     this.state = {
       isLogin: false,
+      googleUser: {},
       profileObj: {},
       profileMenuCollapsed: false
     };
@@ -22,19 +23,43 @@ export class Login extends Component {
 
   loginResponseSuccess = (response) => {
     this.setState({ isLogin: true });
+    this.setState({ googleUser: response });
     this.setState({ profileObj: response.profileObj });
+
     console.log("Response: \n", response);
+    console.log("GoogleUser", this.state.googleUser.profileObj.imageUrl)
     console.log("AuthResponse", response.getAuthResponse());
   }
 
   logoutResponseSuccess = () => {
     this.setState({ isLogin: false });
+    this.setState({ googleUser: {} });
     this.setState({ profileObj: {} });
+
   }
 
   render() {
     return (
       <div id="login">
+
+        <button onClick={async () => {
+
+          const authHeaders = new Headers({
+            'Authorization': this.state.googleUser.getAuthResponse().token_type + " " + this.state.googleUser.getAuthResponse().access_token,
+            'Accept': 'application/json',
+          });
+
+          const response = await fetch('https://www.googleapis.com/books/v1/mylibrary/bookshelves?key=AIzaSyAdnHNzKVY7G3ZriaqdSIKkVbHlxKbxyu0', {
+            method: 'GET',
+            headers: authHeaders,
+          })
+
+          const bookshelves = await response.json();
+
+          console.log(bookshelves);
+
+        }}>Fetch Stuff</button>
+
         {this.state.isLogin
           ?
           <div>
@@ -60,11 +85,12 @@ export class Login extends Component {
           :
           <div>
 
-            <GoogleLogin 
+            <GoogleLogin
               clientId="962122785123-r4ps71sg5eobh9riec89s9kas6dpvraj.apps.googleusercontent.com"
               buttonText="Login"
               onSuccess={this.loginResponseSuccess}
               isSignedIn={true}
+              scope={"https://www.googleapis.com/auth/books"}
               cookiePolicy={"single_host_origin"} />
 
           </div>}
