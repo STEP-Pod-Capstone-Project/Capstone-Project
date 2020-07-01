@@ -312,4 +312,3 @@ public class Utility {
     return getById(id, collectionReference, request, response, genericClass).get(0);
   }
 }
-
