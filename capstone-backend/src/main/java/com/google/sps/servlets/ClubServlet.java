@@ -47,9 +47,11 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<Club> result = Utility.get(clubs, request, new GenericClass(Club.class));
-    response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(clubsRetrieved));
+    List<Club> retrievedClubs = Utility.get(clubs, request, response, new GenericClass(Club.class));
+    if (retrievedClubs != null) {
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(retrievedClubs));
+    }
   }
 
   @Override

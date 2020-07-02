@@ -21,10 +21,13 @@ import com.google.gson.JsonParser;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map; 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 public class Utility {
@@ -61,37 +64,108 @@ public class Utility {
     return jsonObject;
   }
 
-  public static <T> List<T> get(CollectionReference collectionReference, HttpServletRequest request, GenericClass<T> genClass) throws IOException {
-    List<T> result = new ArrayList<>();
-    if (request.getParameter("id") != null) {
-      DocumentReference docRef = collectionReference.document(request.getParameter("id"));
-      ApiFuture<DocumentSnapshot> future = docRef.get();
-      DocumentSnapshot document = null;
-      T item = null;
-      try {
-        document = future.get();
-        if (document.exists()) {
-          item = document.toObject(genClass.getMyType());
-        } else {
-          System.err.println("Error: no such document!");
-        }
-      } catch (Exception e) {
-        System.err.println("Error: " + e);
+  private static <T> List<T> getById(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    if (request.getParameterMap().size() > 1) {
+      System.err.println("Error: No other parameter can be sent with an ID");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    List<T> retrievedObjects = new ArrayList<>();
+    ApiFuture<QuerySnapshot> asyncQuery;
+    DocumentReference docRef = collectionReference.document(request.getParameter("id"));
+    ApiFuture<DocumentSnapshot> asyncDocument = docRef.get();
+    DocumentSnapshot document = null;
+    T item = null;
+    try {
+      document = asyncDocument.get();
+      if (document.exists()) {
+        item = document.toObject(genericClass.getMyType());
+      } else {
+        System.err.println("Error: no such document!");
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        return null;
       }
-      result.add(item);
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return null;
+    }
+    retrievedObjects.add(item);
+    return retrievedObjects;
+  }
+
+  private static <T> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    Map.Entry<String, String[]> entry = request.getParameterMap().entrySet().iterator().next();
+    String parameterName = entry.getKey();
+    if (entry.getValue().length != 1) {
+      System.err.println("Error: Each parameter should have only one value");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    if (entry.getValue()[0].isEmpty()) {
+      System.err.println("Error: The parameter value cannot be empty");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    String parameterValue = entry.getValue()[0];
+    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    boolean containsParameter = false;
+    boolean parameterIsList = false;
+    for (Field field : fields) {
+      if (field.getName().equals(parameterName)) {
+        containsParameter = true;
+        if (field.getType().getName().equals("java.util.List") || field.getType().getName().equals("java.util.ArrayList")) {
+          parameterIsList = true;
+        }
+      }
+    }
+    if (!containsParameter) {
+      System.err.println("Error: The object does not have the field specified in the request parameter.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    if (!parameterIsList) {
+      return collectionReference.whereEqualTo(parameterName, parameterValue).get(); 
     }
     else {
-      ApiFuture<QuerySnapshot> future = collectionReference.get();
-      try {
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        for (QueryDocumentSnapshot document : documents) {
-          result.add(document.toObject(genClass.getMyType()));
-        }
-      } catch (Exception e) {
-        System.err.println("Error: " + e);
+      return collectionReference.whereArrayContains(parameterName, parameterValue).get();
+    }
+  }
+
+  public static <T> List<T> get(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    List<T> retrievedObjects = new ArrayList<>();
+    ApiFuture<QuerySnapshot> asyncQuery;
+    if (request.getParameter("id") != null) {
+      return getById(collectionReference, request, response, genericClass);
+    }
+    if (request.getParameterMap().size() == 0) {
+      asyncQuery = collectionReference.get();
+    }
+    else if (request.getParameterMap().size() == 1) {
+      asyncQuery = getByField(collectionReference, request, response, genericClass);
+      if (asyncQuery == null) {
+        return null;
       }
     }
-    return result;
+    else {
+      System.err.println("Error: Only one parameter may be sent in the request");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    try {
+      List<QueryDocumentSnapshot> documents = asyncQuery.get().getDocuments();
+      for (QueryDocumentSnapshot document : documents) {
+        retrievedObjects.add(document.toObject(genericClass.getMyType()));
+      }
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return null;
+    }
+    return retrievedObjects;
   }
 
 }
