@@ -67,7 +67,7 @@ public class ClubServlet extends HttpServlet {
     }
 
     Club club = new Club(name, description, ownerID, gbookID);
-    ApiFuture<WriteResult> future = clubs.document(id).set(club);
+    ApiFuture<WriteResult> asyncDocument = clubs.document(id).set(club);
     try {
       System.out.println("Update time : " + asyncDocument.get().getUpdateTime());
     } catch (Exception e) {

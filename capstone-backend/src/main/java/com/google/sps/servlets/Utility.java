@@ -63,7 +63,7 @@ public class Utility {
    * @param {genericClass} a Generic class, used in casting documents from the database
    * @return List<T> a singleton List of the Object that matches the ID in the request.
    */
-  private static <T extends BaseEntity> List<T> getById(CollectionReference collectionReference, HttpServletRequest request, 
+  private static <T extends BaseEntity> List<T> getById(String id, CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     if (request.getParameterMap().size() > 1) {
       System.err.println("Error: No other parameter can be sent with an ID");
@@ -71,7 +71,7 @@ public class Utility {
       return null;
     }
     List<T> retrievedObjects = new ArrayList<>();
-    DocumentReference docRef = collectionReference.document(request.getParameter("id"));
+    DocumentReference docRef = collectionReference.document(id);
     ApiFuture<DocumentSnapshot> asyncDocument = docRef.get();
     DocumentSnapshot document = null;
     T item = null;
@@ -240,7 +240,7 @@ public class Utility {
     return retrievedObjects;
   }
 
-  public static <T> T put(CollectionReference collectionReference, HttpServletRequest request, 
+  public static <T extends BaseEntity> T put(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     String id = "";
