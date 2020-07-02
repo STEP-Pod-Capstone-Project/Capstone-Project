@@ -2,15 +2,14 @@ package com.google.sps.data;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.common.collect.ImmutableMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +39,15 @@ public final class UserTest {
   private final String SCOPE = "email profile openid";
   private final String IDP_ID = "google";
 
+  private final Map<String, String> TOKEN_OBJ = new ImmutableMap.Builder<String, String>() 
+    .put("TOKEN_ID", TOKEN_ID)
+    .put("TOKEN_TYPE", TOKEN_TYPE)
+    .put("ACCESS_TOKEN", ACCESS_TOKEN)
+    .put("SCOPE", SCOPE)
+    .put("IDP_ID", IDP_ID)
+    .build();
+    
+
   private final Collection<String> FRIEND_IDs = new ArrayList<String>(
       Arrays.asList("friend_x", "friend_y", "friend_z"));
 
@@ -50,11 +58,9 @@ public final class UserTest {
   @Before
   public void setUp() {
 
-    userOne = new User(ID_ONE, EMAIL_ONE, FULL_NAME_ONE, PROFILE_IMAGE_URL_ONE,
-        User.createTokenObject(TOKEN_ID, TOKEN_TYPE, ACCESS_TOKEN, SCOPE, IDP_ID), FRIEND_IDs);
+    userOne = new User(ID_ONE, EMAIL_ONE, FULL_NAME_ONE, PROFILE_IMAGE_URL_ONE, TOKEN_OBJ, FRIEND_IDs);
 
-    userTwo = new User(ID_TWO, EMAIL_TWO, FULL_NAME_TWO, PROFILE_IMAGE_URL_TWO,
-        User.createTokenObject(TOKEN_ID, TOKEN_TYPE, ACCESS_TOKEN, SCOPE, IDP_ID));
+    userTwo = new User(ID_TWO, EMAIL_TWO, FULL_NAME_TWO, PROFILE_IMAGE_URL_TWO, TOKEN_OBJ);
   }
 
   @Test
@@ -64,13 +70,13 @@ public final class UserTest {
     assertEquals(EMAIL_ONE, userOne.getEmail());
     assertEquals(FULL_NAME_ONE, userOne.getfullName());
     assertEquals(PROFILE_IMAGE_URL_ONE, userOne.getProfileImageUrl());
-    assertNotNull(userOne.getTokenObj());
+    assertFalse(userOne.getTokenObj().isEmpty());
 
-    assertEquals(TOKEN_ID, userOne.getTokenId());
-    assertEquals(TOKEN_TYPE, userOne.getTokenType());
-    assertEquals(ACCESS_TOKEN, userOne.getAccessToken());
-    assertEquals(SCOPE, userOne.getScope());
-    assertEquals(IDP_ID, userOne.getIdpId());
+    assertTrue(userOne.getTokenObj().containsValue(TOKEN_ID));
+    assertTrue(userOne.getTokenObj().containsValue(TOKEN_TYPE));
+    assertTrue(userOne.getTokenObj().containsValue(ACCESS_TOKEN));
+    assertTrue(userOne.getTokenObj().containsValue(SCOPE));
+    assertTrue(userOne.getTokenObj().containsValue(IDP_ID));
 
     assertFalse(userOne.getFriends().isEmpty());
 
@@ -78,13 +84,13 @@ public final class UserTest {
     assertEquals(EMAIL_TWO, userTwo.getEmail());
     assertEquals(FULL_NAME_TWO, userTwo.getfullName());
     assertEquals(PROFILE_IMAGE_URL_TWO, userTwo.getProfileImageUrl());
-    assertNotNull(userTwo.getTokenObj());
+    assertFalse(userTwo.getTokenObj().isEmpty());
 
-    assertEquals(TOKEN_ID, userOne.getTokenId());
-    assertEquals(TOKEN_TYPE, userOne.getTokenType());
-    assertEquals(ACCESS_TOKEN, userOne.getAccessToken());
-    assertEquals(SCOPE, userOne.getScope());
-    assertEquals(IDP_ID, userOne.getIdpId());
+    assertTrue(userTwo.getTokenObj().containsValue(TOKEN_ID));
+    assertTrue(userTwo.getTokenObj().containsValue(TOKEN_TYPE));
+    assertTrue(userTwo.getTokenObj().containsValue(ACCESS_TOKEN));
+    assertTrue(userTwo.getTokenObj().containsValue(SCOPE));
+    assertTrue(userTwo.getTokenObj().containsValue(IDP_ID));
 
     assertTrue(userTwo.getFriends().isEmpty());
   }
