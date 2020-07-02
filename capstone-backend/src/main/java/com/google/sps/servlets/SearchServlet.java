@@ -49,7 +49,7 @@ public class SearchServlet extends HttpServlet {
     if (searchTerm == null || searchTerm.isEmpty()) return;
     searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
 
-    int maxResults;
+    int maxResults = 0;
     if (request.getParameter("maxResults") != null) { 
       maxResults = parseNaturalNumber(request.getParameter("maxResults"));
     } 
