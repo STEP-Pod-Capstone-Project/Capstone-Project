@@ -69,12 +69,12 @@ public class UserServlet extends HttpServlet {
 
         googleUser = new User(googleId, email, fullname, profileImageUrl,
             new ImmutableMap.Builder<String, String>()
-            .put("token_id", tokenId)
-            .put("token_type", token_type)
-            .put("access_token", access_token)
-            .put("scope", scope)
-            .put("idpId", idpId)
-            .build());
+              .put("token_id", tokenId)
+              .put("token_type", token_type)
+              .put("access_token", access_token)
+              .put("scope", scope)
+              .put("idpId", idpId)
+              .build());
 
         System.out.println("Object Build: " + googleUser.toString());
 
