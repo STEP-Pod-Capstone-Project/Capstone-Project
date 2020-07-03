@@ -66,6 +66,14 @@ public class Utility {
     return jsonObject;
   }
 
+  /**
+   * Query the given collection by id. 
+   * @param {collectionReference} reference to the appropriate database collection
+   * @param {request} request sent to the backend
+   * @param {response} response returned from the call
+   * @param {genericClass} a Generic class, used in casting documents from the database
+   * @return List<T> a singleton List of the Object that matches the ID in the request.
+   */
   private static <T> List<T> getById(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     if (request.getParameterMap().size() > 1) {
@@ -97,6 +105,14 @@ public class Utility {
     return retrievedObjects;
   }
 
+  /**
+   * Appends filters to the given query depending on fields in the request query 
+   * @param {genericClass} a Generic class, used in casting documents from the database
+   * @param {response} response returned from the call
+   * @param {it} iterator for the Map of query parameter names to values
+   * @param {query} query being modified, to eventually be used to query the database.
+   * @return Query the query being modified, to eventually be used to query the database.
+   */
   private static <T> Query addToQuery(GenericClass<T> genericClass, HttpServletResponse response, 
       Iterator it, Query query) throws IOException {
     Map.Entry<String, String[]> entry = (Map.Entry) it.next();
@@ -136,6 +152,14 @@ public class Utility {
     }
   }
 
+  /**
+   * Gets an asynchronous collection of matching documents from the database matching the request
+   * @param {collectionRefence} reference to the appropriate collection of documents in the database
+   * @param {genericClass} a Generic class, used in casting documents from the database
+   * @param {request} request sent to the backend
+   * @param {response} response returned from the call
+   * @return Query the query being modified, to eventually be used to query the database.
+   */
   private static <T> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     Iterator it = request.getParameterMap().entrySet().iterator();
@@ -179,6 +203,17 @@ public class Utility {
     return query.get();
   }
 
+  /**
+   * Performs a get request on the given collection, allowing the requester to apply any number 
+   * of queries both for equality and to check membership in list fields. Query parameters must 
+   * match object field names exactly. If no queries are applied, the entire collection
+   * is returned. If an ID is supplied, a singleton list with that object is returned. 
+   * @param {collectionRefence} the appropriate collection of documents in the database
+   * @param {request} the request sent to the backend
+   * @param {response} the response returned from the call
+   * @param {genericClass} a Generic class, to be used in casting objects retrieved from the database
+   * @return Query the query being modified, to eventually be used to query the database.
+   */
   public static <T> List<T> get(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     List<T> retrievedObjects = new ArrayList<>();
