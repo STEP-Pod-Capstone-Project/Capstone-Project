@@ -6,6 +6,7 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
@@ -22,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map; 
@@ -95,9 +97,9 @@ public class Utility {
     return retrievedObjects;
   }
 
-  private static <T> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference, HttpServletRequest request, 
-      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
-    Map.Entry<String, String[]> entry = request.getParameterMap().entrySet().iterator().next();
+  private static <T> Query addToQuery(GenericClass<T> genericClass, HttpServletResponse response, 
+      Iterator it, Query query) throws IOException {
+    Map.Entry<String, String[]> entry = (Map.Entry) it.next();
     String parameterName = entry.getKey();
     if (entry.getValue().length != 1) {
       System.err.println("Error: Each parameter should have only one value");
@@ -127,11 +129,54 @@ public class Utility {
       return null;
     }
     if (!parameterIsList) {
-      return collectionReference.whereEqualTo(parameterName, parameterValue).get(); 
+      return query.whereEqualTo(parameterName, parameterValue);
     }
     else {
-      return collectionReference.whereArrayContains(parameterName, parameterValue).get();
+      return query.whereArrayContains(parameterName, parameterValue);
     }
+  }
+
+  private static <T> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    Iterator it = request.getParameterMap().entrySet().iterator();
+    Map.Entry<String, String[]> entry = (Map.Entry) it.next();
+    String parameterName = entry.getKey();
+    if (entry.getValue().length != 1) {
+      System.err.println("Error: Each parameter should have only one value");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    if (entry.getValue()[0].isEmpty()) {
+      System.err.println("Error: The parameter value cannot be empty");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    String parameterValue = entry.getValue()[0];
+    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    boolean containsParameter = false;
+    boolean parameterIsList = false;
+    for (Field field : fields) {
+      if (field.getName().equals(parameterName)) {
+        containsParameter = true;
+        if (field.getType().getName().equals("java.util.List") || field.getType().getName().equals("java.util.ArrayList")) {
+          parameterIsList = true;
+        }
+      }
+    }
+    if (!containsParameter) {
+      System.err.println("Error: The object does not have the field specified in the request parameter.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    Query query = parameterIsList ? collectionReference.whereArrayContains(parameterName, parameterValue)
+        : collectionReference.whereEqualTo(parameterName, parameterValue);
+    while (it.hasNext()) {
+      query = addToQuery(genericClass, response, it, query);
+      if (query == null) {
+        return null;
+      }
+    }
+    return query.get();
   }
 
   public static <T> List<T> get(CollectionReference collectionReference, HttpServletRequest request, 
@@ -144,16 +189,11 @@ public class Utility {
     if (request.getParameterMap().size() == 0) {
       asyncQuery = collectionReference.get();
     }
-    else if (request.getParameterMap().size() == 1) {
+    else {
       asyncQuery = getByField(collectionReference, request, response, genericClass);
       if (asyncQuery == null) {
         return null;
       }
-    }
-    else {
-      System.err.println("Error: Only one parameter may be sent in the request");
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return null;
     }
     try {
       List<QueryDocumentSnapshot> documents = asyncQuery.get().getDocuments();
@@ -167,5 +207,4 @@ public class Utility {
     }
     return retrievedObjects;
   }
-
 }
