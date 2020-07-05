@@ -5,6 +5,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
@@ -26,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map; 
@@ -236,4 +238,58 @@ public class Utility {
     }
     return retrievedObjects;
   }
+
+  public static <T> void put(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    JsonObject jsonObject = Utility.createRequestBodyJson(request);
+    String id = jsonObject.get("id").getAsString();
+    Map<String, Object> update = new HashMap<>();
+    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    boolean containsParameter = false;
+    for (String key : jsonObject.keySet()) {
+      for (Field field: fields) {
+        String type = field.getType().getName();
+        if (field.getName().equals(key)) {
+          containsParameter = true;
+          if (type.equals("int") || type.equals("java.lang.Integer")) {
+            update.put(key, jsonObject.get(key).getAsInt());
+          }
+          if (type.equals("java.lang.String")) {
+            update.put(key, jsonObject.get(key).getAsString());
+          }
+          if (type.equals("boolean") || type.equals("java.lang.boolean")) {
+            update.put(key, jsonObject.get(key).getAsBoolean());
+          }
+        }
+        else if (("add_"+field.getName()).equals(key)) {
+          if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
+            containsParameter = true;
+            update.put(key, FieldValue.arrayUnion(jsonObject.get(key).getAsString()));
+          }
+        }
+        else if (("remove_"+field.getName()).equals(key)) {
+          if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
+            containsParameter = true;
+            update.put(key, FieldValue.arrayRemove(jsonObject.get(key).getAsString()));
+          }
+        }
+      }
+      if (!containsParameter) {
+        System.err.println("Error: The object does not have the field specified in the request parameter.");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+      containsParameter = false;
+    }
+
+    ApiFuture<WriteResult> writeResult = collectionReference.document(id).set(update, SetOptions.merge());
+    try {
+      System.out.println("Update time : " + writeResult.get().getUpdateTime());
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
+  }
+
 }

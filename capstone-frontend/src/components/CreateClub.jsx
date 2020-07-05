@@ -18,7 +18,8 @@ class CreateClub extends Component {
         .then(function() {
           history.push(`/clubpage/${data.id}`);
         })
-        .catch(function() {
+        .catch(function(e) {
+          console.log(e);
           alert("Looks like we're having trouble connecting to our database, hang tight!");
         });  
   }
