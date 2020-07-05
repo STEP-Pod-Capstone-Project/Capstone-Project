@@ -83,25 +83,6 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    String id = jsonObject.get("id").getAsString();
-    Map<String, Object> update = new HashMap<>();
-
-    if (jsonObject.get("name") != null) {
-      update.put("name", jsonObject.get("name").getAsString());
-    }
-    if (jsonObject.get("description") != null) {
-      update.put("description", jsonObject.get("description").getAsInt());
-    }
-    if (jsonObject.get("gbookID") != null) {
-      update.put("gbookID", jsonObject.get("gbookID").getAsString());
-    }
-
-    ApiFuture<WriteResult> writeResult = clubs.document(id).set(update, SetOptions.merge());
-    try {
-      System.out.println("Update time : " + writeResult.get().getUpdateTime());
-    } catch (Exception e) {
-      System.err.println("Error: " + e);
-    }
+    Utility.put(clubs, request, response, new GenericClass(Club.class));
   }
 }
