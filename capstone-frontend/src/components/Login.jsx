@@ -26,17 +26,12 @@ export class Login extends Component {
     this.setState({ googleUser: response });
     this.setState({ profileObj: response.profileObj });
 
-    console.log("GoogleUser\n", this.state.googleUser);
-    console.log("AuthResponse\n", this.state.googleUser.getAuthResponse());
-
     // Store User in Firebase
 
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user",
-      {
-        method: "POST",
-        body: JSON.stringify(this.state.googleUser.tokenObj),
-        credentials: 'include'
-      }).then(response => console.log("Data Sent: \t", response));
+    fetch("/api/user", {
+      method: "POST",
+      body: JSON.stringify(this.state.googleUser.tokenObj),
+    });
 
   }
 
@@ -51,7 +46,7 @@ export class Login extends Component {
     return (
       <div id="login">
 
-        <button onClick={async () => {
+        {/* <button onClick={async () => {
 
           const authHeaders = new Headers({
             'Authorization': this.state.googleUser.getAuthResponse().token_type + " " + this.state.googleUser.getAuthResponse().access_token,
@@ -67,7 +62,7 @@ export class Login extends Component {
 
           console.log(bookshelves);
 
-        }}>Fetch Stuff</button>
+        }}>Fetch Stuff</button> */}
 
         {this.state.isLogin
           ?
@@ -99,7 +94,7 @@ export class Login extends Component {
               buttonText="Login"
               onSuccess={this.loginResponseSuccess}
               isSignedIn={true}
-              scope={"https://www.googleapis.com/auth/books"}
+              // scope={"https://www.googleapis.com/auth/books"}
               cookiePolicy={"single_host_origin"} />
 
           </div>}

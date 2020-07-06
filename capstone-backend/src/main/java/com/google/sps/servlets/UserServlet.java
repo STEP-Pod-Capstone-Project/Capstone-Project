@@ -34,11 +34,6 @@ public class UserServlet extends HttpServlet {
 
     try {
 
-      response.setHeader("Access-Control-Allow-Methods", "GET");
-      response.setHeader("Access-Control-Allow-Credentials", "true");
-      response.setHeader("Access-Control-Allow-Origin",
-          "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
-
       String googleUserTokenObjString = request.getReader().lines().collect(Collectors.joining());
       JsonObject googleUserTokenObjJSON = JsonParser.parseString(googleUserTokenObjString).getAsJsonObject();
 
@@ -75,8 +70,6 @@ public class UserServlet extends HttpServlet {
               .put("scope", scope)
               .put("idpId", idpId)
               .build());
-
-        System.out.println("Object Build: " + googleUser.toString());
 
       } else {
         System.err.println("Invalid ID token.");
