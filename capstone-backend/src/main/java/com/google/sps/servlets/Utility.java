@@ -56,6 +56,7 @@ public class Utility {
 
   /**
    * Query the given collection by id. 
+   * @param {id} id to be searched 
    * @param {collectionReference} reference to the appropriate database collection
    * @param {request} request sent to the backend
    * @param {response} response returned from the call
@@ -64,6 +65,11 @@ public class Utility {
    */
   private static <T extends BaseEntity> List<T> getById(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    if (id.length() == 0) {
+      System.err.println("Error caused by either an empty or non-existent \"id\" field in the post body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
     if (request.getParameterMap().size() > 1) {
       System.err.println("Error: No other parameter can be sent with an ID");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -212,7 +218,7 @@ public class Utility {
     List<T> retrievedObjects = new ArrayList<>();
     ApiFuture<QuerySnapshot> asyncQuery;
     if (request.getParameter("id") != null) {
-      return getById(collectionReference, request, response, genericClass);
+      return getById(request.getParameter("id"), collectionReference, request, response, genericClass);
     }
     if (request.getParameterMap().size() == 0) {
       asyncQuery = collectionReference.get();
@@ -239,10 +245,23 @@ public class Utility {
     return retrievedObjects;
   }
 
-  public static <T> void put(CollectionReference collectionReference, HttpServletRequest request, 
+  public static <T> T put(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    String id = jsonObject.get("id").getAsString();
+    String id = "";
+    try {
+      id = jsonObject.get("id").getAsString();
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+      System.err.println("This error was likely caused by a lack of an \"id\" field in the post body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    if (id.length() == 0) {
+      System.err.println("Error caused by either an empty or non-existent \"id\" field in the post body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
     Map<String, Object> update = new HashMap<>();
     Field[] fields = genericClass.getMyType().getDeclaredFields();
     boolean containsParameter = false;
@@ -259,6 +278,11 @@ public class Utility {
           }
           if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
             update.put(key, jsonObject.get(key).getAsBoolean());
+          }
+          else {
+            System.err.println("Error: Bad type in request: can't be cast to Integer, String or Boolean.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
           }
         }
         else if (("add_"+field.getName()).equals(key)) {
@@ -277,7 +301,7 @@ public class Utility {
       if (!containsParameter) {
         System.err.println("Error: The object does not have the field specified in the request parameter.");
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        return;
+        return null;
       }
       containsParameter = false;
     }
@@ -288,7 +312,8 @@ public class Utility {
     } catch (Exception e) {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
+      return null;
     }
+    return getById(id, collectionReference, request, response, genericClass).get(0);
   }
 }
