@@ -53,7 +53,8 @@ public class SearchServlet extends HttpServlet {
     String maxResultsParam = request.getParameter("maxResults"); 
     if (maxResultsParam != null) { 
       maxResults = parseNaturalNumber(maxResultsParam);
-    } else if (maxResultsParam == null || maxResults == -1) {
+    }
+    if (maxResultsParam == null || maxResults == -1) {
       maxResults = DEFAULT_MAX_RESULTS;
     }
     
