@@ -148,7 +148,7 @@ public class Utility {
 
   /**
    * Gets an asynchronous collection of matching documents from the database matching the request
-   * @param {collectionRefence} reference to the appropriate collection of documents in the database
+   * @param {collectionReference} reference to the appropriate collection of documents in the database
    * @param {request} request sent to the backend
    * @param {response} response returned from the call
    * @param {genericClass} a Generic class, used in casting documents from the database
@@ -207,7 +207,7 @@ public class Utility {
    * of queries both for equality and to check membership in list fields. Query parameters must 
    * match object field names exactly. If no queries are applied, the entire collection
    * is returned. If an ID is supplied, a singleton list with that object is returned. 
-   * @param {collectionRefence} the appropriate collection of documents in the database
+   * @param {collectionReference} the appropriate collection of documents in the database
    * @param {request} the request sent to the backend
    * @param {response} the response returned from the call
    * @param {genericClass} a Generic class, to be used in casting objects retrieved from the database
@@ -315,5 +315,86 @@ public class Utility {
       return null;
     }
     return getById(id, collectionReference, request, response, genericClass).get(0);
+  }
+
+  public static boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
+      GenericClass<T> genericClass, List<String> requiredParameters) throws IOException {
+    List<String> list = new ArrayList<>();
+    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    List<String> fieldNames = new ArrayList<>();
+    for (Field f : fields) {
+      fieldNames.add(f.getName());
+    }
+
+    list.addAll(requiredParameters);
+    list.retainAll(jsonObject.keySet());
+    if (list.size() != requiredParameters.size()) {
+      System.err.println("Error: Not all required parameters are in the request body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return false;
+    }
+    list.clear();
+
+    list.addAll(requiredParameters);
+    list.retainAll(fieldNames);
+    if (list.size() != requiredParameters.size()) {
+      System.err.println("Error: Not all required parameters are fields of the given class.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return false;
+    }
+    list.clear();
+
+    list.addAll(jsonObject.keySet());
+    list.retainAll(fieldNames);
+    if (list.size() != jsonObject.keySet().size()) {
+      System.err.println("Error: Not all parameters in the request body are fields of the given class.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return false;
+    }
+    
+    return true;
+  }
+
+  public static <T> T post(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response, GenericClass<T> genericClass, 
+      List<String> requiredParameters) throws IOException {
+    Map<String, Object> constructorFields = new HashMap<>();
+    JsonObject jsonObject = Utility.createRequestBodyJson(request);
+    try {
+      String id = jsonObject.get("id").getAsString();
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+      System.err.println("This error was likely caused by a lack of an \"id\" field in your post body");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    if (!postErrorHandler(jsonObject, response, genericClass, requiredParameters)) {
+      return null;
+    }
+    for (String key : jsonObject.keySet()) {
+      for (Field f : fields) {
+        if (f.getName().equals(key)) {
+          containsParameter = true;
+          if (type.equals("int") || type.equals("java.lang.Integer")) {
+            constructorFields.put(key, jsonObject.get(key).getAsInt());
+          }
+          if (type.equals("java.lang.String")) {
+            constructorFields.put(key, jsonObject.get(key).getAsString());
+          }
+          if (type.equals("boolean") || type.equals("java.lang.boolean")) {
+            constructorFields.put(key, jsonObject.get(key).getAsBoolean());
+          }
+        }
+      }
+    }
+    T newObject = new T(constructorFields);
+    ApiFuture<WriteResult> asyncDocument = db.collection(collectionReference).document(id).set(newObject);
+    try {
+      System.out.println("Update time : " + asyncDocument.get().getUpdateTime());
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+    }
+    return newObject;
   }
 }
