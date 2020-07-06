@@ -85,6 +85,10 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Utility.put(clubs, request, response, new GenericClass(Club.class));
+    Club updatedClub = (Club) Utility.put(clubs, request, response, new GenericClass(Club.class));
+    if (updatedClub != null) {
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(updatedClub));
+    }
   }
 }
