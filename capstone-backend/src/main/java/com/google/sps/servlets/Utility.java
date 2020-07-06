@@ -286,11 +286,17 @@ public class Utility {
       List<String> requiredParameters) throws IOException {
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
+    String id = "";
     try {
-      String id = jsonObject.get("id").getAsString();
+      id = jsonObject.get("id").getAsString();
     } catch (Exception e) {
       System.err.println("Error: " + e);
       System.err.println("This error was likely caused by a lack of an \"id\" field in your post body");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    if (id.length() == 0) {
+      System.err.println("Error caused by either an empty or non-existent \"id\" field in the post body.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return null;
     }
