@@ -60,12 +60,6 @@ class CreateClub extends Component {
             <input type="text" id="gbookID" name="gbookID" />
           </div>
           <div>
-            <label htmlFor="add_memberIDs"> add_memberIDs </label>
-          </div>
-          <div>
-            <input type="text" id="add_memberIDs" name="add_memberIDs" />
-          </div>
-          <div>
             <input id="create-club" type="submit" value="Create your Club!" />
           </div>
         </form>
