@@ -1,15 +1,11 @@
 package com.google.sps.data;
 
-import com.google.sps.data.Club;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
