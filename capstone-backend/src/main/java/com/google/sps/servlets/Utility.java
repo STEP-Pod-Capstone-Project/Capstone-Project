@@ -65,6 +65,11 @@ public class Utility {
    */
   private static <T extends BaseEntity> List<T> getById(String id, CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    if (id.length() == 0) {
+      System.err.println("Error caused by either an empty or non-existent \"id\" field in the post body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
     if (request.getParameterMap().size() > 1) {
       System.err.println("Error: No other parameter can be sent with an ID");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
