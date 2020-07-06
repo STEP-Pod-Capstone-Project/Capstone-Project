@@ -11,6 +11,7 @@ export class Login extends Component {
 
     this.state = {
       isLogin: false,
+      googleUser: {},
       profileObj: {},
       profileMenuCollapsed: false
     };
@@ -22,17 +23,28 @@ export class Login extends Component {
 
   loginResponseSuccess = (response) => {
     this.setState({ isLogin: true });
+    this.setState({ googleUser: response });
     this.setState({ profileObj: response.profileObj });
+
+    // Store User in Firebase
+    fetch("/api/user", {
+      method: "POST",
+      body: JSON.stringify(this.state.googleUser.tokenObj),
+    });
+
   }
 
   logoutResponseSuccess = () => {
     this.setState({ isLogin: false });
+    this.setState({ googleUser: {} });
     this.setState({ profileObj: {} });
+
   }
 
   render() {
     return (
       <div id="login">
+
         {this.state.isLogin
           ?
           <div>
@@ -58,7 +70,7 @@ export class Login extends Component {
           :
           <div>
 
-            <GoogleLogin 
+            <GoogleLogin
               clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
               buttonText="Login"
               onSuccess={this.loginResponseSuccess}
