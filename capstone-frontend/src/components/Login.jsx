@@ -46,24 +46,6 @@ export class Login extends Component {
     return (
       <div id="login">
 
-        {/* <button onClick={async () => {
-
-          const authHeaders = new Headers({
-            'Authorization': this.state.googleUser.getAuthResponse().token_type + " " + this.state.googleUser.getAuthResponse().access_token,
-            'Accept': 'application/json',
-          });
-
-          const response = await fetch('https://www.googleapis.com/books/v1/mylibrary/bookshelves?key=AIzaSyAdnHNzKVY7G3ZriaqdSIKkVbHlxKbxyu0', {
-            method: 'GET',
-            headers: authHeaders,
-          })
-
-          const bookshelves = await response.json();
-
-          console.log(bookshelves);
-
-        }}>Fetch Stuff</button> */}
-
         {this.state.isLogin
           ?
           <div>
@@ -94,7 +76,6 @@ export class Login extends Component {
               buttonText="Login"
               onSuccess={this.loginResponseSuccess}
               isSignedIn={true}
-              // scope={"https://www.googleapis.com/auth/books"}
               cookiePolicy={"single_host_origin"} />
 
           </div>}
