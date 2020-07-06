@@ -23,10 +23,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map; 
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,26 +44,9 @@ public class Utility {
     return FirestoreClient.getFirestore();
   }
 
-  public static JsonObject createRequestBodyJson(HttpServletRequest request) {
-    JsonObject jsonObject = new JsonObject();
-    StringBuffer jb = new StringBuffer();
-    String line = null;
-    try {
-      BufferedReader reader = new BufferedReader(new InputStreamReader((request.getInputStream())));
-      while ((line = reader.readLine()) != null) {
-       jb.append(line);
-      }
-    } catch (Exception e) { 
-      System.err.println("Error: " + e);
-    }
-    try {
-      Gson gson = new Gson();
-      JsonParser parser = new JsonParser();
-      JsonElement data = parser.parse(jb.toString());
-      jsonObject = data.getAsJsonObject();
-    } catch (Exception e) {
-      System.err.println("Error parsing JSON request string");
-    }
+  public static JsonObject createRequestBodyJson(HttpServletRequest request) throws IOException {
+    String jsonObjectString = request.getReader().lines().collect(Collectors.joining());
+    JsonObject jsonObject = JsonParser.parseString(jsonObjectString).getAsJsonObject();
     return jsonObject;
   }
 
@@ -82,7 +66,6 @@ public class Utility {
       return null;
     }
     List<T> retrievedObjects = new ArrayList<>();
-    ApiFuture<QuerySnapshot> asyncQuery;
     DocumentReference docRef = collectionReference.document(request.getParameter("id"));
     ApiFuture<DocumentSnapshot> asyncDocument = docRef.get();
     DocumentSnapshot document = null;
@@ -114,8 +97,8 @@ public class Utility {
    * @return Query the query being modified, to eventually be used to query the database.
    */
   private static <T> Query addToQuery(GenericClass<T> genericClass, HttpServletResponse response, 
-      Iterator it, Query query) throws IOException {
-    Map.Entry<String, String[]> entry = (Map.Entry) it.next();
+      Iterator<Map.Entry<String, String[]>> it, Query query) throws IOException {
+    Map.Entry<String, String[]> entry = it.next();
     String parameterName = entry.getKey();
     if (entry.getValue().length != 1) {
       System.err.println("Error: Each parameter should have only one value");
@@ -162,8 +145,8 @@ public class Utility {
    */
   private static <T> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
-    Iterator it = request.getParameterMap().entrySet().iterator();
-    Map.Entry<String, String[]> entry = (Map.Entry) it.next();
+    Iterator<Map.Entry<String, String[]>> it = request.getParameterMap().entrySet().iterator();
+    Map.Entry<String, String[]> entry = it.next();
     String parameterName = entry.getKey();
     if (entry.getValue().length != 1) {
       System.err.println("Error: Each parameter should have only one value");
