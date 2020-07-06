@@ -84,6 +84,8 @@ public class UserServlet extends HttpServlet {
         return;
       }
 
+      //TODO: Update Acess Token if it expires.
+
       Firestore db = getFirestore();
 
       ApiFuture<WriteResult> futureUsers = db.collection("users").document(googleUser.getID()).set(googleUser);
