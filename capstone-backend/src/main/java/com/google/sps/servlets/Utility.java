@@ -270,13 +270,13 @@ public class Utility {
         else if (("add_"+field.getName()).equals(key)) {
           if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
             containsParameter = true;
-            update.put(key, FieldValue.arrayUnion(jsonObject.get(key).getAsString()));
+            update.put(field.getName(), FieldValue.arrayUnion(jsonObject.get(key).getAsString()));
           }
         }
         else if (("remove_"+field.getName()).equals(key)) {
           if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
             containsParameter = true;
-            update.put(key, FieldValue.arrayRemove(jsonObject.get(key).getAsString()));
+            update.put(field.getName(), FieldValue.arrayRemove(jsonObject.get(key).getAsString()));
           }
         }
       }
