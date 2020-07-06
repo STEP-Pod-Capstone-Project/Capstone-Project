@@ -13,8 +13,8 @@ class CreateClub extends Component {
         data[formElements[i].name] = formElements[i].value;
       }
     }
-    fetch("/api/clubs", 
-        {method: "post", body: JSON.stringify(data)})
+    fetch("https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/clubs", 
+        {method: "put", body: JSON.stringify(data), credentials:'include'})
         .then(function() {
           history.push(`/clubpage/${data.id}`);
         })
@@ -58,6 +58,12 @@ class CreateClub extends Component {
           </div>
           <div>
             <input type="text" id="gbookID" name="gbookID" />
+          </div>
+          <div>
+            <label htmlFor="add_memberIDs"> add_memberIDs </label>
+          </div>
+          <div>
+            <input type="text" id="add_memberIDs" name="add_memberIDs" />
           </div>
           <div>
             <input id="create-club" type="submit" value="Create your Club!" />
