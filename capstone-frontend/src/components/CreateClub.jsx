@@ -13,8 +13,8 @@ class CreateClub extends Component {
         data[formElements[i].name] = formElements[i].value;
       }
     }
-    fetch("https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/clubs", 
-        {method: "put", body: JSON.stringify(data), credentials:'include'})
+    fetch("/api/clubs", 
+        {method: "post", body: JSON.stringify(data)})
         .then(function() {
           history.push(`/clubpage/${data.id}`);
         })
