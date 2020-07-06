@@ -257,7 +257,7 @@ public class Utility {
           if (type.equals("java.lang.String")) {
             update.put(key, jsonObject.get(key).getAsString());
           }
-          if (type.equals("boolean") || type.equals("java.lang.boolean")) {
+          if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
             update.put(key, jsonObject.get(key).getAsBoolean());
           }
         }
@@ -291,5 +291,4 @@ public class Utility {
       return;
     }
   }
-
 }

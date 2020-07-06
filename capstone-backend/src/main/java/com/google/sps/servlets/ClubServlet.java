@@ -43,6 +43,12 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+response.setHeader("Access-Control-Allow-Credentials", "true");
+response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
+response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
+
+
     List<Club> retrievedClubs = Utility.get(clubs, request, response, new GenericClass(Club.class));
     if (retrievedClubs != null) {
       response.setContentType("application/json;");
@@ -52,6 +58,12 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+response.setHeader("Access-Control-Allow-Credentials", "true");
+response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
+response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
+
+
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     String id = jsonObject.get("id").getAsString();
     String name = jsonObject.get("name").getAsString();
@@ -81,6 +93,12 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+response.setHeader("Access-Control-Allow-Credentials", "true");
+response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
+response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
+response.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
+
     Utility.put(clubs, request, response, new GenericClass(Club.class));
   }
 }
