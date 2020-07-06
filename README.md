@@ -2,7 +2,7 @@
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/STEP-Pod-Capstone-Project/Capstone-Project)
 
-### Additonal Gitpod Setup Instructions:
+### Additional Gitpod Setup Instructions:
 - Go to: https://gitpod.io/access-control/ and manage Gitpod access 
 
 ## Deployment Build Instructions:

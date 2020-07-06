@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Login } from "./Login"
 import '../App.css';
 
@@ -8,6 +8,7 @@ class Navbar extends Component {
     super(props);
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.toggleNavbarLibrary = this.toggleNavbarLibrary.bind(this);
+
     this.state = {
       navCollapsed: true,
       navLibraryCollapsed: true
@@ -25,6 +26,13 @@ class Navbar extends Component {
     this.setState({
       navLibraryCollapsed: !this.state.navLibraryCollapsed,
     });
+  }
+
+  handleSearchInput = (e) => {
+    e.preventDefault();
+    const searchValue = document.getElementById("search").value;
+    this.props.setSearchQuery(searchValue);
+    this.props.history.push(`/browse/${searchValue}`);
   }
 
   render() {
@@ -48,8 +56,8 @@ class Navbar extends Component {
         </Link>
         <div className={navClassOne} id="navbarNavDropdown">
           <ul className="navbar-nav">
-            <form className="form-inline my-2 my-lg-0">
-              <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+            <form className="form-inline my-2 my-lg-0" onSubmit={this.handleSearchInput}>
+              <input className="form-control mr-sm-2" id="search" type="search" placeholder="Search" aria-label="Search" />
               <button className="btn btn-outline my-2 my-sm-0" type="submit"></button>
             </form>
             <li className={navLibClassOne}>
@@ -70,4 +78,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+export default withRouter(Navbar);

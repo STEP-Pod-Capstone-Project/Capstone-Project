@@ -3,12 +3,7 @@ import { withRouter } from 'react-router-dom';
 import '../styles/Groups.css';
 
 class CreateClub extends Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     const history = this.props.history;
     e.preventDefault();
     let data = {};
