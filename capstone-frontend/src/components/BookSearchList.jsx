@@ -13,28 +13,28 @@ class BookSearchList extends Component {
 
   getData = () => {
     fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?searchTerm=${this.props.searchQuery}`,
-      {credentials: 'include'})
+      { credentials: 'include' })
       .then(response => response.json())
       .then(res => this.setState({ bookSearchList: res }))
       .catch(err => console.log(err));
   }
 
   getUserBookLists = () => {
-    let userBookLists = [{ id:"1", name:"Best Books" },
-                         { id:"2", name:"Fantasy" },
-                         { id:"3", name:"Sci-fi" }];
+    let userBookLists = [{ id: "1", name: "Best Books" },
+    { id: "2", name: "Fantasy" },
+    { id: "3", name: "Sci-fi" }];
     return userBookLists;
   }
 
   getUserClubs = () => {
-    let userClubs =  [{ id:"1", name:"Cool Kats Book Club" },
-                      { id:"2", name:"Sci-fi Fans"}];
+    let userClubs = [{ id: "1", name: "Cool Kats Book Club" },
+    { id: "2", name: "Sci-fi Fans" }];
     return userClubs;
   }
 
   getUserCommunities = () => {
-    let userCommunities = [{ id:"1", name:"Sci-fi Community" },
-                           { id:"2", name:"Read-a-lot" }];
+    let userCommunities = [{ id: "1", name: "Sci-fi Community" },
+    { id: "2", name: "Read-a-lot" }];
     return userCommunities;
   }
 
