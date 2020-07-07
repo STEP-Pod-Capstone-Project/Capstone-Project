@@ -147,14 +147,19 @@ public class Utility {
   /**
    * Gets an asynchronous collection of matching documents from the database matching the request
    * @param {collectionRefence} reference to the appropriate collection of documents in the database
-   * @param {genericClass} a Generic class, used in casting documents from the database
    * @param {request} request sent to the backend
    * @param {response} response returned from the call
-   * @return Query the query being modified, to eventually be used to query the database.
+   * @param {genericClass} a Generic class, used in casting documents from the database
+   * @return ApiFuture<QuerySnapshot> the asynchronous query results from the given filters.
    */
   private static <T> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     Iterator<Map.Entry<String, String[]>> it = request.getParameterMap().entrySet().iterator();
+    if (!it.hasNext()) {
+      System.err.println("Error in iterating through the request query map");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
     Map.Entry<String, String[]> entry = it.next();
     String parameterName = entry.getKey();
     if (entry.getValue().length != 1) {
@@ -223,10 +228,9 @@ public class Utility {
       }
     }
     try {
-      List<QueryDocumentSnapshot> documents = asyncQuery.get().getDocuments();
-      for (QueryDocumentSnapshot document : documents) {
-        retrievedObjects.add(document.toObject(genericClass.getMyType()));
-      }
+      retrievedObjects = asyncQuery.get().getDocuments().stream()
+                             .map(d -> d.toObject(genericClass.getMyType()))
+                             .collect(Collectors.toList());
     } catch (Exception e) {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -307,3 +311,4 @@ public class Utility {
     return getById(id, collectionReference, request, response, genericClass).get(0);
   }
 }
+

@@ -2,11 +2,12 @@ package com.google.sps.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class Club {
   
-  private final String id;
+  private final String id = UUID.randomUUID().toString();
   private String name;
   private String description;
   private String announcement;
@@ -16,9 +17,8 @@ public class Club {
   private List<String> inviteIDs;
   private String gbookID;
 
-  public Club(String id, String name, String description, String announcement, List<String> posts, 
+  public Club(String name, String description, String announcement, List<String> posts, 
       String ownerID, List<String> memberIDs, List<String> inviteIDs, String gbookID) {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.announcement = announcement;
@@ -29,20 +29,20 @@ public class Club {
         this.gbookID = gbookID;
   }
 
-  public Club(String id, String name, String description, String ownerID, String gbookID){
-    this(id, name, description, "", new ArrayList<String>(), ownerID, new ArrayList<String>(), new ArrayList<String>(), gbookID);
+  public Club(String name, String description, String ownerID, String gbookID){
+    this(name, description, "", new ArrayList<String>(), ownerID, new ArrayList<String>(), new ArrayList<String>(), gbookID);
   }
 
-  public Club(String id, String name, String ownerID, String gbookID) {
-    this(id, name, "", ownerID, gbookID);
+  public Club(String name, String ownerID, String gbookID) {
+    this(name, "", ownerID, gbookID);
   }
 
-  public Club(String id, String name, String ownerID) {
-    this(id, name, "", ownerID, "");
+  public Club(String name, String ownerID) {
+    this(name, "", ownerID, "");
   }
 
   public Club() {
-    this("", "", "");
+    this("", "");
   }
  
   public String getID() {
