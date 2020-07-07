@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class Club {
+public class Club extends BaseEntity {
   
-  private final String id = UUID.randomUUID().toString();
   private String name;
   private String description;
   private String announcement;
@@ -43,10 +42,6 @@ public class Club {
 
   public Club() {
     this("", "");
-  }
- 
-  public String getID() {
-    return this.id;
   }
  
   public String getName() {

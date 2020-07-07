@@ -19,6 +19,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import com.google.sps.data.BaseEntity;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -58,7 +60,7 @@ public class Utility {
    * @param {genericClass} a Generic class, used in casting documents from the database
    * @return List<T> a singleton List of the Object that matches the ID in the request.
    */
-  private static <T> List<T> getById(CollectionReference collectionReference, HttpServletRequest request, 
+  private static <T extends BaseEntity> List<T> getById(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     if (request.getParameterMap().size() > 1) {
       System.err.println("Error: No other parameter can be sent with an ID");
@@ -74,6 +76,7 @@ public class Utility {
       document = asyncDocument.get();
       if (document.exists()) {
         item = document.toObject(genericClass.getMyType());
+        item.setId(document.getId());
       } else {
         System.err.println("Error: no such document!");
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -96,7 +99,7 @@ public class Utility {
    * @param {query} query being modified, to eventually be used to query the database.
    * @return Query the query being modified, to eventually be used to query the database.
    */
-  private static <T> Query addToQuery(GenericClass<T> genericClass, HttpServletResponse response, 
+  private static <T extends BaseEntity> Query addToQuery(GenericClass<T> genericClass, HttpServletResponse response, 
       Iterator<Map.Entry<String, String[]>> it, Query query) throws IOException {
     Map.Entry<String, String[]> entry = it.next();
     String parameterName = entry.getKey();
@@ -143,7 +146,7 @@ public class Utility {
    * @param {genericClass} a Generic class, used in casting documents from the database
    * @return ApiFuture<QuerySnapshot> the asynchronous query results from the given filters.
    */
-  private static <T> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference, HttpServletRequest request, 
+  private static <T extends BaseEntity> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     Iterator<Map.Entry<String, String[]>> it = request.getParameterMap().entrySet().iterator();
     if (!it.hasNext()) {
@@ -202,7 +205,7 @@ public class Utility {
    * @param {genericClass} a Generic class, to be used in casting objects retrieved from the database
    * @return Query the query being modified, to eventually be used to query the database.
    */
-  public static <T> List<T> get(CollectionReference collectionReference, HttpServletRequest request, 
+  public static <T extends BaseEntity> List<T> get(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     List<T> retrievedObjects = new ArrayList<>();
     ApiFuture<QuerySnapshot> asyncQuery;
@@ -220,7 +223,11 @@ public class Utility {
     }
     try {
       retrievedObjects = asyncQuery.get().getDocuments().stream()
-                             .map(d -> d.toObject(genericClass.getMyType()))
+                             .map(d -> {
+                                        T t = d.toObject(genericClass.getMyType());
+                                        t.setId(d.getId());
+                                        return t;
+                                       })
                              .collect(Collectors.toList());
     } catch (Exception e) {
       System.err.println("Error: " + e);
