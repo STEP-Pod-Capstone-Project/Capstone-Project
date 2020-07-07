@@ -70,7 +70,7 @@ public class ClubServlet extends HttpServlet {
       gbookID = jsonObject.get("gbookID").getAsString();
     }
 
-    Club club = new Club(id, name, description, ownerID, gbookID);
+    Club club = new Club(name, description, ownerID, gbookID);
     ApiFuture<WriteResult> future = clubs.document(id).set(club);
     try {
       System.out.println("Update time : " + future.get().getUpdateTime());
