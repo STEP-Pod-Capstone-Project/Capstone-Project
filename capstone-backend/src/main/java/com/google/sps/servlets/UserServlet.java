@@ -47,6 +47,7 @@ public class UserServlet extends HttpServlet {
 
       GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
           .setAudience(
+              // Client ID URL
               Collections.singletonList("962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"))
           .build();
 
@@ -77,7 +78,7 @@ public class UserServlet extends HttpServlet {
         return;
       }
 
-      //TODO: Update Acess Token if it expires.
+      //TODO(#47): Update Acess Token if it expires.
 
       Firestore db = getFirestore();
 
