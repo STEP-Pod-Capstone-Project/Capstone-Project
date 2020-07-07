@@ -34,8 +34,7 @@ public class UserServlet extends HttpServlet {
 
     try {
 
-      String googleUserTokenObjString = request.getReader().lines().collect(Collectors.joining());
-      JsonObject googleUserTokenObjJSON = JsonParser.parseString(googleUserTokenObjString).getAsJsonObject();
+      JsonObject googleUserTokenObjJSON = Utility.createRequestBodyJson(request);
 
       String tokenId = googleUserTokenObjJSON.get("id_token").getAsString();
       String token_type = googleUserTokenObjJSON.get("token_type").getAsString();
