@@ -37,12 +37,11 @@ public final class ClubTest {
 
   @Before
   public void setUp() {
-    club = new Club("id", ORIGINAL_NAME, ORIGINAL_DESCRIPTION, ORIGINAL_OWNER, ORIGINAL_BOOK);
+    club = new Club(ORIGINAL_NAME, ORIGINAL_DESCRIPTION, ORIGINAL_OWNER, ORIGINAL_BOOK);
   }
   
   @Test
   public void testConstructor() {
-    Assert.assertEquals(club.getID(), "id");
     Assert.assertEquals(club.getName(), ORIGINAL_NAME);
     Assert.assertEquals(club.getDescription(), ORIGINAL_DESCRIPTION);
     Assert.assertEquals(club.getAnnouncement(), "");
