@@ -44,26 +44,33 @@ public class SearchServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    response.setHeader("Access-Control-Allow-Methods", "GET");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+
     String fullOutput = "";
     String searchTerm = request.getParameter("searchTerm");
-    if (searchTerm == null || searchTerm.isEmpty()) return;
+    if (searchTerm == null || searchTerm.isEmpty())
+      return;
     searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
 
     int maxResults = parseNaturalNumber(request.getParameter("maxResults"));
-    if (request.getParameter("maxResults") != null) { 
+    if (request.getParameter("maxResults") != null) {
       maxResults = parseNaturalNumber(request.getParameter("maxResults"));
-    } 
+    }
     if (maxResults == -1) {
       maxResults = DEFAULT_MAX_RESULTS;
     }
-    
+
     try {
       String formattedURL = String.format("https://www.googleapis.com/books/v1/volumes?q={%s}&maxResults=%d&country=US",
-        searchTerm, maxResults);
-		  URL url = new URL(formattedURL);
-		  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		  conn.setRequestMethod("GET");
-		  conn.setRequestProperty("Accept", "application/json");
+          searchTerm, maxResults);
+      URL url = new URL(formattedURL);
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("GET");
+      conn.setRequestProperty("Accept", "application/json");
 
       Reader streamReader = null;
       if (conn.getResponseCode() != 200) {
@@ -80,8 +87,7 @@ public class SearchServlet extends HttpServlet {
 
       if (conn.getResponseCode() != 200) {
         System.err.println(fullOutput);
-        throw new RuntimeException("Failed : error code : "
-          + conn.getResponseCode());
+        throw new RuntimeException("Failed : error code : " + conn.getResponseCode());
       }
 
       conn.disconnect();
@@ -90,7 +96,7 @@ public class SearchServlet extends HttpServlet {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    
+
     response.setContentType("application/json;");
     Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
@@ -98,8 +104,11 @@ public class SearchServlet extends HttpServlet {
   }
 
   /*
-   * Takes in a response from the Google Books API and converts it to a Collection of VolumeData objects.
+   * Takes in a response from the Google Books API and converts it to a Collection
+   * of VolumeData objects.
+   * 
    * @param output the response from the Books API
+   * 
    * @return a Collection of the books from the API call, in VolumeData form
    */
   static Collection<VolumeData> convertResponseToVolumeData(String output) {
@@ -109,17 +118,20 @@ public class SearchServlet extends HttpServlet {
     JsonElement data = JsonParser.parseString(output);
     JsonObject dataInfo = data.getAsJsonObject();
 
-    // Get the items element from the output and convert it into the array of book jsons
+    // Get the items element from the output and convert it into the array of book
+    // jsons
     JsonElement items = dataInfo.get("items");
     JsonArray itemsInfo = items.getAsJsonArray();
 
-    for (JsonElement book: itemsInfo) {
+    for (JsonElement book : itemsInfo) {
       JsonObject bookInfo = book.getAsJsonObject();
       String id = bookInfo.get("id").getAsString();
 
-      // volumeInfo houses all of the information about the book itself: description, authors, title
+      // volumeInfo houses all of the information about the book itself: description,
+      // authors, title
       JsonElement volumeInfo = bookInfo.get("volumeInfo");
-      if (volumeInfo == null) continue;
+      if (volumeInfo == null)
+        continue;
       JsonObject volumeInfoObj = volumeInfo.getAsJsonObject();
 
       JsonElement titleElement = volumeInfoObj.get("title");
@@ -139,11 +151,9 @@ public class SearchServlet extends HttpServlet {
       String description = descElement != null ? descElement.getAsString() : "";
 
       JsonElement thumbnailElement = volumeInfoObj.get("imageLinks");
-      String thumbnailLink = thumbnailElement != null ? thumbnailElement
-                                                        .getAsJsonObject()
-                                                        .get("thumbnail")
-                                                        .getAsString()
-                                                        : "";
+      String thumbnailLink = thumbnailElement != null
+          ? thumbnailElement.getAsJsonObject().get("thumbnail").getAsString()
+          : "";
       thumbnailLink = thumbnailLink.replace("http", "https");
 
       volumes.add(new VolumeData(id, title, authorNames.toArray(new String[0]), description, thumbnailLink));
@@ -152,9 +162,11 @@ public class SearchServlet extends HttpServlet {
   }
 
   /*
-   * Convert a string into an integer. If not a natural number,
-   * return -1 with an error message.
+   * Convert a string into an integer. If not a natural number, return -1 with an
+   * error message.
+   * 
    * @param stringNum A string that will be parsed into a natural number
+   * 
    * @return The number as an int, -1 if input is invalid
    */
   private static int parseNaturalNumber(String stringNum) {

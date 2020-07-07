@@ -54,7 +54,7 @@ public final class BookList {
     return userID;
   }
 
-  public String getId() {
+  public String getID() {
     return this.id;
   }
 

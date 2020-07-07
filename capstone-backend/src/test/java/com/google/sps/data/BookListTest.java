@@ -5,12 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -53,7 +51,7 @@ public final class BookListTest {
     assertNotEquals(bookList1, bookList2);
 
     // Test Diff
-    assertNotEquals(bookList1.getId(), bookList2.getId());
+    assertNotEquals(bookList1.getID(), bookList2.getID());
     assertNotEquals(bookList1.getUserID(), bookList2.getUserID());
     assertNotEquals(bookList1.getGbookIDs(), bookList2.getGbookIDs());
 
@@ -65,7 +63,7 @@ public final class BookListTest {
     assertFalse(bookList1.getCollaboratorsIDs().containsAll(bookList2.getCollaboratorsIDs())
         && bookList2.getCollaboratorsIDs().containsAll(bookList1.getCollaboratorsIDs()));
 
-    assertNotEquals(bookList1.getId(), bookList2.getId());
+    assertNotEquals(bookList1.getID(), bookList2.getID());
   }
 
   @Test
@@ -130,7 +128,7 @@ public final class BookListTest {
     assertTrue(bookList1.getGbookIDs().isEmpty());
     assertTrue(bookList1.getCollaboratorsIDs().isEmpty());
     assertNotNull(bookList1.getUserID());
-    assertNotNull(bookList1.getId());
+    assertNotNull(bookList1.getID());
 
     bookList2.clear();
     assertEquals(bookList1.isEmpty(), bookList2.isEmpty());
