@@ -317,77 +317,52 @@ public class Utility {
     return getById(id, collectionReference, request, response, genericClass).get(0);
   }
 
-  public static <T> boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
-      GenericClass<T> genericClass, List<String> requiredParameters) throws IOException {
+  public static <T extends BaseEntity> boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
+      GenericClass<T> genericClass) throws IOException {
     List<String> list = new ArrayList<>();
-    Field[] fields = genericClass.getMyType().getDeclaredFields();
-    List<String> fieldNames = new ArrayList<>();
-    for (Field f : fields) {
-      fieldNames.add(f.getName());
-    }
-
-    list.addAll(requiredParameters);
-    list.retainAll(jsonObject.keySet());
-    if (list.size() != requiredParameters.size()) {
-      System.err.println("Error: Not all required parameters are in the request body.");
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return false;
-    }
-    list.clear();
-
-    list.addAll(requiredParameters);
-    list.retainAll(fieldNames);
-    if (list.size() != requiredParameters.size()) {
-      System.err.println("Error: Not all required parameters are fields of the given class.");
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return false;
-    }
-    list.clear();
-
+    List<String> fieldNames = genericClass.getMyType().getDeclaredFields()
+                                  .map(f -> f.getName()).collect(Collectors.toList());
     list.addAll(jsonObject.keySet());
     list.retainAll(fieldNames);
     if (list.size() != jsonObject.keySet().size()) {
       System.err.println("Error: Not all parameters in the request body are fields of the given class.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return false;
-    }
-    
+    } 
     return true;
   }
 
-  public static <T> T post(CollectionReference collectionReference, HttpServletRequest request, 
-      HttpServletResponse response, GenericClass<T> genericClass, 
-      List<String> requiredParameters) throws IOException {
+  public static <T extends BaseEntity> T post(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     Field[] fields = genericClass.getMyType().getDeclaredFields();
     if (!postErrorHandler(jsonObject, response, genericClass, requiredParameters)) {
       return null;
     }
-    for (String key : jsonObject.keySet()) {
-      for (Field f : fields) {
-        String type = f.getType().getName();
-        if (f.getName().equals(key)) {
-          if (type.equals("int") || type.equals("java.lang.Integer")) {
-            constructorFields.put(key, jsonObject.get(key).getAsInt());
-          }
-          if (type.equals("java.lang.String")) {
-            constructorFields.put(key, jsonObject.get(key).getAsString());
-          }
-          if (type.equals("boolean") || type.equals("java.lang.boolean")) {
-            constructorFields.put(key, jsonObject.get(key).getAsBoolean());
-          }
-        }
+    for (Field f : fields) {
+      String type = f.getType().getName();
+      if (type.equals("int") || type.equals("java.lang.Integer")) {
+        constructorFields.put(key, jsonObject.getOrDefault(key, -1).getAsInt());
+      }
+      if (type.equals("java.lang.String")) {
+        constructorFields.put(key, jsonObject.getOrDefault(key, "").getAsString());
+      }
+      if (type.equals("boolean") || type.equals("java.lang.boolean")) {
+        constructorFields.put(key, jsonObject.getOrDefault(key, false).getAsBoolean());
       }
     }
-    Class c = genericClass.getMyType();
-    c newObject = new c(constructorFields);
-    ApiFuture<WriteResult> asyncDocument = collectionReference.document(id).set(newObject);
+
+    ApiFuture<WriteResult> asyncDocument = collectionReference.add(constructorFields);
     try {
-      System.out.println("Update time : " + asyncDocument.get().getUpdateTime());
+      DocumentSnapshot document = asyncDocument.get();
+      System.out.println("Update time : " + document.getUpdateTime());
+      return getById(document.getId(), request, response, genericClass).get(0);
     } catch (Exception e) {
       System.err.println("Error: " + e);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return null;
     }
-    return newObject;
+    return null;
   }
 }
