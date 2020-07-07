@@ -2,19 +2,24 @@ import React from 'react';
 import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../styles/BookSearchTile.css';
 
-const addBookToBookList = async (bookId, bookListId) => {
-  console.log(`Added book with id: ${bookId} to bookList with id: ${bookListId}`);
+const addBookToBookList = async (bookId, bookListJson) => {
+  console.log(`Added book with id: ${bookId} to bookList: ${bookListJson}`);
 
-  const bookListJson = {
-    "userID": window.sessionStorage.getItem("userID"),
-    "gBookID": bookId
+  console.log(bookListJson);
+
+  const gBookIDs = Array.from(bookListJson.gbookIDs);
+  gBookIDs.push(bookId)
+
+  const bookListUpdateJson = {
+    "bookListID": bookListJson.id,
+    "gbookIDs": gBookIDs,
   }
 
-  // Store User in Firebase
-  fetch("/api/booklistStore", {
-    method: "POST",
-    body: JSON.stringify(bookListJson)
-  });
+  // Update BookList in Firebase
+  fetch("/api/booklist", {
+    method: "PUT",
+    body: JSON.stringify(bookListUpdateJson)
+  }).then(resp => console.log(resp));
 }
 
 const addBookToClub = (bookId, clubId) => {
@@ -44,7 +49,7 @@ const BookSearchTile = (props) => {
                   props.userBookLists.map(bookList =>
                     React.createElement(Dropdown.Item, {
                       key: bookList.id, onSelect: () =>
-                        addBookToBookList(props.id, bookList.id)
+                        addBookToBookList(props.id, bookList)
                     }, bookList.name))
                 }
               </DropdownButton>

@@ -20,17 +20,23 @@ public final class BookList {
 
   private final String id = UUID.randomUUID().toString();
   private final String userID;
+  private String name;
   private List<String> gbookIDs;
   private List<String> collaboratorsIDs;
 
-  public BookList(String userID, List<String> gbookIDs, List<String> collaboratorsIDs) {
+  public BookList(String userID, String name, List<String> gbookIDs, List<String> collaboratorsIDs) {
     this.userID = userID;
+    this.name = name;
     this.gbookIDs = gbookIDs;
     this.collaboratorsIDs = collaboratorsIDs;
   }
 
-  public BookList(String userID, List<String> gbookIDs) {
-    this(userID, gbookIDs, new ArrayList<String>());
+  public BookList(String userID, String name, List<String> gbookIDs) {
+    this(userID, name, gbookIDs, new ArrayList<String>());
+  }
+
+  public BookList(String userID, String name){
+    this(userID, name, new ArrayList<String>(), new ArrayList<String>());
   }
 
   public void setGbookIDs(List<String> gbookIDs) {
@@ -52,6 +58,10 @@ public final class BookList {
 
   public String getUserID() {
     return userID;
+  }
+
+  public String getName() {
+    return name;
   }
 
   public String getID() {
