@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that stores User's data from Frontend Authentication. */
-@WebServlet("/api/booklist")
-public class BookListServlet extends HttpServlet {
+@WebServlet("/api/booklistStore")
+public class BookListStoreServlet extends HttpServlet {
 
   private Firestore getFirestore() throws IOException {
     return Utility.getFirestoreDb();
@@ -32,10 +32,10 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    response.setHeader("Access-Control-Allow-Methods", "GET");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin",
-        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+    // response.setHeader("Access-Control-Allow-Methods", "GET");
+    // response.setHeader("Access-Control-Allow-Credentials", "true");
+    // response.setHeader("Access-Control-Allow-Origin",
+    //     "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
     try {
 
@@ -59,30 +59,5 @@ public class BookListServlet extends HttpServlet {
 
   }
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    response.setHeader("Access-Control-Allow-Methods", "GET");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin",
-        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
-
-
-    Firestore db = getFirestore();
-
-    Query query = db.collection("booklists").whereEqualTo("userID", userID);
-    ApiFuture<QuerySnapshot> querySnapshot = query.get();
-
-    ArrayList<Map<String, Object>> userBookLists;
-
-    for (DocumentSnapshot document : querySnapshot.get().getDocuments()){
-      userBookLists.add(document.getData());
-    }
-
-
-    response.setContentType("application/json;");
-
-    response.getWriter().println("Data Has Been Sent");
-
-  }
+  
 }

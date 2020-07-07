@@ -11,7 +11,7 @@ const addBookToBookList = async (bookId, bookListId) => {
   }
 
   // Store User in Firebase
-  fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+  fetch("/api/booklistStore", {
     method: "POST",
     body: JSON.stringify(bookListJson)
   });

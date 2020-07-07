@@ -5,8 +5,19 @@ class MyLists extends Component {
     return (
       <div>
         <h1> My Lists- put user's lists here </h1>
-        <button className="" onClick={() => {
-          fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {method: "GET"});
+        <button className="" onClick={async () => {
+
+          const userID = {
+            "userID": window.sessionStorage.getItem("userID")
+          }
+
+
+          const bookLists = await fetch("/api/booklistGet", {
+            method: "POST",
+            body: JSON.stringify(userID)
+          }).then(resp => resp.json());
+
+          console.log(bookLists);
 
         }}>Click for Data</button>
 
