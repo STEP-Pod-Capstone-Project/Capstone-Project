@@ -317,7 +317,7 @@ public class Utility {
     return getById(id, collectionReference, request, response, genericClass).get(0);
   }
 
-  public static boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
+  public static <T> boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
       GenericClass<T> genericClass, List<String> requiredParameters) throws IOException {
     List<String> list = new ArrayList<>();
     Field[] fields = genericClass.getMyType().getDeclaredFields();
@@ -360,28 +360,14 @@ public class Utility {
       List<String> requiredParameters) throws IOException {
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    String id = "";
-    try {
-      id = jsonObject.get("id").getAsString();
-    } catch (Exception e) {
-      System.err.println("Error: " + e);
-      System.err.println("This error was likely caused by a lack of an \"id\" field in your post body");
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return null;
-    }
-    if (id.length() == 0) {
-      System.err.println("Error caused by either an empty or non-existent \"id\" field in the post body.");
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return null;
-    }
     Field[] fields = genericClass.getMyType().getDeclaredFields();
     if (!postErrorHandler(jsonObject, response, genericClass, requiredParameters)) {
       return null;
     }
     for (String key : jsonObject.keySet()) {
       for (Field f : fields) {
+        String type = f.getType().getName();
         if (f.getName().equals(key)) {
-          containsParameter = true;
           if (type.equals("int") || type.equals("java.lang.Integer")) {
             constructorFields.put(key, jsonObject.get(key).getAsInt());
           }
@@ -394,8 +380,9 @@ public class Utility {
         }
       }
     }
-    T newObject = new T(constructorFields);
-    ApiFuture<WriteResult> asyncDocument = db.collection(collectionReference).document(id).set(newObject);
+    Class c = genericClass.getMyType();
+    c newObject = new c(constructorFields);
+    ApiFuture<WriteResult> asyncDocument = collectionReference.document(id).set(newObject);
     try {
       System.out.println("Update time : " + asyncDocument.get().getUpdateTime());
     } catch (Exception e) {
