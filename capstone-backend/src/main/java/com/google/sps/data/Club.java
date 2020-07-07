@@ -43,17 +43,6 @@ public class Club extends BaseEntity {
   public Club() {
     this("", "");
   }
-
-  public Club (Map<String, String> constructorFields) {
-    this(constructorFields.getOrDefault("name", ""), constructorFields.getOrDefault("ownerID", ""), 
-             constructorFields.getOrDefault("gbookID", ""), 
-             constructorFields.getOrDefault("description", ""));
-  }
- 
-  public String getID() {
-    return this.id;
->>>>>>> need generic constructor
-  }
  
   public String getName() {
     return this.name;

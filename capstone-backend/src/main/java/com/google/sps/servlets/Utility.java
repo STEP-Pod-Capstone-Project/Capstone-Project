@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -318,9 +319,9 @@ public class Utility {
   }
 
   public static <T extends BaseEntity> boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
-      GenericClass<T> genericClass) throws IOException {
+      GenericClass<T> genericClass, Field[] fields) throws IOException {
     List<String> list = new ArrayList<>();
-    List<String> fieldNames = genericClass.getMyType().getDeclaredFields()
+    List<String> fieldNames = Arrays.asList(fields).stream()
                                   .map(f -> f.getName()).collect(Collectors.toList());
     list.addAll(jsonObject.keySet());
     list.retainAll(fieldNames);
@@ -337,27 +338,27 @@ public class Utility {
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     Field[] fields = genericClass.getMyType().getDeclaredFields();
-    if (!postErrorHandler(jsonObject, response, genericClass, requiredParameters)) {
+    if (!postErrorHandler(jsonObject, response, genericClass, fields)) {
       return null;
     }
     for (Field f : fields) {
+      String name = f.getName();
       String type = f.getType().getName();
       if (type.equals("int") || type.equals("java.lang.Integer")) {
-        constructorFields.put(key, jsonObject.getOrDefault(key, -1).getAsInt());
+        constructorFields.put(name, jsonObject.getOrDefault(name, -1).getAsInt());
       }
       if (type.equals("java.lang.String")) {
-        constructorFields.put(key, jsonObject.getOrDefault(key, "").getAsString());
+        constructorFields.put(name, jsonObject.getOrDefault(name, "").getAsString());
       }
       if (type.equals("boolean") || type.equals("java.lang.boolean")) {
-        constructorFields.put(key, jsonObject.getOrDefault(key, false).getAsBoolean());
+        constructorFields.put(name, jsonObject.getOrDefault(name, false).getAsBoolean());
       }
     }
 
-    ApiFuture<WriteResult> asyncDocument = collectionReference.add(constructorFields);
+    ApiFuture<DocumentReference> asyncDocument = collectionReference.add(constructorFields);
     try {
-      DocumentSnapshot document = asyncDocument.get();
-      System.out.println("Update time : " + document.getUpdateTime());
-      return getById(document.getId(), request, response, genericClass).get(0);
+      System.out.println("Update time : " + asyncDocument.get().getUpdateTime());
+      return getById(asyncDocument.get().getId(), request, response, genericClass).get(0);
     } catch (Exception e) {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
