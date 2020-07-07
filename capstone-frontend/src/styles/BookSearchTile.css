@@ -13,6 +13,11 @@
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 1;
+}
+
+.center-vertical:focus-within {
+  z-index: 100;
 }
 
 .dropdown-add {
@@ -21,4 +26,7 @@
 
 #dropdown-group-add, #dropdown-list-add {
   width: 100%;
+  z-index: 1;
+  position: relative;
 }
+

@@ -31,21 +31,21 @@ const BookSearchTile = (props) => {
             <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
               {
                 props.userBookLists.map(bookList => 
-                  React.createElement(Dropdown.Item, { key:bookList.id, onSelect:() => 
-                    addBookToBookList(props.id, bookList.id)}, bookList.name))
+                  React.createElement(Dropdown.Item, { key:bookList.id, className:"dropdown-item",
+                  onSelect:() => addBookToBookList(props.id, bookList.id)}, bookList.name))
               }
             </DropdownButton>
             <DropdownButton id="dropdown-group-add" className="dropdown-add" title="Add to Group">
               {
                 props.userClubs.map(club => 
-                  React.createElement(Dropdown.Item, { key:club.id, onSelect:() => 
-                    addBookToClub(props.id, club.id) }, club.name))
+                  React.createElement(Dropdown.Item, { key:club.id, className:"dropdown-item",
+                    onSelect:() => addBookToClub(props.id, club.id) }, club.name))
               }
               <Dropdown.Divider />
               {
                 props.userCommunities.map(community => 
-                  React.createElement(Dropdown.Item, { key:community.id, onSelect:() => 
-                    addBookToCommunity(props.id, community.id) }, community.name))
+                  React.createElement(Dropdown.Item, { key:community.id, className:"dropdown-item",
+                    onSelect:() => addBookToCommunity(props.id, community.id) }, community.name))
               }
             </DropdownButton>
             </Container>
