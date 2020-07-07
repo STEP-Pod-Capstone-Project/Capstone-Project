@@ -19,11 +19,11 @@ const BookSearchTile = (props) => {
     <div className="book-search-tile">
       <Container>
         <Row className="justify-content-md-center">
-          <Col md="auto"><img className="book-img-med" src={props.thumbnailLink} alt={props.title}/></Col>
+          <Col md="auto"><img className="book-img-med" src={props.book.thumbnailLink} alt={props.book.title}/></Col>
           <Col>
             <div className="center-vertical">
-              <h2> {props.title} </h2>
-              <p> {props.author.join(', ')} </p>
+              <h2> {props.book.title} </h2>
+              <p> {props.book.authors.join(', ')} </p>
             </div>
           </Col>
           <Col md="auto">
@@ -31,21 +31,21 @@ const BookSearchTile = (props) => {
             <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
               {
                 props.userBookLists.map(bookList => 
-                  React.createElement(Dropdown.Item, { key:bookList.id, className:"dropdown-item",
-                  onSelect:() => addBookToBookList(props.id, bookList.id)}, bookList.name))
+                  React.createElement(Dropdown.Item, { key:bookList.id,
+                  onSelect:() => addBookToBookList(props.book.id, bookList.id)}, bookList.name))
               }
             </DropdownButton>
             <DropdownButton id="dropdown-group-add" className="dropdown-add" title="Add to Group">
               {
                 props.userClubs.map(club => 
-                  React.createElement(Dropdown.Item, { key:club.id, className:"dropdown-item",
-                    onSelect:() => addBookToClub(props.id, club.id) }, club.name))
+                  React.createElement(Dropdown.Item, { key:club.id,
+                    onSelect:() => addBookToClub(props.book.id, club.id) }, club.name))
               }
               <Dropdown.Divider />
               {
                 props.userCommunities.map(community => 
-                  React.createElement(Dropdown.Item, { key:community.id, className:"dropdown-item",
-                    onSelect:() => addBookToCommunity(props.id, community.id) }, community.name))
+                  React.createElement(Dropdown.Item, { key:community.id,
+                    onSelect:() => addBookToCommunity(props.book.id, community.id) }, community.name))
               }
             </DropdownButton>
             </Container>

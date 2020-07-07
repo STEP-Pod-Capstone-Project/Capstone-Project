@@ -7,7 +7,7 @@ class BookSearchList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bookList: []
+      bookSearchList: []
     }
   }
 
@@ -15,7 +15,7 @@ class BookSearchList extends Component {
     fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?searchTerm=${this.props.searchQuery}`,
       {credentials: 'include'})
       .then(response => response.json())
-      .then(res => this.setState({ bookList: res }))
+      .then(res => this.setState({ bookSearchList: res }))
       .catch(err => console.log(err));
   }
 
@@ -47,13 +47,11 @@ class BookSearchList extends Component {
 
   render() {
     var books = [];
-    for (const book of this.state.bookList) {
-      books.push(<BookSearchTile title={book.title}
-        author={book.authors} thumbnailLink={book.thumbnailLink}
+    for (const book of this.state.bookSearchList) {
+      books.push(<BookSearchTile book={book}
         userBookLists={this.state.userBookLists}
         userClubs={this.state.userClubs}
         userCommunities={this.state.userCommunities}
-        id={book.id}
         key={book.id} />);
     }
 
