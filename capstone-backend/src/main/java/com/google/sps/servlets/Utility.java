@@ -63,8 +63,8 @@ public class Utility {
    * @param {genericClass} a Generic class, used in casting documents from the database
    * @return List<T> a singleton List of the Object that matches the ID in the request.
    */
-  private static <T extends BaseEntity> List<T> getById(String id, CollectionReference collectionReference, HttpServletRequest request, 
-      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+  private static <T extends BaseEntity> List<T> getById(String id, CollectionReference collectionReference, 
+      HttpServletRequest request, HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     if (id.length() == 0) {
       System.err.println("Error caused by either an empty or non-existent \"id\" field in the post body.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -273,7 +273,7 @@ public class Utility {
           if (type.equals("int") || type.equals("java.lang.Integer")) {
             update.put(key, jsonObject.get(key).getAsInt());
           }
-          if (type.equals("java.lang.String")) {
+          if (type.equals("java.lang.String") && !field.getName().equals("id")) {
             update.put(key, jsonObject.get(key).getAsString());
           }
           if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
