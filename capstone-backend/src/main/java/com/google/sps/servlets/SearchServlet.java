@@ -56,11 +56,12 @@ public class SearchServlet extends HttpServlet {
       return;
     searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
 
-    int maxResults = parseNaturalNumber(request.getParameter("maxResults"));
-    if (request.getParameter("maxResults") != null) {
-      maxResults = parseNaturalNumber(request.getParameter("maxResults"));
+    int maxResults = 0;
+    String maxResultsParam = request.getParameter("maxResults"); 
+    if (maxResultsParam != null) { 
+      maxResults = parseNaturalNumber(maxResultsParam);
     }
-    if (maxResults == -1) {
+    if (maxResultsParam == null || maxResults == -1) {
       maxResults = DEFAULT_MAX_RESULTS;
     }
 

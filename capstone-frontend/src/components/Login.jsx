@@ -22,9 +22,7 @@ export class Login extends Component {
   }
 
   loginResponseSuccess = (response) => {
-    this.setState({ isLogin: true });
-    this.setState({ googleUser: response });
-    this.setState({ profileObj: response.profileObj });
+    this.setState({ isLogin: true, googleUser: response, profileObj: response.profileObj });
 
     // Store User in Firebase
     fetch("/api/user", {
@@ -37,10 +35,7 @@ export class Login extends Component {
   }
 
   logoutResponseSuccess = () => {
-    this.setState({ isLogin: false });
-    this.setState({ googleUser: {} });
-    this.setState({ profileObj: {} });
-
+    this.setState({ isLogin: false, googleUser: {}, profileObj: {} });
   }
 
   render() {

@@ -1,14 +1,11 @@
 package com.google.sps.data;
 
-import com.google.sps.data.Club;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -28,29 +25,28 @@ public final class ClubTest {
   private static final String POST_ONE = "postOne";
   private static final String POST_TWO = "postTwo";
 
-  private static final long ORIGINAL_OWNER = 1;
-  private static final long NEW_OWNER = 2;
+  private static final String ORIGINAL_OWNER = "originalOwner";
+  private static final String NEW_OWNER = "newOwner";
 
-  private static final long MEMBER_ONE = 1;
-  private static final long MEMBER_TWO = 2;
-  private static final long MEMBER_THREE = 3;
+  private static final String MEMBER_ONE = "memberOne";
+  private static final String MEMBER_TWO = "memberTwo";
+  private static final String MEMBER_THREE = "memberThree";
 
   private static final String ORIGINAL_BOOK = "originalBook";
   private static final String NEW_BOOK = "newBook";
 
   @Before
   public void setUp() {
-    club = new Club(1, ORIGINAL_NAME, ORIGINAL_DESCRIPTION, ORIGINAL_OWNER, ORIGINAL_BOOK);
+    club = new Club(ORIGINAL_NAME, ORIGINAL_DESCRIPTION, ORIGINAL_OWNER, ORIGINAL_BOOK);
   }
   
   @Test
   public void testConstructor() {
-    Assert.assertEquals(club.getID(), 1);
     Assert.assertEquals(club.getName(), ORIGINAL_NAME);
     Assert.assertEquals(club.getDescription(), ORIGINAL_DESCRIPTION);
     Assert.assertEquals(club.getAnnouncement(), "");
     Assert.assertEquals(club.getPosts().size(), 0);
-    Assert.assertEquals(club.getOwnerID(), 1);
+    Assert.assertEquals(club.getOwnerID(), ORIGINAL_OWNER);
     Assert.assertEquals(club.getMemberIDs().size(), 0);
     Assert.assertEquals(club.getInviteIDs().size(), 0);
     Assert.assertEquals(club.getGbookID(), ORIGINAL_BOOK);
@@ -114,25 +110,25 @@ public final class ClubTest {
     club.invite(MEMBER_ONE);
 
     Assert.assertEquals(club.getInviteIDs().size(), 1);
-    List<Long> list = new ArrayList<>(club.getInviteIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
+    List<String> list = club.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
 
     club.invite(MEMBER_TWO);
 
     Assert.assertEquals(club.getInviteIDs().size(), 2);
-    list = new ArrayList<>(club.getInviteIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
-    Assert.assertEquals(list.get(1), new Long(MEMBER_TWO));
+    list = club.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertTrue(list.contains(MEMBER_TWO));
   }
 
   @Test
   public void testInviteList() {
-    club.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO)));
+    club.invite(Arrays.asList(MEMBER_ONE, MEMBER_TWO));
 
     Assert.assertEquals(club.getInviteIDs().size(), 2);
-    List<Long> list = new ArrayList<>(club.getInviteIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
-    Assert.assertEquals(list.get(1), new Long(MEMBER_TWO));
+    List<String> list = club.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertTrue(list.contains(MEMBER_TWO));
   }
 
   @Test
@@ -142,18 +138,18 @@ public final class ClubTest {
     club.uninvite(MEMBER_TWO);
 
     Assert.assertEquals(club.getInviteIDs().size(), 1);
-    List<Long> list = new ArrayList<>(club.getInviteIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
+    List<String> list = club.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
   }
 
   @Test
   public void testUninviteList() {
-    club.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE)));
-    club.uninvite(new ArrayList<>(Arrays.asList(MEMBER_TWO, MEMBER_THREE)));
+    club.invite(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE));
+    club.uninvite(Arrays.asList(MEMBER_TWO, MEMBER_THREE));
 
     Assert.assertEquals(club.getInviteIDs().size(), 1);
-    List<Long> list = new ArrayList<>(club.getInviteIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
+    List<String> list = club.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
   }
 
   @Test
@@ -165,10 +161,10 @@ public final class ClubTest {
     Assert.assertEquals(b, true);
     Assert.assertEquals(club.getInviteIDs().size(), 1);
     Assert.assertEquals(club.getMemberIDs().size(), 1);
-    List<Long> list = new ArrayList<>(club.getInviteIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_TWO));
-    list = new ArrayList<>(club.getMemberIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
+    List<String> list = club.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_TWO));
+    list = club.getMemberIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
   }
 
   @Test
@@ -180,14 +176,14 @@ public final class ClubTest {
     Assert.assertEquals(b, false);
     Assert.assertEquals(club.getInviteIDs().size(), 2);
     Assert.assertEquals(club.getMemberIDs().size(), 0);
-    List<Long> list = new ArrayList<>(club.getInviteIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
-    Assert.assertEquals(list.get(1), new Long(MEMBER_TWO));
+    List<String> list = club.getInviteIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertTrue(list.contains(MEMBER_TWO));
   }
   
   @Test
   public void removeMember() {
-    club.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE)));
+    club.invite(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE));
     club.addMember(MEMBER_ONE);
     club.addMember(MEMBER_TWO);
     club.addMember(MEMBER_THREE);
@@ -197,25 +193,25 @@ public final class ClubTest {
     club.removeMember(MEMBER_TWO);
 
     Assert.assertEquals(club.getMemberIDs().size(), 2);
-    List<Long> list = new ArrayList<>(club.getMemberIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_ONE));
-    Assert.assertEquals(list.get(1), new Long(MEMBER_THREE));
+    List<String> list = club.getMemberIDs();
+    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertTrue(list.contains(MEMBER_THREE));
   }
 
   @Test
   public void removeMembers() {
-    club.invite(new ArrayList<>(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE)));
+    club.invite(Arrays.asList(MEMBER_ONE, MEMBER_TWO, MEMBER_THREE));
     club.addMember(MEMBER_ONE);
     club.addMember(MEMBER_TWO);
     club.addMember(MEMBER_THREE);
 
     Assert.assertEquals(club.getMemberIDs().size(), 3);
 
-    club.removeMembers(new ArrayList(Arrays.asList(MEMBER_ONE, MEMBER_TWO)));
+    club.removeMembers(Arrays.asList(MEMBER_ONE, MEMBER_TWO));
 
     Assert.assertEquals(club.getMemberIDs().size(), 1);
-    List<Long> list = new ArrayList<>(club.getMemberIDs());
-    Assert.assertEquals(list.get(0), new Long(MEMBER_THREE));
+    List<String> list = club.getMemberIDs();
+    Assert.assertTrue(list.contains(MEMBER_THREE));
   }
 
   @Test 

@@ -34,8 +34,7 @@ public class UserServlet extends HttpServlet {
 
     try {
 
-      String googleUserTokenObjString = request.getReader().lines().collect(Collectors.joining());
-      JsonObject googleUserTokenObjJSON = JsonParser.parseString(googleUserTokenObjString).getAsJsonObject();
+      JsonObject googleUserTokenObjJSON = Utility.createRequestBodyJson(request);
 
       String tokenId = googleUserTokenObjJSON.get("id_token").getAsString();
       String token_type = googleUserTokenObjJSON.get("token_type").getAsString();
@@ -47,6 +46,7 @@ public class UserServlet extends HttpServlet {
 
       GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
           .setAudience(
+              // Client ID URL
               Collections.singletonList("962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"))
           .build();
 
@@ -77,7 +77,7 @@ public class UserServlet extends HttpServlet {
         return;
       }
 
-      //TODO: Update Acess Token if it expires.
+      //TODO(#47): Update Acess Token if it expires.
 
       Firestore db = getFirestore();
 
