@@ -29,6 +29,10 @@ public class Community extends Group {
     this(name, description, "", ownerID);
   }
 
+  public Community() {
+    this("", "", "");
+  }
+
   public List<String> getCommunityIDs() {
     return this.communityIDs;
   }

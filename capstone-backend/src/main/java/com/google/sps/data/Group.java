@@ -1,5 +1,6 @@
 package com.google.sps.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
  
@@ -22,6 +23,10 @@ public abstract class Group extends BaseEntity {
         this.ownerID = ownerID;
         this.memberIDs = memberIDs;
         this.inviteIDs = inviteIDs;
+  }
+
+  public Group() {
+    this("", "", "", new ArrayList<>(), "", new ArrayList<>(), new ArrayList<>())
   }
  
   public String getName() {

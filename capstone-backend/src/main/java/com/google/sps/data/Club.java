@@ -28,6 +28,10 @@ public class Club extends Group {
   public Club(String name, String ownerID) {
     this(name, "", ownerID, "");
   }
+
+  public Club() {
+    this("", "");
+  }
  
   public String getGbookID() {
     return this.gbookID;
