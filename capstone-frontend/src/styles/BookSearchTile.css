@@ -15,10 +15,16 @@
   transform: translateY(-50%);
 }
 
+.center-vertical:focus-within {
+  z-index: 100;
+}
+
 .dropdown-add {
   margin-bottom: 5px;
 }
 
 #dropdown-group-add, #dropdown-list-add {
   width: 100%;
+  position: relative;
 }
+

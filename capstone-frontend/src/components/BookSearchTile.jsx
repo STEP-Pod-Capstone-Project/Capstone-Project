@@ -35,11 +35,11 @@ const BookSearchTile = (props) => {
     <div className="book-search-tile">
       <Container>
         <Row className="justify-content-md-center">
-          <Col md="auto"><img className="book-img-med" src={props.thumbnailLink} alt={props.title} /></Col>
+          <Col md="auto"><img className="book-img-med" src={props.book.thumbnailLink} alt={props.book.title}/></Col>
           <Col>
             <div className="center-vertical">
-              <h2> {props.title} </h2>
-              <p> {props.author.join(', ')} </p>
+              <h2> {props.book.title} </h2>
+              <p> {props.book.authors.join(', ')} </p>
             </div>
           </Col>
           <Col md="auto">

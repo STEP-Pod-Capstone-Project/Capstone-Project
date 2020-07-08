@@ -52,12 +52,10 @@ class BookSearchList extends Component {
   render() {
     var books = [];
     for (const book of this.state.bookSearchList) {
-      books.push(<BookSearchTile title={book.title}
-        author={book.authors} thumbnailLink={book.thumbnailLink}
+      books.push(<BookSearchTile book={book}
         userBookLists={this.state.bookLists}
         userClubs={this.state.userClubs}
         userCommunities={this.state.userCommunities}
-        id={book.id}
         key={book.id} />);
     }
 
