@@ -2,11 +2,11 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: mvn appengine init
-    command: cd capstone-backend; mvn package appengine:stage
+  - command: cd capstone-backend; mvn package appengine:stage
 
-  - init: npm run init
-    command: cd capstone-frontend; npm install; npm run build
+  - command: cd capstone-frontend; npm install; npm run build
+
+  - command: ./google-cloud-sdk/install.sh; echo -e "To initialize gcloud, Open a new Terminal (Terminal -> New Terminal) and enter 'gcloud init'\n\n"
 
 vscode:
   extensions:

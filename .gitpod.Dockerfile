@@ -1,5 +1,7 @@
 FROM gitpod/workspace-full
 
+FROM google/cloud-sdk
+
 # Install custom tools, runtimes, etc.
 # For example "bastet", a command-line tetris clone:
 # RUN brew install bastet
