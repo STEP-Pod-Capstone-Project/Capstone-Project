@@ -46,10 +46,10 @@ test('renders book search tile test', () => {
   const bookThumbnail = document.getElementsByClassName("book-img-med")[0];
   expect(bookThumbnail).toBeInTheDocument();
 
-  const bookTitle = document.getElementsByTagName("h2")[0];
+  const bookTitle = document.getElementsByClassName("book-title")[0];
   expect(bookTitle).toBeInTheDocument();
 
-  const bookAuthor = document.getElementsByTagName("p")[0];
+  const bookAuthor = document.getElementsByClassName("book-authors")[0];
   expect(bookAuthor).toBeInTheDocument();
 
   const bookListButton = document.getElementById("dropdown-list-add");

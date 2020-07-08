@@ -22,8 +22,8 @@ const BookSearchTile = (props) => {
           <Col md="auto"><img className="book-img-med" src={props.book.thumbnailLink} alt={props.book.title}/></Col>
           <Col>
             <div className="center-vertical">
-              <h2> {props.book.title} </h2>
-              <p> {props.book.authors.join(', ')} </p>
+              <h2 className="book-title"> {props.book.title} </h2>
+              <p className="book-authors"> {props.book.authors.join(', ')} </p>
             </div>
           </Col>
           <Col md="auto">
