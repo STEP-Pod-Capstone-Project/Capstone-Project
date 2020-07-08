@@ -11,10 +11,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -77,7 +75,7 @@ public class UserServlet extends HttpServlet {
         return;
       }
 
-      //TODO(#47): Update Acess Token if it expires.
+      // TODO(#47): Update Acess Token if it expires.
 
       Firestore db = getFirestore();
 
