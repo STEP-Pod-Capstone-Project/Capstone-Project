@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 import com.google.sps.data.BaseEntity;
 
@@ -26,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -319,7 +321,7 @@ public class Utility {
   }
 
   public static <T extends BaseEntity> boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
-      GenericClass<T> genericClass, Field[] fields) throws IOException {
+      GenericClass<T> genericClass, Field[] fields, List<String> requiredFields) throws IOException {
     List<String> list = new ArrayList<>();
     List<String> fieldNames = Arrays.asList(fields).stream()
                                   .map(f -> f.getName()).collect(Collectors.toList());
@@ -330,40 +332,76 @@ public class Utility {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return false;
     } 
+    list.clear();
+    list.addAll(jsonObject.keySet());
+    list.retainAll(requiredFields);
+    if (list.size() != requiredFields.size()) {
+      System.err.println("Error: Not all required fields are present in the request body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return false;
+    } 
     return true;
   }
 
   public static <T extends BaseEntity> T post(CollectionReference collectionReference, HttpServletRequest request, 
-      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+      HttpServletResponse response, GenericClass<T> genericClass, List<String> requiredFields) throws IOException {
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     Field[] fields = genericClass.getMyType().getDeclaredFields();
-    if (!postErrorHandler(jsonObject, response, genericClass, fields)) {
+    if (!postErrorHandler(jsonObject, response, genericClass, fields, requiredFields)) {
       return null;
     }
     for (Field f : fields) {
       String name = f.getName();
       String type = f.getType().getName();
       if (type.equals("int") || type.equals("java.lang.Integer")) {
-        constructorFields.put(name, jsonObject.getOrDefault(name, -1).getAsInt());
+        if (jsonObject.has(name)) {
+          constructorFields.put(name, jsonObject.get(name).getAsInt());
+        }
+        else {
+          constructorFields.put(name, -1);
+        }
       }
       if (type.equals("java.lang.String")) {
-        constructorFields.put(name, jsonObject.getOrDefault(name, "").getAsString());
+        if (jsonObject.has(name)) {
+          constructorFields.put(name, jsonObject.get(name).getAsString());
+        }
+        else {
+          constructorFields.put(name, "");
+        }
       }
       if (type.equals("boolean") || type.equals("java.lang.boolean")) {
-        constructorFields.put(name, jsonObject.getOrDefault(name, false).getAsBoolean());
+        if (jsonObject.has(name)) {
+          constructorFields.put(name, jsonObject.get(name).getAsBoolean());
+        }
+        else {
+          constructorFields.put(name, false);
+        }
+      }
+      if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
+        if (jsonObject.has(name)) {
+          try {
+            JsonElement value = jsonObject.get(name);
+            Type listType = new TypeToken<List<String>>() {}.getType();
+            constructorFields.put(name, new Gson().fromJson(value, listType));
+          } catch (Exception e) {
+            List<String> value = Arrays.asList(jsonObject.get(name).getAsString().split(", "));
+            constructorFields.put(name, value);
+          }
+        }
+        else {
+          constructorFields.put(name, new ArrayList<String>());
+        }
       }
     }
 
     ApiFuture<DocumentReference> asyncDocument = collectionReference.add(constructorFields);
     try {
-      System.out.println("Update time : " + asyncDocument.get().getUpdateTime());
-      return getById(asyncDocument.get().getId(), request, response, genericClass).get(0);
+      return getById(asyncDocument.get().getId(), collectionReference, request, response, genericClass).get(0);
     } catch (Exception e) {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return null;
     }
-    return null;
   }
 }

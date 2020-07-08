@@ -13,15 +13,14 @@ class CreateClub extends Component {
         data[formElements[i].name] = formElements[i].value;
       }
     }
-    fetch("/api/clubs", 
-        {method: "post", body: JSON.stringify(data)})
-        .then(function() {
-          history.push(`/clubpage/${data.id}`);
-        })
-        .catch(function(e) {
-          console.log(e);
-          alert("Looks like we're having trouble connecting to our database, hang tight!");
-        });  
+    let response = fetch("/api/clubs", 
+        {method: "post", body: JSON.stringify(data)});
+    response.catch(function(err) {
+      alert(err);
+    });
+    response.then(response => response.json()).then(response => {
+      history.push(`/clubpage/${response.id}`);
+    });
   }
 
   render() {
@@ -41,12 +40,6 @@ class CreateClub extends Component {
           <div>
             <textarea rows="5" cols="75" type="text" id="description" name="description" />
           </div>
-          <div> 
-            <label htmlFor="id"> Club ID </label> 
-          </div>
-          <div>
-            <input type="text" id="id" name="id" />
-          </div>
           <div>
             <label htmlFor="ownerID"> ownerID </label>
           </div>
@@ -58,6 +51,12 @@ class CreateClub extends Component {
           </div>
           <div>
             <input type="text" id="gbookID" name="gbookID" />
+          </div>
+          <div>
+            <label htmlFor="memberIDs"> memberIDs </label>
+          </div>
+          <div>
+            <input type="text" id="memberIDs" name="memberIDs" />
           </div>
           <div>
             <input id="create-club" type="submit" value="Create your Club!" />
