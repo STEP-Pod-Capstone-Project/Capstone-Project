@@ -3,9 +3,6 @@ import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../styles/BookSearchTile.css';
 
 const addBookToBookList = async (bookId, bookListJson) => {
-  console.log(`Added book with id: ${bookId} to bookList: ${bookListJson}`);
-
-  console.log(bookListJson);
 
   const gBookIDs = Array.from(bookListJson.gbookIDs);
   gBookIDs.push(bookId)
@@ -49,7 +46,7 @@ const BookSearchTile = (props) => {
                   props.userBookLists.map(bookList =>
                     React.createElement(Dropdown.Item, {
                       key: bookList.id, onSelect: () =>
-                        addBookToBookList(props.id, bookList)
+                        addBookToBookList(props.book.id, bookList)
                     }, bookList.name))
                 }
               </DropdownButton>

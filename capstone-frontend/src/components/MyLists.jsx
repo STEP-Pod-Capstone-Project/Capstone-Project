@@ -6,8 +6,6 @@ class MyLists extends Component {
 
     event.preventDefault();
 
-    console.log(event.target[0].value);
-
     const newBooklist = {
       "userID": window.sessionStorage.getItem("userID"),
       "booklistName": event.target[0].value,

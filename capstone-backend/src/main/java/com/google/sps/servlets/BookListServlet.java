@@ -12,11 +12,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,10 +34,7 @@ public class BookListServlet extends HttpServlet {
 
     try {
 
-      String bookListJsonString = request.getReader().lines().collect(Collectors.joining());
-      JsonObject bookListJson = JsonParser.parseString(bookListJsonString).getAsJsonObject();
-
-      System.out.println(bookListJsonString);
+      JsonObject bookListJson = Utility.createRequestBodyJson(request);
 
       final String userID = bookListJson.get("userID").getAsString();
       final String bookListName = bookListJson.get("booklistName").getAsString();
@@ -63,8 +58,7 @@ public class BookListServlet extends HttpServlet {
 
     try {
 
-      String bookListJsonString = request.getReader().lines().collect(Collectors.joining());
-      JsonObject bookListJson = JsonParser.parseString(bookListJsonString).getAsJsonObject();
+      JsonObject bookListJson = Utility.createRequestBodyJson(request);
 
       final String bookListID = bookListJson.get("bookListID").getAsString();
       final JsonArray gBookIDsJsonArray = bookListJson.get("gbookIDs").getAsJsonArray();
