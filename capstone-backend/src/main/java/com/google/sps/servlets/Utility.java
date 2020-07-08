@@ -211,7 +211,7 @@ public class Utility {
    * @param {request} the request sent to the backend
    * @param {response} the response returned from the call
    * @param {genericClass} a Generic class, to be used in casting objects retrieved from the database
-   * @return Query the query being modified, to eventually be used to query the database.
+   * @return List<T> the results of the given get request.
    */
   public static <T extends BaseEntity> List<T> get(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
@@ -245,6 +245,17 @@ public class Utility {
     return retrievedObjects;
   }
 
+  /**
+   * Performs a put on the given collection, allowing the requester to supply fields to be changed. 
+   * Request body fields must match object field names exactly, except in the case of lists.
+   * To add to a list the body should contain a key "add_<listName>" and to remove from a list the 
+   * body should contain a key "remove_<listName>". The updated object is returned.
+   * @param {collectionRefence} the appropriate collection of documents in the database
+   * @param {request} the request sent to the backend
+   * @param {response} the response returned from the call
+   * @param {genericClass} a Generic class, to be used in casting objects retrieved from the database
+   * @return T the object being modified.
+   */
   public static <T extends BaseEntity> T put(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
