@@ -26,7 +26,7 @@ public abstract class Group extends BaseEntity {
   }
 
   public Group() {
-    this("", "", "", new ArrayList<>(), "", new ArrayList<>(), new ArrayList<>())
+    this("", "", "", new ArrayList<>(), "", new ArrayList<>(), new ArrayList<>());
   }
  
   public String getName() {
