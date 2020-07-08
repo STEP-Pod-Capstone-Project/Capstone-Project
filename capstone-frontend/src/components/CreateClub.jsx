@@ -9,7 +9,8 @@ class CreateClub extends Component {
     let data = {};
     const formElements = document.getElementById("create-club-form").elements;
     for (let i = 0; i < formElements.length; i++) {
-      if (formElements[i].type !== "submit") {
+      if (formElements[i].name.length != 0 && 
+          formElements[i].type !== "submit" && formElements[i].value.length != 0) {
         data[formElements[i].name] = formElements[i].value;
       }
     }
