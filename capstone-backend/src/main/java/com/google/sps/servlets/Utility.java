@@ -8,7 +8,6 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteResult;
@@ -22,8 +21,6 @@ import com.google.gson.JsonParser;
 
 import com.google.sps.data.BaseEntity;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -64,14 +61,9 @@ public class Utility {
    * @return List<T> a singleton List of the Object that matches the ID in the request.
    */
   private static <T extends BaseEntity> List<T> getById(String id, CollectionReference collectionReference, 
-      HttpServletRequest request, HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     if (id.length() == 0) {
       System.err.println("Error caused by either an empty or non-existent \"id\" field in the post body.");
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return null;
-    }
-    if (request.getParameterMap().size() > 1) {
-      System.err.println("Error: No other parameter can be sent with an ID");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return null;
     }
@@ -218,7 +210,12 @@ public class Utility {
     List<T> retrievedObjects = new ArrayList<>();
     ApiFuture<QuerySnapshot> asyncQuery;
     if (request.getParameter("id") != null) {
-      return getById(request.getParameter("id"), collectionReference, request, response, genericClass);
+      if (request.getParameterMap().size() > 1) {
+        System.err.println("Error: No other parameter can be sent with an ID");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return null;
+      }
+      return getById(request.getParameter("id"), collectionReference, response, genericClass);
     }
     if (request.getParameterMap().size() == 0) {
       asyncQuery = collectionReference.get();
@@ -277,18 +274,22 @@ public class Utility {
     Field[] fields = genericClass.getMyType().getDeclaredFields();
     boolean containsParameter = false;
     for (String key : jsonObject.keySet()) {
+      containsParameter = false;
+      if (key.equals("id")) containsParameter = true;
+      if (jsonObject.get(key).getAsString().length() == 0) continue;
       for (Field field: fields) {
         String type = field.getType().getName();
-        if (field.getName().equals(key)) {
+        String name = field.getName();
+        if (key.equals(name)) {
           containsParameter = true;
           if (type.equals("int") || type.equals("java.lang.Integer")) {
-            update.put(key, jsonObject.get(key).getAsInt());
+            update.put(name, jsonObject.get(name).getAsInt());
           }
-          if (type.equals("java.lang.String") && !field.getName().equals("id")) {
-            update.put(key, jsonObject.get(key).getAsString());
+          else if (type.equals("java.lang.String") && !name.equals("id")) {
+            update.put(name, jsonObject.get(name).getAsString());
           }
-          if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
-            update.put(key, jsonObject.get(key).getAsBoolean());
+          else if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
+            update.put(name, jsonObject.get(name).getAsBoolean());
           }
           else {
             System.err.println("Error: Bad type in request: can't be cast to Integer, String or Boolean.");
@@ -296,16 +297,16 @@ public class Utility {
             return null;
           }
         }
-        else if (("add_"+field.getName()).equals(key)) {
+        else if (key.equals("add_"+name)) {
           if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
             containsParameter = true;
-            update.put(field.getName(), FieldValue.arrayUnion(jsonObject.get(key).getAsString()));
+            update.put(name, FieldValue.arrayUnion(jsonObject.get(key).getAsString()));
           }
         }
-        else if (("remove_"+field.getName()).equals(key)) {
+        else if (key.equals("remove_"+name)) {
           if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
             containsParameter = true;
-            update.put(field.getName(), FieldValue.arrayRemove(jsonObject.get(key).getAsString()));
+            update.put(name, FieldValue.arrayRemove(jsonObject.get(key).getAsString()));
           }
         }
       }
@@ -325,6 +326,6 @@ public class Utility {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return null;
     }
-    return getById(id, collectionReference, request, response, genericClass).get(0);
+    return getById(id, collectionReference, response, genericClass).get(0);
   }
 }
