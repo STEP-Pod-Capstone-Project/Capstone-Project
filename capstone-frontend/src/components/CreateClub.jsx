@@ -13,8 +13,7 @@ class CreateClub extends Component {
         data[formElements[i].name] = formElements[i].value;
       }
     }
-    let response = fetch("/api/clubs", 
-        {method: "post", body: JSON.stringify(data)});
+    let response = fetch("/api/clubs", {method: "post", body: JSON.stringify(data)});
     response.catch(function(err) {
       alert(err);
     });

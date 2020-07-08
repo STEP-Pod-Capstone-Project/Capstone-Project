@@ -333,10 +333,12 @@ public class Utility {
       return false;
     } 
     list.clear();
-    list.addAll(jsonObject.keySet());
+    list.addAll(jsonObject.keySet().stream()
+                    .filter(key -> jsonObject.get(key).getAsString().length() > 0)
+                    .collect(Collectors.toList()));
     list.retainAll(requiredFields);
     if (list.size() != requiredFields.size()) {
-      System.err.println("Error: Not all required fields are present in the request body.");
+      System.err.println("Error: Not all required fields are present in the request body, or some required fields are empty.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return false;
     } 
@@ -355,43 +357,50 @@ public class Utility {
       String name = f.getName();
       String type = f.getType().getName();
       if (type.equals("int") || type.equals("java.lang.Integer")) {
-        if (jsonObject.has(name)) {
+        if (jsonObject.has(name) && jsonObject.get(name).getAsString().length() != 0) {
           constructorFields.put(name, jsonObject.get(name).getAsInt());
         }
         else {
           constructorFields.put(name, -1);
         }
       }
-      if (type.equals("java.lang.String")) {
-        if (jsonObject.has(name)) {
+      else if (type.equals("java.lang.String")) {
+        if (jsonObject.has(name) && jsonObject.get(name).getAsString().length() != 0) {
           constructorFields.put(name, jsonObject.get(name).getAsString());
         }
         else {
           constructorFields.put(name, "");
         }
       }
-      if (type.equals("boolean") || type.equals("java.lang.boolean")) {
-        if (jsonObject.has(name)) {
+      else if (type.equals("boolean") || type.equals("java.lang.boolean")) {
+        if (jsonObject.has(name) && jsonObject.get(name).getAsString().length() != 0) {
           constructorFields.put(name, jsonObject.get(name).getAsBoolean());
         }
         else {
           constructorFields.put(name, false);
         }
       }
-      if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
-        if (jsonObject.has(name)) {
+      else if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
+        if (jsonObject.has(name) && jsonObject.get(name).getAsString().length() != 0) {
+          // First check to see if it's an "actual array"
           try {
             JsonElement value = jsonObject.get(name);
             Type listType = new TypeToken<List<String>>() {}.getType();
             constructorFields.put(name, new Gson().fromJson(value, listType));
-          } catch (Exception e) {
-            List<String> value = Arrays.asList(jsonObject.get(name).getAsString().split(", "));
-            constructorFields.put(name, value);
+          } catch (Exception e) { //if not, see if it's a comma separated list
+              String stringValue = jsonObject.get(name).getAsString().replace("[", "").replace("]", "");
+              List<String> listValue = Arrays.asList(stringValue.split(", "));
+              constructorFields.put(name, listValue);
+            }
           }
-        }
         else {
           constructorFields.put(name, new ArrayList<String>());
         }
+      }
+      else {
+        System.err.println("Error: unsupported type");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return null;
       }
     }
 

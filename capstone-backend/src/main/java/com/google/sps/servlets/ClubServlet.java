@@ -53,7 +53,7 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<String> requiredFields = new ArrayList<String>( Arrays.asList("Name", "ownerID") );
+    List<String> requiredFields = new ArrayList<String>( Arrays.asList("name", "ownerID") );
     Club createdClub = (Club) Utility.post(clubs, request, response, new GenericClass(Club.class), requiredFields);
     if (createdClub != null) {
       response.setContentType("application/json;");
