@@ -10,23 +10,23 @@ public class Community extends Group {
   private List<String> communityIDs;
   private List<String> clubIDs;
 
-  public Community(String id, String name, String description, String announcement, List<String> posts,
+  public Community(String name, String description, String announcement, List<String> posts,
       String ownerID, List<String> memberIDs, List<String> inviteIDs, List<String> communityIDs,
       List<String> clubIDs) {
 
-    super(id, name, description, announcement, posts, ownerID, memberIDs, inviteIDs);
+    super(name, description, announcement, posts, ownerID, memberIDs, inviteIDs);
     this.communityIDs = communityIDs;
     this.clubIDs = clubIDs;
   }
 
-  public Community(String id, String name, String description, String announcement, String ownerID) {
+  public Community(String name, String description, String announcement, String ownerID) {
 
-    this(id, name, description, announcement, new ArrayList<String>(), ownerID, new ArrayList<String>(),
+    this(name, description, announcement, new ArrayList<String>(), ownerID, new ArrayList<String>(),
         new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
   }
 
-  public Community(String id, String name, String description, String ownerID) {
-    this(id, name, description, "", ownerID);
+  public Community(String name, String description, String ownerID) {
+    this(name, description, "", ownerID);
   }
 
   public List<String> getCommunityIDs() {

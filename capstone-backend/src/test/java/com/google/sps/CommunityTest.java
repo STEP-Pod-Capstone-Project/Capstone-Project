@@ -26,12 +26,11 @@ public final class CommunityTest {
 
   @Before
   public void setUp() {
-    community = new Community("1", NAME, DESCRIPTION, OWNER);
+    community = new Community(NAME, DESCRIPTION, OWNER);
   }
 
   @Test
   public void testConstructor() {
-    Assert.assertEquals(community.getID(), "1");
     Assert.assertEquals(community.getName(), NAME);
     Assert.assertEquals(community.getDescription(), DESCRIPTION);
     Assert.assertEquals(community.getAnnouncement(), "");

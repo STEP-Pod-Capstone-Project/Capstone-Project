@@ -35,12 +35,11 @@ public final class GroupTest {
 
   @Before
   public void setUp() {
-    group = new Club("id", ORIGINAL_NAME, ORIGINAL_DESCRIPTION, ORIGINAL_OWNER, "");
+    group = new Club(ORIGINAL_NAME, ORIGINAL_DESCRIPTION, ORIGINAL_OWNER, "");
   }
   
   @Test
   public void testConstructor() {
-    Assert.assertEquals(group.getID(), "id");
     Assert.assertEquals(group.getName(), ORIGINAL_NAME);
     Assert.assertEquals(group.getDescription(), ORIGINAL_DESCRIPTION);
     Assert.assertEquals(group.getAnnouncement(), "");

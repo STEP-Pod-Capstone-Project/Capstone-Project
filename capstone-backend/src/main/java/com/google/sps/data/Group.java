@@ -3,9 +3,8 @@ package com.google.sps.data;
 import java.util.List;
 
  
-public abstract class Group {
+public abstract class Group extends BaseEntity {
   
-  private final String id;
   private String name;
   private String description;
   private String announcement;
@@ -14,9 +13,8 @@ public abstract class Group {
   private List<String> memberIDs;
   private List<String> inviteIDs;
 
-  public Group(String id, String name, String description, String announcement, List<String> posts, 
+  public Group(String name, String description, String announcement, List<String> posts, 
       String ownerID, List<String> memberIDs, List<String> inviteIDs) {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.announcement = announcement;
@@ -24,10 +22,6 @@ public abstract class Group {
         this.ownerID = ownerID;
         this.memberIDs = memberIDs;
         this.inviteIDs = inviteIDs;
-  }
- 
-  public String getID() {
-    return this.id;
   }
  
   public String getName() {

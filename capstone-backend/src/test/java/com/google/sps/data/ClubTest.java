@@ -15,18 +15,17 @@ public final class ClubTest {
   private static final String DESCRIPTION = "description";
 
   private static final String OWNER = "1";
-
+  
   private static final String ORIGINAL_BOOK = "originalBook";
   private static final String NEW_BOOK = "newBook";
 
   @Before
   public void setUp() {
-    club = new Club("1", NAME, DESCRIPTION, OWNER, ORIGINAL_BOOK);
+    club = new Club(NAME, DESCRIPTION, OWNER, ORIGINAL_BOOK);
   }
   
   @Test
   public void testConstructor() {
-    Assert.assertEquals(club.getID(), "1");
     Assert.assertEquals(club.getName(), NAME);
     Assert.assertEquals(club.getDescription(), DESCRIPTION);
     Assert.assertEquals(club.getAnnouncement(), "");

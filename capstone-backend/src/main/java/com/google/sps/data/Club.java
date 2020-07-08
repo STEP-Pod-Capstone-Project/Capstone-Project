@@ -8,25 +8,25 @@ public class Club extends Group {
   
   private String gbookID;
 
-  public Club(String id, String name, String description, String announcement,
+  public Club(String name, String description, String announcement,
     List<String> posts, String ownerID, List<String> memberIDs,
     List<String> inviteIDs, String gbookID) {
       
-    super(id, name, description, announcement, posts, ownerID, memberIDs, inviteIDs);
+    super(name, description, announcement, posts, ownerID, memberIDs, inviteIDs);
     this.gbookID = gbookID;
   }
 
-  public Club(String id, String name, String description, String ownerID, String gbookID) {
-    this(id, name, description, "", new ArrayList<String>(), ownerID, new ArrayList<String>(),
+  public Club(String name, String description, String ownerID, String gbookID) {
+    this(name, description, "", new ArrayList<String>(), ownerID, new ArrayList<String>(),
       new ArrayList<String>(), gbookID);
   }
 
-  public Club(String id, String name, String ownerID, String gbookID) {
-    this(id, name, "", ownerID, gbookID);
+  public Club(String name, String ownerID, String gbookID) {
+    this(name, "", ownerID, gbookID);
   }
 
-  public Club(String id, String name, String ownerID) {
-    this(id, name, "", ownerID, "");
+  public Club(String name, String ownerID) {
+    this(name, "", ownerID, "");
   }
  
   public String getGbookID() {
