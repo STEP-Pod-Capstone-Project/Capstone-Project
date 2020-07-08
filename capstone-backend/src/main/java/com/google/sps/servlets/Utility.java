@@ -412,4 +412,29 @@ public class Utility {
       return null;
     }
   }
+  
+  public static boolean delete(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response) throws IOException {
+    if (request.getParameterMap().size() > 1) {
+      System.err.println("Error: No other parameter can be sent with an ID");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return false;
+    }
+    if (request.getParameter("id") != null) {
+      String id = request.getParameter("id");
+      if (id.length() == 0) {
+        System.err.println("Error caused by an empty \"id\" field in the post body.");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return false;
+      }
+      ApiFuture<WriteResult> writeResult = collectionReference.document(id).delete();
+      System.out.println("Update time : " + writeResult.get().getUpdateTime());
+      return true;
+    }
+    else {
+      System.err.println("Error caused by a non-existent \"id\" field in the post body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return false;
+    }
+  }
 }
