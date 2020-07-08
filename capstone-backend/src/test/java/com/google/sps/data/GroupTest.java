@@ -1,11 +1,8 @@
-package com.google.sps;
-
-import com.google.sps.data.Club;
+package com.google.sps.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 import org.junit.Assert;
 import org.junit.Before;

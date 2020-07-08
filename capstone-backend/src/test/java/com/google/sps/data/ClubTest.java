@@ -1,7 +1,5 @@
 package com.google.sps.data;
 
-import com.google.sps.data.Club;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
