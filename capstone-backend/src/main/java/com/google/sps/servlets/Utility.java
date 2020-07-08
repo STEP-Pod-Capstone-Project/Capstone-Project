@@ -323,8 +323,7 @@ public class Utility {
   public static <T extends BaseEntity> boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
       GenericClass<T> genericClass, Field[] fields, List<String> requiredFields) throws IOException {
     List<String> list = new ArrayList<>();
-    List<String> fieldNames = Arrays.asList(fields).stream()
-                                  .map(f -> f.getName()).collect(Collectors.toList());
+    List<String> fieldNames = fields.stream().map(f -> f.getName()).collect(Collectors.toList());
     list.addAll(jsonObject.keySet());
     list.retainAll(fieldNames);
     if (list.size() != jsonObject.keySet().size()) {
