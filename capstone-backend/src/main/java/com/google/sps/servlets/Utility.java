@@ -413,6 +413,13 @@ public class Utility {
     }
   }
   
+   /**
+   * Deletes the object with the id given in the request query from the given collectionReference
+   * @param {collectionReference} reference to the appropriate collection of documents in the database
+   * @param {request} request sent to the backend
+   * @param {response} response returned from the call
+   * @return boolean true if the object is successfully deleted, false if not
+   */
   public static boolean delete(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response) throws IOException {
     if (request.getParameterMap().size() > 1) {
