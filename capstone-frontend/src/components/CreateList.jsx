@@ -34,7 +34,7 @@ class CreateList extends Component {
           <br />
         </form>
 
-        <button className="" onClick={async () => {
+        <button onClick={async () => {
 
           const userID = window.sessionStorage.getItem("userID");
 

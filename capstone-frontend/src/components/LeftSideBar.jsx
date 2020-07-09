@@ -14,7 +14,7 @@ export class LeftSideBar extends Component {
     super(props);
 
     this.state = {
-      bookLists: {}
+      bookLists: []
     }
   }
 
@@ -26,10 +26,11 @@ export class LeftSideBar extends Component {
       method: "GET",
     }).then(resp => resp.json());
 
-    console.log(bookLists);
+    this.setState({ bookLists });
+  }
 
-    this.setState({bookLists});
-
+  componentDidMount() {
+    this.fetchBookLists();
   }
 
 
@@ -83,19 +84,26 @@ export class LeftSideBar extends Component {
 
             <Card>
               <Accordion.Toggle as={Card.Header} eventKey="3">
-                <Link to="/createlist" className="bg-dark list-group-item list-group-item-action">
+                <Link to="/createlist" className="bg-light list-group-item list-group-item-action">
                   <div className="d-flex w-100 justify-content-start align-items-center">
                     <span> My Lists </span>
                   </div>
                 </Link>
               </Accordion.Toggle>
+
               <Accordion.Collapse eventKey="3">
                 <Card.Body>
-                  <Link to="/listpage/:id" className="bg-dark list-group-item list-group-item-action">
-                    <div className="d-flex w-100 justify-content-start align-items-center">
-                      <span> My List 1 </span>
-                    </div>
-                  </Link>
+
+                  {
+                    this.state.bookLists.map(bookList =>
+                      <Link to={`/listpage/${bookList.id}`} key={bookList.id} className="bg-light list-group-item list-group-item-action">
+                        <div className="d-flex w-100 justify-content-start align-items-center">
+                          <span> {bookList.name}</span>
+                        </div>
+                      </Link>
+                    )
+                  }
+
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
