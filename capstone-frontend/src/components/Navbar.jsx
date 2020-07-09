@@ -56,8 +56,8 @@ class Navbar extends Component {
         </Link>
         <div className={navClassOne} id="navbarNavDropdown">
           <ul className="navbar-nav">
-            <form className="form-inline my-2 my-lg-0">
-              <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+            <form className="form-inline my-2 my-lg-0" onSubmit={this.handleSearchInput}>
+              <input className="form-control mr-sm-2" id="search" type="search" placeholder="Search" aria-label="Search" />
               <button className="btn btn-outline my-2 my-sm-0" type="submit"></button>
             </form>
             <li className={navLibClassOne}>
