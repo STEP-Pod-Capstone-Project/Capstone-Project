@@ -56,13 +56,18 @@ const LeftSideBar = () => {
             <Accordion.Toggle as={Card.Header} eventKey="3">
               <Link to="/mylists" className="bg-dark list-group-item list-group-item-action">
                 <div className="d-flex w-100 justify-content-start align-items-center">
-                  <span className="fa fa-tasks fa-fw mr-3"></span>
-                  <span id="mylists-link" className="menu-collapsed"> My Lists </span>
+                  <span> My Lists </span>
                 </div>
               </Link>
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="3">
-              <Card.Body>My Lists Dropdown</Card.Body>
+              <Card.Body>
+                <Link to="/myclubs" className="bg-dark list-group-item list-group-item-action">
+                  <div className="d-flex w-100 justify-content-start align-items-center">
+                    <span> My List 1 </span>
+                  </div>
+                </Link>
+              </Card.Body>
             </Accordion.Collapse>
           </Card>
 
