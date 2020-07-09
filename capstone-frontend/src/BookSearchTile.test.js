@@ -19,10 +19,9 @@ const book = {
   thumbnailLink: "https://http.cat/100.jpg"
 };
 const getUserBookLists = () => {
-  let userBookLists = [{ id: "1", name: "Best Books" },
+  return [{ id: "1", name: "Best Books" },
   { id: "2", name: "Fantasy" },
   { id: "3", name: "Sci-fi" }];
-  return userBookLists;
 }
 
 test('renders book search tile test', () => {
