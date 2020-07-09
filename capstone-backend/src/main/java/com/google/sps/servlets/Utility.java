@@ -14,6 +14,8 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
@@ -366,15 +368,12 @@ public class Utility {
       Field[] fields, List<String> requiredFields) throws IOException {
     List<String> list = new ArrayList<>();
     List<String> fieldNames = Arrays.asList(fields).stream().map(f -> f.getName()).collect(Collectors.toList());
-    list.addAll(jsonObject.keySet());
-    list.retainAll(fieldNames);
     // Every jsonObject key must match a field name. If not, this check will fail. 
-    if (list.size() != jsonObject.keySet().size()) {
+    if (fieldNames.containsAll(jsonObject.keySet())) {
       System.err.println("Error: Not all parameters in the request body are fields of the given class.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return false;
     } 
-    list.clear();
     list.addAll(jsonObject.keySet().stream()
                     .filter(key -> jsonObject.get(key).getAsString().length() > 0)
                     .collect(Collectors.toList()));
@@ -409,7 +408,7 @@ public class Utility {
       String type = f.getType().getName();
       if (type.equals("int") || type.equals("java.lang.Integer")) {
         if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
-          constructorFields.put(name, jsonObject.get(fName).getAsInt());
+          constructorFields.put(fName, jsonObject.get(fName).getAsInt());
         }
         else {
           constructorFields.put(fName, -1);
@@ -457,7 +456,7 @@ public class Utility {
 
     ApiFuture<DocumentReference> asyncDocument = collectionReference.add(constructorFields);
     try {
-      return getById(asyncDocument.get().getId(), collectionReference, request, response, genericClass).get(0);
+      return getById(asyncDocument.get().getId(), collectionReference, response, genericClass).get(0);
     } catch (Exception e) {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
