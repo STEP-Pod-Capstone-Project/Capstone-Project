@@ -30,6 +30,11 @@ public class UserServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    response.setHeader("Access-Control-Allow-Methods", "POST");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+
     try {
 
       JsonObject googleUserTokenObjJSON = Utility.createRequestBodyJson(request);
@@ -81,7 +86,7 @@ public class UserServlet extends HttpServlet {
 
       ApiFuture<WriteResult> futureUsers = db.collection("users").document(googleUser.getID()).set(googleUser);
 
-      System.out.println("Update time : " + futureUsers.get().getUpdateTime());
+      System.out.println("UserSevlet Update time : " + futureUsers.get().getUpdateTime());
 
     } catch (Exception e) {
       System.err.println("Error: " + e.getMessage());

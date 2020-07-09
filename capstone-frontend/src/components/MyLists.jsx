@@ -12,7 +12,7 @@ class MyLists extends Component {
     }
 
     // Store BookList in Firebase
-    fetch("/api/booklist", {
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
       method: "POST",
       body: JSON.stringify(newBooklist)
     });
@@ -38,7 +38,7 @@ class MyLists extends Component {
 
           const userID = window.sessionStorage.getItem("userID");
 
-          const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
+          const bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
             method: "GET",
           }).then(resp => resp.json());
 

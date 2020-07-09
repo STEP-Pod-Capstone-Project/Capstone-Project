@@ -5,7 +5,10 @@ import '../styles/BookSearchTile.css';
 const addBookToBookList = async (bookId, bookListJson) => {
 
   const gBookIDs = Array.from(bookListJson.gbookIDs);
-  gBookIDs.push(bookId)
+  gBookIDs.push(bookId);
+
+  console.log(bookListJson)
+  console.log(gBookIDs)
 
   const bookListUpdateJson = {
     "bookListID": bookListJson.id,
@@ -13,8 +16,9 @@ const addBookToBookList = async (bookId, bookListJson) => {
   }
 
   // Update BookList in Firebase
-  fetch("/api/booklist", {
-    method: "PUT",
+  fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    method: "put",
+    credentials: "include",
     body: JSON.stringify(bookListUpdateJson)
   }).then(resp => console.log(resp));
 }

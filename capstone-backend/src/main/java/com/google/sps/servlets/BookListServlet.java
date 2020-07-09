@@ -7,7 +7,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
-import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -32,6 +31,11 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    response.setHeader("Access-Control-Allow-Methods", "POST");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+
     try {
 
       JsonObject bookListJson = Utility.createRequestBodyJson(request);
@@ -45,7 +49,7 @@ public class BookListServlet extends HttpServlet {
 
       ApiFuture<WriteResult> futureUsers = db.collection("booklists").document(userBookList.getID()).set(userBookList);
 
-      System.out.println("Update time : " + futureUsers.get().getUpdateTime());
+      System.out.println("BookListServlet POST Update time : " + futureUsers.get().getUpdateTime());
 
     } catch (Exception e) {
       System.err.println("Error: " + e.getMessage());
@@ -55,6 +59,13 @@ public class BookListServlet extends HttpServlet {
 
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    response.setHeader("Access-Control-Allow-Methods", "PUT");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+
+    System.out.println("GOT to PUT");
 
     try {
 
@@ -73,9 +84,11 @@ public class BookListServlet extends HttpServlet {
 
       ApiFuture<WriteResult> futureUsers = db.collection("booklists").document(bookListID).update("gbookIDs", gBookIDs);
 
-      System.out.println("Update time : " + futureUsers.get().getUpdateTime());
+
+      System.out.println("BookListServlet PUT Update time : " + futureUsers.get().getUpdateTime());
 
     } catch (Exception e) {
+      System.out.println("BookListServlet PUT Error : " + e.getMessage());
       System.err.println("Error: " + e.getMessage());
     }
 
@@ -83,6 +96,11 @@ public class BookListServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    response.setHeader("Access-Control-Allow-Methods", "GET");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
     try {
 
@@ -97,7 +115,6 @@ public class BookListServlet extends HttpServlet {
 
       for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
         userBookLists.add(document.getData());
-        System.out.println(Joiner.on(",").withKeyValueSeparator("=").join(document.getData()));
       }
 
       Gson gson = new Gson();
