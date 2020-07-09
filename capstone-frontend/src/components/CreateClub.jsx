@@ -9,7 +9,8 @@ class CreateClub extends Component {
     let data = {};
     const formElements = document.getElementById("create-club-form").elements;
     for (let i = 0; i < formElements.length; i++) {
-      if (formElements[i].type !== "submit") {
+      if (formElements[i].name.length !== 0 && 
+          formElements[i].type !== "submit" && formElements[i].value.length !== 0) {
         data[formElements[i].name] = formElements[i].value;
       }
     }
@@ -18,7 +19,8 @@ class CreateClub extends Component {
         .then(function() {
           history.push(`/clubpage/${data.id}`);
         })
-        .catch(function() {
+        .catch(function(e) {
+          console.log(e);
           alert("Looks like we're having trouble connecting to our database, hang tight!");
         });  
   }

@@ -76,55 +76,10 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    String id = jsonObject.get("id").getAsString();
-    Map<String, Object> update = new HashMap<>();
-    DocumentReference docRef = clubs.document(request.getParameter("id"));
-    ApiFuture<DocumentSnapshot> asyncDocument = docRef.get();
-    DocumentSnapshot document = null;
-    Club club = null;
-
-    try {
-      document = asyncDocument.get();
-      if (document.exists()) {
-        club = document.toObject(Club.class);
-      } else {
-        System.err.println("Error: no such document!");
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        return;
-      }
-    } catch (Exception e) {
-      System.err.println("Error: " + e);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
+    Club updatedClub = (Club) Utility.put(clubs, request, response, new GenericClass(Club.class));
+    if (updatedClub != null) {
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(updatedClub));
     }
-
-    if (jsonObject.get("name") != null) {
-      String name = jsonObject.get("name").getAsString();
-      club.setName(name);
-      update.put("name", name);
-    }
-    if (jsonObject.get("description") != null) {
-      String description = jsonObject.get("description").getAsString();
-      club.setDescription(description);
-      update.put("description", description);
-    }
-    if (jsonObject.get("gbookID") != null) {
-      String gbookID = jsonObject.get("gbookID").getAsString();
-      club.setGbookID(gbookID);
-      update.put("gbookID", gbookID);
-    }
-
-    ApiFuture<WriteResult> writeResult = clubs.document(id).set(update, SetOptions.merge());
-    try {
-      System.out.println("Update time : " + writeResult.get().getUpdateTime());
-    } catch (Exception e) {
-      System.err.println("Error: " + e);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
-    }
-
-    response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(club));
   }
 }
