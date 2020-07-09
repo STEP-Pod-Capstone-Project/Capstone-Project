@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
-import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../styles/BookSearchTile.css';
 
 const addBookToBookList = (bookId, bookListId) => {
@@ -54,8 +54,7 @@ const BookListDropdownEmpty = (props) => {
   return (
     <DropdownButton id="dropdown-list-add" className="dropdown-add" title="No Lists Found" variant="warning">
       {
-        <Dropdown.Item key={"emptyBookList"}
-          onSelect={() => props.history.push("/createlist")}>
+        <Dropdown.Item tag={Link} to="/createList" key={"emptyBookList"}>
           <span> Create New List </span>
         </Dropdown.Item>
       }
@@ -63,4 +62,4 @@ const BookListDropdownEmpty = (props) => {
   );
 }
 
-export default withRouter(BookSearchTile);
+export default BookSearchTile;
