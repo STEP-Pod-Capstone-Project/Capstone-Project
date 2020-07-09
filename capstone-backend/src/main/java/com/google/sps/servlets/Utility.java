@@ -1,7 +1,7 @@
 package com.google.sps.servlets;
 
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.api.core.ApiFuture;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -9,38 +9,43 @@ import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.SetOptions;
-import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import com.google.sps.data.BaseEntity;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map; 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 public class Utility {
   public static Firestore getFirestoreDb() throws IOException {
-    GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+
+    // Firebase already initialize
+    if (!FirebaseApp.getApps().isEmpty()) {
+      return FirestoreClient.getFirestore();
+    }
+
+    FileInputStream serviceAccount = new FileInputStream(
+        "./sopa-capstone-step-2020-firebase-adminsdk-f2rym-883a473e3d.json");
+
     FirebaseOptions options = new FirebaseOptions.Builder()
-        .setCredentials(credentials)
-        .setProjectId("sopa-capstone-step-2020")
-        .build();
+      .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+      .setDatabaseUrl("https://sopa-capstone-step-2020.firebaseio.com")
+      .build();
+
     FirebaseApp.initializeApp(options);
     return FirestoreClient.getFirestore();
   }
@@ -55,10 +60,12 @@ public class Utility {
    * Query the given collection by id. 
    * @param {id} id to be searched 
    * @param {collectionReference} reference to the appropriate database collection
-   * @param {request} request sent to the backend
-   * @param {response} response returned from the call
-   * @param {genericClass} a Generic class, used in casting documents from the database
-   * @return List<T> a singleton List of the Object that matches the ID in the request.
+   * @param {request}             request sent to the backend
+   * @param {response}            response returned from the call
+   * @param {genericClass}        a Generic class, used in casting documents from
+   *                              the database
+   * @return List<T> a singleton List of the Object that matches the ID in the
+   *         request.
    */
   private static <T extends BaseEntity> List<T> getById(String id, CollectionReference collectionReference, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
@@ -92,14 +99,18 @@ public class Utility {
   }
 
   /**
-   * Appends filters to the given query depending on fields in the request query 
-   * @param {genericClass} a Generic class, used in casting documents from the database
-   * @param {response} response returned from the call
-   * @param {it} iterator for the Map of query parameter names to values
-   * @param {query} query being modified, to eventually be used to query the database.
-   * @return Query the query being modified, to eventually be used to query the database.
+   * Appends filters to the given query depending on fields in the request query
+   * 
+   * @param {genericClass} a Generic class, used in casting documents from the
+   *                       database
+   * @param {response}     response returned from the call
+   * @param {it}           iterator for the Map of query parameter names to values
+   * @param {query}        query being modified, to eventually be used to query
+   *                       the database.
+   * @return Query the query being modified, to eventually be used to query the
+   *         database.
    */
-  private static <T extends BaseEntity> Query addToQuery(GenericClass<T> genericClass, HttpServletResponse response, 
+  private static <T extends BaseEntity> Query addToQuery(GenericClass<T> genericClass, HttpServletResponse response,
       Iterator<Map.Entry<String, String[]>> it, Query query) throws IOException {
     Map.Entry<String, String[]> entry = it.next();
     String parameterName = entry.getKey();
@@ -120,7 +131,8 @@ public class Utility {
     for (Field field : fields) {
       if (field.getName().equals(parameterName)) {
         containsParameter = true;
-        if (field.getType().getName().equals("java.util.List") || field.getType().getName().equals("java.util.ArrayList")) {
+        if (field.getType().getName().equals("java.util.List")
+            || field.getType().getName().equals("java.util.ArrayList")) {
           parameterIsList = true;
         }
       }
@@ -132,22 +144,26 @@ public class Utility {
     }
     if (!parameterIsList) {
       return query.whereEqualTo(parameterName, parameterValue);
-    }
-    else {
+    } else {
       return query.whereArrayContains(parameterName, parameterValue);
     }
   }
 
   /**
-   * Gets an asynchronous collection of matching documents from the database matching the request
-   * @param {collectionRefence} reference to the appropriate collection of documents in the database
-   * @param {request} request sent to the backend
-   * @param {response} response returned from the call
-   * @param {genericClass} a Generic class, used in casting documents from the database
-   * @return ApiFuture<QuerySnapshot> the asynchronous query results from the given filters.
+   * Gets an asynchronous collection of matching documents from the database
+   * matching the request
+   * 
+   * @param {collectionRefence} reference to the appropriate collection of
+   *                            documents in the database
+   * @param {request}           request sent to the backend
+   * @param {response}          response returned from the call
+   * @param {genericClass}      a Generic class, used in casting documents from
+   *                            the database
+   * @return ApiFuture<QuerySnapshot> the asynchronous query results from the
+   *         given filters.
    */
-  private static <T extends BaseEntity> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference, HttpServletRequest request, 
-      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+  private static <T extends BaseEntity> ApiFuture<QuerySnapshot> getByField(CollectionReference collectionReference,
+      HttpServletRequest request, HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     Iterator<Map.Entry<String, String[]>> it = request.getParameterMap().entrySet().iterator();
     if (!it.hasNext()) {
       System.err.println("Error in iterating through the request query map");
@@ -173,7 +189,8 @@ public class Utility {
     for (Field field : fields) {
       if (field.getName().equals(parameterName)) {
         containsParameter = true;
-        if (field.getType().getName().equals("java.util.List") || field.getType().getName().equals("java.util.ArrayList")) {
+        if (field.getType().getName().equals("java.util.List")
+            || field.getType().getName().equals("java.util.ArrayList")) {
           parameterIsList = true;
         }
       }
@@ -195,17 +212,22 @@ public class Utility {
   }
 
   /**
-   * Performs a get request on the given collection, allowing the requester to apply any number 
-   * of queries both for equality and to check membership in list fields. Query parameters must 
-   * match object field names exactly. If no queries are applied, the entire collection
-   * is returned. If an ID is supplied, a singleton list with that object is returned. 
-   * @param {collectionRefence} the appropriate collection of documents in the database
-   * @param {request} the request sent to the backend
-   * @param {response} the response returned from the call
-   * @param {genericClass} a Generic class, to be used in casting objects retrieved from the database
-   * @return List<T> the results of the given get request.
+   * Performs a get request on the given collection, allowing the requester to
+   * apply any number of queries both for equality and to check membership in list
+   * fields. Query parameters must match object field names exactly. If no queries
+   * are applied, the entire collection is returned. If an ID is supplied, a
+   * singleton list with that object is returned.
+   * 
+   * @param {collectionRefence} the appropriate collection of documents in the
+   *                            database
+   * @param {request}           the request sent to the backend
+   * @param {response}          the response returned from the call
+   * @param {genericClass}      a Generic class, to be used in casting objects
+   *                            retrieved from the database
+   * @return Query the query being modified, to eventually be used to query the
+   *         database.
    */
-  public static <T extends BaseEntity> List<T> get(CollectionReference collectionReference, HttpServletRequest request, 
+  public static <T extends BaseEntity> List<T> get(CollectionReference collectionReference, HttpServletRequest request,
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     List<T> retrievedObjects = new ArrayList<>();
     ApiFuture<QuerySnapshot> asyncQuery;
@@ -219,21 +241,18 @@ public class Utility {
     }
     if (request.getParameterMap().size() == 0) {
       asyncQuery = collectionReference.get();
-    }
-    else {
+    } else {
       asyncQuery = getByField(collectionReference, request, response, genericClass);
       if (asyncQuery == null) {
         return null;
       }
     }
     try {
-      retrievedObjects = asyncQuery.get().getDocuments().stream()
-                             .map(d -> {
-                                        T t = d.toObject(genericClass.getMyType());
-                                        t.setId(d.getId());
-                                        return t;
-                                       })
-                             .collect(Collectors.toList());
+      retrievedObjects = asyncQuery.get().getDocuments().stream().map(d -> {
+        T t = d.toObject(genericClass.getMyType());
+        t.setId(d.getId());
+        return t;
+      }).collect(Collectors.toList());
     } catch (Exception e) {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
