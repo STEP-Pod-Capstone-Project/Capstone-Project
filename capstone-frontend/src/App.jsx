@@ -8,7 +8,7 @@ import './App.css';
 import Home from './components/Home';
 import Browse from './components/Browse';
 import MyBooks from './components/MyBooks';
-import MyLists from './components/MyLists';
+import CreateList from './components/CreateList';
 import MyClubs from './components/MyClubs';
 import BookPage from './components/BookPage';
 import ListPage from './components/ListPage';
@@ -42,10 +42,10 @@ class App extends Component {
             <Route exact path='/' component={Home} />
             <Route path='/browse/:query' component={Browse} />
             <Route path='/mybooks' component={MyBooks} />
-            <Route path='/mylists' component={MyLists} />
+            <Route path='/createlist' component={CreateList} />
+            <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' component={BookPage} />
-            <Route path='/listpage/:id' component={ListPage} />
             <Route path='/clubpage/:id' component={ClubPage} />
             <Route path='/createclub' component={CreateClub} />
           </div>

@@ -4,15 +4,9 @@ import '../styles/BookSearchTile.css';
 
 const addBookToBookList = async (bookId, bookListJson) => {
 
-  const gBookIDs = Array.from(bookListJson.gbookIDs);
-  gBookIDs.push(bookId);
-
-  console.log(bookListJson)
-  console.log(gBookIDs)
-
   const bookListUpdateJson = {
     "bookListID": bookListJson.id,
-    "gbookIDs": gBookIDs,
+    "gbookID": bookId,
   }
 
   // Update BookList in Firebase
@@ -20,18 +14,11 @@ const addBookToBookList = async (bookId, bookListJson) => {
     method: "put",
     credentials: "include",
     body: JSON.stringify(bookListUpdateJson)
-  }).then(resp => console.log(resp));
-}
-
-const addBookToClub = (bookId, clubId) => {
-  console.log(`Added book with id: ${bookId} to club with id: ${clubId}`);
-}
-
-const addBookToCommunity = (bookId, communityId) => {
-  console.log(`Added book with id: ${bookId} to community with id: ${communityId}`);
+  });
 }
 
 const BookSearchTile = (props) => {
+  // TODO: #48 Prompt user to create a BookList if they have no BookLists
   return (
     <div className="book-search-tile">
       <Container>
@@ -39,36 +26,20 @@ const BookSearchTile = (props) => {
           <Col md="auto"><img className="book-img-med" src={props.book.thumbnailLink} alt={props.book.title}/></Col>
           <Col>
             <div className="center-vertical">
-              <h2> {props.book.title} </h2>
-              <p> {props.book.authors.join(', ')} </p>
+              <h2 className="book-title"> {props.book.title} </h2>
+              <p className="book-authors"> {props.book.authors.join(', ')} </p>
             </div>
           </Col>
           <Col md="auto">
             <Container className="center-vertical">
               <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
                 {
-                  props.userBookLists.map(bookList =>
-                    React.createElement(Dropdown.Item, {
-                      key: bookList.id, onSelect: () =>
-                        addBookToBookList(props.book.id, bookList)
-                    }, bookList.name))
-                }
-              </DropdownButton>
-              <DropdownButton id="dropdown-group-add" className="dropdown-add" title="Add to Group">
-                {
-                  props.userClubs.map(club =>
-                    React.createElement(Dropdown.Item, {
-                      key: club.id, onSelect: () =>
-                        addBookToClub(props.id, club.id)
-                    }, club.name))
-                }
-                <Dropdown.Divider />
-                {
-                  props.userCommunities.map(community =>
-                    React.createElement(Dropdown.Item, {
-                      key: community.id, onSelect: () =>
-                        addBookToCommunity(props.id, community.id)
-                    }, community.name))
+                  props.bookLists.map(bookList =>
+                    <Dropdown.Item key={bookList.id}
+                      onSelect={() => addBookToBookList(props.book.id, bookList)}>
+                      {bookList.name}
+                    </Dropdown.Item>
+                  )
                 }
               </DropdownButton>
             </Container>

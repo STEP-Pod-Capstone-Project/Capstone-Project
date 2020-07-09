@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class MyLists extends Component {
+class CreateList extends Component {
 
   handleSubmit = (event) => {
 
@@ -51,4 +51,4 @@ class MyLists extends Component {
   }
 }
 
-export default MyLists;
+export default CreateList;

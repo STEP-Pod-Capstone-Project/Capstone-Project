@@ -5,9 +5,12 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.SetOptions;
+import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -20,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +59,8 @@ public class Utility {
   }
 
   /**
-   * Query the given collection by id.
-   * 
+   * Query the given collection by id. 
+   * @param {id} id to be searched 
    * @param {collectionReference} reference to the appropriate database collection
    * @param {request}             request sent to the backend
    * @param {response}            response returned from the call
@@ -65,15 +69,15 @@ public class Utility {
    * @return List<T> a singleton List of the Object that matches the ID in the
    *         request.
    */
-  private static <T extends BaseEntity> List<T> getById(CollectionReference collectionReference,
-      HttpServletRequest request, HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
-    if (request.getParameterMap().size() > 1) {
-      System.err.println("Error: No other parameter can be sent with an ID");
+  private static <T extends BaseEntity> List<T> getById(String id, CollectionReference collectionReference, 
+      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    if (id.length() == 0) {
+      System.err.println("Error caused by either an empty or non-existent \"id\" field in the post body.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return null;
     }
     List<T> retrievedObjects = new ArrayList<>();
-    DocumentReference docRef = collectionReference.document(request.getParameter("id"));
+    DocumentReference docRef = collectionReference.document(id);
     ApiFuture<DocumentSnapshot> asyncDocument = docRef.get();
     DocumentSnapshot document = null;
     T item = null;
@@ -230,7 +234,12 @@ public class Utility {
     List<T> retrievedObjects = new ArrayList<>();
     ApiFuture<QuerySnapshot> asyncQuery;
     if (request.getParameter("id") != null) {
-      return getById(collectionReference, request, response, genericClass);
+      if (request.getParameterMap().size() > 1) {
+        System.err.println("Error: No other parameter can be sent with an ID");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return null;
+      }
+      return getById(request.getParameter("id"), collectionReference, response, genericClass);
     }
     if (request.getParameterMap().size() == 0) {
       asyncQuery = collectionReference.get();
@@ -252,5 +261,92 @@ public class Utility {
       return null;
     }
     return retrievedObjects;
+  }
+
+  /**
+   * Performs a put on the given collection, allowing the requester to supply fields to be changed. 
+   * Request body fields must match object field names exactly, except in the case of lists.
+   * To add to a list the body should contain a key "add_<listName>" and to remove from a list the 
+   * body should contain a key "remove_<listName>". The updated object is returned.
+   * @param {collectionRefence} the appropriate collection of documents in the database
+   * @param {request} the request sent to the backend
+   * @param {response} the response returned from the call
+   * @param {genericClass} a Generic class, to be used in casting objects retrieved from the database
+   * @return T the object being modified.
+   */
+  public static <T extends BaseEntity> T put(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    JsonObject jsonObject = Utility.createRequestBodyJson(request);
+    String id = "";
+    try {
+      id = jsonObject.get("id").getAsString();
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+      System.err.println("This error was likely caused by a lack of an \"id\" field in the post body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    if (id.length() == 0) {
+      System.err.println("Error caused by either an empty or non-existent \"id\" field in the post body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return null;
+    }
+    Map<String, Object> update = new HashMap<>();
+    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    boolean containsParameter = false;
+    for (String key : jsonObject.keySet()) {
+      containsParameter = false;
+      if (key.equals("id")) containsParameter = true;
+      if (jsonObject.get(key).getAsString().length() == 0) continue;
+      for (Field field: fields) {
+        String type = field.getType().getName();
+        String name = field.getName();
+        if (key.equals(name)) {
+          containsParameter = true;
+          if (type.equals("int") || type.equals("java.lang.Integer")) {
+            update.put(name, jsonObject.get(name).getAsInt());
+          }
+          else if (type.equals("java.lang.String") && !name.equals("id")) {
+            update.put(name, jsonObject.get(name).getAsString());
+          }
+          else if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
+            update.put(name, jsonObject.get(name).getAsBoolean());
+          }
+          else {
+            System.err.println("Error: Bad type in request: can't be cast to Integer, String or Boolean.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+          }
+        }
+        else if (key.equals("add_"+name)) {
+          if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
+            containsParameter = true;
+            update.put(name, FieldValue.arrayUnion(jsonObject.get(key).getAsString()));
+          }
+        }
+        else if (key.equals("remove_"+name)) {
+          if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
+            containsParameter = true;
+            update.put(name, FieldValue.arrayRemove(jsonObject.get(key).getAsString()));
+          }
+        }
+      }
+      if (!containsParameter) {
+        System.err.println("Error: The object does not have the field specified in the request parameter.");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return null;
+      }
+      containsParameter = false;
+    }
+
+    ApiFuture<WriteResult> writeResult = collectionReference.document(id).set(update, SetOptions.merge());
+    try {
+      System.out.println("Update time : " + writeResult.get().getUpdateTime());
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return null;
+    }
+    return getById(id, collectionReference, response, genericClass).get(0);
   }
 }
