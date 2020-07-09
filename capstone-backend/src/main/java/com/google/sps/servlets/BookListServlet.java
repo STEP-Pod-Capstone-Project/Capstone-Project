@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import com.google.sps.data.BookList;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
@@ -61,15 +62,15 @@ public class BookListServlet extends HttpServlet {
       JsonObject bookListJson = Utility.createRequestBodyJson(request);
 
       final String bookListID = bookListJson.get("bookListID").getAsString();
-      final JsonArray gBookIDsJsonArray = bookListJson.get("gbookIDs").getAsJsonArray();
-
-      ArrayList<String> gBookIDs = new ArrayList<String>();
+      final String newGBookID = bookListJson.get("gbookID").getAsString();
       
-      for (JsonElement element : gBookIDsJsonArray){
-        gBookIDs.add(element.getAsString());
-      }
 
       Firestore db = getFirestore();
+
+      DocumentSnapshot bookList = db.collection("booklists").document(bookListID).get().get();
+
+      ArrayList<String> gBookIDs = (ArrayList<String>) bookList.get("gbookIDs");
+      gBookIDs.add(newGBookID);
 
       ApiFuture<WriteResult> futureUsers = db.collection("booklists").document(bookListID).update("gbookIDs", gBookIDs);
 
