@@ -26,7 +26,6 @@ const BookSearchTile = (props) => {
                 <BookListDropdownActive userBookLists={props.userBookLists} book={props.book}></BookListDropdownActive>
                 :
                 <BookListDropdownEmpty history={props.history}></BookListDropdownEmpty>
-
               }
             </Container>
           </Col>
