@@ -332,7 +332,7 @@ public class Utility {
   public static <T extends BaseEntity> boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
       Field[] fields, List<String> requiredFields) throws IOException {
     List<String> list = new ArrayList<>();
-    List<String> fieldNames = fields.stream().map(f -> f.getName()).collect(Collectors.toList());
+    List<String> fieldNames = Arrays.asList(fields).stream().map(f -> f.getName()).collect(Collectors.toList());
     list.addAll(jsonObject.keySet());
     list.retainAll(fieldNames);
     // Every jsonObject key must match a field name. If not, this check will fail. 
