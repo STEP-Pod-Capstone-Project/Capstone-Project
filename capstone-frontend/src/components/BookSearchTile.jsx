@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import '../styles/BookSearchTile.css';
 
 const addBookToBookList = (bookId, bookListId) => {
