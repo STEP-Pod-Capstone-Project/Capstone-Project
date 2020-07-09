@@ -25,23 +25,9 @@ class BookSearchList extends Component {
     return userBookLists;
   }
 
-  getUserClubs = () => {
-    let userClubs = [{ id: "1", name: "Cool Kats Book Club" },
-    { id: "2", name: "Sci-fi Fans" }];
-    return userClubs;
-  }
-
-  getUserCommunities = () => {
-    let userCommunities = [{ id: "1", name: "Sci-fi Community" },
-    { id: "2", name: "Read-a-lot" }];
-    return userCommunities;
-  }
-
   componentDidMount() {
     this.getData();
     this.setState({ userBookLists: this.getUserBookLists() });
-    this.setState({ userClubs: this.getUserClubs() });
-    this.setState({ userCommunities: this.getUserCommunities() });
   }
 
   render() {
@@ -49,8 +35,6 @@ class BookSearchList extends Component {
     for (const book of this.state.bookSearchList) {
       books.push(<BookSearchTile book={book}
         userBookLists={this.state.userBookLists}
-        userClubs={this.state.userClubs}
-        userCommunities={this.state.userCommunities}
         key={book.id} />);
     }
 
