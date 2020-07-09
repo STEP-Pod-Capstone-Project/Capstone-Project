@@ -1,7 +1,7 @@
 .book-search-tile {
+  border: 2px solid black;
   margin: 10px;
   padding: 5px;
-  border: 2px solid black;
   text-align: center;
 }
 
@@ -23,8 +23,8 @@
   margin-bottom: 5px;
 }
 
-#dropdown-group-add, #dropdown-list-add {
-  width: 100%;
+#dropdown-list-add {
   position: relative;
+  width: 100%;
 }
 

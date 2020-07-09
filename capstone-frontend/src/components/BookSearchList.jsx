@@ -7,7 +7,7 @@ class BookSearchList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bookSearchList: [],
+      books: [],
       bookLists: []
     }
   }
@@ -15,7 +15,7 @@ class BookSearchList extends Component {
   getData = () => {
     fetch(`/api/search?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
-      .then(res => this.setState({ bookSearchList: res }))
+      .then(booksResult => this.setState({ books: booksResult }))
       .catch(err => console.log(err));
   }
 
@@ -26,45 +26,28 @@ class BookSearchList extends Component {
     fetch(`/api/booklist?userID=${userID}`, {
       method: "GET",
     }).then(response => response.json()).then(res => {
-      this.setState({ bookLists: res });
+      this.setState({ bookLists: res })
     });
   }
 
-  getUserClubs = () => {
-    let userClubs = [{ id: "1", name: "Cool Kats Book Club" },
-    { id: "2", name: "Sci-fi Fans" }];
-    return userClubs;
-  }
-
-  getUserCommunities = () => {
-    let userCommunities = [{ id: "1", name: "Sci-fi Community" },
-    { id: "2", name: "Read-a-lot" }];
-    return userCommunities;
-  }
 
   componentDidMount() {
     this.getData();
     this.getUserBookLists();
-    this.setState({ userClubs: this.getUserClubs() });
-    this.setState({ userCommunities: this.getUserCommunities() });
   }
 
   render() {
-    var books = [];
-    for (const book of this.state.bookSearchList) {
-      books.push(<BookSearchTile book={book}
-        userBookLists={this.state.bookLists}
-        userClubs={this.state.userClubs}
-        userCommunities={this.state.userCommunities}
-        key={book.id} />);
-    }
-
     return (
       <div>
-        {books}
+        {
+          this.state.books.map(book =>
+            <BookSearchTile book={book} bookLists={this.state.bookLists} key={book.id} />
+          )
+        }
       </div>
     );
   }
 }
+
 
 export default BookSearchList;
