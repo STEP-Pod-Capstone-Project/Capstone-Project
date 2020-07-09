@@ -335,6 +335,7 @@ public class Utility {
     List<String> fieldNames = fields.stream().map(f -> f.getName()).collect(Collectors.toList());
     list.addAll(jsonObject.keySet());
     list.retainAll(fieldNames);
+    // Every jsonObject key must match a field name. If not, this check will fail. 
     if (list.size() != jsonObject.keySet().size()) {
       System.err.println("Error: Not all parameters in the request body are fields of the given class.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -345,6 +346,7 @@ public class Utility {
                     .filter(key -> jsonObject.get(key).getAsString().length() > 0)
                     .collect(Collectors.toList()));
     list.retainAll(requiredFields);
+    // Every requiredField must be present as a key in the jsonObject. If not, this check will fail. 
     if (list.size() != requiredFields.size()) {
       System.err.println("Error: Not all required fields are present in the request body, or some required fields are empty.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -370,47 +372,47 @@ public class Utility {
       return null;
     }
     for (Field f : fields) {
-      String name = f.getName();
+      String fName = f.getName();
       String type = f.getType().getName();
       if (type.equals("int") || type.equals("java.lang.Integer")) {
-        if (jsonObject.has(name) && jsonObject.get(name).getAsString().length() != 0) {
-          constructorFields.put(name, jsonObject.get(name).getAsInt());
+        if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
+          constructorFields.put(name, jsonObject.get(fName).getAsInt());
         }
         else {
-          constructorFields.put(name, -1);
+          constructorFields.put(fName, -1);
         }
       }
       else if (type.equals("java.lang.String")) {
-        if (jsonObject.has(name) && jsonObject.get(name).getAsString().length() != 0) {
-          constructorFields.put(name, jsonObject.get(name).getAsString());
+        if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
+          constructorFields.put(fName, jsonObject.get(fName).getAsString());
         }
         else {
-          constructorFields.put(name, "");
+          constructorFields.put(fName, "");
         }
       }
       else if (type.equals("boolean") || type.equals("java.lang.boolean")) {
-        if (jsonObject.has(name) && jsonObject.get(name).getAsString().length() != 0) {
-          constructorFields.put(name, jsonObject.get(name).getAsBoolean());
+        if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
+          constructorFields.put(fName, jsonObject.get(fName).getAsBoolean());
         }
         else {
-          constructorFields.put(name, false);
+          constructorFields.put(fName, false);
         }
       }
       else if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
-        if (jsonObject.has(name) && jsonObject.get(name).getAsString().length() != 0) {
+        if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
           // First check to see if it's an "actual array"
           try {
-            JsonElement value = jsonObject.get(name);
+            JsonElement value = jsonObject.get(fName);
             Type listType = new TypeToken<List<String>>() {}.getType();
-            constructorFields.put(name, new Gson().fromJson(value, listType));
+            constructorFields.put(fName, new Gson().fromJson(value, listType));
           } catch (Exception e) { //if not, see if it's a comma separated list
-              String stringValue = jsonObject.get(name).getAsString().replace("[", "").replace("]", "");
+              String stringValue = jsonObject.get(fName).getAsString().replace("[", "").replace("]", "");
               List<String> listValue = Arrays.asList(stringValue.split(", "));
-              constructorFields.put(name, listValue);
+              constructorFields.put(fName, listValue);
             }
           }
         else {
-          constructorFields.put(name, new ArrayList<String>());
+          constructorFields.put(fName, new ArrayList<String>());
         }
       }
       else {
