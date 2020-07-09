@@ -16,7 +16,7 @@ class ClubPage extends Component {
 
   handleClick = (e) => {
     e.preventDefault();
-    fetch(`/api/clubs?id=${this.props.match.params.id}`, {method: "post", credentials:'include'})
+    fetch(`/api/clubs?id=${this.props.match.params.id}`, {method: "delete"})
     .then(response => {console.log(response)});
     this.props.history.push("/myclubs");
   }

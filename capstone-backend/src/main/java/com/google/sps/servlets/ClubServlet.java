@@ -72,11 +72,6 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
-response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
-
     boolean successfulDelete = Utility.delete(clubs, request, response);
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(successfulDelete));

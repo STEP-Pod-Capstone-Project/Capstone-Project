@@ -487,8 +487,14 @@ public class Utility {
         return false;
       }
       ApiFuture<WriteResult> writeResult = collectionReference.document(id).delete();
-      System.out.println("Update time : " + writeResult.get().getUpdateTime());
-      return true;
+      try {
+        System.out.println("Update time : " + writeResult.get().getUpdateTime());
+        return true;
+      } catch (Exception e) {
+          System.err.println(e);
+          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+          return false;
+        }
     }
     else {
       System.err.println("Error caused by a non-existent \"id\" field in the post body.");
