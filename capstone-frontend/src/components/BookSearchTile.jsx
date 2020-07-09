@@ -54,7 +54,7 @@ const BookListDropdownEmpty = (props) => {
   return (
     <DropdownButton id="dropdown-list-add" className="dropdown-add" title="No Lists Found" variant="warning">
       {
-        <Dropdown.Item tag={Link} to="/createList" key={"emptyBookList"}>
+        <Dropdown.Item href="/createlist" key={"emptyBookList"}>
           <span> Create New List </span>
         </Dropdown.Item>
       }
