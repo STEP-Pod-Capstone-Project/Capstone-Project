@@ -84,7 +84,7 @@ public final class ClubTest {
   }
 
   @Test
-  public void testClearPost() {
+  public void testClearAssignments() {
     club.addAssignment(ASSIGNMENT_ONE);
     club.addAssignment(ASSIGNMENT_TWO);
 
