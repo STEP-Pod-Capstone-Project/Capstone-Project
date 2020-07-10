@@ -8,25 +8,21 @@ public abstract class Group extends BaseEntity {
   
   private String name;
   private String description;
-  private String announcement;
-  private List<String> posts;
   private String ownerID;
   private List<String> memberIDs;
   private List<String> inviteIDs;
 
-  public Group(String name, String description, String announcement, List<String> posts, 
-      String ownerID, List<String> memberIDs, List<String> inviteIDs) {
-        this.name = name;
-        this.description = description;
-        this.announcement = announcement;
-        this.posts = posts;
-        this.ownerID = ownerID;
-        this.memberIDs = memberIDs;
-        this.inviteIDs = inviteIDs;
+  public Group(String name, String description, String ownerID, List<String> memberIDs, 
+      List<String> inviteIDs) {
+    this.name = name;
+    this.description = description;
+    this.ownerID = ownerID;
+    this.memberIDs = memberIDs;
+    this.inviteIDs = inviteIDs;
   }
 
   public Group() {
-    this("", "", "", new ArrayList<>(), "", new ArrayList<>(), new ArrayList<>());
+    this("", "", "", new ArrayList<>(), new ArrayList<>());
   }
  
   public String getName() {
@@ -43,26 +39,6 @@ public abstract class Group extends BaseEntity {
  
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public String getAnnouncement() {
-    return this.announcement;
-  }
- 
-  public void setAnnouncement(String announcement) {
-    this.announcement = announcement;
-  }
-
-  public List<String> getPosts() {
-    return this.posts;
-  }
-
-  public void addPost(String post) {
-    this.posts.add(post);
-  }
-
-  public void clearPosts() {
-    this.posts.clear();
   }
 
   public String getOwnerID() {
