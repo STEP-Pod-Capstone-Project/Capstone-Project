@@ -8,29 +8,41 @@ public class Community extends Group {
 
   // ID references to other communities and clubs
   private List<String> communityIDs;
+  private List<String> posts;
   private List<String> clubIDs;
 
-  public Community(String name, String description, String announcement, List<String> posts,
-      String ownerID, List<String> memberIDs, List<String> inviteIDs, List<String> communityIDs,
+  public Community(String name, String description, List<String> posts, String ownerID, 
+      List<String> memberIDs, List<String> inviteIDs, List<String> communityIDs,
       List<String> clubIDs) {
-
-    super(name, description, announcement, posts, ownerID, memberIDs, inviteIDs);
+    super(name, description, ownerID, memberIDs, inviteIDs);
+    this.posts = posts;
     this.communityIDs = communityIDs;
     this.clubIDs = clubIDs;
   }
 
-  public Community(String name, String description, String announcement, String ownerID) {
-
-    this(name, description, announcement, new ArrayList<String>(), ownerID, new ArrayList<String>(),
-        new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
-  }
-
   public Community(String name, String description, String ownerID) {
-    this(name, description, "", ownerID);
+    this(name, description, new ArrayList<String>(), ownerID, new ArrayList<String>(),
+        new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
   }
 
   public Community() {
     this("", "", "");
+  }
+
+  public List<String> getPosts() {
+    return posts;
+  }
+
+  public void addPost(String post) {
+    this.posts.add(post);
+  }
+
+  public void removePost(String post) {
+    this.posts.remove(post);
+  }
+
+  public void clearPosts() {
+    this.posts.clear();
   }
 
   public List<String> getCommunityIDs() {
