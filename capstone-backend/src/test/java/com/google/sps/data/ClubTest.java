@@ -23,7 +23,6 @@ public final class ClubTest {
 
   private static final String ORIGINAL_OWNER = "originalOwner";
   private static final String NEW_OWNER = "newOwner";
->>>>>>> modify clubs to have assignments
 
   private static final String DESCRIPTION = "description";
 
@@ -211,7 +210,6 @@ public final class ClubTest {
   }
 
   @Test 
->>>>>>> modify clubs to have assignments
   public void testBook() {
     club.setGbookID(NEW_BOOK);
     Assert.assertEquals(club.getGbookID(), NEW_BOOK);
