@@ -69,25 +69,24 @@ public final class GroupTest {
 
   @Test
   public void testPost() {
-    group.post(POST_ONE);
+    group.addPost(POST_ONE);
 
     Assert.assertEquals(group.getPosts().size(), 1);
 
     List<String> list = new ArrayList<>(group.getPosts());
-    Assert.assertEquals(list.get(0), POST_ONE);
+    Assert.assertEquals(list, Arrays.asList(POST_ONE));
 
-    group.post(POST_TWO);
+    group.addPost(POST_TWO);
 
     Assert.assertEquals(group.getPosts().size(), 2);
     list = new ArrayList<>(group.getPosts());
-    Assert.assertEquals(list.get(0), POST_ONE);
-    Assert.assertEquals(list.get(1), POST_TWO);
+    Assert.assertEquals(list, Arrays.asList(POST_ONE, POST_TWO));
   }
 
   @Test
   public void testClearPost() {
-    group.post(POST_ONE);
-    group.post(POST_TWO);
+    group.addPost(POST_ONE);
+    group.addPost(POST_TWO);
 
     Assert.assertEquals(group.getPosts().size(), 2);
 
@@ -108,14 +107,13 @@ public final class GroupTest {
 
     Assert.assertEquals(group.getInviteIDs().size(), 1);
     List<String> list = group.getInviteIDs();
-    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_ONE));
 
     group.invite(MEMBER_TWO);
 
     Assert.assertEquals(group.getInviteIDs().size(), 2);
     list = group.getInviteIDs();
-    Assert.assertTrue(list.contains(MEMBER_ONE));
-    Assert.assertTrue(list.contains(MEMBER_TWO));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_ONE, MEMBER_TWO));
   }
 
   @Test
@@ -124,8 +122,7 @@ public final class GroupTest {
 
     Assert.assertEquals(group.getInviteIDs().size(), 2);
     List<String> list = group.getInviteIDs();
-    Assert.assertTrue(list.contains(MEMBER_ONE));
-    Assert.assertTrue(list.contains(MEMBER_TWO));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_ONE, MEMBER_TWO));
   }
 
   @Test
@@ -136,7 +133,7 @@ public final class GroupTest {
 
     Assert.assertEquals(group.getInviteIDs().size(), 1);
     List<String> list = group.getInviteIDs();
-    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_ONE));
   }
 
   @Test
@@ -146,7 +143,7 @@ public final class GroupTest {
 
     Assert.assertEquals(group.getInviteIDs().size(), 1);
     List<String> list = group.getInviteIDs();
-    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_ONE));
   }
 
   @Test
@@ -159,9 +156,9 @@ public final class GroupTest {
     Assert.assertEquals(group.getInviteIDs().size(), 1);
     Assert.assertEquals(group.getMemberIDs().size(), 1);
     List<String> list = group.getInviteIDs();
-    Assert.assertTrue(list.contains(MEMBER_TWO));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_TWO));
     list = group.getMemberIDs();
-    Assert.assertTrue(list.contains(MEMBER_ONE));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_ONE));
   }
 
   @Test
@@ -174,8 +171,7 @@ public final class GroupTest {
     Assert.assertEquals(group.getInviteIDs().size(), 2);
     Assert.assertEquals(group.getMemberIDs().size(), 0);
     List<String> list = group.getInviteIDs();
-    Assert.assertTrue(list.contains(MEMBER_ONE));
-    Assert.assertTrue(list.contains(MEMBER_TWO));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_ONE, MEMBER_TWO));
   }
   
   @Test
@@ -191,8 +187,7 @@ public final class GroupTest {
 
     Assert.assertEquals(group.getMemberIDs().size(), 2);
     List<String> list = group.getMemberIDs();
-    Assert.assertTrue(list.contains(MEMBER_ONE));
-    Assert.assertTrue(list.contains(MEMBER_THREE));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_ONE, MEMBER_THREE));
   }
 
   @Test
@@ -208,7 +203,7 @@ public final class GroupTest {
 
     Assert.assertEquals(group.getMemberIDs().size(), 1);
     List<String> list = group.getMemberIDs();
-    Assert.assertTrue(list.contains(MEMBER_THREE));
+    Assert.assertEquals(list, Arrays.asList(MEMBER_THREE));
   }
 
 }

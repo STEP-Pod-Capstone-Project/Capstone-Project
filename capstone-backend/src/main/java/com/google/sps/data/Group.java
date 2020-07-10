@@ -57,7 +57,7 @@ public abstract class Group extends BaseEntity {
     return this.posts;
   }
 
-  public void post(String post) {
+  public void addPost(String post) {
     this.posts.add(post);
   }
 
