@@ -26,7 +26,7 @@ const getUserBookLists = () => {
 
 test('renders book search tile test', () => {
   render(<BookSearchTile book={book}
-    userBookLists={getUserBookLists()} />, container);
+    bookLists={getUserBookLists()} />, container);
 
   const bookThumbnail = document.getElementsByClassName("book-img-med")[0];
   expect(bookThumbnail).toBeInTheDocument();
