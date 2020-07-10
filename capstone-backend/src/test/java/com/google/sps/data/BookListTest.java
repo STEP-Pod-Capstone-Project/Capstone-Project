@@ -6,12 +6,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @RunWith(JUnit4.class)
@@ -19,29 +20,36 @@ public final class BookListTest {
 
   private BookList bookList1;
   private BookList bookList2;
+  private BookList bookList3;
 
-  private final String BOOKSHELF_ID_1 = "bookshelfID_1";
-  private final String BOOKSHELF_ID_2 = "bookshelfID_2";
+  private final List<String> GBOOK_IDs_1 = new ArrayList<String>(Arrays.asList("abc123", "def456", "ghi789"));
+  private final List<String> GBOOK_IDs_2 = new ArrayList<String>(Arrays.asList("zxy987", "wvu654", "tsr321"));
 
-  private final Long USER_ID_1 = Long.valueOf(12345);
-  private final Long USER_ID_2 = Long.valueOf(67890);
+  private final String USER_ID_1 = "12345";
+  private final String USER_ID_2 = "67890";
+  private final String USER_ID_3 = "abcde";
 
-  private final Long COLLABORATOR_ID_1 = Long.valueOf(1111);
-  private final Long COLLABORATOR_ID_2 = Long.valueOf(2222);
+  private final String NAME_1 = "bookList1";
+  private final String NAME_2 = "bookList2";
+  private final String NAME_3 = "bookList3";
 
-  private final Long ID_1 = Long.valueOf(123456789);
-  private final Long ID_2 = Long.valueOf(987654321);
+  private final String GBOOK_1 = "123abc";
+  private final String GBOOK_2 = "987xyz";
 
-  private final Collection<Long> COLLABORATORS_IDs_1 = new HashSet<Long>(
-      Arrays.asList((long) 123, (long) 321, (long) 345, (long) 543, (long) 234));
+  private final String COLLABORATOR_ID_1 = "1111";
+  private final String COLLABORATOR_ID_2 = "2222";
 
-  private final Collection<Long> COLLABORATORS_IDs_2 = new HashSet<Long>(
-      Arrays.asList((long) 678, (long) 876, (long) 8910, (long) 789, (long) 1098));
+  private final List<String> COLLABORATORS_IDs_1 = new ArrayList<String>(
+      Arrays.asList("123", "321", "345", "543", "234"));
+
+  private final List<String> COLLABORATORS_IDs_2 = new ArrayList<String>(
+      Arrays.asList("678", "876", "8910", "789", "1098"));
 
   @Before
   public void setUp() {
-    bookList1 = new BookList(USER_ID_1, BOOKSHELF_ID_1, COLLABORATORS_IDs_1, ID_1);
-    bookList2 = new BookList(USER_ID_2, BOOKSHELF_ID_2);
+    bookList1 = new BookList(USER_ID_1, NAME_1, GBOOK_IDs_1, COLLABORATORS_IDs_1);
+    bookList2 = new BookList(USER_ID_2, NAME_2, GBOOK_IDs_2);
+    bookList3 = new BookList(USER_ID_3, NAME_3);
   }
 
   @Test
@@ -50,73 +58,90 @@ public final class BookListTest {
     assertNotEquals(bookList1, bookList2);
 
     // Test Diff
+    assertNotEquals(bookList1.getID(), bookList2.getID());
     assertNotEquals(bookList1.getUserID(), bookList2.getUserID());
-    assertNotEquals(bookList1.getBookshelfID(), bookList2.getBookshelfID());
+    assertNotEquals(bookList1.getName(), bookList2.getName());
+    assertNotEquals(bookList1.getGbookIDs(), bookList2.getGbookIDs());
 
-    assertNotEquals(bookList1.getBookshelfID(), bookList2.getBookshelfID());
+    assertFalse(bookList1.getGbookIDs().containsAll(bookList2.getGbookIDs())
+        && bookList2.getGbookIDs().containsAll(bookList1.getGbookIDs()));
 
-    assertNotNull(bookList1.getId());
-    assertNull(bookList2.getId());
+    assertNotEquals(bookList1.getCollaboratorsIDs(), bookList2.getCollaboratorsIDs());
+
+    assertFalse(bookList1.getCollaboratorsIDs().containsAll(bookList2.getCollaboratorsIDs())
+        && bookList2.getCollaboratorsIDs().containsAll(bookList1.getCollaboratorsIDs()));
+
+    assertNotEquals(bookList1.getID(), bookList2.getID());
+
+    assertEquals(USER_ID_3, bookList3.getUserID());
+    assertEquals(NAME_3, bookList3.getName());
   }
 
   @Test
   public void testGetters() {
 
     assertEquals(USER_ID_1, bookList1.getUserID());
-    assertEquals(BOOKSHELF_ID_1, bookList1.getBookshelfID());
+    assertEquals(NAME_1, bookList1.getName());
+    assertEquals(GBOOK_IDs_1, bookList1.getGbookIDs());
+    assertTrue(bookList1.getGbookIDs().containsAll(GBOOK_IDs_1));
     assertEquals(COLLABORATORS_IDs_1, bookList1.getCollaboratorsIDs());
-    assertEquals(ID_1, bookList1.getId());
+    assertTrue(bookList1.getCollaboratorsIDs().containsAll(COLLABORATORS_IDs_1));
 
     assertEquals(USER_ID_2, bookList2.getUserID());
-    assertEquals(BOOKSHELF_ID_2, bookList2.getBookshelfID());
-    assertEquals(true, bookList2.getCollaboratorsIDs().isEmpty());
-    assertNull(bookList2.getId());
+    assertEquals(NAME_2, bookList2.getName());
+    assertEquals(GBOOK_IDs_2, bookList2.getGbookIDs());
+    assertTrue(bookList2.getGbookIDs().containsAll(GBOOK_IDs_2));
+    assertTrue(bookList2.getCollaboratorsIDs().isEmpty());
   }
 
   @Test
   public void testSetters() {
 
-    bookList2.setUserID(USER_ID_1);
-    bookList2.setBookshelf(BOOKSHELF_ID_1);
+    bookList2.setGbookIDs(GBOOK_IDs_1);
     bookList2.setCollaboratorsIDs(COLLABORATORS_IDs_2);
-    bookList2.setID(ID_2);
 
-    assertEquals(BOOKSHELF_ID_1, bookList2.getBookshelfID());
-    assertEquals(USER_ID_1, bookList2.getUserID());
+    assertEquals(GBOOK_IDs_1, bookList2.getGbookIDs());
+    assertTrue(bookList2.getGbookIDs().containsAll(GBOOK_IDs_1));
     assertEquals(COLLABORATORS_IDs_2, bookList2.getCollaboratorsIDs());
-    assertEquals(ID_2, bookList2.getId());
+    assertTrue(bookList2.getCollaboratorsIDs().containsAll(COLLABORATORS_IDs_2));
   }
 
   @Test
-  public void testAddRemoveContainsCollaborators(){
+  public void testAddRemoveContains() {
 
-    bookList1.addCollaborator(COLLABORATOR_ID_2);
-    assertEquals(true, bookList1.containsCollaborator(COLLABORATOR_ID_2));
+    bookList1.addGbook(GBOOK_1);
+    bookList1.addCollaborator(COLLABORATOR_ID_1);
+    assertTrue(bookList1.containsGbook(GBOOK_1));
+    assertTrue(bookList1.containsCollaborator(COLLABORATOR_ID_1));
 
-    bookList2.addCollaborator(COLLABORATOR_ID_1);
-    assertEquals(true, bookList2.containsCollaborator(COLLABORATOR_ID_1));
+    bookList2.addGbook(GBOOK_2);
+    bookList2.addCollaborator(COLLABORATOR_ID_2);
+    assertTrue(bookList2.containsGbook(GBOOK_2));
+    assertTrue(bookList2.containsCollaborator(COLLABORATOR_ID_2));
 
-    bookList1.removeCollaborator(COLLABORATOR_ID_2);
-    assertEquals(false, bookList1.containsCollaborator(COLLABORATOR_ID_2));
+    bookList1.removeGbook(GBOOK_1);
+    bookList1.removeCollaborator(COLLABORATOR_ID_1);
+    assertFalse(bookList1.containsGbook(GBOOK_1));
+    assertFalse(bookList1.containsCollaborator(COLLABORATOR_ID_1));
 
-    bookList2.removeCollaborator(COLLABORATOR_ID_1);
-    assertEquals(false, bookList2.containsCollaborator(COLLABORATOR_ID_1));
-
+    bookList2.removeGbook(GBOOK_2);
+    bookList2.removeCollaborator(COLLABORATOR_ID_2);
+    assertFalse(bookList2.containsGbook(GBOOK_2));
+    assertFalse(bookList2.containsCollaborator(COLLABORATOR_ID_2));
   }
 
   @Test
   public void testIsEmptyAndClear() {
 
-    assertEquals(false, bookList1.isEmpty());
+    assertFalse(bookList1.isEmpty());
 
     bookList1.clear();
 
-    assertEquals(true, bookList1.isEmpty());
-    assertNull(bookList1.getUserID());
-    assertEquals("", bookList1.getBookshelfID());
-    assertEquals(true, bookList1.getCollaboratorsIDs().isEmpty());
-
-    assertNotNull(bookList1.getId());
+    assertTrue(bookList1.isEmpty());
+    assertTrue(bookList1.getGbookIDs().isEmpty());
+    assertTrue(bookList1.getCollaboratorsIDs().isEmpty());
+    assertNotNull(bookList1.getUserID());
+    assertNotNull(bookList1.getID());
 
     bookList2.clear();
     assertEquals(bookList1.isEmpty(), bookList2.isEmpty());
