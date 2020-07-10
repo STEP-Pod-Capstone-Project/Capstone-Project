@@ -5,9 +5,6 @@ import "../styles/LeftSideBar.css";
 // import '../App.css';
 
 
-
-
-
 export class LeftSideBar extends Component {
 
   constructor(props) {
@@ -39,33 +36,23 @@ export class LeftSideBar extends Component {
       <div id="left-sidebar-container" className="sidebar-expanded d-none d-md-block col-2 sidebar-container">
         <ul className="list-group sticky-top sticky-offset">
 
-          <Accordion defaultActiveKey="0">
+          <Accordion defaultActiveKey="0" style={{ marginRight: -14.3 }}>
             <Card>
-              <Accordion.Toggle as={Card.Header} eventKey="0">
-                <Link to="/" className="bg-dark list-group-item list-group-item-action">
-                  <div className="d-flex w-100 justify-content-start align-items-center">
-                    <span className="fa fa-tasks fa-fw mr-3"></span>
-                    <span id="home-link" className="menu-collapsed"> Home </span>
-                  </div>
-                </Link>
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>My Home Dropdown</Card.Body>
-              </Accordion.Collapse>
+              <Link to="/" className="bg-dark list-group-item list-group-item-action">
+                <div className="d-flex w-100 justify-content-start align-items-center">
+                  <span className="fa fa-tasks fa-fw mr-3"></span>
+                  <span id="home-link" className="menu-collapsed"> Home </span>
+                </div>
+              </Link>
             </Card>
 
             <Card>
-              <Accordion.Toggle as={Card.Header} eventKey="1">
-                <Link to="/browse" className="bg-dark list-group-item list-group-item-action">
-                  <div className="d-flex w-100 justify-content-start align-items-center">
-                    <span className="fa fa-tasks fa-fw mr-3"></span>
-                    <span id="browse-link" className="menu-collapsed"> Browse </span>
-                  </div>
-                </Link>
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="1">
-                <Card.Body>Browse Dropdown</Card.Body>
-              </Accordion.Collapse>
+              <Link to="/browse" className="bg-dark list-group-item list-group-item-action">
+                <div className="d-flex w-100 justify-content-start align-items-center">
+                  <span className="fa fa-tasks fa-fw mr-3"></span>
+                  <span id="browse-link" className="menu-collapsed"> Browse </span>
+                </div>
+              </Link>
             </Card>
 
             <Card>
@@ -84,11 +71,12 @@ export class LeftSideBar extends Component {
 
             <Card>
               <Accordion.Toggle as={Card.Header} eventKey="3">
-                <Link to="/createlist" className="bg-light list-group-item list-group-item-action">
+                <div className="bg-dark list-group-item list-group-item-action">
                   <div className="d-flex w-100 justify-content-start align-items-center">
-                    <span> My Lists </span>
+                    <span className="fa fa-list fa-fw mr-3"></span>
+                    <span> My Library </span>
                   </div>
-                </Link>
+                </div>
               </Accordion.Toggle>
 
               <Accordion.Collapse eventKey="3">
@@ -103,6 +91,12 @@ export class LeftSideBar extends Component {
                       </Link>
                     )
                   }
+
+                  <Link to="/createlist" className="bg-light list-group-item list-group-item-action">
+                    <div className="d-flex w-100 justify-content-start align-items-center">
+                      <span> Create New List </span>
+                    </div>
+                  </Link>
 
                 </Card.Body>
               </Accordion.Collapse>

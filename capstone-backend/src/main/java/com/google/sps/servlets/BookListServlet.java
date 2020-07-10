@@ -2,15 +2,12 @@ package com.google.sps.servlets;
 
 import com.google.sps.data.BookList;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,8 +63,6 @@ public class BookListServlet extends HttpServlet {
     response.setHeader("Access-Control-Allow-Origin",
         "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
-    System.out.println("GOT to PUT");
-
     try {
 
       JsonObject bookListJson = Utility.createRequestBodyJson(request);
@@ -89,7 +84,6 @@ public class BookListServlet extends HttpServlet {
       System.out.println("BookListServlet PUT Update time : " + futureUsers.get().getUpdateTime());
 
     } catch (Exception e) {
-      System.out.println("BookListServlet PUT Error : " + e.getMessage());
       System.err.println("Error: " + e.getMessage());
     }
 
@@ -123,6 +117,33 @@ public class BookListServlet extends HttpServlet {
       response.setContentType("application/json;");
 
       response.getWriter().println(gson.toJson(userBookLists));
+
+    } catch (Exception e) {
+      System.err.println("Error: " + e.getMessage());
+    }
+  }
+
+
+  @Override
+  public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    response.setHeader("Access-Control-Allow-Methods", "DELETE");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+
+    try {
+
+      JsonObject bookListJson = Utility.createRequestBodyJson(request);
+
+      final String bookListID = bookListJson.get("bookListID").getAsString();      
+
+      Firestore db = getFirestore();
+
+      ApiFuture<WriteResult> futureUsers = db.collection("booklists").document(bookListID).delete();
+
+
+      System.out.println("BookListServlet DELETE Update time : " + futureUsers.get().getUpdateTime());
 
     } catch (Exception e) {
       System.err.println("Error: " + e.getMessage());
