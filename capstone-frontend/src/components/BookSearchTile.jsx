@@ -21,11 +21,7 @@ const BookSearchTile = (props) => {
           </Col>
           <Col md="auto">
             <Container className="center-vertical">
-              {props.userBookLists.length > 0 ?
-                <BookListDropdownActive userBookLists={props.userBookLists} book={props.book}></BookListDropdownActive>
-                :
-                <BookListDropdownEmpty history={props.history}></BookListDropdownEmpty>
-              }
+              <BookListAddDropdown userBookLists={props.userBookLists} book={props.book}></BookListAddDropdown>
             </Container>
           </Col>
         </Row>
@@ -34,31 +30,31 @@ const BookSearchTile = (props) => {
   );
 }
 
-const BookListDropdownActive = (props) => {
-  return (
-    <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
-      {
-        props.userBookLists.map(bookList =>
-          <Dropdown.Item key={bookList.id}
-            onSelect={() => addBookToBookList(props.book.id, bookList.id)}>
-            {bookList.name}
+const BookListAddDropdown = (props) => {
+  if (props.userBookLists.length > 0) {
+    return (
+      <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
+        {
+          props.userBookLists.map(bookList =>
+            <Dropdown.Item key={bookList.id}
+              onSelect={() => addBookToBookList(props.book.id, bookList.id)}>
+              {bookList.name}
+            </Dropdown.Item>
+          )
+        }
+      </DropdownButton>
+    );
+  } else {
+    return (
+      <DropdownButton id="dropdown-list-add" className="dropdown-add" title="No Lists Found" variant="warning">
+        {
+          <Dropdown.Item href="/createlist" key="emptyBookList">
+            <span> Create New List </span>
           </Dropdown.Item>
-        )
-      }
-    </DropdownButton>
-  );
-}
-
-const BookListDropdownEmpty = (props) => {
-  return (
-    <DropdownButton id="dropdown-list-add" className="dropdown-add" title="No Lists Found" variant="warning">
-      {
-        <Dropdown.Item href="/createlist" key={"emptyBookList"}>
-          <span> Create New List </span>
-        </Dropdown.Item>
-      }
-    </DropdownButton>
-  );
+        }
+      </DropdownButton>
+    );
+  }
 }
 
 export default BookSearchTile;
