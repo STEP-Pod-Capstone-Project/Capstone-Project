@@ -29,6 +29,22 @@ export class LeftSideBar extends Component {
     this.fetchBookLists();
   }
 
+  deleteBookList = (bookListId) => {
+    console.log("BookList ID:\t", bookListId);
+
+    // const bookListJson = {
+    //   "bookListID": bookListId
+    // }
+
+    // // Delete BookList in Firebase
+    // fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    //   method: "DELETE",
+    //   credentials: "include",
+    //   body: JSON.stringify(bookListJson)
+    // });
+
+  }
+
 
   render() {
     return (
@@ -86,6 +102,7 @@ export class LeftSideBar extends Component {
                       <Link to={`/listpage/${bookList.id}`} key={bookList.id} className="bg-light list-group-item list-group-item-action">
                         <div className="d-flex w-100 justify-content-start align-items-center">
                           <span> {bookList.name}</span>
+                          <button className="border-0 bg-transparent" onClick={this.deleteBookList(bookList.id)}><img src="/images/trash_icon.png" alt="Search Icon" alt="Delete Icon" /></button>
                         </div>
                       </Link>
                     )

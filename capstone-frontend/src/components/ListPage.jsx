@@ -50,7 +50,7 @@ class ListPage extends Component {
 
   render() {
     return this.state.loading ? (<h1 className="text-center">Loading...</h1>) : (
-      <div className="text-center">
+      <div className="text-center mt-4">
         {
           this.state.gBooks.map(gBook =>
             <div key={gBook.id + Math.random().toString(36).substr(2, 9)}>
