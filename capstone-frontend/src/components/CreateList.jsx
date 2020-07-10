@@ -3,22 +3,24 @@ import {Button, Form} from 'react-bootstrap'
 
 class CreateList extends Component {
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
 
     event.preventDefault();
 
     console.log("Submitted")
 
     const newBooklist = {
-      "userID": window.sessionStorage.getItem("userID"),
+      "userID": window.localStorage.getItem("userID"),
       "booklistName": event.target[0].value,
     }
 
     // Store BookList in Firebase
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    await fetch("/api/booklist", {
       method: "POST",
       body: JSON.stringify(newBooklist)
     });
+
+    document.location.href="/";
   }
 
   render() {

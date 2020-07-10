@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Accordion, Card } from 'react-bootstrap';
+import { Accordion, Card, Button} from 'react-bootstrap';
 import "../styles/LeftSideBar.css";
 
 
@@ -16,9 +16,11 @@ export class LeftSideBar extends Component {
 
   fetchBookLists = async () => {
 
-    const userID = window.sessionStorage.getItem("userID");
+    const userID = window.localStorage.getItem("userID");
 
-    const bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
+    console.log("Fetching Books LeftSideBar");
+
+    const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
       method: "GET",
     }).then(resp => resp.json());
 
@@ -29,20 +31,27 @@ export class LeftSideBar extends Component {
     this.fetchBookLists();
   }
 
-  deleteBookList = (bookListId) => {
-    console.log("BookList ID:\t", bookListId);
+  deleteBookList = async (bookListId) => {
+    console.log("DELETE BookList ID:\t", bookListId);
 
-    // const bookListJson = {
-    //   "bookListID": bookListId
-    // }
+    const bookListJson = {
+      "bookListID": bookListId
+    }
 
-    // // Delete BookList in Firebase
-    // fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
-    //   method: "DELETE",
-    //   credentials: "include",
-    //   body: JSON.stringify(bookListJson)
-    // });
+    // Delete BookList in Firebase
+    await fetch("/api/booklist", {
+      method: "DELETE",
+      body: JSON.stringify(bookListJson)
+    });
 
+    this.fetchBookLists();
+
+    const currentUrlPath = new URL(window.location.href).pathname;
+    const bookListIdURL = currentUrlPath.substr(10);
+
+    if (bookListIdURL === bookListId) {
+      document.location.href="/";
+    }
   }
 
 
@@ -99,12 +108,19 @@ export class LeftSideBar extends Component {
 
                   {
                     this.state.bookLists.map(bookList =>
-                      <Link to={`/listpage/${bookList.id}`} key={bookList.id} className="bg-light list-group-item list-group-item-action">
+                      <div className="bg-light p-0 list-group-item list-group-item-action">
                         <div className="d-flex w-100 justify-content-start align-items-center">
-                          <span> {bookList.name}</span>
-                          <button className="border-0 bg-transparent" onClick={this.deleteBookList(bookList.id)}><img src="/images/trash_icon.png" alt="Search Icon" alt="Delete Icon" /></button>
+                          <Link to={`/listpage/${bookList.id}`} key={bookList.id} className="bg-light border-0 list-group-item list-group-item-action">
+                            <span> {bookList.name}</span>
+                          </Link>
+                          <Button className="border-0 bg-transparent" onClick={() => this.deleteBookList(bookList.id)}>
+                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="black" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
+                            </svg>
+                          </Button>
                         </div>
-                      </Link>
+                      </div>
+
                     )
                   }
 

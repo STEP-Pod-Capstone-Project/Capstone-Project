@@ -7,20 +7,32 @@ class ListPage extends Component {
 
     this.state = {
       gBooks: [],
-      loading: true
+      loading: true,
+      empty: false
     }
   }
 
 
   fetchBooks = async () => {
 
-    const userID = window.sessionStorage.getItem("userID");
+    const userID = window.localStorage.getItem("userID");
 
-    const bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
+    console.log("Fetch Books LIST PAGE")
+
+    const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
       method: "GET",
     }).then(resp => resp.json());
 
+    console.log("Booklist", bookLists)
+
     const bookList = Array.from(bookLists).filter(bookList => (bookList.id === this.props.match.params.id))[0].gbookIDs;
+
+    console.log("Booklist", bookList)
+
+    if (bookList.length === 0) {
+      this.setState({loading: false, empty: true});
+      return;
+    }
 
     const gBooks = [];
 
@@ -49,7 +61,7 @@ class ListPage extends Component {
   }
 
   render() {
-    return this.state.loading ? (<h1 className="text-center">Loading...</h1>) : (
+    return this.state.loading ? (<h1 className="text-center mt-4">Loading...</h1>) : (this.state.empty ? (<h1 className="text-center mt-4">Booklist has No Books</h1>) : (
       <div className="text-center mt-4">
         {
           this.state.gBooks.map(gBook =>
@@ -71,7 +83,7 @@ class ListPage extends Component {
 
 
       </div>
-    );
+    ));
   }
 }
 

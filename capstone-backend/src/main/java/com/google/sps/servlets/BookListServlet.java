@@ -29,10 +29,10 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    response.setHeader("Access-Control-Allow-Methods", "POST");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin",
-        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+    // response.setHeader("Access-Control-Allow-Methods", "POST");
+    // response.setHeader("Access-Control-Allow-Credentials", "true");
+    // response.setHeader("Access-Control-Allow-Origin",
+    //     "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
     try {
 
@@ -58,10 +58,10 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    response.setHeader("Access-Control-Allow-Methods", "PUT");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin",
-        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+    // response.setHeader("Access-Control-Allow-Methods", "PUT");
+    // response.setHeader("Access-Control-Allow-Credentials", "true");
+    // response.setHeader("Access-Control-Allow-Origin",
+    //     "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
     try {
 
@@ -92,10 +92,10 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    response.setHeader("Access-Control-Allow-Methods", "GET");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin",
-        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+    // response.setHeader("Access-Control-Allow-Methods", "GET");
+    // response.setHeader("Access-Control-Allow-Credentials", "true");
+    // response.setHeader("Access-Control-Allow-Origin",
+    //     "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
     try {
 
@@ -127,10 +127,10 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    response.setHeader("Access-Control-Allow-Methods", "DELETE");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin",
-        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+    // response.setHeader("Access-Control-Allow-Methods", "DELETE");
+    // response.setHeader("Access-Control-Allow-Credentials", "true");
+    // response.setHeader("Access-Control-Allow-Origin",
+    //     "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
     try {
 
