@@ -6,7 +6,8 @@ class ListPage extends Component {
     super(props)
 
     this.state = {
-      gBooks: []
+      gBooks: [],
+      loading: true
     }
   }
 
@@ -28,7 +29,8 @@ class ListPage extends Component {
       gBooks.push(gBook);
     }))
 
-    this.setState({ gBooks });
+    this.setState({ gBooks, loading: false });
+    console.log(gBooks)
   }
 
   componentDidMount() {
@@ -37,6 +39,7 @@ class ListPage extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.match.params.id !== prevProps.match.params.id) {
+      this.setState({ loading: true })
       this.fetchBooks();
     }
   }
@@ -46,15 +49,22 @@ class ListPage extends Component {
   }
 
   render() {
-    return (
+    return this.state.loading ? (<h1 className="text-center">Loading...</h1>) : (
       <div className="text-center">
         {
           this.state.gBooks.map(gBook =>
             <div key={gBook.id + Math.random().toString(36).substr(2, 9)}>
-              <img src={this.convertToHttps(gBook.volumeInfo.imageLinks.thumbnail)} alt={gBook.volumeInfo.title} />
+              <a className="text-decoration-none text-body" href={gBook.volumeInfo.canonicalVolumeLink}>
+                <div>
+                  <img src={this.convertToHttps(gBook.volumeInfo.imageLinks.thumbnail)} alt={gBook.volumeInfo.title} />
+                  <br />
+                  <h2 > {gBook.volumeInfo.title} </h2>
+                  <p > {gBook.volumeInfo.authors.join(', ')} </p>
+                </div>
+              </a>
+              <a className="btn btn-primary" href={gBook.accessInfo.webReaderLink}>Web Reader</a>
               <br/>
-              <h2 > {gBook.volumeInfo.title} </h2>
-              <p > {gBook.volumeInfo.authors.join(', ')} </p>
+              <br/>
             </div>
           )
         }
