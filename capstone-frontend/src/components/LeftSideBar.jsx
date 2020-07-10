@@ -104,7 +104,7 @@ export class LeftSideBar extends Component {
               </Accordion.Toggle>
 
               <Accordion.Collapse eventKey="3">
-                <Card.Body>
+                <Card.Body id="mylists-link">
 
                   {
                     this.state.bookLists.map(bookList =>
@@ -114,8 +114,8 @@ export class LeftSideBar extends Component {
                             <span> {bookList.name}</span>
                           </Link>
                           <Button className="border-0 bg-transparent" onClick={() => this.deleteBookList(bookList.id)}>
-                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="black" xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
+                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-trash-fill" fill="black" xmlns="http://www.w3.org/2000/svg">
+                              <path fillRule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
                             </svg>
                           </Button>
                         </div>
@@ -126,7 +126,7 @@ export class LeftSideBar extends Component {
 
                   <Link to="/createlist" className="bg-light list-group-item list-group-item-action">
                     <div className="d-flex w-100 justify-content-start align-items-center">
-                      <span> Create New List </span>
+                      <span id="mylists-create-link"> Create New List </span>
                     </div>
                   </Link>
 
