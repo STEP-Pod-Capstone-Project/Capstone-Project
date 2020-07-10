@@ -9,18 +9,18 @@ public class Club extends BaseEntity {
   private String name;
   private String description;
   private String announcement;
-  private List<String> posts;
+  private List<Assignment> assignments;
   private String ownerID;
   private List<String> memberIDs;
   private List<String> inviteIDs;
   private String gbookID;
 
-  public Club(String name, String description, String announcement, List<String> posts, 
+  public Club(String name, String description, String announcement, List<Assignment> assignments, 
       String ownerID, List<String> memberIDs, List<String> inviteIDs, String gbookID) {
         this.name = name;
         this.description = description;
         this.announcement = announcement;
-        this.posts = posts;
+        this.assignments = assignments;
         this.ownerID = ownerID;
         this.memberIDs = memberIDs;
         this.inviteIDs = inviteIDs;
@@ -28,7 +28,7 @@ public class Club extends BaseEntity {
   }
 
   public Club(String name, String description, String ownerID, String gbookID){
-    this(name, description, "", new ArrayList<String>(), ownerID, new ArrayList<String>(), new ArrayList<String>(), gbookID);
+    this(name, description, "", new ArrayList<Assignment>(), ownerID, new ArrayList<String>(), new ArrayList<String>(), gbookID);
   }
 
   public Club(String name, String ownerID, String gbookID) {
@@ -67,16 +67,16 @@ public class Club extends BaseEntity {
     this.announcement = announcement;
   }
 
-  public List<String> getPosts() {
-    return this.posts;
+  public List<Assignment> getAssignments() {
+    return this.assignments;
   }
 
-  public void post(String post) {
-    this.posts.add(post);
+  public void addAssignment(Assignment assignment) {
+    this.assignments.add(assignment);
   }
 
-  public void clearPosts() {
-    this.posts.clear();
+  public void clearAssignments() {
+    this.assignments.clear();
   }
 
   public String getOwnerID() {

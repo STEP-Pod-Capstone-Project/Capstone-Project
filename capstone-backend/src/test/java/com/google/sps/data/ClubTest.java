@@ -22,8 +22,8 @@ public final class ClubTest {
 
   private static final String ANNOUNCEMENT = "announcement";
 
-  private static final String POST_ONE = "postOne";
-  private static final String POST_TWO = "postTwo";
+  private static final Assignment ASSIGNMENT_ONE = new Assignment("one", "id", "created", "due");
+  private static final Assignment ASSIGNMENT_TWO = new Assignment("two", "id", "created", "due");
 
   private static final String ORIGINAL_OWNER = "originalOwner";
   private static final String NEW_OWNER = "newOwner";
@@ -45,7 +45,7 @@ public final class ClubTest {
     Assert.assertEquals(club.getName(), ORIGINAL_NAME);
     Assert.assertEquals(club.getDescription(), ORIGINAL_DESCRIPTION);
     Assert.assertEquals(club.getAnnouncement(), "");
-    Assert.assertEquals(club.getPosts().size(), 0);
+    Assert.assertEquals(club.getAssignments().size(), 0);
     Assert.assertEquals(club.getOwnerID(), ORIGINAL_OWNER);
     Assert.assertEquals(club.getMemberIDs().size(), 0);
     Assert.assertEquals(club.getInviteIDs().size(), 0);
@@ -71,32 +71,32 @@ public final class ClubTest {
   }
 
   @Test
-  public void testPost() {
-    club.post(POST_ONE);
+  public void testAssignment() {
+    club.addAssignment(ASSIGNMENT_ONE);
 
-    Assert.assertEquals(club.getPosts().size(), 1);
+    Assert.assertEquals(club.getAssignments().size(), 1);
 
-    List<String> list = new ArrayList<>(club.getPosts());
-    Assert.assertEquals(list.get(0), POST_ONE);
+    List<Assignment> list = new ArrayList<>(club.getAssignments());
+    Assert.assertEquals(list.get(0), ASSIGNMENT_ONE);
 
-    club.post(POST_TWO);
+    club.addAssignment(ASSIGNMENT_TWO);
 
-    Assert.assertEquals(club.getPosts().size(), 2);
-    list = new ArrayList<>(club.getPosts());
-    Assert.assertEquals(list.get(0), POST_ONE);
-    Assert.assertEquals(list.get(1), POST_TWO);
+    Assert.assertEquals(club.getAssignments().size(), 2);
+    list = new ArrayList<>(club.getAssignments());
+    Assert.assertEquals(list.get(0), ASSIGNMENT_ONE);
+    Assert.assertEquals(list.get(1), ASSIGNMENT_TWO);
   }
 
   @Test
   public void testClearPost() {
-    club.post(POST_ONE);
-    club.post(POST_TWO);
+    club.addAssignment(ASSIGNMENT_ONE);
+    club.addAssignment(ASSIGNMENT_TWO);
 
-    Assert.assertEquals(club.getPosts().size(), 2);
+    Assert.assertEquals(club.getAssignments().size(), 2);
 
-    club.clearPosts();
+    club.clearAssignments();
 
-    Assert.assertEquals(club.getPosts().size(), 0);
+    Assert.assertEquals(club.getAssignments().size(), 0);
   }
 
   @Test 
