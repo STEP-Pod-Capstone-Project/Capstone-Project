@@ -63,8 +63,22 @@ class ListPage extends Component {
                 </div>
               </a>
               <a className="btn btn-primary" href={gBook.accessInfo.webReaderLink}>Web Reader</a>
-              <br/>
-              <br/>
+              <br />
+              <button className="btn btn-danger" onClick={async () => {
+
+                const userID = window.sessionStorage.getItem("userID");
+
+                const userIdJson = {
+                  "userID": userID
+                }
+
+                await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+                  method: "DELETE",
+                  body: userIdJson
+                }).then(response => console.log(response));
+
+              }}>Delete BookLists</button>
+              <br />
             </div>
           )
         }

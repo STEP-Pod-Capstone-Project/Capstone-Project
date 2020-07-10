@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Accordion, Card } from 'react-bootstrap';
 import "../styles/LeftSideBar.css";
-// import '../App.css';
 
 
 export class LeftSideBar extends Component {
