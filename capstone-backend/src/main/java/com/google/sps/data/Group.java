@@ -21,6 +21,10 @@ public abstract class Group extends BaseEntity {
     this.inviteIDs = inviteIDs;
   }
 
+  public Group(String name, String description, String ownerID) {
+    this(name, description, ownerID, new ArrayList<>(), new ArrayList<>());
+  }
+
   public Group() {
     this("", "", "", new ArrayList<>(), new ArrayList<>());
   }
