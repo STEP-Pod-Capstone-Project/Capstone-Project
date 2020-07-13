@@ -19,9 +19,10 @@ class ClubPage extends Component {
   }
 
   handleClick = () => {
+    const history = this.props.history;
     fetch(`/api/clubs?id=${this.props.match.params.id}`, {method: "delete"})
         .then(function() {
-            this.props.history.push("/myclubs");
+            history.push("/myclubs");
         })
         .catch(function(err) {
             //TODO #61: Centralize error output
