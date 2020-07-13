@@ -11,14 +11,22 @@ class ClubPage extends Component {
 
   fetchClubData = () => {
     fetch(`/api/clubs?id=${this.props.match.params.id}`)
-        .then(response => response.json()).then(res => this.setState({club: res[0]}));
+        .then(response => response.json()).then(res => this.setState({club: res[0]}))
+        .catch(function(err) {
+            //TODO #61: Centralize error output
+            alert(err);
+        });
   }
 
-  handleClick = (e) => {
-    e.preventDefault();
+  handleClick = () => {
     fetch(`/api/clubs?id=${this.props.match.params.id}`, {method: "delete"})
-    .then(response => {console.log(response)});
-    this.props.history.push("/myclubs");
+        .then(function() {
+            this.props.history.push("/myclubs");
+        })
+        .catch(function(err) {
+            //TODO #61: Centralize error output
+            alert(err);
+        });
   }
 
   componentDidMount() {
