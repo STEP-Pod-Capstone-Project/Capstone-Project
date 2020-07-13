@@ -9,6 +9,7 @@ class ListPage extends Component {
     this.state = {
       gBooks: [],
       loading: true,
+      empty: false
     }
   }
 
@@ -22,7 +23,7 @@ class ListPage extends Component {
     const gbookIDs = bookList[0].gbookIDs;
 
     if (!gbookIDs.length) {
-      this.setState({ loading: false });
+      this.setState({ loading: false , empty: true});
       return;
     }
 
@@ -68,7 +69,7 @@ class ListPage extends Component {
   }
 
   render() {
-    return this.state.loading ? (<h1 className="text-center mt-4">Loading...</h1>) : (this.state.gBooks.length ? (<h1 className="text-center mt-4">Booklist has No Books</h1>) : (
+    return this.state.loading ? (<h1 className="text-center mt-4">Loading...</h1>) : (this.state.empty ? (<h1 className="text-center mt-4">Booklist has No Books</h1>) : (
       <div className="text-center mt-4">
         {
           this.state.gBooks.map(gBook =>
