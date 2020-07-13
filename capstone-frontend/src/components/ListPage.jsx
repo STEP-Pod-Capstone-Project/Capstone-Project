@@ -23,7 +23,7 @@ class ListPage extends Component {
     const gbookIDs = bookList[0].gbookIDs;
 
     if (!gbookIDs.length) {
-      this.setState({ loading: false , empty: true});
+      this.setState({ loading: false, empty: true });
       return;
     }
 
@@ -49,7 +49,7 @@ class ListPage extends Component {
   }
 
   convertToHttps = (imgURL) => {
-    return imgURL.replace("http","https");
+    return imgURL.replace("http", "https");
   }
 
   deleteBook = (bookId) => {
@@ -73,7 +73,7 @@ class ListPage extends Component {
       <div className="text-center mt-4">
         {
           this.state.gBooks.map(gBook =>
-            <div key={gBook.id + Math.random().toString(36).substr(2, 9)}>
+            <div key={gBook.id + this.props.match.params.id}>
               <a className="text-decoration-none text-body" href={gBook.volumeInfo.canonicalVolumeLink}>
                 <div>
                   <img src={this.convertToHttps(gBook.volumeInfo.imageLinks.thumbnail)} alt={gBook.volumeInfo.title} />
