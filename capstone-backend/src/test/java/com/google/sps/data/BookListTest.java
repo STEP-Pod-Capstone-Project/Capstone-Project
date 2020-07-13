@@ -58,7 +58,6 @@ public final class BookListTest {
     assertNotEquals(bookList1, bookList2);
 
     // Test Diff
-    assertNotEquals(bookList1.getID(), bookList2.getID());
     assertNotEquals(bookList1.getUserID(), bookList2.getUserID());
     assertNotEquals(bookList1.getName(), bookList2.getName());
     assertNotEquals(bookList1.getGbookIDs(), bookList2.getGbookIDs());
@@ -71,7 +70,6 @@ public final class BookListTest {
     assertFalse(bookList1.getCollaboratorsIDs().containsAll(bookList2.getCollaboratorsIDs())
         && bookList2.getCollaboratorsIDs().containsAll(bookList1.getCollaboratorsIDs()));
 
-    assertNotEquals(bookList1.getID(), bookList2.getID());
 
     assertEquals(USER_ID_3, bookList3.getUserID());
     assertEquals(NAME_3, bookList3.getName());
@@ -141,7 +139,6 @@ public final class BookListTest {
     assertTrue(bookList1.getGbookIDs().isEmpty());
     assertTrue(bookList1.getCollaboratorsIDs().isEmpty());
     assertNotNull(bookList1.getUserID());
-    assertNotNull(bookList1.getID());
 
     bookList2.clear();
     assertEquals(bookList1.isEmpty(), bookList2.isEmpty());

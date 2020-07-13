@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Accordion, Card, Button} from 'react-bootstrap';
+import { Accordion, Card, Button } from 'react-bootstrap';
 import "../styles/LeftSideBar.css";
 
 
@@ -50,7 +50,7 @@ export class LeftSideBar extends Component {
     const bookListIdURL = currentUrlPath.substr(10);
 
     if (bookListIdURL === bookListId) {
-      document.location.href="/";
+      document.location.href = "/";
     }
   }
 
