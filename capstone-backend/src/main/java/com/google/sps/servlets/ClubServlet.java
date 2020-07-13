@@ -57,4 +57,9 @@ public class ClubServlet extends HttpServlet {
       response.getWriter().println(gson.toJson(updatedClub));
     }
   }
+
+  @Override
+  public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Utility.delete(clubs, request, response);
+  }
 }
