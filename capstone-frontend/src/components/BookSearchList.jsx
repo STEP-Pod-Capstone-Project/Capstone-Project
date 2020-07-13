@@ -7,34 +7,47 @@ class BookSearchList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bookList: []
+      books: [],
+      bookLists: []
     }
-    this.getData = this.getData.bind(this);
   }
 
-  getData() {
+  getData = () => {
     fetch(`/api/search?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
-      .then(res => this.setState({ bookList: res }))
+      .then(booksResult => this.setState({ books: booksResult }))
       .catch(err => console.log(err));
   }
 
+  getUserBookLists = () => {
+
+    const userID = window.sessionStorage.getItem("userID");
+
+    fetch(`/api/booklist?userID=${userID}`, {
+      method: "GET",
+    }).then(response => response.json()).then(res => {
+      this.setState({ bookLists: res })
+    });
+  }
+
+
   componentDidMount() {
     this.getData();
+    this.getUserBookLists();
   }
 
   render() {
-    var books = [];
-    for (const book of this.state.bookList) {
-      books.push(<BookSearchTile title={book.title} author={book.authors} thumbnailLink={book.thumbnailLink} key={book.id} />);
-    }
-
     return (
       <div>
-        {books}
+        {
+          this.state.books.map(book =>
+            <BookSearchTile book={book} bookLists={this.state.bookLists} key={book.id} />
+          )
+        }
       </div>
     );
   }
 }
+
 
 export default BookSearchList;

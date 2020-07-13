@@ -368,15 +368,12 @@ public class Utility {
       Field[] fields, List<String> requiredFields) throws IOException {
     List<String> list = new ArrayList<>();
     List<String> fieldNames = Arrays.asList(fields).stream().map(f -> f.getName()).collect(Collectors.toList());
-    list.addAll(jsonObject.keySet());
-    list.retainAll(fieldNames);
     // Every jsonObject key must match a field name. If not, this check will fail. 
-    if (list.size() != jsonObject.keySet().size()) {
+    if (fieldNames.containsAll(jsonObject.keySet())) {
       System.err.println("Error: Not all parameters in the request body are fields of the given class.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return false;
     } 
-    list.clear();
     list.addAll(jsonObject.keySet().stream()
                     .filter(key -> jsonObject.get(key).getAsString().length() > 0)
                     .collect(Collectors.toList()));

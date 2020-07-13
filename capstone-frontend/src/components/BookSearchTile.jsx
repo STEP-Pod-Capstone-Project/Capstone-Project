@@ -1,14 +1,50 @@
 import React from 'react';
-import '../App.css';
+import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
+import '../styles/BookSearchTile.css';
+
+const addBookToBookList = async (bookId, bookListJson) => {
+
+  const bookListUpdateJson = {
+    "bookListID": bookListJson.id,
+    "gbookID": bookId,
+  }
+
+  // Update BookList in Firebase
+  fetch("/api/booklist", {
+    method: "PUT",
+    body: JSON.stringify(bookListUpdateJson)
+  });
+}
 
 const BookSearchTile = (props) => {
+  // TODO: #48 Prompt user to create a BookList if they have no BookLists
   return (
     <div className="book-search-tile">
-      <img className="book-img-med" src={props.thumbnailLink} alt={props.title}/>
-      <div>
-        <div className="book-title"> {props.title} </div>
-        <div className="book-author"> {props.author.join()} </div>
-      </div>
+      <Container>
+        <Row className="justify-content-md-center">
+          <Col md="auto"><img className="book-img-med" src={props.book.thumbnailLink} alt={props.book.title}/></Col>
+          <Col>
+            <div className="center-vertical">
+              <h2 className="book-title"> {props.book.title} </h2>
+              <p className="book-authors"> {props.book.authors.join(', ')} </p>
+            </div>
+          </Col>
+          <Col md="auto">
+            <Container className="center-vertical">
+              <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
+                {
+                  props.bookLists.map(bookList =>
+                    <Dropdown.Item key={bookList.id}
+                      onSelect={() => addBookToBookList(props.book.id, bookList)}>
+                      {bookList.name}
+                    </Dropdown.Item>
+                  )
+                }
+              </DropdownButton>
+            </Container>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
