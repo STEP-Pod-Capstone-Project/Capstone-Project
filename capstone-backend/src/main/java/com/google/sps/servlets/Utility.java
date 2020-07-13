@@ -189,6 +189,7 @@ public class Utility {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return null;
     }
+
     String parameterValue = entry.getValue()[0];
     Field[] fields = genericClass.getMyType().getDeclaredFields();
     boolean containsParameter = false;
@@ -207,6 +208,8 @@ public class Utility {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return null;
     }
+
+    System.out.println(parameterName + ":\t" +  parameterValue);
     Query query = parameterIsList ? collectionReference.whereArrayContains(parameterName, parameterValue)
         : collectionReference.whereEqualTo(parameterName, parameterValue);
     while (it.hasNext()) {
@@ -265,6 +268,7 @@ public class Utility {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return null;
     }
+
     return retrievedObjects;
   }
 
@@ -368,8 +372,9 @@ public class Utility {
       Field[] fields, List<String> requiredFields) throws IOException {
     List<String> list = new ArrayList<>();
     List<String> fieldNames = Arrays.asList(fields).stream().map(f -> f.getName()).collect(Collectors.toList());
+
     // Every jsonObject key must match a field name. If not, this check will fail. 
-    if (fieldNames.containsAll(jsonObject.keySet())) {
+    if (!fieldNames.containsAll(jsonObject.keySet())) {
       System.err.println("Error: Not all parameters in the request body are fields of the given class.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return false;

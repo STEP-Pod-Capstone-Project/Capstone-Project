@@ -5,8 +5,8 @@ import '../styles/BookSearchTile.css';
 const addBookToBookList = async (bookId, bookListJson) => {
 
   const bookListUpdateJson = {
-    "bookListID": bookListJson.id,
-    "gbookID": bookId,
+    "id": bookListJson.id,
+    "add_gbookIDs": bookId,
   }
 
   // Update BookList in Firebase

@@ -11,7 +11,7 @@ class CreateList extends Component {
 
     const newBooklist = {
       "userID": window.localStorage.getItem("userID"),
-      "booklistName": event.target[0].value,
+      "name": event.target[0].value,
     }
 
     // Store BookList in Firebase
