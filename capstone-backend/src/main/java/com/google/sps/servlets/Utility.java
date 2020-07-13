@@ -132,7 +132,9 @@ public class Utility {
       return null;
     }
     String parameterValue = entry.getValue()[0];
-    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    Class superClass = genericClass.getMyType().getSuperclass();
+    List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
+    fields.addAll(Arrays.asList(superClass.getDeclaredFields()));
     boolean containsParameter = false;
     boolean parameterIsList = false;
     for (Field field : fields) {
@@ -190,7 +192,9 @@ public class Utility {
       return null;
     }
     String parameterValue = entry.getValue()[0];
-    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    Class superClass = genericClass.getMyType().getSuperclass();
+    List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
+    fields.addAll(Arrays.asList(superClass.getDeclaredFields()));
     boolean containsParameter = false;
     boolean parameterIsList = false;
     for (Field field : fields) {
@@ -297,7 +301,9 @@ public class Utility {
       return null;
     }
     Map<String, Object> update = new HashMap<>();
-    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    Class superClass = genericClass.getMyType().getSuperclass();
+    List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
+    fields.addAll(Arrays.asList(superClass.getDeclaredFields()));
     boolean containsParameter = false;
     for (String key : jsonObject.keySet()) {
       containsParameter = false;
@@ -365,9 +371,9 @@ public class Utility {
    * @return boolean true if it is a valid post request, false if not
    */
   public static <T extends BaseEntity> boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
-      Field[] fields, List<String> requiredFields) throws IOException {
+      List<Field> fields, List<String> requiredFields) throws IOException {
     List<String> list = new ArrayList<>();
-    List<String> fieldNames = Arrays.asList(fields).stream().map(f -> f.getName()).collect(Collectors.toList());
+    List<String> fieldNames = fields.stream().map(f -> f.getName()).collect(Collectors.toList());
     // Every jsonObject key must match a field name. If not, this check will fail. 
     if (fieldNames.containsAll(jsonObject.keySet())) {
       System.err.println("Error: Not all parameters in the request body are fields of the given class.");
@@ -399,7 +405,9 @@ public class Utility {
       HttpServletResponse response, GenericClass<T> genericClass, List<String> requiredFields) throws IOException {
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    Class superClass = genericClass.getMyType().getSuperclass();
+    List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
+    fields.addAll(Arrays.asList(superClass.getDeclaredFields()));
     if (!postErrorHandler(jsonObject, response, fields, requiredFields)) {
       return null;
     }
@@ -414,7 +422,7 @@ public class Utility {
           constructorFields.put(fName, -1);
         }
       }
-      else if (type.equals("java.lang.String")) {
+      else if (type.equals("java.lang.String") && !fName.equals("id")) {
         if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
           constructorFields.put(fName, jsonObject.get(fName).getAsString());
         }

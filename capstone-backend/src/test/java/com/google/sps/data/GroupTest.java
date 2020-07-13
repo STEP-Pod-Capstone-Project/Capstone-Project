@@ -1,6 +1,5 @@
 package com.google.sps.data;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,11 +19,6 @@ public final class GroupTest {
   private static final String ORIGINAL_DESCRIPTION = "originalDescription";
   private static final String NEW_DESCRIPTION = "newDescription";
 
-  private static final String ANNOUNCEMENT = "announcement";
-
-  private static final String POST_ONE = "postOne";
-  private static final String POST_TWO = "postTwo";
-
   private static final String ORIGINAL_OWNER = "originalOwner";
   private static final String NEW_OWNER = "newOwner";
 
@@ -42,8 +36,6 @@ public final class GroupTest {
   public void testConstructor() {
     Assert.assertEquals(group.getName(), ORIGINAL_NAME);
     Assert.assertEquals(group.getDescription(), ORIGINAL_DESCRIPTION);
-    Assert.assertEquals(group.getAnnouncement(), "");
-    Assert.assertEquals(group.getPosts().size(), 0);
     Assert.assertEquals(group.getOwnerID(), ORIGINAL_OWNER);
     Assert.assertEquals(group.getMemberIDs().size(), 0);
     Assert.assertEquals(group.getInviteIDs().size(), 0);
@@ -59,40 +51,6 @@ public final class GroupTest {
   public void testDescription() {
     group.setDescription(NEW_DESCRIPTION);
     Assert.assertEquals(group.getDescription(), NEW_DESCRIPTION);
-  }
-
-  @Test 
-  public void testAnnouncement() {
-    group.setAnnouncement(ANNOUNCEMENT);
-    Assert.assertEquals(group.getAnnouncement(), ANNOUNCEMENT);
-  }
-
-  @Test
-  public void testPost() {
-    group.addPost(POST_ONE);
-
-    Assert.assertEquals(group.getPosts().size(), 1);
-
-    List<String> list = new ArrayList<>(group.getPosts());
-    Assert.assertEquals(list, Arrays.asList(POST_ONE));
-
-    group.addPost(POST_TWO);
-
-    Assert.assertEquals(group.getPosts().size(), 2);
-    list = new ArrayList<>(group.getPosts());
-    Assert.assertEquals(list, Arrays.asList(POST_ONE, POST_TWO));
-  }
-
-  @Test
-  public void testClearPost() {
-    group.addPost(POST_ONE);
-    group.addPost(POST_TWO);
-
-    Assert.assertEquals(group.getPosts().size(), 2);
-
-    group.clearPosts();
-
-    Assert.assertEquals(group.getPosts().size(), 0);
   }
 
   @Test 
@@ -205,5 +163,4 @@ public final class GroupTest {
     List<String> list = group.getMemberIDs();
     Assert.assertEquals(list, Arrays.asList(MEMBER_THREE));
   }
-
 }
