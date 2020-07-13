@@ -2,9 +2,18 @@ import React from 'react';
 import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../styles/BookSearchTile.css';
 
-const addBookToBookList = (bookId, bookListId) => {
-  // TODO: Referenced in PR #30 to add book to given BookList
-  console.log(`Added book with id: ${bookId} to bookList with id: ${bookListId}`);
+const addBookToBookList = async (bookId, bookListJson) => {
+
+  const bookListUpdateJson = {
+    "bookListID": bookListJson.id,
+    "gbookID": bookId,
+  }
+
+  // Update BookList in Firebase
+  fetch("/api/booklist", {
+    method: "PUT",
+    body: JSON.stringify(bookListUpdateJson)
+  });
 }
 
 const BookSearchTile = (props) => {
@@ -24,9 +33,9 @@ const BookSearchTile = (props) => {
             <Container className="center-vertical">
               <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
                 {
-                  props.userBookLists.map(bookList =>
+                  props.bookLists.map(bookList =>
                     <Dropdown.Item key={bookList.id}
-                      onSelect={() => addBookToBookList(props.book.id, bookList.id)}>
+                      onSelect={() => addBookToBookList(props.book.id, bookList)}>
                       {bookList.name}
                     </Dropdown.Item>
                   )
