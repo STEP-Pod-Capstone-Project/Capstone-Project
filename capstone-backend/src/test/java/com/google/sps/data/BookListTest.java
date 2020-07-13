@@ -97,7 +97,9 @@ public final class BookListTest {
 
     bookList2.setGbookIDs(GBOOK_IDs_1);
     bookList2.setCollaboratorsIDs(COLLABORATORS_IDs_2);
+    bookList2.setName(NAME_1);
 
+    assertEquals(NAME_1, bookList2.getName());
     assertEquals(GBOOK_IDs_1, bookList2.getGbookIDs());
     assertTrue(bookList2.getGbookIDs().containsAll(GBOOK_IDs_1));
     assertEquals(COLLABORATORS_IDs_2, bookList2.getCollaboratorsIDs());

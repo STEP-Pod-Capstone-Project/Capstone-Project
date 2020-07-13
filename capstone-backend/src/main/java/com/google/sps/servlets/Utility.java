@@ -11,7 +11,6 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteResult;
-import com.google.common.base.Joiner;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -269,8 +268,6 @@ public class Utility {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return null;
     }
-
-    System.out.println(retrievedObjects.isEmpty());
 
     return retrievedObjects;
   }

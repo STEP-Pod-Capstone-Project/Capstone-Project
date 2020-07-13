@@ -25,23 +25,14 @@ public class BookListServlet extends HttpServlet {
   private CollectionReference booklists;
   private Gson gson;
 
-  private Firestore getFirestore() throws IOException {
-    return Utility.getFirestoreDb();
-  }
-
   public BookListServlet() throws IOException {
     db = Utility.getFirestoreDb();
-    booklists = db.collection("bookLists");
+    booklists = db.collection("booklists");
     gson = new Gson();
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    // response.setHeader("Access-Control-Allow-Methods", "POST");
-    // response.setHeader("Access-Control-Allow-Credentials", "true");
-    // response.setHeader("Access-Control-Allow-Origin",
-    // "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
     List<String> requiredFields = new ArrayList<String>(Arrays.asList("userID", "name"));
     BookList createdBookLists = (BookList) Utility.post(booklists, request, response, new GenericClass(BookList.class),
@@ -55,12 +46,6 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // response.setHeader("Access-Control-Allow-Methods", "PUT");
-    // response.setHeader("Access-Control-Allow-Credentials", "true");
-    // response.setHeader("Access-Control-Allow-Origin",
-    // "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
-
-
     BookList updatedBookList = (BookList) Utility.put(booklists, request, response, new GenericClass(BookList.class));
     if (updatedBookList != null) {
       response.setContentType("application/json;");
@@ -72,11 +57,6 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // response.setHeader("Access-Control-Allow-Methods", "GET");
-    // response.setHeader("Access-Control-Allow-Credentials", "true");
-    // response.setHeader("Access-Control-Allow-Origin",
-    // "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
-
     List<BookList> retrievedBookLists = Utility.get(booklists, request, response, new GenericClass(BookList.class));
     if (retrievedBookLists != null) {
       response.setContentType("application/json;");
@@ -87,20 +67,13 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // response.setHeader("Access-Control-Allow-Methods", "DELETE");
-    // response.setHeader("Access-Control-Allow-Credentials", "true");
-    // response.setHeader("Access-Control-Allow-Origin",
-    // "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
-
     try {
 
       JsonObject bookListJson = Utility.createRequestBodyJson(request);
 
       final String bookListID = bookListJson.get("bookListID").getAsString();
 
-      Firestore db = getFirestore();
-
-      ApiFuture<WriteResult> futureUsers = db.collection("bookLists").document(bookListID).delete();
+      ApiFuture<WriteResult> futureUsers = db.collection("booklists").document(bookListID).delete();
 
       System.out.println("BookListServlet DELETE Update time : " + futureUsers.get().getUpdateTime());
 
