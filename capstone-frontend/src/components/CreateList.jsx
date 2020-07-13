@@ -7,8 +7,6 @@ class CreateList extends Component {
 
     event.preventDefault();
 
-    console.log("Submitted")
-
     const newBooklist = {
       "userID": window.localStorage.getItem("userID"),
       "name": event.target[0].value,

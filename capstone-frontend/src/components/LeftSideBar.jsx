@@ -18,8 +18,6 @@ export class LeftSideBar extends Component {
 
     const userID = window.localStorage.getItem("userID");
 
-    console.log("Fetching Books LeftSideBar");
-
     const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
       method: "GET",
     }).then(resp => resp.json());
@@ -32,7 +30,6 @@ export class LeftSideBar extends Component {
   }
 
   deleteBookList = async (bookListId) => {
-    console.log("DELETE BookList ID:\t", bookListId);
 
     const bookListJson = {
       "bookListID": bookListId

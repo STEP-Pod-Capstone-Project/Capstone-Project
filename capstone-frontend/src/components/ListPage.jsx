@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button} from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 class ListPage extends Component {
 
@@ -9,41 +9,31 @@ class ListPage extends Component {
     this.state = {
       gBooks: [],
       loading: true,
-      empty: false
     }
   }
 
 
   fetchBooks = async () => {
 
-    const userID = window.localStorage.getItem("userID");
-
-    console.log("Fetch Books LIST PAGE")
-
-    const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
+    const bookList = await fetch(`/api/booklist?id=${this.props.match.params.id}`, {
       method: "GET",
     }).then(resp => resp.json());
 
-    console.log("Booklist", bookLists)
+    const gbookIDs = bookList[0].gbookIDs;
 
-    const bookList = Array.from(bookLists).filter(bookList => (bookList.id === this.props.match.params.id))[0].gbookIDs;
-
-    console.log("Booklist", bookList)
-
-    if (bookList.length === 0) {
-      this.setState({loading: false, empty: true});
+    if (!gbookIDs.length) {
+      this.setState({ loading: false });
       return;
     }
 
     const gBooks = [];
 
-    await Promise.all(bookList.map(async (gBookID) => {
+    await Promise.all(gbookIDs.map(async (gBookID) => {
       const gBook = await fetch(`https://www.googleapis.com/books/v1/volumes/${gBookID}`).then(response => response.json())
       gBooks.push(gBook);
     }))
 
     this.setState({ gBooks, loading: false });
-    console.log(gBooks)
   }
 
   componentDidMount() {
@@ -58,15 +48,27 @@ class ListPage extends Component {
   }
 
   convertToHttps = (imgURL) => {
-    return imgURL.slice(0, 4) + "s" + imgURL.slice(4);
+    return imgURL.replace("http","https");
   }
 
   deleteBook = (bookId) => {
-    
+
+    const bookListUpdateJson = {
+      "id": this.props.match.params.id,
+      "remove_gbookIDs": bookId,
+    }
+
+    // Update BookList in Firebase
+    fetch("/api/booklist", {
+      method: "PUT",
+      body: JSON.stringify(bookListUpdateJson)
+    });
+
+    this.fetchBooks();
   }
 
   render() {
-    return this.state.loading ? (<h1 className="text-center mt-4">Loading...</h1>) : (this.state.empty ? (<h1 className="text-center mt-4">Booklist has No Books</h1>) : (
+    return this.state.loading ? (<h1 className="text-center mt-4">Loading...</h1>) : (this.state.gBooks.length ? (<h1 className="text-center mt-4">Booklist has No Books</h1>) : (
       <div className="text-center mt-4">
         {
           this.state.gBooks.map(gBook =>
@@ -82,14 +84,14 @@ class ListPage extends Component {
               <a className="btn btn-primary" href={gBook.accessInfo.webReaderLink}>Web Reader</a>
               <br />
               <br />
-              <Button variant="warning" />
+              <Button variant="danger" onClick={() => this.deleteBook(gBook.id)}>
+                Remove Book from List
+              </Button>
               <br />
               <br />
             </div>
           )
         }
-
-
       </div>
     ));
   }
