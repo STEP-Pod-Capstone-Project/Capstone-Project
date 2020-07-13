@@ -14,6 +14,8 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
@@ -409,7 +411,7 @@ public class Utility {
       String type = f.getType().getName();
       if (type.equals("int") || type.equals("java.lang.Integer")) {
         if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
-          constructorFields.put(name, jsonObject.get(fName).getAsInt());
+          constructorFields.put(fName, jsonObject.get(fName).getAsInt());
         }
         else {
           constructorFields.put(fName, -1);
@@ -457,7 +459,7 @@ public class Utility {
 
     ApiFuture<DocumentReference> asyncDocument = collectionReference.add(constructorFields);
     try {
-      return getById(asyncDocument.get().getId(), collectionReference, request, response, genericClass).get(0);
+      return getById(asyncDocument.get().getId(), collectionReference, response, genericClass).get(0);
     } catch (Exception e) {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -472,34 +474,35 @@ public class Utility {
    * @param {response} response returned from the call
    * @return boolean true if the object is successfully deleted, false if not
    */
-  public static boolean delete(CollectionReference collectionReference, HttpServletRequest request, 
+  public static void delete(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response) throws IOException {
     if (request.getParameterMap().size() > 1) {
       System.err.println("Error: No other parameter can be sent with an ID");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return false;
+      return;
     }
     if (request.getParameter("id") != null) {
       String id = request.getParameter("id");
       if (id.length() == 0) {
         System.err.println("Error caused by an empty \"id\" field in the post body.");
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        return false;
+        return;
       }
       ApiFuture<WriteResult> writeResult = collectionReference.document(id).delete();
       try {
         System.out.println("Update time : " + writeResult.get().getUpdateTime());
-        return true;
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        return;
       } catch (Exception e) {
           System.err.println(e);
           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-          return false;
+          return;
         }
     }
     else {
       System.err.println("Error caused by a non-existent \"id\" field in the post body.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return false;
+      return;
     }
   }
 }
