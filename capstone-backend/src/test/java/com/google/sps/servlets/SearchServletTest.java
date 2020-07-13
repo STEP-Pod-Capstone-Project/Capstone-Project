@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static org.mockito.Mockito.when;
@@ -66,9 +69,15 @@ public class SearchServletTest {
   }
 
   public String servletInvalidSearch() {
-    when(request.getParameter("searchTerm")).thenReturn("Lord of the Flies");
-    when(request.getParameter("gbookId")).thenReturn("5QRZ4z6A1WwC");
+    // Pass gbookId and searchTerm which should not be a valid API call
+    Map<String, String[]> parameters = new HashMap<>();
+    parameters.put("searchTerm", new String[] { "Lord of the Flies" });
+    parameters.put("gbookId", new String[] { "5QRZ4z6A1WwC" });
+    when(request.getParameterMap()).thenReturn(parameters);
+    when(request.getParameter("searchTerm")).thenReturn(parameters.get("searchTerm")[0]);
+    when(request.getParameter("gbookId")).thenReturn(parameters.get("searchTerm")[0]);
 
+    return performDoGet(request);
   }
 
   public String performDoGet(HttpServletRequest request) {
@@ -85,6 +94,12 @@ public class SearchServletTest {
     }
 
     return result;
+  }
+
+  public boolean checkPopulatedVolumeDataObject(VolumeData book) {
+    return book.getID() != null || book.getTitle() != null || book.getAuthors() != null || book.getDescription() != null
+        || book.getAvgRating() != 0 || book.getCanonicalVolumeLink() != null || book.getThumbnailLink() != null
+        || book.getWebReaderLink() != null;
   }
 
   @Test
@@ -136,10 +151,7 @@ public class SearchServletTest {
   public void checkConvertResponseToVolumeDataPopulatesObjects() {
     Collection<VolumeData> books = SearchServlet.convertResponseToVolumeData(ARTIFICIAL_JSON_RESPONSE);
 
-    boolean anyNotPopulated = books.stream()
-        .anyMatch(book -> book.getID() != null || book.getTitle() != null || book.getAuthors() != null
-            || book.getDescription() != null || book.getAvgRating() != 0 || book.getCanonicalVolumeLink() != null
-            || book.getThumbnailLink() != null || book.getWebReaderLink() != null);
+    boolean anyNotPopulated = books.stream().anyMatch(book -> checkPopulatedVolumeDataObject(book));
 
     Assert.assertTrue(anyNotPopulated);
   }
@@ -158,11 +170,16 @@ public class SearchServletTest {
 
   @Test
   public void checkIndividualBookJsonIsProperlyConverted() {
+    JsonElement bookJson = JsonParser.parseString(ARTIFICIAL_BOOK_1);
+    VolumeData volume = SearchServlet.individualBookToVolumeData(bookJson);
 
+    Assert.assertTrue(checkPopulatedVolumeDataObject(volume));
   }
 
   @Test
   public void checkErrorCodeWhenIncorrectParametersSent() {
+    String responseString = servletInvalidSearch();
 
+    Assert.assertTrue(responseString.isEmpty());
   }
 }
