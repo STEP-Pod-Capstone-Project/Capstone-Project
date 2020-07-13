@@ -346,7 +346,7 @@ public class Utility {
 
     ApiFuture<WriteResult> writeResult = collectionReference.document(id).set(update, SetOptions.merge());
     try {
-      System.out.println("Update time : " + writeResult.get().getUpdateTime());
+      System.out.println("Put update time : " + writeResult.get().getUpdateTime());
     } catch (Exception e) {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -461,6 +461,45 @@ public class Utility {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return null;
+    }
+  }
+  
+   /**
+   * Deletes the object with the id given in the request query from the given collectionReference
+   * @param {collectionReference} reference to the appropriate collection of documents in the database
+   * @param {request} request sent to the backend
+   * @param {response} response returned from the call
+   * @return boolean true if the object is successfully deleted, false if not
+   */
+  public static void delete(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response) throws IOException {
+    if (request.getParameterMap().size() > 1) {
+      System.err.println("Error: No other parameter can be sent with an ID");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+    if (request.getParameter("id") != null) {
+      String id = request.getParameter("id");
+      if (id.length() == 0) {
+        System.err.println("Error caused by an empty \"id\" field in the post body.");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+      ApiFuture<WriteResult> writeResult = collectionReference.document(id).delete();
+      try {
+        System.out.println("Delete update time : " + writeResult.get().getUpdateTime());
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        return;
+      } catch (Exception e) {
+          System.err.println(e);
+          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+          return;
+        }
+    }
+    else {
+      System.err.println("Error caused by a non-existent \"id\" field in the post body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
     }
   }
 }
