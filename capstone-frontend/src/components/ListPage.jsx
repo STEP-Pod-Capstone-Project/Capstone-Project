@@ -43,7 +43,7 @@ class ListPage extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.match.params.id !== prevProps.match.params.id) {
-      this.setState({ loading: true })
+      this.setState({ loading: true, empty: false })
       this.fetchBooks();
     }
   }

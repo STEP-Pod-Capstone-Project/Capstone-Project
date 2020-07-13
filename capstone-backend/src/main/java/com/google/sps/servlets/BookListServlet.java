@@ -66,21 +66,7 @@ public class BookListServlet extends HttpServlet {
 
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    try {
-
-      JsonObject bookListJson = Utility.createRequestBodyJson(request);
-
-      final String bookListID = bookListJson.get("bookListID").getAsString();
-
-      ApiFuture<WriteResult> futureUsers = db.collection("booklists").document(bookListID).delete();
-
-      System.out.println("BookListServlet DELETE Update time : " + futureUsers.get().getUpdateTime());
-
-    } catch (Exception e) {
-      System.err.println("Error: " + e.getMessage());
-    }
-
+    Utility.delete(booklists, request, response);
   }
 
 }

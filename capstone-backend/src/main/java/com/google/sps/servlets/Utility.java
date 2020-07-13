@@ -321,8 +321,10 @@ public class Utility {
           if (type.equals("int") || type.equals("java.lang.Integer")) {
             update.put(name, jsonObject.get(name).getAsInt());
           }
-          else if (type.equals("java.lang.String") && !name.equals("id")) {
-            update.put(name, jsonObject.get(name).getAsString());
+          else if (type.equals("java.lang.String")) {
+            if (!name.equals("id")){
+              update.put(name, jsonObject.get(name).getAsString());
+            }
           }
           else if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
             update.put(name, jsonObject.get(name).getAsBoolean());
@@ -418,6 +420,9 @@ public class Utility {
     for (Field f : fields) {
       String fName = f.getName();
       String type = f.getType().getName();
+
+      System.out.println(fName +"=\t" +type);
+
       if (type.equals("int") || type.equals("java.lang.Integer")) {
         if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
           constructorFields.put(fName, jsonObject.get(fName).getAsInt());
@@ -426,12 +431,14 @@ public class Utility {
           constructorFields.put(fName, -1);
         }
       }
-      else if (type.equals("java.lang.String") && !fName.equals("id")) {
-        if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
-          constructorFields.put(fName, jsonObject.get(fName).getAsString());
-        }
-        else {
-          constructorFields.put(fName, "");
+      else if (type.equals("java.lang.String")) {
+        if (!fName.equals("id")){
+          if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
+            constructorFields.put(fName, jsonObject.get(fName).getAsString());
+          }
+          else {
+            constructorFields.put(fName, "");
+          }
         }
       }
       else if (type.equals("boolean") || type.equals("java.lang.boolean")) {

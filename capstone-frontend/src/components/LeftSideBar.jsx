@@ -31,18 +31,15 @@ export class LeftSideBar extends Component {
 
   deleteBookList = async (bookListId) => {
 
-    const bookListJson = {
-      "bookListID": bookListId
-    }
-
     // Delete BookList in Firebase
-    await fetch("/api/booklist", {
+    await fetch(`/api/booklist?id=${bookListId}`, {
       method: "DELETE",
-      body: JSON.stringify(bookListJson)
     });
 
     this.fetchBookLists();
 
+    // These lines of code check if the current BookList URL has the same id as the one being deleted
+    // If so we redirect home
     const currentUrlPath = new URL(window.location.href).pathname;
     const bookListIdURL = currentUrlPath.substr(10);
 
