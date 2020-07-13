@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Button} from 'react-bootstrap'
 
 class ListPage extends Component {
 
@@ -60,6 +61,10 @@ class ListPage extends Component {
     return imgURL.slice(0, 4) + "s" + imgURL.slice(4);
   }
 
+  deleteBook = (bookId) => {
+    
+  }
+
   render() {
     return this.state.loading ? (<h1 className="text-center mt-4">Loading...</h1>) : (this.state.empty ? (<h1 className="text-center mt-4">Booklist has No Books</h1>) : (
       <div className="text-center mt-4">
@@ -75,6 +80,9 @@ class ListPage extends Component {
                 </div>
               </a>
               <a className="btn btn-primary" href={gBook.accessInfo.webReaderLink}>Web Reader</a>
+              <br />
+              <br />
+              <Button variant="warning" />
               <br />
               <br />
             </div>
