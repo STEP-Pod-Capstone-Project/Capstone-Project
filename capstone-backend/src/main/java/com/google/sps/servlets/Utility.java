@@ -132,7 +132,9 @@ public class Utility {
       return null;
     }
     String parameterValue = entry.getValue()[0];
-    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    Class superClass = genericClass.getMyType().getSuperclass();
+    List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
+    fields.addAll(Arrays.asList(superClass.getDeclaredFields()));
     boolean containsParameter = false;
     boolean parameterIsList = false;
     for (Field field : fields) {
@@ -191,7 +193,9 @@ public class Utility {
     }
 
     String parameterValue = entry.getValue()[0];
-    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    Class superClass = genericClass.getMyType().getSuperclass();
+    List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
+    fields.addAll(Arrays.asList(superClass.getDeclaredFields()));
     boolean containsParameter = false;
     boolean parameterIsList = false;
     for (Field field : fields) {
@@ -301,7 +305,9 @@ public class Utility {
       return null;
     }
     Map<String, Object> update = new HashMap<>();
-    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    Class superClass = genericClass.getMyType().getSuperclass();
+    List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
+    fields.addAll(Arrays.asList(superClass.getDeclaredFields()));
     boolean containsParameter = false;
     for (String key : jsonObject.keySet()) {
       containsParameter = false;
@@ -350,7 +356,7 @@ public class Utility {
 
     ApiFuture<WriteResult> writeResult = collectionReference.document(id).set(update, SetOptions.merge());
     try {
-      System.out.println("Update time : " + writeResult.get().getUpdateTime());
+      System.out.println("Put update time : " + writeResult.get().getUpdateTime());
     } catch (Exception e) {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -369,10 +375,9 @@ public class Utility {
    * @return boolean true if it is a valid post request, false if not
    */
   public static <T extends BaseEntity> boolean postErrorHandler(JsonObject jsonObject, HttpServletResponse response, 
-      Field[] fields, List<String> requiredFields) throws IOException {
+      List<Field> fields, List<String> requiredFields) throws IOException {
     List<String> list = new ArrayList<>();
-    List<String> fieldNames = Arrays.asList(fields).stream().map(f -> f.getName()).collect(Collectors.toList());
-
+    List<String> fieldNames = fields.stream().map(f -> f.getName()).collect(Collectors.toList());
     // Every jsonObject key must match a field name. If not, this check will fail. 
     if (!fieldNames.containsAll(jsonObject.keySet())) {
       System.err.println("Error: Not all parameters in the request body are fields of the given class.");
@@ -404,7 +409,9 @@ public class Utility {
       HttpServletResponse response, GenericClass<T> genericClass, List<String> requiredFields) throws IOException {
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    Field[] fields = genericClass.getMyType().getDeclaredFields();
+    Class superClass = genericClass.getMyType().getSuperclass();
+    List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
+    fields.addAll(Arrays.asList(superClass.getDeclaredFields()));
     if (!postErrorHandler(jsonObject, response, fields, requiredFields)) {
       return null;
     }
@@ -419,7 +426,7 @@ public class Utility {
           constructorFields.put(fName, -1);
         }
       }
-      else if (type.equals("java.lang.String")) {
+      else if (type.equals("java.lang.String") && !fName.equals("id")) {
         if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
           constructorFields.put(fName, jsonObject.get(fName).getAsString());
         }
@@ -466,6 +473,45 @@ public class Utility {
       System.err.println("Error: " + e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return null;
+    }
+  }
+  
+   /**
+   * Deletes the object with the id given in the request query from the given collectionReference
+   * @param {collectionReference} reference to the appropriate collection of documents in the database
+   * @param {request} request sent to the backend
+   * @param {response} response returned from the call
+   * @return boolean true if the object is successfully deleted, false if not
+   */
+  public static void delete(CollectionReference collectionReference, HttpServletRequest request, 
+      HttpServletResponse response) throws IOException {
+    if (request.getParameterMap().size() > 1) {
+      System.err.println("Error: No other parameter can be sent with an ID");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+    if (request.getParameter("id") != null) {
+      String id = request.getParameter("id");
+      if (id.length() == 0) {
+        System.err.println("Error caused by an empty \"id\" field in the post body.");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+      ApiFuture<WriteResult> writeResult = collectionReference.document(id).delete();
+      try {
+        System.out.println("Delete update time : " + writeResult.get().getUpdateTime());
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        return;
+      } catch (Exception e) {
+          System.err.println(e);
+          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+          return;
+        }
+    }
+    else {
+      System.err.println("Error caused by a non-existent \"id\" field in the post body.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
     }
   }
 }

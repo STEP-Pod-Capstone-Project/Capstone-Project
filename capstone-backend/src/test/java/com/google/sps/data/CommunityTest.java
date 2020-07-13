@@ -22,6 +22,9 @@ public final class CommunityTest {
   private static final String GROUP_TWO_ID = "def456";
   private static final String GROUP_THREE_ID = "ghi789";
 
+  private static final String POST_ONE = "postOne";
+  private static final String POST_TWO = "postTwo";
+
   @Before
   public void setUp() {
     community = new Community(NAME, DESCRIPTION, OWNER);
@@ -31,13 +34,40 @@ public final class CommunityTest {
   public void testConstructor() {
     Assert.assertEquals(community.getName(), NAME);
     Assert.assertEquals(community.getDescription(), DESCRIPTION);
-    Assert.assertEquals(community.getAnnouncement(), "");
     Assert.assertEquals(community.getPosts().size(), 0);
     Assert.assertEquals(community.getOwnerID(), OWNER);
     Assert.assertEquals(community.getMemberIDs().size(), 0);
     Assert.assertEquals(community.getInviteIDs().size(), 0);
     Assert.assertEquals(community.getCommunityIDs().size(), 0);
     Assert.assertEquals(community.getClubIDs().size(), 0);
+  }
+
+  @Test
+  public void testPost() {
+    community.addPost(POST_ONE);
+
+    Assert.assertEquals(community.getPosts().size(), 1);
+
+    List<String> list = new ArrayList<>(community.getPosts());
+    Assert.assertEquals(list, Arrays.asList(POST_ONE));
+
+    community.addPost(POST_TWO);
+
+    Assert.assertEquals(community.getPosts().size(), 2);
+    list = new ArrayList<>(community.getPosts());
+    Assert.assertEquals(list, Arrays.asList(POST_ONE, POST_TWO));
+  }
+
+  @Test
+  public void testClearPost() {
+    community.addPost(POST_ONE);
+    community.addPost(POST_TWO);
+
+    Assert.assertEquals(community.getPosts().size(), 2);
+
+    community.clearPosts();
+
+    Assert.assertEquals(community.getPosts().size(), 0);
   }
 
   @Test
