@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom'
 import { Button, Form, Spinner } from 'react-bootstrap'
 
 class CreateList extends Component {
@@ -25,18 +26,21 @@ class CreateList extends Component {
     }
 
     // Store BookList in Firebase
-    await fetch("/api/booklist", {
+    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
       method: "POST",
       body: JSON.stringify(newBooklist)
     });
 
-    const createdBookList = await fetch(`/api/booklist?userID=${window.localStorage.getItem("userID")}&name=${name}`, {
+    const createdBookList = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${window.localStorage.getItem("userID")}&name=${name}`, {
       method: "GET",
     }).then(resp => resp.json());
 
-    document.location.href = `/listpage/${createdBookList[0].id}`;
-
     this.setState({ loading: false })
+
+    this.props.history.push(`/listpage/${createdBookList[0].id}`);
+
+    console.log(this.props);
+    this.props.updateBookLists();
   }
 
   render() {
@@ -67,4 +71,4 @@ class CreateList extends Component {
   }
 }
 
-export default CreateList;
+export default withRouter(CreateList);

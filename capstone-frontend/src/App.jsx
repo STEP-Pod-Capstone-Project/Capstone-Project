@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Route, 
+  Route,
   BrowserRouter as Router
 } from 'react-router-dom';
 
@@ -22,27 +22,46 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchQuery: ""
+      searchQuery: "",
+      bookLists: []
     };
   }
 
   setSearchQuery = (value) => {
     if (value !== this.state.searchQuery) {
-      this.setState({ searchQuery:value });
+      this.setState({ searchQuery: value });
     }
   }
+
+  fetchBookLists = async () => {
+
+    const userID = window.localStorage.getItem("userID");
+
+    const bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
+      method: "GET",
+    }).then(resp => resp.json());
+
+    this.setState({ bookLists });
+  }
+
+  componentDidMount() {
+    this.fetchBookLists();
+  }
+
 
   render() {
     return (
       <Router>
         <Navbar setSearchQuery={this.setSearchQuery} />
         <div className="row">
-          <LeftSideBar />
+          <LeftSideBar bookLists={this.state.bookLists} />
           <div className="col-12 col-md-8" id="body-row">
             <Route exact path='/' component={Home} />
             <Route path='/browse/:query' component={Browse} />
             <Route path='/mybooks' component={MyBooks} />
-            <Route path='/createlist' component={CreateList} />
+            <Route path='/createlist' component={() => (
+              <CreateList updateBookLists={this.fetchBookLists} />
+            )} />
             <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' component={BookPage} />
@@ -51,7 +70,7 @@ class App extends Component {
           </div>
           <RightSideBar />
         </div>
-      </Router> 
+      </Router>
     );
   }
 }

@@ -6,29 +6,6 @@ import "../styles/LeftSideBar.css";
 
 export class LeftSideBar extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      bookLists: []
-    }
-  }
-
-  fetchBookLists = async () => {
-
-    const userID = window.localStorage.getItem("userID");
-
-    const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
-      method: "GET",
-    }).then(resp => resp.json());
-
-    this.setState({ bookLists });
-  }
-
-  componentDidMount() {
-    this.fetchBookLists();
-  }
-
   deleteBookList = async (bookListId) => {
 
     // Delete BookList in Firebase
@@ -98,12 +75,11 @@ export class LeftSideBar extends Component {
 
               <Accordion.Collapse eventKey="3">
                 <Card.Body id="mylists-link">
-
                   {
-                    this.state.bookLists.map(bookList =>
-                      <div className="bg-light p-0 list-group-item list-group-item-action">
+                    this.props.bookLists.map(bookList =>
+                      <div key={bookList.id} className="bg-light p-0 list-group-item list-group-item-action">
                         <div className="d-flex w-100 justify-content-start align-items-center">
-                          <Link to={`/listpage/${bookList.id}`} key={bookList.id} className="bg-light border-0 list-group-item list-group-item-action">
+                          <Link to={`/listpage/${bookList.id}`} className="bg-light border-0 list-group-item list-group-item-action">
                             <span> {bookList.name}</span>
                           </Link>
                           <Button className="border-0 bg-transparent" onClick={() => this.deleteBookList(bookList.id)}>
@@ -113,10 +89,8 @@ export class LeftSideBar extends Component {
                           </Button>
                         </div>
                       </div>
-
                     )
                   }
-
                   <Link to="/createlist" className="bg-light list-group-item list-group-item-action">
                     <div className="d-flex w-100 justify-content-start align-items-center">
                       <span id="mylists-create-link"> Create New List </span>

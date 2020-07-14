@@ -45,6 +45,11 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    response.setHeader("Access-Control-Allow-Methods", "GET");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+
     String fullOutput = "";
     String searchTerm = request.getParameter("searchTerm");
     if (searchTerm == null || searchTerm.isEmpty())
@@ -52,8 +57,8 @@ public class SearchServlet extends HttpServlet {
     searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
 
     int maxResults = 0;
-    String maxResultsParam = request.getParameter("maxResults"); 
-    if (maxResultsParam != null) { 
+    String maxResultsParam = request.getParameter("maxResults");
+    if (maxResultsParam != null) {
       maxResults = parseNaturalNumber(maxResultsParam);
     }
     if (maxResultsParam == null || maxResults == -1) {
