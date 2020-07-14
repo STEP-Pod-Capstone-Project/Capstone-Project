@@ -59,7 +59,7 @@ public class SearchServlet extends HttpServlet {
       formattedURL = String.format("https://www.googleapis.com/books/v1/volumes/%s", gbookId);
 
     } else if (request.getParameter("searchTerm") != null || !request.getParameter("searchTerm").isEmpty()) {
-      if (request.getParameterMap().size() >= 2 && request.getParameter("maxResults") != null) {
+      if (request.getParameterMap().size() >= 2 && request.getParameter("maxResults") == null) {
         System.err.println("Error: No other parameters must be sent with searchTerm other than maxResults");
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         return;
