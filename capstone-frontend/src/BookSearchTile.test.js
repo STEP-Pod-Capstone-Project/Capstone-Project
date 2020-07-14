@@ -24,9 +24,11 @@ const getUserBookLists = () => {
   { id: "3", name: "Sci-fi" }];
 }
 
+const emptyArray = [];
+
 test('renders book search tile test', () => {
   render(<BookSearchTile book={book}
-    bookLists={getUserBookLists()} />, container);
+    userBookLists={getUserBookLists()} />, container);
 
   const bookThumbnail = document.getElementsByClassName("book-img-med")[0];
   expect(bookThumbnail).toBeInTheDocument();
@@ -39,5 +41,17 @@ test('renders book search tile test', () => {
 
   const bookListButton = document.getElementById("dropdown-list-add");
   expect(bookListButton).toBeInTheDocument();
+  expect(bookListButton.innerHTML).toEqual("Add to List");
+  
+
+});
+
+test('renders book search tile with empty bookList test', () => {
+  render(<BookSearchTile book={book}
+    userBookLists={emptyArray} />, container);
+
+  const bookListButton = document.getElementById("dropdown-list-add");
+  expect(bookListButton).toBeInTheDocument();
+  expect(bookListButton.innerHTML).toEqual("No Lists Found");
 
 });
