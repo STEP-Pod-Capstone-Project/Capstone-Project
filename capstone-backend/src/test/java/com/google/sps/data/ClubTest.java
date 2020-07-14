@@ -17,9 +17,6 @@ public final class ClubTest {
 
   private static final String DESCRIPTION = "description";
 
-  private static final Assignment ASSIGNMENT_ONE = new Assignment("one", "id", "created", "due");
-  private static final Assignment ASSIGNMENT_TWO = new Assignment("two", "id", "created", "due");
-
   private static final String OWNER = "owner";
   
   private static final String ORIGINAL_BOOK = "originalBook";
@@ -32,37 +29,7 @@ public final class ClubTest {
   
   @Test
   public void testConstructor() {
-    Assert.assertEquals(club.getAssignments().size(), 0);
     Assert.assertEquals(club.getGbookID(), ORIGINAL_BOOK);
-  }
-
-  @Test
-  public void testAssignment() {
-    club.addAssignment(ASSIGNMENT_ONE);
-
-    Assert.assertEquals(club.getAssignments().size(), 1);
-
-    List<Assignment> list = new ArrayList<>(club.getAssignments());
-    Assert.assertEquals(list.get(0), ASSIGNMENT_ONE);
-
-    club.addAssignment(ASSIGNMENT_TWO);
-
-    Assert.assertEquals(club.getAssignments().size(), 2);
-    list = new ArrayList<>(club.getAssignments());
-    Assert.assertEquals(list.get(0), ASSIGNMENT_ONE);
-    Assert.assertEquals(list.get(1), ASSIGNMENT_TWO);
-  }
-
-  @Test
-  public void testClearAssignments() {
-    club.addAssignment(ASSIGNMENT_ONE);
-    club.addAssignment(ASSIGNMENT_TWO);
-
-    Assert.assertEquals(club.getAssignments().size(), 2);
-
-    club.clearAssignments();
-
-    Assert.assertEquals(club.getAssignments().size(), 0);
   }
 
   @Test 
