@@ -59,6 +59,11 @@ public class SearchServlet extends HttpServlet {
       formattedURL = String.format("https://www.googleapis.com/books/v1/volumes/%s", gbookId);
 
     } else if (request.getParameter("searchTerm") != null || !request.getParameter("searchTerm").isEmpty()) {
+      if (request.getParameterMap().size() >= 2 && request.getParameter("maxResults") != null) {
+        System.err.println("Error: No other parameters must be sent with searchTerm other than maxResults");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
       String searchTerm = URLEncoder.encode(request.getParameter("searchTerm"), "UTF-8");
       // format url
       int maxResults = DEFAULT_MAX_RESULTS;
@@ -73,63 +78,68 @@ public class SearchServlet extends HttpServlet {
       }
       formattedURL = String.format("https://www.googleapis.com/books/v1/volumes?q={%s}&maxResults=%d&country=US",
           searchTerm, maxResults);
+    }
+  }else
 
+  {
+    System.err.println("Error: Invalid combination of parameters sent");
+    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+    return;
+  }
+
+  try
+  {
+    URL url = new URL(formattedURL);
+    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    conn.setRequestMethod("GET");
+    conn.setRequestProperty("Accept", "application/json");
+
+    Reader streamReader = null;
+    if (conn.getResponseCode() != 200) {
+      streamReader = new InputStreamReader(conn.getErrorStream());
     } else {
-      System.err.println("Error: Invalid combination of parameters sent");
+      streamReader = new InputStreamReader(conn.getInputStream());
+    }
+    BufferedReader br = new BufferedReader(streamReader);
+
+    fullOutput = br.lines().collect(Collectors.joining());
+
+    if (conn.getResponseCode() != 200) {
+      System.err.println(fullOutput);
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
 
-    try {
-      URL url = new URL(formattedURL);
-      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("GET");
-      conn.setRequestProperty("Accept", "application/json");
+    conn.disconnect();
+  }catch(
+  Exception e)
+  {
+    e.printStackTrace();
+    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    return;
+  }
 
-      Reader streamReader = null;
-      if (conn.getResponseCode() != 200) {
-        streamReader = new InputStreamReader(conn.getErrorStream());
-      } else {
-        streamReader = new InputStreamReader(conn.getInputStream());
-      }
-      BufferedReader br = new BufferedReader(streamReader);
+  response.setContentType("application/json;");
 
-      fullOutput = br.lines().collect(Collectors.joining());
-
-      if (conn.getResponseCode() != 200) {
-        System.err.println(fullOutput);
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        return;
-      }
-
-      conn.disconnect();
-    } catch (Exception e) {
-      e.printStackTrace();
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+  Collection<VolumeData> volumes = new ArrayList<>();if(request.getParameter("gbookId")!=null)
+  {
+    VolumeData bookObject = individualBookToVolumeData(JsonParser.parseString(fullOutput));
+    if (bookObject != null) {
+      volumes.add(bookObject);
+    } else {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
-
-    response.setContentType("application/json;");
-
-    Collection<VolumeData> volumes = new ArrayList<>();
-    if (request.getParameter("gbookId") != null) {
-      VolumeData bookObject = individualBookToVolumeData(JsonParser.parseString(fullOutput));
-      if (bookObject != null) {
-        volumes.add(bookObject);
-      } else {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        return;
-      }
-    } else if (request.getParameter("searchTerm") != null) {
-      volumes.addAll(convertResponseToVolumeData(fullOutput));
-      if (volumes.size() == 0) {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        return;
-      }
+  }else if(request.getParameter("searchTerm")!=null)
+  {
+    volumes.addAll(convertResponseToVolumeData(fullOutput));
+    if (volumes.size() == 0) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      return;
     }
+  }
 
-    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-    response.getWriter().println(gson.toJson(volumes));
+  Gson gson = new GsonBuilder().disableHtmlEscaping().create();response.getWriter().println(gson.toJson(volumes));
   }
 
   /*
@@ -182,6 +192,9 @@ public class SearchServlet extends HttpServlet {
 
     JsonElement titleElement = volumeInfoObj.get("title");
     String title = titleElement != null ? titleElement.getAsString() : "";
+    if (title.isEmpty()) {
+      return null;
+    }
 
     // there may be any number of authors, not guaranteed to only have 1
     JsonElement authors = volumeInfoObj.get("authors");
