@@ -17,12 +17,13 @@ const addBookToBookList = async (bookId, bookListJson) => {
 }
 
 const BookSearchTile = (props) => {
-  // TODO: #48 Prompt user to create a BookList if they have no BookLists
   return (
     <div className="book-search-tile">
       <Container>
         <Row className="justify-content-md-center">
-          <Col md="auto"><img className="book-img-med" src={props.book.thumbnailLink} alt={props.book.title}/></Col>
+          <Col md="auto">
+            <img className="book-img-med" src={props.book.thumbnailLink} alt={props.book.title} />
+          </Col>
           <Col>
             <div className="center-vertical">
               <h2 className="book-title"> {props.book.title} </h2>
@@ -31,22 +32,40 @@ const BookSearchTile = (props) => {
           </Col>
           <Col md="auto">
             <Container className="center-vertical">
-              <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
-                {
-                  props.bookLists.map(bookList =>
-                    <Dropdown.Item key={bookList.id}
-                      onSelect={() => addBookToBookList(props.book.id, bookList)}>
-                      {bookList.name}
-                    </Dropdown.Item>
-                  )
-                }
-              </DropdownButton>
+              <BookListAddDropdown bookLists={props.bookLists} book={props.book} />
             </Container>
           </Col>
         </Row>
       </Container>
     </div>
   );
+}
+
+const BookListAddDropdown = ({ book, bookLists }) => {
+  if (bookLists.length > 0) {
+    return (
+      <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
+        {
+          bookLists.map(bookList =>
+            <Dropdown.Item key={bookList.id}
+              onSelect={() => addBookToBookList(book.id, bookList.id)}>
+              {bookList.name}
+            </Dropdown.Item>
+          )
+        }
+      </DropdownButton>
+    );
+  } else {
+    return (
+      <DropdownButton id="dropdown-list-add" className="dropdown-add" title="No Lists Found" variant="warning">
+        {
+          <Dropdown.Item href="/createlist">
+            <span> Create New List </span>
+          </Dropdown.Item>
+        }
+      </DropdownButton>
+    );
+  }
 }
 
 export default BookSearchTile;

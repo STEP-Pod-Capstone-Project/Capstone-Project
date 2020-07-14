@@ -14,7 +14,7 @@ const container = document.createElement("div");
 document.body.appendChild(container);
 
 test('renders sidebar test', () => {
-  render(<Router> <LeftSideBar /> </Router>, container);
+  render(<App />, container);
 
   const homeLink = document.getElementById("home-link");
   expect(homeLink).toBeInTheDocument();

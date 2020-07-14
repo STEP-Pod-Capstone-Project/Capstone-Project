@@ -47,3 +47,9 @@
 form div {
   margin-bottom: 10px;
 }
+
+.description {
+  font-size: 20px;
+  text-align: center;
+  margin: 15px 0px;
+}
