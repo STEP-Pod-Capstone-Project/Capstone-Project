@@ -12,7 +12,9 @@ const BookSearchTile = (props) => {
     <div className="book-search-tile">
       <Container>
         <Row className="justify-content-md-center">
-          <Col md="auto"><img className="book-img-med" src={props.book.thumbnailLink} alt={props.book.title} /></Col>
+          <Col md="auto">
+            <img className="book-img-med" src={props.book.thumbnailLink} alt={props.book.title} />
+          </Col>
           <Col>
             <div className="center-vertical">
               <h2 className="book-title"> {props.book.title} </h2>
@@ -21,7 +23,7 @@ const BookSearchTile = (props) => {
           </Col>
           <Col md="auto">
             <Container className="center-vertical">
-              <BookListAddDropdown userBookLists={props.userBookLists} book={props.book}/>
+              <BookListAddDropdown userBookLists={props.userBookLists} book={props.book} />
             </Container>
           </Col>
         </Row>
