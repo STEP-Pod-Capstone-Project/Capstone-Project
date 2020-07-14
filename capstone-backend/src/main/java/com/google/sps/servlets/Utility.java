@@ -213,7 +213,6 @@ public class Utility {
       return null;
     }
 
-    System.out.println(parameterName + ":\t" +  parameterValue);
     Query query = parameterIsList ? collectionReference.whereArrayContains(parameterName, parameterValue)
         : collectionReference.whereEqualTo(parameterName, parameterValue);
     while (it.hasNext()) {
