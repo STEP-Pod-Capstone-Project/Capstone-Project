@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap'
+import { Button, Spinner } from 'react-bootstrap'
 
 class ListPage extends Component {
 
@@ -69,32 +69,45 @@ class ListPage extends Component {
   }
 
   render() {
-    return this.state.loading ? (<h1 className="text-center mt-4">Loading...</h1>) : (this.state.empty ? (<h1 className="text-center mt-4">Booklist has No Books</h1>) : (
-      <div className="text-center mt-4">
-        {
-          this.state.gBooks.map(gBook =>
-            <div key={gBook.id + this.props.match.params.id}>
-              <a className="text-decoration-none text-body" href={gBook.volumeInfo.canonicalVolumeLink}>
-                <div>
-                  <img src={this.convertToHttps(gBook.volumeInfo.imageLinks.thumbnail)} alt={gBook.volumeInfo.title} />
+    return this.state.loading
+      ?
+      (<div className="text-center mt-4">
+        <Spinner animation="border" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+        <br />
+        <h1>Loading...</h1>
+      </div>)
+      :
+      (this.state.empty
+        ?
+        (<h1 className="text-center mt-4">Booklist has No Books</h1>)
+        : (
+          <div className="text-center mt-4">
+            {
+              this.state.gBooks.map(gBook =>
+                <div key={gBook.id + this.props.match.params.id}>
+                  <a className="text-decoration-none text-body" href={gBook.volumeInfo.canonicalVolumeLink}>
+                    <div>
+                      <img src={this.convertToHttps(gBook.volumeInfo.imageLinks.thumbnail)} alt={gBook.volumeInfo.title} />
+                      <br />
+                      <h2 > {gBook.volumeInfo.title} </h2>
+                      <p > {gBook.volumeInfo.authors.join(', ')} </p>
+                    </div>
+                  </a>
+                  <a className="btn btn-primary" href={gBook.accessInfo.webReaderLink}>Web Reader</a>
                   <br />
-                  <h2 > {gBook.volumeInfo.title} </h2>
-                  <p > {gBook.volumeInfo.authors.join(', ')} </p>
-                </div>
-              </a>
-              <a className="btn btn-primary" href={gBook.accessInfo.webReaderLink}>Web Reader</a>
-              <br />
-              <br />
-              <Button variant="danger" onClick={() => this.deleteBook(gBook.id)}>
-                Remove Book from List
+                  <br />
+                  <Button variant="danger" onClick={() => this.deleteBook(gBook.id)}>
+                    Remove Book from List
               </Button>
-              <br />
-              <br />
-            </div>
-          )
-        }
-      </div>
-    ));
+                  <br />
+                  <br />
+                </div>
+              )
+            }
+          </div>
+        ));
   }
 }
 
