@@ -26,11 +26,11 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,23 +46,46 @@ public class SearchServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     String fullOutput = "";
-    String searchTerm = request.getParameter("searchTerm");
-    if (searchTerm == null || searchTerm.isEmpty())
-      return;
-    searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
+    String formattedURL = "";
 
-    int maxResults = 0;
-    String maxResultsParam = request.getParameter("maxResults"); 
-    if (maxResultsParam != null) { 
-      maxResults = parseNaturalNumber(maxResultsParam);
-    }
-    if (maxResultsParam == null || maxResults == -1) {
-      maxResults = DEFAULT_MAX_RESULTS;
+    if (request.getParameter("gbookId") != null) {
+      if (request.getParameterMap().size() > 1) {
+        System.err.println("Error: No other parameter can be sent with a gbookId");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+      // make formatted url
+      String gbookId = request.getParameter("gbookId");
+      formattedURL = String.format("https://www.googleapis.com/books/v1/volumes/%s", gbookId);
+
+    } else if (request.getParameter("searchTerm") != null || !request.getParameter("searchTerm").isEmpty()) {
+      int parameterLength = request.getParameterMap().size();
+      if ((parameterLength == 2 && request.getParameter("maxResults") == null) || parameterLength > 2) {
+        System.err.println("Error: No other parameters must be sent with searchTerm other than maxResults");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+      String searchTerm = URLEncoder.encode(request.getParameter("searchTerm"), "UTF-8");
+      // format url
+      int maxResults = DEFAULT_MAX_RESULTS;
+      String maxResultsParam = request.getParameter("maxResults");
+      // If maxResultsParam represents a positive integer,
+      // then replace maxResults with the new value
+      if (maxResultsParam != null) {
+        int parsedMaxResults = parseNaturalNumber(maxResultsParam);
+        if (parsedMaxResults != -1) {
+          maxResults = parsedMaxResults;
+        }
+      }
+      formattedURL = String.format("https://www.googleapis.com/books/v1/volumes?q={%s}&maxResults=%d&country=US",
+          searchTerm, maxResults);
+    } else {
+      System.err.println("Error: Invalid combination of parameters sent");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
     }
 
     try {
-      String formattedURL = String.format("https://www.googleapis.com/books/v1/volumes?q={%s}&maxResults=%d&country=US",
-          searchTerm, maxResults);
       URL url = new URL(formattedURL);
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("GET");
@@ -76,27 +99,42 @@ public class SearchServlet extends HttpServlet {
       }
       BufferedReader br = new BufferedReader(streamReader);
 
-      String output;
-      while ((output = br.readLine()) != null) {
-        fullOutput += output;
-      }
+      fullOutput = br.lines().collect(Collectors.joining());
 
       if (conn.getResponseCode() != 200) {
         System.err.println(fullOutput);
-        throw new RuntimeException("Failed : error code : " + conn.getResponseCode());
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return;
       }
 
       conn.disconnect();
-    } catch (MalformedURLException e) {
+    } catch (Exception e) {
       e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
     }
 
     response.setContentType("application/json;");
-    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-    response.getWriter().println(gson.toJson(convertResponseToVolumeData(fullOutput)));
+    Collection<VolumeData> volumes = new ArrayList<>();
+    if (request.getParameter("gbookId") != null) {
+      VolumeData bookObject = individualBookToVolumeData(JsonParser.parseString(fullOutput));
+      if (bookObject != null) {
+        volumes.add(bookObject);
+      } else {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      }
+    } else if (request.getParameter("searchTerm") != null) {
+      volumes.addAll(convertResponseToVolumeData(fullOutput));
+      if (volumes.size() == 0) {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      }
+    }
+
+    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    response.getWriter().println(gson.toJson(volumes));
   }
 
   /*
@@ -120,41 +158,70 @@ public class SearchServlet extends HttpServlet {
     JsonArray itemsInfo = items.getAsJsonArray();
 
     for (JsonElement book : itemsInfo) {
-      JsonObject bookInfo = book.getAsJsonObject();
-      String id = bookInfo.get("id").getAsString();
-
-      // volumeInfo houses all of the information about the book itself: description,
-      // authors, title
-      JsonElement volumeInfo = bookInfo.get("volumeInfo");
-      if (volumeInfo == null)
-        continue;
-      JsonObject volumeInfoObj = volumeInfo.getAsJsonObject();
-
-      JsonElement titleElement = volumeInfoObj.get("title");
-      String title = titleElement != null ? titleElement.getAsString() : "";
-
-      // there may be any number of authors, not guaranteed to only have 1
-      JsonElement authors = volumeInfoObj.get("authors");
-      ArrayList<String> authorNames = new ArrayList<>();
-      if (authors != null) {
-        JsonArray authorsArray = authors.getAsJsonArray();
-        for (JsonElement name : authorsArray) {
-          authorNames.add(name.getAsString());
-        }
+      VolumeData bookObject = individualBookToVolumeData(book);
+      if (bookObject != null) {
+        volumes.add(individualBookToVolumeData(book));
       }
-
-      JsonElement descElement = volumeInfoObj.get("description");
-      String description = descElement != null ? descElement.getAsString() : "";
-
-      JsonElement thumbnailElement = volumeInfoObj.get("imageLinks");
-      String thumbnailLink = thumbnailElement != null
-          ? thumbnailElement.getAsJsonObject().get("thumbnail").getAsString()
-          : "";
-      thumbnailLink = thumbnailLink.replace("http", "https");
-
-      volumes.add(new VolumeData(id, title, authorNames.toArray(new String[0]), description, thumbnailLink));
     }
     return volumes;
+  }
+
+  /*
+   * Takes in an individual book response from the Google Books API and converts
+   * it to a VolumeData object.
+   * 
+   * @param singleBook a single book from the Books API as a JsonElement
+   * 
+   * @return a singular object of the book from the API call
+   */
+  static VolumeData individualBookToVolumeData(JsonElement singleBook) {
+    JsonObject bookInfo = singleBook.getAsJsonObject();
+    String id = bookInfo.get("id").getAsString();
+
+    // volumeInfo houses all of the information about the book itself: description,
+    // authors, title
+    JsonElement volumeInfo = bookInfo.get("volumeInfo");
+    if (volumeInfo == null)
+      return null;
+    JsonObject volumeInfoObj = volumeInfo.getAsJsonObject();
+
+    JsonElement titleElement = volumeInfoObj.get("title");
+    String title = titleElement != null ? titleElement.getAsString() : "";
+    if (title.isEmpty()) {
+      return null;
+    }
+
+    // there may be any number of authors, not guaranteed to only have 1
+    JsonElement authors = volumeInfoObj.get("authors");
+    ArrayList<String> authorNames = new ArrayList<>();
+    if (authors != null) {
+      JsonArray authorsArray = authors.getAsJsonArray();
+      for (JsonElement name : authorsArray) {
+        authorNames.add(name.getAsString());
+      }
+    }
+
+    JsonElement descElement = volumeInfoObj.get("description");
+    String description = descElement != null ? descElement.getAsString() : "";
+
+    JsonElement avgRatingElement = volumeInfoObj.get("averageRating");
+    double avgRating = avgRatingElement != null ? avgRatingElement.getAsDouble() : -1;
+
+    JsonElement canonVolumeElement = volumeInfoObj.get("canonicalVolumeLink");
+    String canonicalVolumeLink = canonVolumeElement != null ? canonVolumeElement.getAsString() : "";
+
+    JsonElement thumbnailElement = volumeInfoObj.get("imageLinks");
+    String thumbnailLink = thumbnailElement != null ? thumbnailElement.getAsJsonObject().get("thumbnail").getAsString()
+        : "";
+    thumbnailLink = thumbnailLink.replace("http", "https");
+
+    JsonElement accessInfoElement = bookInfo.get("accessInfo");
+    String webReaderLink = accessInfoElement != null
+        ? accessInfoElement.getAsJsonObject().get("webReaderLink").getAsString()
+        : "";
+
+    return new VolumeData(id, title, authorNames.toArray(new String[0]), description, avgRating, canonicalVolumeLink,
+        thumbnailLink, webReaderLink);
   }
 
   /*

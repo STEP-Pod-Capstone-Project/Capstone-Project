@@ -5,19 +5,16 @@ import java.util.List;
 
 
 public class Club extends Group {
-  
-  private List<Assignment> assignments;
   private String gbookID;
 
-  public Club(String name, String description, List<Assignment> assignments, 
-      String ownerID, List<String> memberIDs, List<String> inviteIDs, String gbookID) {
+  public Club(String name, String description, String ownerID, List<String> memberIDs, 
+      List<String> inviteIDs, String gbookID) {
     super(name, description, ownerID, memberIDs, inviteIDs);
-    this.assignments = assignments;
     this.gbookID = gbookID;
   }
 
   public Club(String name, String description, String ownerID, String gbookID){
-    this(name, description, new ArrayList<Assignment>(), ownerID, new ArrayList<String>(), new ArrayList<String>(), gbookID);
+    this(name, description, ownerID, new ArrayList<String>(), new ArrayList<String>(), gbookID);
   }
 
   public Club(String name, String ownerID, String gbookID) {
@@ -30,18 +27,6 @@ public class Club extends Group {
 
   public Club() {
     this("", "");
-  }
-
-  public List<Assignment> getAssignments() {
-    return this.assignments;
-  }
-
-  public void addAssignment(Assignment assignment) {
-    this.assignments.add(assignment);
-  }
-
-  public void clearAssignments() {
-    this.assignments.clear();
   }
 
   public String getGbookID() {
