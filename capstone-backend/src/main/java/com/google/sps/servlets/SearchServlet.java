@@ -78,68 +78,62 @@ public class SearchServlet extends HttpServlet {
       }
       formattedURL = String.format("https://www.googleapis.com/books/v1/volumes?q={%s}&maxResults=%d&country=US",
           searchTerm, maxResults);
-    }
-  }else
-
-  {
-    System.err.println("Error: Invalid combination of parameters sent");
-    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-    return;
-  }
-
-  try
-  {
-    URL url = new URL(formattedURL);
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    conn.setRequestMethod("GET");
-    conn.setRequestProperty("Accept", "application/json");
-
-    Reader streamReader = null;
-    if (conn.getResponseCode() != 200) {
-      streamReader = new InputStreamReader(conn.getErrorStream());
     } else {
-      streamReader = new InputStreamReader(conn.getInputStream());
-    }
-    BufferedReader br = new BufferedReader(streamReader);
-
-    fullOutput = br.lines().collect(Collectors.joining());
-
-    if (conn.getResponseCode() != 200) {
-      System.err.println(fullOutput);
+      System.err.println("Error: Invalid combination of parameters sent");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
 
-    conn.disconnect();
-  }catch(
-  Exception e)
-  {
-    e.printStackTrace();
-    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    return;
-  }
+    try {
+      URL url = new URL(formattedURL);
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("GET");
+      conn.setRequestProperty("Accept", "application/json");
 
-  response.setContentType("application/json;");
+      Reader streamReader = null;
+      if (conn.getResponseCode() != 200) {
+        streamReader = new InputStreamReader(conn.getErrorStream());
+      } else {
+        streamReader = new InputStreamReader(conn.getInputStream());
+      }
+      BufferedReader br = new BufferedReader(streamReader);
 
-  Collection<VolumeData> volumes = new ArrayList<>();if(request.getParameter("gbookId")!=null)
-  {
-    VolumeData bookObject = individualBookToVolumeData(JsonParser.parseString(fullOutput));
-    if (bookObject != null) {
-      volumes.add(bookObject);
-    } else {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      fullOutput = br.lines().collect(Collectors.joining());
+
+      if (conn.getResponseCode() != 200) {
+        System.err.println(fullOutput);
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+
+      conn.disconnect();
+    } catch (Exception e) {
+      e.printStackTrace();
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
-  }else if(request.getParameter("searchTerm")!=null)
-  {
-    volumes.addAll(convertResponseToVolumeData(fullOutput));
-    if (volumes.size() == 0) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      return;
-    }
-  }
 
-  Gson gson = new GsonBuilder().disableHtmlEscaping().create();response.getWriter().println(gson.toJson(volumes));
+    response.setContentType("application/json;");
+
+    Collection<VolumeData> volumes = new ArrayList<>();
+    if (request.getParameter("gbookId") != null) {
+      VolumeData bookObject = individualBookToVolumeData(JsonParser.parseString(fullOutput));
+      if (bookObject != null) {
+        volumes.add(bookObject);
+      } else {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      }
+    } else if (request.getParameter("searchTerm") != null) {
+      volumes.addAll(convertResponseToVolumeData(fullOutput));
+      if (volumes.size() == 0) {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      }
+    }
+
+    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    response.getWriter().println(gson.toJson(volumes));
   }
 
   /*
