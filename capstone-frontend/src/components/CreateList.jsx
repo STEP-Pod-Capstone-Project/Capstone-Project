@@ -18,10 +18,11 @@ class CreateList extends Component {
     event.preventDefault();
 
     const name = event.target[0].value
+    const userID = window.localStorage.getItem("userID")
 
     const newBooklist = {
-      "userID": window.localStorage.getItem("userID"),
-      "name": name,
+      "userID": userID,
+      "name": name
     }
 
     // Store BookList in Firebase
@@ -30,7 +31,7 @@ class CreateList extends Component {
       body: JSON.stringify(newBooklist)
     });
 
-    const createdBookList = await fetch(`/api/booklist?userID=${window.localStorage.getItem("userID")}&name=${name}`, {
+    const createdBookList = await fetch(`/api/booklist?userID=${userID}&name=${name}`, {
       method: "GET",
     }).then(resp => resp.json());
 
