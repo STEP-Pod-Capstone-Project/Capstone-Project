@@ -21,7 +21,7 @@ const BookSearchTile = (props) => {
           </Col>
           <Col md="auto">
             <Container className="center-vertical">
-              <BookListAddDropdown userBookLists={props.userBookLists} book={props.book}></BookListAddDropdown>
+              <BookListAddDropdown userBookLists={props.userBookLists} book={props.book}/>
             </Container>
           </Col>
         </Row>
@@ -30,14 +30,14 @@ const BookSearchTile = (props) => {
   );
 }
 
-const BookListAddDropdown = (props) => {
-  if (props.userBookLists.length > 0) {
+const BookListAddDropdown = ({ book, userBookLists }) => {
+  if (userBookLists.length > 0) {
     return (
       <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
         {
-          props.userBookLists.map(bookList =>
+          userBookLists.map(bookList =>
             <Dropdown.Item key={bookList.id}
-              onSelect={() => addBookToBookList(props.book.id, bookList.id)}>
+              onSelect={() => addBookToBookList(book.id, bookList.id)}>
               {bookList.name}
             </Dropdown.Item>
           )
@@ -48,7 +48,7 @@ const BookListAddDropdown = (props) => {
     return (
       <DropdownButton id="dropdown-list-add" className="dropdown-add" title="No Lists Found" variant="warning">
         {
-          <Dropdown.Item href="/createlist" key="emptyBookList">
+          <Dropdown.Item href="/createlist">
             <span> Create New List </span>
           </Dropdown.Item>
         }
