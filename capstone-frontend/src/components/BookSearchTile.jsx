@@ -2,9 +2,18 @@ import React from 'react';
 import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../styles/BookSearchTile.css';
 
-const addBookToBookList = (bookId, bookListId) => {
-  // TODO: Referenced in PR #30 to add book to given BookList
-  console.log(`Added book with id: ${bookId} to bookList with id: ${bookListId}`);
+const addBookToBookList = async (bookId, bookListJson) => {
+
+  const bookListUpdateJson = {
+    "bookListID": bookListJson.id,
+    "gbookID": bookId,
+  }
+
+  // Update BookList in Firebase
+  fetch("/api/booklist", {
+    method: "PUT",
+    body: JSON.stringify(bookListUpdateJson)
+  });
 }
 
 const BookSearchTile = (props) => {
