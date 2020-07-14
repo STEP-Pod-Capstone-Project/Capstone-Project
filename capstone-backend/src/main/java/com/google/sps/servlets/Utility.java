@@ -420,8 +420,6 @@ public class Utility {
       String fName = f.getName();
       String type = f.getType().getName();
 
-      System.out.println(fName +"=\t" +type);
-
       if (type.equals("int") || type.equals("java.lang.Integer")) {
         if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
           constructorFields.put(fName, jsonObject.get(fName).getAsInt());
