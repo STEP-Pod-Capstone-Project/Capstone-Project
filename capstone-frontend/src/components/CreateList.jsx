@@ -34,8 +34,6 @@ class CreateList extends Component {
       method: "GET",
     }).then(resp => resp.json());
 
-    console.log(createdBookList)
-
     document.location.href = `/listpage/${createdBookList[0].id}`;
 
     this.setState({ loading: false })
