@@ -94,7 +94,7 @@ public class UserServlet extends HttpServlet {
     try {
 
       String userID = request.getParameter("id");
-      List<Map<String, Object>> user = new ArrayList<Map<String, Object>>();
+      Map<String, Object> user;
 
       if (userID == null) {
         System.err.println("Error:\t" + "Null Id");
@@ -104,13 +104,9 @@ public class UserServlet extends HttpServlet {
 
       Firestore db = getFirestore();
 
-      Query query = db.collection("users").whereEqualTo("id", userID);
+      DocumentSnapshot document = db.collection("users").document(userID).get().get();
 
-      ApiFuture<QuerySnapshot> querySnapshot = query.get();
-
-      for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
-        user.add(document.getData());
-      }
+      user = document.getData();
 
       Gson gson = new Gson();
       response.setContentType("application/json;");
