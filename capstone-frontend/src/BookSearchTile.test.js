@@ -28,7 +28,7 @@ const emptyArray = [];
 
 test('renders book search tile test', () => {
   render(<BookSearchTile book={book}
-    bookLists={getUserBookLists()} />, container);
+    userBookLists={getUserBookLists()} />, container);
 
   const bookThumbnail = document.getElementsByClassName("book-img-med")[0];
   expect(bookThumbnail).toBeInTheDocument();
