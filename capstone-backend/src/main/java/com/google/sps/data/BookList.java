@@ -1,7 +1,6 @@
 package com.google.sps.data;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.ArrayList;
 
 /**
@@ -16,9 +15,8 @@ import java.util.ArrayList;
  * sharing feature between Book Lists.
  * 
  */
-public final class BookList {
+public final class BookList extends BaseEntity {
 
-  private final String id = UUID.randomUUID().toString();
   private final String userID;
   private String name;
   private List<String> gbookIDs;
@@ -37,6 +35,17 @@ public final class BookList {
 
   public BookList(String userID, String name){
     this(userID, name, new ArrayList<String>(), new ArrayList<String>());
+  }
+
+  public BookList(){
+    userID = "";
+    name = "";
+    gbookIDs = new ArrayList<String>();
+    collaboratorsIDs = new ArrayList<String>();
+  }
+
+  public void setName(String name){
+    this.name = name;
   }
 
   public void setGbookIDs(List<String> gbookIDs) {
@@ -62,10 +71,6 @@ public final class BookList {
 
   public String getName() {
     return name;
-  }
-
-  public String getID() {
-    return this.id;
   }
 
   public List<String> getGbookIDs() {

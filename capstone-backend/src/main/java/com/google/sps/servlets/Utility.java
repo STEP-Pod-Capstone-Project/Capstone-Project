@@ -191,6 +191,7 @@ public class Utility {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return null;
     }
+
     String parameterValue = entry.getValue()[0];
     Class superClass = genericClass.getMyType().getSuperclass();
     List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
@@ -211,6 +212,7 @@ public class Utility {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return null;
     }
+
     Query query = parameterIsList ? collectionReference.whereArrayContains(parameterName, parameterValue)
         : collectionReference.whereEqualTo(parameterName, parameterValue);
     while (it.hasNext()) {
@@ -269,6 +271,7 @@ public class Utility {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return null;
     }
+
     return retrievedObjects;
   }
 
@@ -317,8 +320,10 @@ public class Utility {
           if (type.equals("int") || type.equals("java.lang.Integer")) {
             update.put(name, jsonObject.get(name).getAsInt());
           }
-          else if (type.equals("java.lang.String") && !name.equals("id")) {
-            update.put(name, jsonObject.get(name).getAsString());
+          else if (type.equals("java.lang.String")) {
+            if (!name.equals("id")){
+              update.put(name, jsonObject.get(name).getAsString());
+            }
           }
           else if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
             update.put(name, jsonObject.get(name).getAsBoolean());
@@ -375,7 +380,7 @@ public class Utility {
     List<String> list = new ArrayList<>();
     List<String> fieldNames = fields.stream().map(f -> f.getName()).collect(Collectors.toList());
     // Every jsonObject key must match a field name. If not, this check will fail. 
-    if (fieldNames.containsAll(jsonObject.keySet())) {
+    if (!fieldNames.containsAll(jsonObject.keySet())) {
       System.err.println("Error: Not all parameters in the request body are fields of the given class.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return false;
@@ -414,6 +419,7 @@ public class Utility {
     for (Field f : fields) {
       String fName = f.getName();
       String type = f.getType().getName();
+
       if (type.equals("int") || type.equals("java.lang.Integer")) {
         if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
           constructorFields.put(fName, jsonObject.get(fName).getAsInt());
@@ -422,12 +428,14 @@ public class Utility {
           constructorFields.put(fName, -1);
         }
       }
-      else if (type.equals("java.lang.String") && !fName.equals("id")) {
-        if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
-          constructorFields.put(fName, jsonObject.get(fName).getAsString());
-        }
-        else {
-          constructorFields.put(fName, "");
+      else if (type.equals("java.lang.String")) {
+        if (!fName.equals("id")){
+          if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
+            constructorFields.put(fName, jsonObject.get(fName).getAsString());
+          }
+          else {
+            constructorFields.put(fName, "");
+          }
         }
       }
       else if (type.equals("boolean") || type.equals("java.lang.boolean")) {

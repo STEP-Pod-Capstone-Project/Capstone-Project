@@ -19,15 +19,15 @@ class BookSearchList extends Component {
       .catch(err => console.log(err));
   }
 
-  getUserBookLists = () => {
+  getUserBookLists = async () => {
 
-    const userID = window.sessionStorage.getItem("userID");
+    const userID = window.localStorage.getItem("userID");
 
-    fetch(`/api/booklist?userID=${userID}`, {
+    const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
       method: "GET",
-    }).then(response => response.json()).then(res => {
-      this.setState({ bookLists: res })
-    });
+    }).then(resp => resp.json());
+
+    this.setState({ bookLists });
   }
 
 

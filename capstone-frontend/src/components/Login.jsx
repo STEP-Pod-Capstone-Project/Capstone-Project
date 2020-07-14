@@ -30,7 +30,7 @@ export class Login extends Component {
       body: JSON.stringify(this.state.googleUser.tokenObj),
     });
 
-    window.sessionStorage.setItem("userID", this.state.profileObj.googleId)
+    window.localStorage.setItem("userID", this.state.profileObj.googleId)
 
   }
 
