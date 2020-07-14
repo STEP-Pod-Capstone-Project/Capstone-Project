@@ -10,7 +10,6 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static org.mockito.Mockito.when;
@@ -96,10 +95,17 @@ public class SearchServletTest {
     return result;
   }
 
+  /**
+   * Checks whether all fields in VolumeData are their default values. If there
+   * are any default values, return false.
+   * 
+   * @param book the VolumeData object
+   * @return false if any default values
+   */
   public boolean checkPopulatedVolumeDataObject(VolumeData book) {
-    return book.getID() != null || book.getTitle() != null || book.getAuthors() != null || book.getDescription() != null
-        || book.getAvgRating() != 0 || book.getCanonicalVolumeLink() != null || book.getThumbnailLink() != null
-        || book.getWebReaderLink() != null;
+    return book.getID() != null && book.getTitle() != null && book.getAuthors() != null && book.getDescription() != null
+        && book.getAvgRating() != 0 && book.getCanonicalVolumeLink() != null && book.getThumbnailLink() != null
+        && book.getWebReaderLink() != null;
   }
 
   @Test
@@ -151,9 +157,9 @@ public class SearchServletTest {
   public void checkConvertResponseToVolumeDataPopulatesObjects() {
     Collection<VolumeData> books = SearchServlet.convertResponseToVolumeData(ARTIFICIAL_JSON_RESPONSE);
 
-    boolean anyNotPopulated = books.stream().anyMatch(book -> checkPopulatedVolumeDataObject(book));
+    boolean allPopulated = books.stream().allMatch(book -> checkPopulatedVolumeDataObject(book));
 
-    Assert.assertTrue(anyNotPopulated);
+    Assert.assertTrue(allPopulated);
   }
 
   @Test

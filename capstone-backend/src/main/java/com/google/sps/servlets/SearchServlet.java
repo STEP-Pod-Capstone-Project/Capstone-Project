@@ -58,7 +58,7 @@ public class SearchServlet extends HttpServlet {
       String gbookId = request.getParameter("gbookId");
       formattedURL = String.format("https://www.googleapis.com/books/v1/volumes/%s", gbookId);
 
-    } else if (request.getParameter("searchTerm") != null || request.getParameter("searchTerm").isEmpty()) {
+    } else if (request.getParameter("searchTerm") != null || !request.getParameter("searchTerm").isEmpty()) {
       String searchTerm = URLEncoder.encode(request.getParameter("searchTerm"), "UTF-8");
       // format url
       int maxResults = DEFAULT_MAX_RESULTS;
