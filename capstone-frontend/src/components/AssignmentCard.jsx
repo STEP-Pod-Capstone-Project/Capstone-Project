@@ -47,9 +47,15 @@ class AssignmentCard extends Component {
         <div> {this.props.assignment.text} </div>
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <form id="comment-form" onSubmit={this.onComment}>
-          <label htmlFor="text"> Comment: </label>
-          <textarea rows="5" cols="75" type="text" id="text" name="text" />
-          <input id="submit-comment" type="submit" value="Post" />
+          <div>
+            <label htmlFor="text"> Comment: </label>
+          </div>
+          <div>
+            <textarea rows="3" cols="75" type="text" id="text" name="text" />
+          </div>
+          <div>
+            <input id="submit-comment" type="submit" value="Post" />
+          </div>
         </form>
       </div>
     );

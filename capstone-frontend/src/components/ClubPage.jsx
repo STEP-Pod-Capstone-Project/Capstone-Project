@@ -5,6 +5,7 @@ import AssignmentCard from './AssignmentCard';
  
 import '../styles/Groups.css';
  
+
 class ClubPage extends Component {
   constructor(props) {
     super(props);
@@ -68,11 +69,11 @@ class ClubPage extends Component {
             alert(err);
         });
   }
- 
+
   componentDidMount() {
     this.fetchData();
   }
- 
+
   render() {
     const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} userBookLists={[]} updateBookLists={this.props.fetchBookLists}/>;
     const owner = this.state.owner && <div> Club Owner: {this.state.owner.fullName}, {this.state.owner.email} </div>;
@@ -91,5 +92,5 @@ class ClubPage extends Component {
     );
   }
 }
- 
+
 export default ClubPage;
