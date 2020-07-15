@@ -14,7 +14,7 @@ export class LeftSideBar extends Component {
       method: "DELETE",
     });
 
-    this.fetchBookLists();
+    this.props.updateBookLists();
 
     // These lines of code check if the current BookList URL has the same id as the one being deleted
     // If so we redirect home

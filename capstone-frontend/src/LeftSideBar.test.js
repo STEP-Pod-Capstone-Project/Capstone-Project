@@ -28,8 +28,9 @@ test('renders sidebar test', () => {
   const myListsLink = document.getElementById("mylists-link");
   expect(myListsLink).toBeInTheDocument();
 
-  const myListsCreateLink = document.getElementById("mylists-create-link");
-  expect(myListsCreateLink).toBeInTheDocument();
+  const createBookListBtn = document.getElementById("create-list-modal");
+  expect(createBookListBtn).toBeInTheDocument();
+  expect(createBookListBtn.innerHTML).toEqual(" Create New List ");
 
   const myClubsLink = document.getElementById("myclubs-link");
   expect(myClubsLink).toBeInTheDocument();

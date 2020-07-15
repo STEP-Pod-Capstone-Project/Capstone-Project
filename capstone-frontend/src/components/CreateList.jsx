@@ -13,13 +13,11 @@ class CreateList extends Component {
     }
   }
 
-  handleSubmit = async (event) => {
+  handleSubmit = async () => {
 
     this.setState({ loading: true })
 
-    event.preventDefault();
-
-    const name = event.target[0].value
+    const name = document.getElementById("createBookListForm").value
     const userID = window.localStorage.getItem("userID")
 
     const newBooklist = {
@@ -47,9 +45,9 @@ class CreateList extends Component {
   render() {
     return (
       <>
-        <button className={this.props.btnStyle} onClick={() => {  this.setState({ showModal: true }) }}>
+        <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
           <div className={this.props.textStyle}>
-            <span id="mylists-create-link"> Create New List </span>
+            <span id="create-list-modal"> Create New List </span>
           </div>
         </button>
 
@@ -65,12 +63,12 @@ class CreateList extends Component {
                 </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={this.handleSubmit}>
-              <Form.Group controlId="createBookList">
+            <Form>
+              <Form.Group controlId="createBookListForm">
                 <Form.Label>Name of Booklist</Form.Label>
                 <Form.Control type="text" placeholder="Enter Name" />
               </Form.Group>
-              <Button variant="primary" type="submit" disabled={this.state.loading}>
+              <Button variant="primary" type="submit" onClick={() => this.handleSubmit()}disabled={this.state.loading}>
                 Create Booklist
                     {this.state.loading &&
                   <Spinner
