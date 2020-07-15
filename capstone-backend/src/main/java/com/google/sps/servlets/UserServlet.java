@@ -36,11 +36,6 @@ public class UserServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3000-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io");
-response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
- 
     try {
 
       JsonObject googleUserTokenObjJSON = Utility.createRequestBodyJson(request);
@@ -99,7 +94,6 @@ response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure"
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     try {
 
       String userID = request.getParameter("id");

@@ -53,3 +53,13 @@ form div {
   text-align: center;
   margin: 15px 0px;
 }
+
+.assignment-border {
+  border: 2px solid black;
+  margin-bottom: 10px;
+}
+
+.comment-border {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}

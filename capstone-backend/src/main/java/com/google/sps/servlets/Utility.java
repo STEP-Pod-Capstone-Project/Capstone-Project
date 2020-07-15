@@ -242,12 +242,6 @@ public class Utility {
    */
   public static <T extends BaseEntity> List<T> get(CollectionReference collectionReference, HttpServletRequest request,
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
-    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3000-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io");
-response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
- 
-
     List<T> retrievedObjects = new ArrayList<>();
     ApiFuture<QuerySnapshot> asyncQuery;
     if (request.getParameter("id") != null) {
@@ -294,12 +288,6 @@ response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure"
    */
   public static <T extends BaseEntity> T put(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
-    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3000-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io");
-response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
- 
-   
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     String id = "";
     try {
@@ -420,12 +408,6 @@ response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure"
    */
   public static <T extends BaseEntity> T post(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass, List<String> requiredFields) throws IOException {
-    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3000-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io");
-response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
- 
-
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     Class superClass = genericClass.getMyType().getSuperclass();
@@ -507,12 +489,6 @@ response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure"
    */
   public static void delete(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response) throws IOException {
-    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3000-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io");
-response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
- 
-
     if (request.getParameterMap().size() > 1) {
       System.err.println("Error: No other parameter can be sent with an ID");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);

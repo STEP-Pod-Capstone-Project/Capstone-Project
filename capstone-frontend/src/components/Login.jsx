@@ -25,7 +25,7 @@ export class Login extends Component {
     this.setState({ isLogin: true, googleUser: response, profileObj: response.profileObj });
 
     // Store User in Firebase
-    fetch("https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/user", {
+    fetch("/api/user", {
       method: "POST",
       body: JSON.stringify(this.state.googleUser.tokenObj),
     });

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import CommentCard from './CommentCard';
 
+import '../styles/Groups.css';
+
 
 class AssignmentCard extends Component {
   constructor(props) {
@@ -18,7 +20,7 @@ class AssignmentCard extends Component {
       "userID": window.localStorage.getItem("userID"),
       "whenCreated": new Date()
     };
-    fetch("https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/comments", {method: "post", body: JSON.stringify(data), credentials:'include'})
+    fetch("/api/comments", {method: "post", body: JSON.stringify(data)})
         .then(this.fetchComments())
         .catch(function(err) {
           //TODO #61: Centralize error output
@@ -27,7 +29,7 @@ class AssignmentCard extends Component {
   }
 
   fetchComments = () => {
-    fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/comments?assignmentID=${this.props.assignment.id}`, {credentials:'include'})
+    fetch(`/api/comments?assignmentID=${this.props.assignment.id}`)
         .then(response => response.json()).then(response => this.setState({comments: response}))
         .catch(function(err) {
           //TODO #61: Centralize error output
@@ -41,8 +43,7 @@ class AssignmentCard extends Component {
 
   render() {
     return (
-      <div>
-        <div> {this.props.owner.fullname} </div>
+      <div className="assignment-border">
         <div> {this.props.assignment.text} </div>
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <form id="comment-form" onSubmit={this.onComment}>
