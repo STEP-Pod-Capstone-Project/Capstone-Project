@@ -25,9 +25,10 @@ class ClubPage extends Component {
             //TODO #61: Centralize error output
             alert(err);
         });
+    console.log(clubResponse);
     this.setState({club: clubResponse[0]});
 
-    let bookResponse = await fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/search?id=${this.state.club.gbookID}`, 
+    let bookResponse = await fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/search?gbookId=${this.state.club.gbookID}`, 
     {credentials:'include'})
         .then(response => response.json())
         .catch(function(err) {
@@ -35,7 +36,7 @@ class ClubPage extends Component {
             alert(err);
         });
     console.log(bookResponse);
-    this.setState({book: bookResponse[0]});
+    this.setState({book: bookResponse});
 
     let assignmentResponse = await fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/assignments?clubID=${this.state.club.id}`, 
     {credentials:'include'})
@@ -44,6 +45,7 @@ class ClubPage extends Component {
             //TODO #61: Centralize error output
             alert(err); 
         });
+    console.log(assignmentResponse);
     this.setState({assignments: assignmentResponse});
 
     let ownerResponse = await fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/user?id=${this.state.club.ownerID}`, 

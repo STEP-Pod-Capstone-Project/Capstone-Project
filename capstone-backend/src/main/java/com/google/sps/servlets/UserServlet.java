@@ -81,7 +81,7 @@ public class UserServlet extends HttpServlet {
 
       ApiFuture<WriteResult> futureUsers = db.collection("users").document(googleUser.getID()).set(googleUser);
 
-      System.out.println("Update time : " + futureUsers.get().getUpdateTime());
+      System.out.println("UserServlet Update time : " + futureUsers.get().getUpdateTime());
 
     } catch (Exception e) {
       System.err.println("Error: " + e.getMessage());

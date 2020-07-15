@@ -4,6 +4,12 @@ import CommentCard from './CommentCard';
 
 
 class AssignmentCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      comments: []
+    }
+  }
   onComment = (e) => {
     e.preventDefault();
     let data = {
@@ -12,11 +18,20 @@ class AssignmentCard extends Component {
       "userID": window.localStorage.get("userID"),
       "whenCreated": new Date()
     };
-    fetch("/api/comments", {method: "post", body: JSON.stringify(data)})
+    fetch("https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/comments", {method: "post", body: JSON.stringify(data)})
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
         });
+  }
+
+  fetchComments = async () => {
+    let commentResponse = await fetch("https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/comments", {credentials:'include'})
+        .catch(function(err) {
+          //TODO #61: Centralize error output
+          alert(err); 
+        });
+    this.setState({comments: commentResponse});
   }
 
   render() {
@@ -24,7 +39,7 @@ class AssignmentCard extends Component {
       <div>
         <div> {this.props.owner.fullname} </div>
         <div> {this.props.assignment.text} </div>
-        {this.props.assignment.comments.map(c => <CommentCard comment={c} />)}
+        {this.state.comments.map(c => <CommentCard comment={c} />)}
         <form id="comment-form" onSubmit={this.onComment}>
           <label for="text"> Comment: </label>
           <textarea rows="5" cols="75" type="text" id="text" name="text"> </textarea>

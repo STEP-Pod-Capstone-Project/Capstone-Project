@@ -28,6 +28,9 @@ test('renders sidebar test', () => {
   const myListsLink = document.getElementById("mylists-link");
   expect(myListsLink).toBeInTheDocument();
 
+  const myListsCreateLink = document.getElementById("mylists-create-link");
+  expect(myListsCreateLink).toBeInTheDocument();
+
   const myClubsLink = document.getElementById("myclubs-link");
   expect(myClubsLink).toBeInTheDocument();
 }); 

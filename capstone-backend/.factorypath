@@ -2,7 +2,10 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/javax/servlet/javax.servlet-api/4.0.1/javax.servlet-api-4.0.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/appengine/appengine-api-1.0-sdk/1.9.59/appengine-api-1.0-sdk-1.9.59.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/mockito/mockito-core/2.22.0/mockito-core-2.22.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/net/bytebuddy/byte-buddy/1.8.21/byte-buddy-1.8.21.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/net/bytebuddy/byte-buddy-agent/1.8.21/byte-buddy-agent-1.8.21.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/objenesis/objenesis/2.6/objenesis-2.6.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/cloud/google-cloud-firestore/1.9.0/google-cloud-firestore-1.9.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/cloud/google-cloud-core/1.79.0/google-cloud-core-1.79.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar" enabled="true" runInBatchMode="false"/>
