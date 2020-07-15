@@ -242,7 +242,7 @@ public class Utility {
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
 response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
+response.setHeader("Access-Control-Allow-Origin", "https://3000-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io");
 response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
  
 
@@ -293,7 +293,7 @@ response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure"
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
 response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
+response.setHeader("Access-Control-Allow-Origin", "https://3000-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io");
 response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
  
    
@@ -417,7 +417,7 @@ response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure"
       HttpServletResponse response, GenericClass<T> genericClass, List<String> requiredFields) throws IOException {
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
 response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
+response.setHeader("Access-Control-Allow-Origin", "https://3000-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io");
 response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
  
 
@@ -501,7 +501,7 @@ response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure"
       HttpServletResponse response) throws IOException {
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
 response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3001-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev");
+response.setHeader("Access-Control-Allow-Origin", "https://3000-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io");
 response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
  
 

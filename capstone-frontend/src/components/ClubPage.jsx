@@ -17,49 +17,47 @@ class ClubPage extends Component {
     }
   }
 
-  fetchClubData = async () => {
-    let club = await fetch(`https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/clubs?id=${this.props.match.params.id}`, 
+  fetchData = async () => {
+    let clubResponse = await fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`, 
     {credentials:'include'})
-        .then(response => response.json()).then(res => this.setState({club: res[0]})).then(console.log(this.state.club))
+        .then(response => response.json())
         .catch(function(err) {
             //TODO #61: Centralize error output
             alert(err);
         });
-    console.log('club');
-    console.log(club);
-  }
+    this.setState({club: clubResponse[0]});
 
-  fetchBookData = () => {
-    fetch(`https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/search?id=${this.state.club.gbookID}`, 
+    let bookResponse = await fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/search?id=${this.state.club.gbookID}`, 
     {credentials:'include'})
-        .then(response => response.json()).then(res => this.setState({book: res[0]})).then(console.log(this.state.book))
+        .then(response => response.json())
         .catch(function(err) {
             //TODO #61: Centralize error output
             alert(err);
         });
-  }
+    console.log(bookResponse);
+    this.setState({book: bookResponse[0]});
 
-  fetchAssignmentData = () => {
-    fetch(`https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/assignments?clubID=${this.state.club.id}`, 
+    let assignmentResponse = await fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/assignments?clubID=${this.state.club.id}`, 
     {credentials:'include'})
-        .then(response => response.json()).then(res => this.setState({assignments: res})).then(console.log(this.state.assignments))
+        .then(response => response.json())
         .catch(function(err) {
             //TODO #61: Centralize error output
             alert(err); 
         });
-  }
- 
-  fetchMemberData = async () => {
-    fetch(`https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/user?id=${this.state.club.ownerID}`, 
+    this.setState({assignments: assignmentResponse});
+
+    let ownerResponse = await fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/user?id=${this.state.club.ownerID}`, 
     {credentials:'include'})
-        .then(response => response.json()).then(res => this.setState({owner: res[0]})).then(console.log(this.state.owner))
+        .then(response => response.json())
         .catch(function(err) {
             //TODO #61: Centralize error output
             alert(err); 
         });
+    this.setState({owner: ownerResponse[0]});
+
     let memberID;
     for (memberID of this.state.club.memberIDs) {
-      fetch(`https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/user?id=${memberID}`, 
+      fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/user?id=${memberID}`, 
       {credentials:'include'})
           .then(response => response.json())
           .then(function(res) {
@@ -75,7 +73,7 @@ class ClubPage extends Component {
  
   handleClick = () => {
     const history = this.props.history;
-    fetch(`https://8080-0b34ed39-12e2-4bb0-83f0-3edbd4365bbd.us-east1.cloudshell.dev/api/clubs?id=${this.props.match.params.id}`, {method: "delete"})
+    fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`, {method: "delete"})
         .then(function() {
             history.push("/myclubs");
         })
@@ -86,16 +84,13 @@ class ClubPage extends Component {
   }
  
   componentDidMount() {
-    this.fetchClubData();
-    this.fetchBookData();
-    this.fetchAssignmentData();
-    this.fetchMemberData();
+    this.fetchData();
   }
  
   render() {
     console.log(this.state);
     return (
-      <div className="text-center">
+      <div className="text-center"> 
         <div className="title"> Club Name: {this.state.club.name} </div>
         <div> Club Owner: {this.state.owner.fullname}, {this.state.owner.email} </div>
         <div> Club Members: {this.state.members.map(m => m.profileObj.fullname)} </div>
