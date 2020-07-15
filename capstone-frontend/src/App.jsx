@@ -11,7 +11,6 @@ import MyBooks from './components/MyBooks';
 import CreateList from './components/CreateList';
 import MyClubs from './components/MyClubs';
 import BookPage from './components/BookPage';
-import ListPage from './components/ListPage';
 import ClubPage from './components/ClubPage';
 import CreateClub from './components/CreateClub';
 import Navbar from './components/Navbar';
@@ -43,10 +42,11 @@ class App extends Component {
             <Route path='/browse/:query' component={Browse} />
             <Route path='/mybooks' component={MyBooks} />
             <Route path='/createlist' component={CreateList} />
-            <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' component={BookPage} />
-            <Route path='/clubpage/:id' component={ClubPage} />
+            <Route path='/clubpage/:id' component={(props) => (
+                <ClubPage bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} id={props.match.params.id} />
+            )} />
             <Route path='/createclub' component={CreateClub} />
           </div>
           <RightSideBar />

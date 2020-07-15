@@ -17,6 +17,8 @@ const addBookToBookList = async (bookId, bookListJson) => {
 }
 
 const BookSearchTile = (props) => {
+  console.log('book');
+  console.log(props);
   return (
     <div className="book-search-tile">
       <Container>

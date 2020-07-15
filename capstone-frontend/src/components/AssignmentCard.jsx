@@ -15,23 +15,28 @@ class AssignmentCard extends Component {
     let data = {
       "assignmentID": this.props.assignment.id,
       "text": e.target[0].value,
-      "userID": window.localStorage.get("userID"),
+      "userID": window.localStorage.getItem("userID"),
       "whenCreated": new Date()
     };
-    fetch("https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/comments", {method: "post", body: JSON.stringify(data)})
+    fetch("https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/comments", {method: "post", body: JSON.stringify(data), credentials:'include'})
+        .then(this.fetchComments())
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
         });
   }
 
-  fetchComments = async () => {
-    let commentResponse = await fetch("https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/comments", {credentials:'include'})
+  fetchComments = () => {
+    fetch(`https://8080-c462bdd8-69e0-4be9-b400-1ebde23ca93d.ws-us02.gitpod.io/api/comments?assignmentID=${this.props.assignment.id}`, {credentials:'include'})
+        .then(response => response.json()).then(response => this.setState({comments: response}))
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
         });
-    this.setState({comments: commentResponse});
+  }
+
+  componentDidMount() {
+    this.fetchComments();
   }
 
   render() {
@@ -39,10 +44,10 @@ class AssignmentCard extends Component {
       <div>
         <div> {this.props.owner.fullname} </div>
         <div> {this.props.assignment.text} </div>
-        {this.state.comments.map(c => <CommentCard comment={c} />)}
+        {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <form id="comment-form" onSubmit={this.onComment}>
-          <label for="text"> Comment: </label>
-          <textarea rows="5" cols="75" type="text" id="text" name="text"> </textarea>
+          <label htmlFor="text"> Comment: </label>
+          <textarea rows="5" cols="75" type="text" id="text" name="text" />
           <input id="submit-comment" type="submit" value="Post" />
         </form>
       </div>
