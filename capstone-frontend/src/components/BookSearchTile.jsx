@@ -63,7 +63,7 @@ const BookListAddDropdown = ({ book, bookLists, updateBookLists }) => {
       <DropdownButton id="dropdown-list-add" className="dropdown-add" title="No Lists Found" variant="warning">
         {
           <Dropdown.Item id="create-booklist-search">
-            <CreateList updateBookLists={updateBookLists} btnStyle="btn border-0"/>
+            <CreateList updateBookLists={updateBookLists} btnStyle="btn p-0 border-0"/>
           </Dropdown.Item>
         }
       </DropdownButton>
