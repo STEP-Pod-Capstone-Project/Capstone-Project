@@ -7,12 +7,19 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -67,11 +74,11 @@ public class UserServlet extends HttpServlet {
 
         googleUser = new User(googleId, email, fullname, profileImageUrl,
             new ImmutableMap.Builder<String, String>()
-              .put("token_id", tokenId)
-              .put("token_type", token_type)
               .put("access_token", access_token)
-              .put("scope", scope)
               .put("idpId", idpId)
+              .put("scope", scope)
+              .put("token_id", tokenId)
+              .put("token_type", token_type) 
               .build());
 
       } else {
@@ -79,8 +86,6 @@ public class UserServlet extends HttpServlet {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         return;
       }
-
-      // TODO(#47): Update Acess Token if it expires.
 
       Firestore db = getFirestore();
 
@@ -91,6 +96,34 @@ public class UserServlet extends HttpServlet {
     } catch (Exception e) {
       System.err.println("Error: " + e.getMessage());
     }
+  }
 
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    try {
+
+      String userID = request.getParameter("id");
+      Map<String, Object> user;
+
+      if (userID == null) {
+        System.err.println("Error:\t" + "Null Id");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+
+      Firestore db = getFirestore();
+
+      DocumentSnapshot document = db.collection("users").document(userID).get().get();
+
+      user = document.getData();
+
+      Gson gson = new Gson();
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(user));
+
+    } catch (Exception e) {
+      System.err.println("Error:\t" + e.getMessage());
+    }
   }
 }
