@@ -26,9 +26,9 @@ const getUserBookLists = () => {
 
 const emptyArray = [];
 
-test('renders book search tile test', () => {
+test('renders book search tile test', async () => {
   render(<BookSearchTile book={book}
-    userBookLists={getUserBookLists()} />, container);
+    bookLists={getUserBookLists()} />, container);
 
   const bookThumbnail = document.getElementsByClassName("book-img-med")[0];
   expect(bookThumbnail).toBeInTheDocument();
@@ -42,16 +42,22 @@ test('renders book search tile test', () => {
   const bookListButton = document.getElementById("dropdown-list-add");
   expect(bookListButton).toBeInTheDocument();
   expect(bookListButton.innerHTML).toEqual("Add to List");
-  
 
+  await act(async () => {bookListButton.click()});
+  const dropdownItems = document.getElementsByClassName("dropdown-item");
+  expect(dropdownItems.length).toEqual(3);
+  expect(dropdownItems[0].innerHTML).toEqual("<span>Best Books</span>");
 });
 
-test('renders book search tile with empty bookList test', () => {
+test('renders book search tile with empty bookList test', async () => {
   render(<BookSearchTile book={book}
-    userBookLists={emptyArray} />, container);
+    bookLists={emptyArray} />, container);
 
   const bookListButton = document.getElementById("dropdown-list-add");
   expect(bookListButton).toBeInTheDocument();
   expect(bookListButton.innerHTML).toEqual("No Lists Found");
 
+  await act(async () => {bookListButton.click()});
+  const dropdownItems = document.getElementsByClassName("dropdown-item");
+  expect(dropdownItems[0].innerHTML).toEqual("<span>Create New List</span>");
 });
