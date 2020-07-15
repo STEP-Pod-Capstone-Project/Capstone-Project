@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
-import { Button, Form, Spinner } from 'react-bootstrap'
+import { Button, Form, Spinner, Modal } from 'react-bootstrap'
 
 class CreateList extends Component {
 
@@ -8,7 +8,8 @@ class CreateList extends Component {
     super(props)
 
     this.state = {
-      loading: false
+      loading: false,
+      showModal: false
     }
   }
 
@@ -36,38 +37,58 @@ class CreateList extends Component {
       method: "GET",
     }).then(resp => resp.json());
 
-    this.setState({ loading: false })
+    this.setState({ loading: false, showModal: false, renderModal: false })
 
     this.props.history.push(`/listpage/${createdBookList[0].id}`);
 
-    console.log(this.props);
     this.props.updateBookLists();
   }
 
   render() {
     return (
-      <div>
-        <h1 className="text-center mt-4"> Create Booklist </h1>
+      <>
+        <button className={this.props.btnStyle} onClick={() => {  this.setState({ showModal: true }) }}>
+          <div className={this.props.textStyle}>
+            <span id="mylists-create-link"> Create New List </span>
+          </div>
+        </button>
 
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Group controlId="createBookList">
-            <Form.Label>Name of Booklist</Form.Label>
-            <Form.Control type="text" placeholder="Enter Name" />
-          </Form.Group>
-          <Button variant="primary" type="submit" disabled={this.state.loading}>
-            Create Booklist
-            {this.state.loading &&
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-                className="ml-4"
-              />}
-          </Button>
-        </Form>
-      </div>
+        <Modal
+          size="lg"
+          show={this.state.showModal}
+          onHide={() => this.setState({ showModal: false })}
+          aria-labelledby="create-booklists-modal">
+
+          <Modal.Header closeButton>
+            <Modal.Title id="create-booklists-modal">
+              Create Booklist
+                </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Group controlId="createBookList">
+                <Form.Label>Name of Booklist</Form.Label>
+                <Form.Control type="text" placeholder="Enter Name" />
+              </Form.Group>
+              <Button variant="primary" type="submit" disabled={this.state.loading}>
+                Create Booklist
+                    {this.state.loading &&
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="ml-4"
+                  />}
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+
+
+
+      </>
     )
   }
 }

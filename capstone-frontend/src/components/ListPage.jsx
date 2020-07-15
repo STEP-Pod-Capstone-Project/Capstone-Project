@@ -34,8 +34,6 @@ class ListPage extends Component {
       gBooks.push(gBook);
     }))
 
-    console.log(gBooks);
-
     this.setState({ gBooks, loading: false });
   }
 

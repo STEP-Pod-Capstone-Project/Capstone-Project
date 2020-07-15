@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Accordion, Card, Button } from 'react-bootstrap';
+import CreateList from './CreateList'
 import "../styles/LeftSideBar.css";
 
 
@@ -21,9 +22,9 @@ export class LeftSideBar extends Component {
 
     if (currentUrlPath.includes(bookListId)) {
       document.location.href = "/";
+      //TODO: Use React Router
     }
   }
-
 
   render() {
     return (
@@ -91,11 +92,8 @@ export class LeftSideBar extends Component {
                       </div>
                     )
                   }
-                  <Link to="/createlist" className="bg-light list-group-item list-group-item-action">
-                    <div className="d-flex w-100 justify-content-start align-items-center">
-                      <span id="mylists-create-link"> Create New List </span>
-                    </div>
-                  </Link>
+
+                  <CreateList updateBookLists={this.props.updateBookLists} btnStyle="bg-light list-group-item list-group-item-action" textStyle={"d-flex w-100 justify-content-start align-items-center"}/>
 
                 </Card.Body>
               </Accordion.Collapse>
