@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Accordion, Card, Button } from 'react-bootstrap';
 import CreateList from './CreateList'
 import "../styles/LeftSideBar.css";
@@ -21,8 +21,7 @@ export class LeftSideBar extends Component {
     const currentUrlPath = new URL(window.location.href).pathname;
 
     if (currentUrlPath.includes(bookListId)) {
-      document.location.href = "/";
-      //TODO: Use React Router
+      this.props.history.push("/")
     }
   }
 
@@ -120,4 +119,4 @@ export class LeftSideBar extends Component {
   }
 }
 
-export default LeftSideBar
+export default withRouter(LeftSideBar)
