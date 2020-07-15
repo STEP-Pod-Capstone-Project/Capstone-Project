@@ -45,7 +45,7 @@ class App extends Component {
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' component={BookPage} />
             <Route path='/clubpage/:id' component={(props) => (
-                <ClubPage bookLists={[]} id={props.match.params.id} />
+                <ClubPage id={props.match.params.id} />
             )} />
             <Route path='/createclub' component={CreateClub} />
           </div>
