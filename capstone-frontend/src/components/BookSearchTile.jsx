@@ -1,20 +1,7 @@
 import React from 'react';
-import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
-import '../styles/BookSearchTile.css';
-
-const addBookToBookList = async (bookId, bookListJson) => {
-
-  const bookListUpdateJson = {
-    "id": bookListJson.id,
-    "add_gbookIDs": bookId,
-  }
-
-  // Update BookList in Firebase
-  fetch("/api/booklist", {
-    method: "PUT",
-    body: JSON.stringify(bookListUpdateJson)
-  });
-}
+import { Container, Row, Col } from 'react-bootstrap';
+import BookListAddDropdown from './BookListAddDropdown';
+import '../styles/Book.css';
 
 const BookSearchTile = (props) => {
   return (
@@ -39,33 +26,6 @@ const BookSearchTile = (props) => {
       </Container>
     </div>
   );
-}
-
-const BookListAddDropdown = ({ book, userBookLists }) => {
-  if (userBookLists.length > 0) {
-    return (
-      <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
-        {
-          userBookLists.map(bookList =>
-            <Dropdown.Item key={bookList.id}
-              onSelect={() => addBookToBookList(book.id, bookList.id)}>
-              {bookList.name}
-            </Dropdown.Item>
-          )
-        }
-      </DropdownButton>
-    );
-  } else {
-    return (
-      <DropdownButton id="dropdown-list-add" className="dropdown-add" title="No Lists Found" variant="warning">
-        {
-          <Dropdown.Item href="/createlist">
-            <span> Create New List </span>
-          </Dropdown.Item>
-        }
-      </DropdownButton>
-    );
-  }
 }
 
 export default BookSearchTile;
