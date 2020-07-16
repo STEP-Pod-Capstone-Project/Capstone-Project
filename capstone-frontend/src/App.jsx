@@ -12,6 +12,7 @@ import CreateList from './components/CreateList';
 import MyClubs from './components/MyClubs';
 import BookPage from './components/BookPage';
 import ClubPage from './components/ClubPage';
+import AdminClubPage from './components/AdminClubPage';
 import CreateClub from './components/CreateClub';
 import Navbar from './components/Navbar';
 import LeftSideBar from './components/LeftSideBar';
@@ -44,6 +45,7 @@ class App extends Component {
             <Route path='/createlist' component={CreateList} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' component={BookPage} />
+            <Route path='/adminclubpage/:id' component={AdminClubPage} />
             <Route path='/clubpage/:id' component={(props) => (
                 <ClubPage id={props.match.params.id} />
             )} />

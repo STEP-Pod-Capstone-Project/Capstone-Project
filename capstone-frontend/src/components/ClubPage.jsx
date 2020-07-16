@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
@@ -84,12 +85,15 @@ class ClubPage extends Component {
   }
 
   render() {
+    const adminButton = this.state.owner.id === window.localStorage.getItem("userID") 
+                            && <Link to={`/adminclubpage/${this.state.club.id}`}> Admin page </Link>;
     const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} userBookLists={this.state.bookLists} />;
     const owner = this.state.owner && <div> Club Owner: {this.state.owner.fullName}, {this.state.owner.email} </div>;
     const members = this.state.members.length && <div> Club Members: {this.state.members.map(m => m.fullName).join(", ")} </div>;
     const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
     return (
       <div className="text-center"> 
+        {adminButton}
         <div className="title"> {this.state.club.name} </div>
         {owner}
         {members}
