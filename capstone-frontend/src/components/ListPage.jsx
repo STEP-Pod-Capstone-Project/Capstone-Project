@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Spinner, Row, Col } from 'react-bootstrap'
+import StarRatings from 'react-star-ratings'
 
 class ListPage extends Component {
 
@@ -96,7 +97,7 @@ class ListPage extends Component {
             <div>
               {
                 this.state.gBooks.map(gBook =>
-                  <Row className="text-center border m-5 bg-light" key={gBook.id + this.props.match.params.id} style={{border: "1px solid #ccc"}}>
+                  <Row className="text-center border m-5 bg-light" key={gBook.id + this.props.match.params.id} style={{ border: "1px solid #ccc" }}>
 
                     {console.log(gBook)}
 
@@ -107,11 +108,16 @@ class ListPage extends Component {
                     </Col>
 
                     <Col className="my-4 p-0">
-                      <h2 className="mt-5"> {gBook.title} </h2>
-                      <p className="my-3" > {gBook.authors.join(', ')} </p>
+                      <h2 className="mt-4"> {gBook.title} </h2>
+                      <StarRatings
+                        rating={gBook.avgRating}
+                        starDimension="40px"
+                        starSpacing="10px"
+                        starRatedColor="gold" />
+                        <p className="my-3" > {gBook.authors.join(', ')} </p>
                     </Col>
 
-                    <Col md={3}className="my-4 p-0">
+                    <Col md={3} className="my-4 p-0">
                       <a className="btn btn-primary mt-5" href={gBook.webReaderLink}>Web Reader</a>
                       <br />
                       <Button className="my-4" variant="danger" onClick={() => this.deleteBook(gBook.id)}>
