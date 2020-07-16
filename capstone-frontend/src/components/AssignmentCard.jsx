@@ -18,7 +18,7 @@ class AssignmentCard extends Component {
       "assignmentID": this.props.assignment.id,
       "text": e.target[0].value,
       "userID": window.localStorage.getItem("userID"),
-      "whenCreated": new Date()
+      "whenCreated": (new Date()).toUTCString()
     };
     fetch("/api/comments", {method: "post", body: JSON.stringify(data)})
         .then(this.fetchComments())
@@ -51,7 +51,7 @@ class AssignmentCard extends Component {
             <label htmlFor="text"> Comment: </label>
           </div>
           <div>
-            <textarea rows="3" cols="75" type="text" id="text" name="text" />
+            <textarea rows="1" cols="75" type="text" id="text" name="text" />
           </div>
           <div>
             <input id="submit-comment" type="submit" value="Post" />
