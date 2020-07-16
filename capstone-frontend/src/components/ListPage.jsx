@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Spinner } from 'react-bootstrap'
+import { Button, Spinner, Row, Col } from 'react-bootstrap'
 
 class ListPage extends Component {
 
@@ -7,6 +7,7 @@ class ListPage extends Component {
     super(props)
 
     this.state = {
+      bookList: {},
       gBooks: [],
       loading: true,
       empty: false
@@ -16,25 +17,28 @@ class ListPage extends Component {
 
   fetchBooks = async () => {
 
-    const bookList = await fetch(`/api/booklist?id=${this.props.match.params.id}`, {
+    const bookList = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?id=${this.props.match.params.id}`, {
       method: "GET",
     }).then(resp => resp.json());
 
     const gbookIDs = bookList[0].gbookIDs;
 
     if (!gbookIDs.length) {
-      this.setState({ loading: false, empty: true });
+      this.setState({ loading: false, empty: true, bookList: bookList[0] });
       return;
     }
+
+    console.log(bookList[0])
 
     const gBooks = [];
 
     await Promise.all(gbookIDs.map(async (gBookID) => {
-      const gBook = await fetch(`/api/search?gbookId=${gBookID}`).then(response => response.json())
+      const gBook = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${gBookID}`).then(response => response.json())
       gBooks.push(gBook[0]);
     }))
 
-    this.setState({ gBooks, loading: false });
+    this.setState({ bookList: bookList[0], gBooks, loading: false });
+
   }
 
   componentDidMount() {
@@ -77,33 +81,50 @@ class ListPage extends Component {
       :
       (this.state.empty
         ?
-        (<h1 className="text-center mt-4">Booklist has No Books</h1>)
-        : (
-          <div className="text-center mt-4">
-            {
-              this.state.gBooks.map(gBook =>
-                <div key={gBook.id + this.props.match.params.id}>
-                  <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
-                    <div>
-                      <img src={gBook.thumbnailLink} alt={gBook.title} />
-                      <br />
-                      <h2 > {gBook.title} </h2>
-                      <p > {gBook.authors.join(', ')} </p>
-                    </div>
-                  </a>
-                  <a className="btn btn-primary" href={gBook.webReaderLink}>Web Reader</a>
-                  <br />
-                  <br />
-                  <Button variant="danger" onClick={() => this.deleteBook(gBook.id)}>
-                    Remove Book from List
-              </Button>
-                  <br />
-                  <br />
-                </div>
-              )
-            }
+        (
+          <div>
+            <h2 className="mt-3">{this.state.bookList.name}</h2>
+            <hr style={{ border: "1px solid #ccc" }} />
+            <h3 className="text-center mt-4">Booklist has No Books</h3>
           </div>
-        ));
+        )
+        : (
+          <div>
+            <h2 className="mt-3">{this.state.bookList.name}</h2>
+            <hr style={{ border: "1px solid #ccc" }} />
+
+            <div>
+              {
+                this.state.gBooks.map(gBook =>
+                  <Row className="text-center border m-5 bg-light" key={gBook.id + this.props.match.params.id} style={{border: "1px solid #ccc"}}>
+
+                    {console.log(gBook)}
+
+                    <Col md={3} className="my-4 p-0 ">
+                      <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
+                        <img className="img-responsive" src={gBook.thumbnailLink} alt={gBook.title} />
+                      </a>
+                    </Col>
+
+                    <Col className="my-4 p-0">
+                      <h2 className="mt-5"> {gBook.title} </h2>
+                      <p className="my-3" > {gBook.authors.join(', ')} </p>
+                    </Col>
+
+                    <Col md={3}className="my-4 p-0">
+                      <a className="btn btn-primary mt-5" href={gBook.webReaderLink}>Web Reader</a>
+                      <br />
+                      <Button className="my-4" variant="danger" onClick={() => this.deleteBook(gBook.id)}>
+                        Remove Book from List
+                      </Button>
+                    </Col>
+
+                  </Row>)
+              }
+            </div>
+
+          </div >)
+      );
   }
 }
 
