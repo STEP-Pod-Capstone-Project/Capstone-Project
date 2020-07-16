@@ -35,7 +35,7 @@ class CreateList extends Component {
       method: "GET",
     }).then(resp => resp.json());
 
-    this.setState({ loading: false, showModal: false, renderModal: false })
+    this.setState({ loading: false, showModal: false, renderModal: false });
 
     this.props.history.push(`/listpage/${createdBookList[0].id}`);
 
@@ -44,7 +44,7 @@ class CreateList extends Component {
 
   render() {
     return (
-      <>
+      <div>
         <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
           <div className={this.props.textStyle}>
             <span id="create-list-modal"> Create New List </span>
@@ -68,7 +68,7 @@ class CreateList extends Component {
                 <Form.Label>Name of Booklist</Form.Label>
                 <Form.Control type="text" placeholder="Enter Name" />
               </Form.Group>
-              <Button variant="primary" type="submit" onClick={() => this.handleSubmit()}disabled={this.state.loading}>
+              <Button variant="primary" type="submit" onClick={() => this.handleSubmit()} disabled={this.state.loading}>
                 Create Booklist
                     {this.state.loading &&
                   <Spinner
@@ -83,10 +83,7 @@ class CreateList extends Component {
             </Form>
           </Modal.Body>
         </Modal>
-
-
-
-      </>
+      </div>
     )
   }
 }

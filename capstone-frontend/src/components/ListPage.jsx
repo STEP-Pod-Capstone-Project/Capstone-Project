@@ -31,7 +31,7 @@ class ListPage extends Component {
 
     await Promise.all(gbookIDs.map(async (gBookID) => {
       const gBook = await fetch(`/api/search?gbookId=${gBookID}`).then(response => response.json())
-      gBooks.push(gBook);
+      gBooks.push(gBook[0]);
     }))
 
     this.setState({ gBooks, loading: false });
@@ -82,19 +82,19 @@ class ListPage extends Component {
           <div className="text-center mt-4">
             {
               this.state.gBooks.map(gBook =>
-                <div key={gBook[0].id + this.props.match.params.id}>
-                  <a className="text-decoration-none text-body" href={gBook[0].canonicalVolumeLink}>
+                <div key={gBook.id + this.props.match.params.id}>
+                  <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
                     <div>
-                      <img src={gBook[0].thumbnailLink} alt={gBook[0].title} />
+                      <img src={gBook.thumbnailLink} alt={gBook.title} />
                       <br />
-                      <h2 > {gBook[0].title} </h2>
-                      <p > {gBook[0].authors.join(', ')} </p>
+                      <h2 > {gBook.title} </h2>
+                      <p > {gBook.authors.join(', ')} </p>
                     </div>
                   </a>
-                  <a className="btn btn-primary" href={gBook[0].webReaderLink}>Web Reader</a>
+                  <a className="btn btn-primary" href={gBook.webReaderLink}>Web Reader</a>
                   <br />
                   <br />
-                  <Button variant="danger" onClick={() => this.deleteBook(gBook[0].id)}>
+                  <Button variant="danger" onClick={() => this.deleteBook(gBook.id)}>
                     Remove Book from List
               </Button>
                   <br />

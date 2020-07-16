@@ -13,8 +13,14 @@ import {
 const container = document.createElement("div");
 document.body.appendChild(container);
 
+const getUserBookLists = () => {
+  return [{ id: "1", name: "Best Books" },
+  { id: "2", name: "Fantasy" },
+  { id: "3", name: "Sci-fi" }];
+}
+
 test('renders sidebar test', () => {
-  render(<App />, container);
+  render(<Router> <LeftSideBar bookLists={getUserBookLists()} /> </Router>, container);
 
   const homeLink = document.getElementById("home-link");
   expect(homeLink).toBeInTheDocument();

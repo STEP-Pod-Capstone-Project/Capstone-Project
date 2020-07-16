@@ -38,7 +38,7 @@ class App extends Component {
 
     const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
       method: "GET",
-    }).then(resp => resp.json());
+    }).then(resp => resp.json()).catch(err => console.log(err));
 
     this.setState({ bookLists });
   }
