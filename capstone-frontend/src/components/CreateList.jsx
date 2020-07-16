@@ -9,7 +9,7 @@ class CreateList extends Component {
 
     this.state = {
       loading: false,
-      showModal: false
+      showModal: false,
     }
   }
 
@@ -60,7 +60,7 @@ class CreateList extends Component {
           <Modal.Header closeButton>
             <Modal.Title id="create-booklists-modal">
               Create Booklist
-                </Modal.Title>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>

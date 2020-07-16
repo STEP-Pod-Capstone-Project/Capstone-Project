@@ -3,7 +3,7 @@ import BookSearchList from './BookSearchList';
 
 const Browse = (props) => {
   return (
-    <BookSearchList searchQuery={props.searchQuery} key={props.searchQuery} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
+    <BookSearchList searchQuery={props.searchQuery} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
   );
 }
 

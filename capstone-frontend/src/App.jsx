@@ -10,7 +10,7 @@ import Browse from './components/Browse';
 import MyBooks from './components/MyBooks';
 import MyClubs from './components/MyClubs';
 import BookPage from './components/BookPage';
-import ListPage from './components/ListPage';
+import ListPage from './components/ListPage'
 import ClubPage from './components/ClubPage';
 import CreateClub from './components/CreateClub';
 import Navbar from './components/Navbar';
@@ -22,7 +22,7 @@ class App extends Component {
     super(props);
     this.state = {
       searchQuery: "",
-      bookLists: []
+      bookLists: [],
     };
   }
 
@@ -56,14 +56,16 @@ class App extends Component {
           <LeftSideBar bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
           <div className="col-12 col-md-8" id="body-row">
             <Route exact path='/' component={Home} />
-            <Route path='/browse/:query' component={(props) => (
+            <Route path='/browse/:query' render={(props) => (
               <Browse bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} searchQuery={props.match.params.query} />
             )} />
             <Route path='/mybooks' component={MyBooks} />
             <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' component={BookPage} />
-            <Route path='/clubpage/:id' component={ClubPage} />
+            <Route path='/clubpage/:id' component={(props) => (
+                <ClubPage id={props.match.params.id} />
+            )} />
             <Route path='/createclub' component={CreateClub} />
           </div>
           <RightSideBar />
