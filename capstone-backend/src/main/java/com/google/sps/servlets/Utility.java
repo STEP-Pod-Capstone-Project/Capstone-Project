@@ -61,6 +61,7 @@ public class Utility {
     String jsonObjectString = request.getReader().lines().collect(Collectors.joining());
     JsonElement jsonElement = JsonParser.parseString(jsonObjectString);
     JsonObject jsonObject = jsonElement.getAsJsonObject();
+    
     return jsonObject;
   }
 
@@ -387,7 +388,7 @@ public class Utility {
       return false;
     } 
     list.addAll(jsonObject.keySet().stream()
-                    .filter(key -> jsonObject.get(key).getAsString().length() > 0)
+                    .filter(key -> jsonObject.get(key).toString().length() > 0)
                     .collect(Collectors.toList()));
     list.retainAll(requiredFields);
     // Every requiredField must be present as a key in the jsonObject. If not, this check will fail. 
@@ -448,7 +449,7 @@ public class Utility {
         }
       }
       else if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
-        if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
+        if (jsonObject.has(fName) && jsonObject.get(fName).toString().length() != 0) {
           // First check to see if it's an "actual array"
           try {
             JsonElement value = jsonObject.get(fName);
