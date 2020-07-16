@@ -24,18 +24,31 @@ class CreateList extends Component {
 
     this.setState({ fetchingBooks: true })
 
-    let searchResults = await fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
-      .then(response => response.json())
-      .catch(err => console.log(err));
+    console.log((searchTerm === ""))
 
-    if (typeof searchResults === "undefined"){
+    let searchResults;
+
+    if (searchTerm === "") {
       searchResults = [];
+      
+      this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
+    else {
+      searchResults = await fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
+        .then(response => response.json())
+        .catch(err => console.log(err));
 
-    this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
+      if (typeof searchResults === "undefined") {
+        searchResults = [];
+      }
+
+      this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
+    }
   }
 
   handleSearchTermChange = (event) => {
+
+    console.log(event.target.value)
 
     if (this.state.typingTimeout) {
       clearTimeout(this.state.typingTimeout);
@@ -150,35 +163,32 @@ class CreateList extends Component {
                 this.state.displayBooks &&
 
                 <div>
-                <h3 clasName="my-4 px-4">Search Results</h3>
-                <Row className="px-3 text-center">
-                  {this.state.searchResults.map(book =>
-                    <Col md={3} className="px-2 my-0 border" style={{ borderColor: "#ccc" }} key={book.id}>
-                      {console.log(book)}
-                      <img className="img-responsive mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
-                      <h5 className="mt-4"> {book.title} </h5>
-                      <p className="my-1"> {book.authors.join(', ')} </p>
-                      {console.log(this.state.addedBooksIDs.includes(book.id))}
-                      {this.state.addedBooksIDs.includes(book.id) ?
-                        <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(book)}>Remove Book</Button>
-                        :
-                        <Button className="my-5" onClick={() => this.addBookToList(book)}>Add to Booklist</Button>}
-                    </Col>
-                  )}
-                </Row>
+                  <h3 clasName="my-4 px-4">Search Results</h3>
+                  <Row className="px-3 text-center">
+                    {this.state.searchResults.map(book =>
+                      <Col md={3} className="px-2 my-0 border" style={{ borderColor: "#ccc" }} key={book.id}>
+                        <img className="img-responsive mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                        <h5 className="mt-4"> {book.title} </h5>
+                        <p className="my-1"> {book.authors.join(', ')} </p>
+                        {this.state.addedBooksIDs.includes(book.id) ?
+                          <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(book)}>Remove Book</Button>
+                          :
+                          <Button className="my-5" onClick={() => this.addBookToList(book)}>Add to Booklist</Button>}
+                      </Col>
+                    )}
+                  </Row>
                 </div>
               }
 
               {
                 (this.state.addedBooks.length !== 0) &&
-                
+
                 <div>
                   <h2 className="text-center my-4 px-4 ">Added Books</h2>
                   <Row className="text-center px-3">
                     {this.state.addedBooks.map(addedBook =>
 
                       <Col md={3} className="px-2 my-0 border" style={{ borderColor: "#ccc" }} key={addedBook.id}>
-                        {console.log("added book", addedBook)}
                         <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
                         <h5 className="mt-4"> {addedBook.title} </h5>
                         <p className="my-1"> {addedBook.authors.join(', ')} </p>
