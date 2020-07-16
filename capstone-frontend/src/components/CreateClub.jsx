@@ -14,6 +14,8 @@ class CreateClub extends Component {
         data[formElements[i].name] = formElements[i].value;
       }
     }
+    data.ownerID = window.localStorage.getItem("userID");
+
     fetch("/api/clubs", {method: "post", body: JSON.stringify(data)})
         .then(function() {
           history.push(`/clubpage/${data.id}`);
@@ -40,12 +42,6 @@ class CreateClub extends Component {
           </div>
           <div>
             <textarea rows="5" cols="75" type="text" id="description" name="description" />
-          </div>
-          <div>
-            <label htmlFor="ownerID"> ownerID </label>
-          </div>
-          <div>
-            <input type="text" id="ownerID" name="ownerID" />
           </div>
           <div>
             <label htmlFor="gbookID"> gbookID </label>
