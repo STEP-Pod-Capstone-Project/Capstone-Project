@@ -1,33 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Accordion, Card, Button } from 'react-bootstrap';
+import CreateList from './CreateList'
 import "../styles/LeftSideBar.css";
 
 
 export class LeftSideBar extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      bookLists: []
-    }
-  }
-
-  fetchBookLists = async () => {
-
-    const userID = window.localStorage.getItem("userID");
-
-    const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
-      method: "GET",
-    }).then(resp => resp.json());
-
-    this.setState({ bookLists });
-  }
-
-  componentDidMount() {
-    this.fetchBookLists();
-  }
 
   deleteBookList = async (bookListId) => {
 
@@ -36,17 +14,16 @@ export class LeftSideBar extends Component {
       method: "DELETE",
     });
 
-    this.fetchBookLists();
+    this.props.updateBookLists();
 
     // These lines of code check if the current BookList URL has the same id as the one being deleted
     // If so we redirect home
     const currentUrlPath = new URL(window.location.href).pathname;
 
     if (currentUrlPath.includes(bookListId)) {
-      document.location.href = "/";
+      this.props.history.push("/")
     }
   }
-
 
   render() {
     return (
@@ -98,12 +75,11 @@ export class LeftSideBar extends Component {
 
               <Accordion.Collapse eventKey="3">
                 <Card.Body id="mylists-link">
-
                   {
-                    this.state.bookLists.map(bookList =>
-                      <div className="bg-light p-0 list-group-item list-group-item-action">
+                    this.props.bookLists.map(bookList =>
+                      <div key={bookList.id} className="bg-light p-0 list-group-item list-group-item-action">
                         <div className="d-flex w-100 justify-content-start align-items-center">
-                          <Link to={`/listpage/${bookList.id}`} key={bookList.id} className="bg-light border-0 list-group-item list-group-item-action">
+                          <Link to={`/listpage/${bookList.id}`} className="bg-light border-0 list-group-item list-group-item-action">
                             <span> {bookList.name}</span>
                           </Link>
                           <Button className="border-0 bg-transparent" onClick={() => this.deleteBookList(bookList.id)}>
@@ -113,15 +89,10 @@ export class LeftSideBar extends Component {
                           </Button>
                         </div>
                       </div>
-
                     )
                   }
 
-                  <Link to="/createlist" className="bg-light list-group-item list-group-item-action">
-                    <div className="d-flex w-100 justify-content-start align-items-center">
-                      <span id="mylists-create-link"> Create New List </span>
-                    </div>
-                  </Link>
+                  <CreateList updateBookLists={this.props.updateBookLists} btnStyle="bg-light list-group-item list-group-item-action" textStyle={"d-flex w-100 justify-content-start align-items-center"}/>
 
                 </Card.Body>
               </Accordion.Collapse>
@@ -148,4 +119,4 @@ export class LeftSideBar extends Component {
   }
 }
 
-export default LeftSideBar
+export default withRouter(LeftSideBar)

@@ -30,8 +30,8 @@ class ListPage extends Component {
     const gBooks = [];
 
     await Promise.all(gbookIDs.map(async (gBookID) => {
-      const gBook = await fetch(`https://www.googleapis.com/books/v1/volumes/${gBookID}`).then(response => response.json())
-      gBooks.push(gBook);
+      const gBook = await fetch(`/api/search?gbookId=${gBookID}`).then(response => response.json())
+      gBooks.push(gBook[0]);
     }))
 
     this.setState({ gBooks, loading: false });
@@ -46,10 +46,6 @@ class ListPage extends Component {
       this.setState({ loading: true, empty: false })
       this.fetchBooks();
     }
-  }
-
-  convertToHttps = (imgURL) => {
-    return imgURL.replace("http", "https");
   }
 
   deleteBook = (bookId) => {
@@ -87,15 +83,15 @@ class ListPage extends Component {
             {
               this.state.gBooks.map(gBook =>
                 <div key={gBook.id + this.props.match.params.id}>
-                  <a className="text-decoration-none text-body" href={gBook.volumeInfo.canonicalVolumeLink}>
+                  <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
                     <div>
-                      <img src={this.convertToHttps(gBook.volumeInfo.imageLinks.thumbnail)} alt={gBook.volumeInfo.title} />
+                      <img src={gBook.thumbnailLink} alt={gBook.title} />
                       <br />
-                      <h2 > {gBook.volumeInfo.title} </h2>
-                      <p > {gBook.volumeInfo.authors.join(', ')} </p>
+                      <h2 > {gBook.title} </h2>
+                      <p > {gBook.authors.join(', ')} </p>
                     </div>
                   </a>
-                  <a className="btn btn-primary" href={gBook.accessInfo.webReaderLink}>Web Reader</a>
+                  <a className="btn btn-primary" href={gBook.webReaderLink}>Web Reader</a>
                   <br />
                   <br />
                   <Button variant="danger" onClick={() => this.deleteBook(gBook.id)}>
