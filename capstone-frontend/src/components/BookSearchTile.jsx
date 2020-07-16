@@ -43,8 +43,6 @@ const BookSearchTile = (props) => {
 }
 
 const BookListAddDropdown = ({ book, bookLists, updateBookLists }) => {
-
-
   if (bookLists.length > 0) {
     return (
       <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">

@@ -119,7 +119,7 @@ class CreateList extends Component {
 
   render() {
     return (
-      <>
+      <div>
         <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
           <div className={this.props.textStyle}>
             <span id="create-list-modal"> Create New List </span>
@@ -143,6 +143,7 @@ class CreateList extends Component {
                 <Form.Label>Name of Booklist</Form.Label>
                 <Form.Control type="text" placeholder="Enter Name" />
               </Form.Group>
+<<<<<<< HEAD
               <Form.Group controlId="form-search-term">
                 <Form.Label>Search for Books</Form.Label>
                 <Form.Control type="text" placeholder="Search for books to add" onChange={(event) => this.handleSearchTermChange(event)} />
@@ -217,6 +218,24 @@ class CreateList extends Component {
           </Modal.Body>
         </Modal>
       </>
+=======
+              <Button variant="primary" type="submit" onClick={() => this.handleSubmit()} disabled={this.state.loading}>
+                Create Booklist
+                    {this.state.loading &&
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="ml-4"
+                  />}
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      </div>
+>>>>>>> origin/BookListStyling
     )
   }
 }

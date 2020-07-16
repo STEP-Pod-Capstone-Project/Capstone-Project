@@ -55,7 +55,7 @@ test('renders book search tile with empty bookList test', () => {
   expect(bookListButton.innerHTML).toEqual("No Lists Found");
 });
 
-test('renders book search tile create list btn', () => {
+test('renders bookSearchTile createList btn', () => {
   render(<App />, container);
 
   const createBookListBtn = document.getElementById("create-list-modal");
