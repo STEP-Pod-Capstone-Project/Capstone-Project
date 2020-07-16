@@ -34,6 +34,8 @@ class App extends Component {
 
   fetchBookLists = async () => {
 
+    // TODO(#74): Add Spinner to LeftSide when fetching BookList from App.jsx
+
     const userID = window.localStorage.getItem("userID");
 
     const bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
