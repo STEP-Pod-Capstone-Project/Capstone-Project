@@ -59,7 +59,8 @@ public class Utility {
 
   public static JsonObject createRequestBodyJson(HttpServletRequest request) throws IOException {
     String jsonObjectString = request.getReader().lines().collect(Collectors.joining());
-    JsonObject jsonObject = JsonParser.parseString(jsonObjectString).getAsJsonObject();
+    JsonElement jsonElement = JsonParser.parseString(jsonObjectString);
+    JsonObject jsonObject = jsonElement.getAsJsonObject();
     return jsonObject;
   }
 
