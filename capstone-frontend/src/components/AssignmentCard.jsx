@@ -45,6 +45,8 @@ class AssignmentCard extends Component {
     return (
       <div className="assignment-border">
         <div> {this.props.assignment.text} </div>
+        <div> Created: {new Date(this.props.assignment.whenCreated)} </div> 
+        <div> Due: {new Date(this.props.assignment.whenDue)} </div> 
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <form id="comment-form" onSubmit={this.onComment}>
           <div>
