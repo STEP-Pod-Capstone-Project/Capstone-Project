@@ -30,7 +30,7 @@ class AssignmentCard extends Component {
 
   fetchComments = () => {
     fetch(`/api/comments?assignmentID=${this.props.assignment.id}`)
-        .then(response => response.json()).then(response => this.setState({comments: response}))
+        .then(response => response.json()).then(commentsJson => this.setState({comments: commentsJson}))
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
