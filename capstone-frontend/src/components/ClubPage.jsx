@@ -15,7 +15,6 @@ class ClubPage extends Component {
       assignments: [],
       owner: {}, 
       members: [], 
-      bookLists: []
     }
   }
 
@@ -57,14 +56,6 @@ class ClubPage extends Component {
             alert(err); 
           });
     }
-
-    await fetch(`/api/booklist?id=${window.localStorage.getItem("userID")}`)
-        .then(response => response.json())
-        .then(bookListsJson => this.setState({bookLists: bookListsJson}))
-        .catch(function(err) {
-            //TODO #61: Centralize error output
-            alert(err); 
-          });
   }
  
   handleClick = () => {
@@ -84,7 +75,7 @@ class ClubPage extends Component {
   }
 
   render() {
-    const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} userBookLists={this.state.bookLists} />;
+    const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />;
     const owner = this.state.owner && <div> Club Owner: {this.state.owner.fullName}, {this.state.owner.email} </div>;
     const members = this.state.members.length && <div> Club Members: {this.state.members.map(m => m.fullName).join(", ")} </div>;
     const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
