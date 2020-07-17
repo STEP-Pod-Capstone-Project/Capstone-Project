@@ -13,10 +13,24 @@ class MyClubs extends Component {
     }
   }
 
-  getMyClubs = () => {
-    fetch("/api/clubs").then(response => response.json()).then(res => {
-      this.setState({clubs: res});
-    });
+  getMyClubs = async () => {
+    let memberClubs = await fetch(`/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
+        .then(response => response.json())
+        .catch(function(err) {
+          //TODO #61: Centralize error output
+          alert(err); 
+        });
+
+    let ownerClubs = await fetch(`/api/clubs?ownerID=${window.localStorage.getItem("userID")}`)
+        .then(response => response.json())
+        .catch(function(err) {
+          //TODO #61: Centralize error output
+          alert(err); 
+        });
+    
+    let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
+
+    this.setState({clubs: allClubs});
   }
 
   componentDidMount() {

@@ -14,9 +14,10 @@ const container = document.createElement("div");
 document.body.appendChild(container);
 
 const getUserBookLists = () => {
-  return [{ id: "1", name: "Best Books" },
-  { id: "2", name: "Fantasy" },
-  { id: "3", name: "Sci-fi" }];
+  return [
+    { id: '1', name: 'Best Books' },
+    { id: '2', name: 'Fantasy' },
+    { id: '3', name: 'Sci-fi' }];
 }
 
 test('renders sidebar test', () => {

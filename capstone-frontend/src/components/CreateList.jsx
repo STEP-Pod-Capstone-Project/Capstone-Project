@@ -16,7 +16,7 @@ class CreateList extends Component {
       searchResults: [],
       displayBooks: false,
       addedBooksIDs: [],
-      addedBooks: []
+      addedBooks: [],
     }
   }
 
@@ -34,7 +34,7 @@ class CreateList extends Component {
     else {
       searchResults = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
         .then(response => response.json())
-        .catch(err => console.log(err));
+        .catch(err => alert(err));
 
       if (typeof searchResults === "undefined") {
         searchResults = [];
@@ -131,7 +131,7 @@ class CreateList extends Component {
           <Modal.Header closeButton>
             <Modal.Title id="create-booklists-modal">
               Create Booklist
-                </Modal.Title>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -162,7 +162,7 @@ class CreateList extends Component {
                   <h3 clasName="my-4 px-4">Search Results</h3>
                   <Row className="px-3 text-center">
                     {this.state.searchResults.map(book =>
-                      <Col md={3} className="px-2 my-0 border" style={{ borderColor: "#ccc" }} key={book.id}>
+                      <Col md={3} className="px-2 my-0 border" key={book.id}>
                         <img className="img-responsive mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
                         <h5 className="mt-4"> {book.title} </h5>
                         <p className="my-1"> {book.authors.join(', ')} </p>
@@ -184,7 +184,7 @@ class CreateList extends Component {
                   <Row className="text-center px-3">
                     {this.state.addedBooks.map(addedBook =>
 
-                      <Col md={3} className="px-2 my-0 border" style={{ borderColor: "#ccc" }} key={addedBook.id}>
+                      <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
                         <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
                         <h5 className="mt-4"> {addedBook.title} </h5>
                         <p className="my-1"> {addedBook.authors.join(', ')} </p>
