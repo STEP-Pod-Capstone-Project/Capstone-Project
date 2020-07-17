@@ -22,12 +22,6 @@ class BookSearchList extends Component {
     this.getData();
   }
 
-  componentWillUnmount() {
-    this.setState = (state,callback) => {
-      return;
-    }
-  }
-
   render() {
     return (
       <div>
