@@ -58,13 +58,22 @@ class SearchBookModal extends Component {
   }
 
   addBookToList = (book) => {
-    this.state.addedBooksIDs.push(book.id);
-    this.state.addedBooks.push(book);
 
-    // Rerender
-    this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
+    if (this.props.type === "club") {
+      this.setState(
+        {
+          addedBooksIDs: [book.id],
+          addedBooks: [book]
+        }
+      )
+    }
+    else {
+      this.state.addedBooksIDs.push(book.id);
+      this.state.addedBooks.push(book);
 
-    console.log(this.state.addedBooksIDs)
+      // Rerender
+      this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
+    }
   }
 
   removeBookFromList = (book) => {
@@ -85,26 +94,34 @@ class SearchBookModal extends Component {
 
     this.setState({ addingBooks: true })
 
-    console.log(JSON.stringify(this.props.updateJson))
-
     console.log("Submitted", this.props.objectId, this.state.addedBooksIDs)
 
     if (this.state.addedBooksIDs.length !== 0) {
 
       this.state.addedBooksIDs.forEach(async bookId => {
 
-        const updateJson = {
-          "id": this.props.objectId,
-          "add_gbookIDs": bookId,
+        var updateJson;
+
+        if (this.props.type === "club") {
+          updateJson = {
+            "id": this.props.objectId,
+            "add_gbookID": bookId,
+          }
+        }
+        else {
+          updateJson = {
+            "id": this.props.objectId,
+            "add_gbookIDs": bookId,
+          }
         }
 
-        console.log("It has been put for BookList", bookId)
+        console.log("It has been put", bookId)
 
         // Update BookList in Firebase
-        // await fetch("/api/booklist", {
-        //   method: "PUT",
-        //   body: JSON.stringify(bookListUpdateJson)
-        // });
+        await fetch(this.props.putURL, {
+          method: "PUT",
+          body: JSON.stringify(updateJson)
+        });
 
       });
 
@@ -118,7 +135,6 @@ class SearchBookModal extends Component {
       console.log("nothing added")
 
       this.setState({ addingBooks: false, showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
-
     }
   }
 
@@ -127,7 +143,7 @@ class SearchBookModal extends Component {
       <div>
         <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
           <div className={this.props.textStyle}>
-            <span id="create-list-modal"> Search for Books to Add </span>
+            <span id="create-list-modal"> Search for Books </span>
           </div>
         </button>
 
@@ -181,27 +197,45 @@ class SearchBookModal extends Component {
               }
 
               {
-                (this.state.addedBooks.length !== 0) &&
+                (this.state.addedBooks.length !== 0) && (
 
-                <div>
-                  <h2 className="text-center my-4 px-4 ">Added Books</h2>
-                  <Row className="text-center px-3">
-                    {this.state.addedBooks.map(addedBook =>
+                  (this.props.type === "club")
+                    ?
+                    <div>
+                      <h2 className="text-center my-4 px-4 ">Added Book</h2>
+                      <Row className="text-center px-3">
+                        {
+                          <Col className="px-2 my-0 border" key={this.state.addedBooks[0].id}>
+                            <img className="img-responsive mt-4 p-0 rounded" src={this.state.addedBooks[0].thumbnailLink} alt={this.state.addedBooks[0].title} />
+                            <h5 className="my-4"> {this.state.addedBooks[0].title} </h5>
+                            <p className="my-1"> {this.state.addedBooks[0].authors.join(', ')} </p>
+                            <Button className="my-4" variant="danger" onClick={() => this.removeBookFromList(this.state.addedBooks[0])}>Remove Book</Button>
+                          </Col>
+                        }
+                      </Row>
+                    </div>
+                    :
+                    <div>
+                      {console.log(this.state.addedBooks, (this.state.addedBooks.length !== 0))}
+                      <h2 className="text-center my-4 px-4 ">Added Books</h2>
+                      <Row className="text-center px-3">
+                        {this.state.addedBooks.map(addedBook =>
 
-                      <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
-                        <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
-                        <h5 className="mt-4"> {addedBook.title} </h5>
-                        <p className="my-1"> {addedBook.authors.join(', ')} </p>
-                        <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>
-                      </Col>
-                    )}
-                  </Row>
-                </div>
+                          <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
+                            <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                            <h5 className="mt-4"> {addedBook.title} </h5>
+                            <p className="my-1"> {addedBook.authors.join(', ')} </p>
+                            <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>
+                          </Col>
+                        )}
+                      </Row>
+                    </div>
+                )
               }
 
               <div className="text-center">
                 <Button className="text-center" variant="primary" onClick={() => this.handleSubmit()} disabled={this.state.addingBooks}>
-                  Add Books
+                  Add
                     {this.state.addingBooks &&
                     <Spinner
                       as="span"

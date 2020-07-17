@@ -84,31 +84,39 @@ class ListPage extends Component {
         ?
         (
           <div>
-            <h2 className="mt-3">{this.state.bookList.name}</h2>
-            <SearchBookModal
-              objectId={this.props.match.params.id}
-              update={this.fetchBooks}
-              btnStyle="btn btn-primary" />
-            <hr className="light-gray-border" />
+            <Row>
+              <Col>
+                <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
+              </Col>
+              <Col className="text-right">
+                <SearchBookModal
+                  objectId={this.props.match.params.id}
+                  update={this.fetchBooks}
+                  putURL="/api/booklist"
+                  type="booklist"
+                  btnStyle="btn btn-primary mt-4 mr-2" />
+              </Col>
+            </Row>
+            <hr className="light-gray-border mx-2 my-2" />
             <h3 className="text-center mt-4">Booklist has No Books</h3>
           </div>
         )
         : (
           <div>
-            <h2 className="mt-3">{this.state.bookList.name}</h2>
-            <SearchBookModal
-              objectId={this.props.match.params.id}
-              update={this.fetchBooks}
-              putURL="/api/booklist"
-              updateJson={
-                {
-                  "id": "",
-                  "add_gbookIDs": "",
-                }
-
-              }
-              btnStyle="btn btn-primary" />
-            <hr className="light-gray-border" />
+            <Row>
+              <Col>
+                <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
+              </Col>
+              <Col className="text-right">
+                <SearchBookModal
+                  objectId={this.props.match.params.id}
+                  update={this.fetchBooks}
+                  putURL="/api/booklist"
+                  type="booklist"
+                  btnStyle="btn btn-primary mt-4 mr-2" />
+              </Col>
+            </Row>
+            <hr className="light-gray-border mx-2 my-2" />
 
             <div>
               {
