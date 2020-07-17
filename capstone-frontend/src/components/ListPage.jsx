@@ -29,8 +29,6 @@ class ListPage extends Component {
       return;
     }
 
-    console.log(bookList[0])
-
     const gBooks = [];
 
     await Promise.all(gbookIDs.map(async (gBookID) => {
@@ -98,9 +96,6 @@ class ListPage extends Component {
               {
                 this.state.gBooks.map(gBook =>
                   <Row className="text-center border m-5 bg-light" key={gBook.id + this.props.match.params.id} style={{ border: "1px solid #ccc" }}>
-
-                    {console.log(gBook)}
-
                     <Col md={3} className="my-4 p-0 ">
                       <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
                         <img className="img-responsive" src={gBook.thumbnailLink} alt={gBook.title} />
