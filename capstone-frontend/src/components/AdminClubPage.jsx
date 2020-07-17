@@ -43,7 +43,7 @@ class AdminClubPage extends Component {
     let data = {
       "clubID": this.props.club.id,
       "text": e.target[0].value,
-      "whenCreated": new Date()
+      "whenCreated": (new Date()).toUTCString()
     };
     console.log(data);
     fetch(`/api/assignments`, {method: "post", body: JSON.stringify(data)})
@@ -73,15 +73,17 @@ class AdminClubPage extends Component {
   render() {
     return (
       <div className="page-container">
+
         <div>Post Assignment</div>
         <form onSubmit={this.handleAssignmentPost} id="assignment-post-form">
           <div>
             <label htmlFor="text"> Assignment Text </label> 
           </div>
           <div>
-            <textarea rows="5" cols="75" type="text" id="text" name="text" />
+            <textarea rows="3" cols="75" type="text" id="text" name="text" />
           </div>
         </form> 
+
         <div>Update Club</div> 
         <form onSubmit={this.handleUpdate} id="update-club-form">
           <div> 
@@ -94,30 +96,14 @@ class AdminClubPage extends Component {
             <label htmlFor="description"> Club Description </label>
           </div>
           <div>
-            <textarea rows="5" cols="75" type="text" id="description" name="description" />
-          </div>
-          <div>
-            <label htmlFor="gbookID"> gbookID </label>
-          </div>
-          <div>
-            <input type="text" id="gbookID" name="gbookID" />
-          </div>
-          <div>
-            <label htmlFor="add_memberIDs"> add_memberID </label>
-          </div>
-          <div>
-            <input type="text" id="add_memberIDs" name="add_memberIDs" />
-          </div>
-          <div>
-            <label htmlFor="remove_memberIDs"> remove_memberID </label>
-          </div>
-          <div>
-            <input type="text" id="remove_memberIDs" name="remove_memberIDs" />
+            <textarea rows="3" cols="75" type="text" id="description" name="description" />
           </div>
           <div>
             <input id="update-club" type="submit" value="Update your Club" />
           </div>
         </form>
+
+
         <button onClick={this.handleDelete}> Delete </button>
       </div>
     );
