@@ -13,7 +13,7 @@ class BookPage extends Component {
   }
 
   fetchBookData = () => {
-    fetch(`/api/search?gbookId=${this.props.match.params.id}`)
+    fetch(`/api/search?gbookId=${this.props.bookId}`)
       .then(response => response.json())
       .then(bookJson => this.setState({ book: bookJson[0] }))
       .catch(function (err) {
@@ -27,7 +27,7 @@ class BookPage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.id !== prevProps.match.params.id) {
+    if (this.props.bookId !== prevProps.bookId) {
       this.fetchBookData();
     }
   }
@@ -52,8 +52,8 @@ class BookPage extends Component {
                       </a>
                     </Row>
                     <Row>
-                      <BookListAddDropdown bookLists={props.bookLists}
-                        updateBookLists={props.updateBookLists} book={book} />
+                      <BookListAddDropdown bookLists={this.props.bookLists}
+                        updateBookLists={this.props.updateBookLists} book={book} />
                     </Row>
                     <Row>
                       <a className="btn btn-primary btn-margin center-horizontal"

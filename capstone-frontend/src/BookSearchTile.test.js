@@ -39,7 +39,7 @@ test('renders book search tile test', () => {
   const bookAuthor = document.getElementsByClassName("book-authors")[0];
   expect(bookAuthor).toBeInTheDocument();
 
-  const bookListButton = document.getElementById("dropdown-list-add");
+  const bookListButton = document.getElementById("button-list-add");
   expect(bookListButton).toBeInTheDocument();
   expect(bookListButton.innerHTML).toEqual("Add to List");
   
@@ -50,9 +50,8 @@ test('renders book search tile with empty bookList test', () => {
   render(<BookSearchTile book={book}
     bookLists={emptyArray} />, container);
 
-  const bookListButton = document.getElementById("dropdown-list-add");
+  const bookListButton = document.getElementById("button-list-add");
   expect(bookListButton).toBeInTheDocument();
-  expect(bookListButton.innerHTML).toEqual("No Lists Found");
 });
 
 test('renders bookSearchTile createList btn', () => {
