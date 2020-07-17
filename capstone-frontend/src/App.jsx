@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Route, 
+  Route,
   BrowserRouter as Router
 } from 'react-router-dom';
 
@@ -8,9 +8,9 @@ import './App.css';
 import Home from './components/Home';
 import Browse from './components/Browse';
 import MyBooks from './components/MyBooks';
-import CreateList from './components/CreateList';
 import MyClubs from './components/MyClubs';
 import BookPage from './components/BookPage';
+import ListPage from './components/ListPage'
 import ClubPage from './components/ClubPage';
 import AdminClubPage from './components/AdminClubPage';
 import CreateClub from './components/CreateClub';
@@ -22,38 +22,59 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchQuery: ""
+      searchQuery: "",
+      bookLists: [],
     };
   }
 
   setSearchQuery = (value) => {
     if (value !== this.state.searchQuery) {
-      this.setState({ searchQuery:value });
+      this.setState({ searchQuery: value });
     }
   }
+
+  fetchBookLists = async () => {
+
+    // TODO(#74): Add Spinner to LeftSide when fetching BookList from App.jsx
+
+    const userID = window.localStorage.getItem("userID");
+
+    const bookLists = await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
+      method: "GET",
+    }).then(resp => resp.json()).catch(err => console.log(err));
+
+    this.setState({ bookLists });
+  }
+
+  componentDidMount() {
+    this.fetchBookLists();
+  }
+
 
   render() {
     return (
       <Router>
         <Navbar setSearchQuery={this.setSearchQuery} />
         <div className="row">
-          <LeftSideBar />
+          <LeftSideBar bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
           <div className="col-12 col-md-8" id="body-row">
             <Route exact path='/' component={Home} />
-            <Route path='/browse/:query' component={Browse} />
+            <Route path='/browse/:query' render={(props) => (
+              <Browse bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} searchQuery={props.match.params.query} />
+            )} />
             <Route path='/mybooks' component={MyBooks} />
-            <Route path='/createlist' component={CreateList} />
+            <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' component={BookPage} />
-            <Route path='/adminclubpage/:id' component={AdminClubPage} />
-            <Route path='/clubpage/:id' component={(props) => (
-                <ClubPage id={props.match.params.id} />
+            <Route path='/clubpage/:id' render={(props) => (
+                <ClubPage id={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
             )} />
+            <Route path='/adminclubpage/:id' component={AdminClubPage} />
             <Route path='/createclub' component={CreateClub} />
           </div>
           <RightSideBar />
         </div>
-      </Router> 
+      </Router>
     );
   }
 }

@@ -63,3 +63,31 @@ form div {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
+
+.admin-button {
+  margin-top: 20px;
+}
+
+#delete-club {
+  margin-top: 50px;
+}
+
+Form {
+  margin-top: 20px;
+}
+
+#remove-member {
+  margin-top: 5px;
+}
+.user-card {
+  border: 1px solid grey;
+  border-radius: 15px;
+  box-shadow: 3px 3px 3px #888888;
+  padding: 15px 10px;
+  margin: 10px;
+}
+
+#user-profile {
+  border-radius: 50%;
+}
+

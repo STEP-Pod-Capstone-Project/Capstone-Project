@@ -59,7 +59,9 @@ public class Utility {
 
   public static JsonObject createRequestBodyJson(HttpServletRequest request) throws IOException {
     String jsonObjectString = request.getReader().lines().collect(Collectors.joining());
-    JsonObject jsonObject = JsonParser.parseString(jsonObjectString).getAsJsonObject();
+    JsonElement jsonElement = JsonParser.parseString(jsonObjectString);
+    JsonObject jsonObject = jsonElement.getAsJsonObject();
+    
     return jsonObject;
   }
 
@@ -242,7 +244,11 @@ public class Utility {
    */
   public static <T extends BaseEntity> List<T> get(CollectionReference collectionReference, HttpServletRequest request,
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
-    List<T> retrievedObjects = new ArrayList<>();
+    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+response.setHeader("Access-Control-Allow-Credentials", "true");
+response.setHeader("Access-Control-Allow-Origin", "https://3000-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io");
+response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
+        List<T> retrievedObjects = new ArrayList<>();
     ApiFuture<QuerySnapshot> asyncQuery;
     if (request.getParameter("id") != null) {
       if (request.getParameterMap().size() > 1) {
@@ -386,7 +392,7 @@ public class Utility {
       return false;
     } 
     list.addAll(jsonObject.keySet().stream()
-                    .filter(key -> jsonObject.get(key).getAsString().length() > 0)
+                    .filter(key -> jsonObject.get(key).toString().length() > 0)
                     .collect(Collectors.toList()));
     list.retainAll(requiredFields);
     // Every requiredField must be present as a key in the jsonObject. If not, this check will fail. 
@@ -408,7 +414,11 @@ public class Utility {
    */
   public static <T extends BaseEntity> T post(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass, List<String> requiredFields) throws IOException {
-    Map<String, Object> constructorFields = new HashMap<>();
+   response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+response.setHeader("Access-Control-Allow-Credentials", "true");
+response.setHeader("Access-Control-Allow-Origin", "https://3000-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io");
+response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
+        Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     Class superClass = genericClass.getMyType().getSuperclass();
     List<Field> fields = new ArrayList<>(Arrays.asList(genericClass.getMyType().getDeclaredFields()));
@@ -447,7 +457,7 @@ public class Utility {
         }
       }
       else if (type.equals("java.util.List") || type.equals("java.util.ArrayList")) {
-        if (jsonObject.has(fName) && jsonObject.get(fName).getAsString().length() != 0) {
+        if (jsonObject.has(fName) && jsonObject.get(fName).toString().length() != 0) {
           // First check to see if it's an "actual array"
           try {
             JsonElement value = jsonObject.get(fName);

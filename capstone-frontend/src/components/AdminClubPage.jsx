@@ -1,9 +1,26 @@
 import React, { Component } from 'react';
+import { Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import '../styles/Groups.css';
 
 class AdminClubPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      club: {}
+    }
+  }
+
+  fetchClub = () => {
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`)
+      .then(response => response.json()).then(clubJson => this.setState({club: clubJson[0]}))
+      .catch(function(err) {
+          //TODO #61: Centralize error output
+          alert(err);
+      });
+  }
+
   handleUpdate = (e) => {
     const history = this.props.history;
     e.preventDefault();
@@ -15,15 +32,13 @@ class AdminClubPage extends Component {
         data[formElements[i].name] = formElements[i].value;
       }
     }
-    data.id = this.props.club.id;
-    if (window.localStorage.getItem("userID") !== this.props.club.ownerID) {
+    data.id = this.state.club.id;
+    if (window.localStorage.getItem("userID") !== this.state.club.ownerID) {
       alert("Update failed. You do not own this club.");
       return;
     } 
 
-    console.log(data);
-
-    fetch("/api/clubs", {method: "put", body: JSON.stringify(data)})
+    fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs", {method: "put", body: JSON.stringify(data)})
         .then(function() {
           history.push(`/clubpage/${data.id}`);
         })
@@ -33,29 +48,8 @@ class AdminClubPage extends Component {
         });  
   }
 
-  handleAssignmentPost = (e) => {
-    const history = this.props.history;
-    e.preventDefault();
-    if (window.localStorage.getItem("userID") !== this.props.club.ownerID) {
-      alert("Assignment creation failed. You do not own this club.");
-      return;
-    }
-    let data = {
-      "clubID": this.props.club.id,
-      "text": e.target[0].value,
-      "whenCreated": (new Date()).toUTCString()
-    };
-    console.log(data);
-    fetch(`/api/assignments`, {method: "post", body: JSON.stringify(data)})
-        .then(history.push(`/clubpage/${data.clubID}`))
-        .catch(function(err) {
-          //TODO #61: Centralize error output
-          alert(err); 
-        });
-  }
-
   handleDelete = () => {
-    if (window.localStorage.getItem("userID") !== this.props.club.ownerID) {
+    if (window.localStorage.getItem("userID") !== this.state.club.ownerID) {
       alert("Delete failed. You do not own this club.");
       return;
     } 
@@ -70,41 +64,27 @@ class AdminClubPage extends Component {
         });
   }
 
+  componentDidMount() {
+    this.fetchClub();
+  }
+
   render() {
     return (
-      <div className="page-container">
-
-        <div>Post Assignment</div>
-        <form onSubmit={this.handleAssignmentPost} id="assignment-post-form">
-          <div>
-            <label htmlFor="text"> Assignment Text </label> 
-          </div>
-          <div>
-            <textarea rows="3" cols="75" type="text" id="text" name="text" />
-          </div>
-        </form> 
-
-        <div>Update Club</div> 
-        <form onSubmit={this.handleUpdate} id="update-club-form">
-          <div> 
-            <label htmlFor="name"> Club Name </label> 
-          </div>
-          <div>
-            <input type="text" id="name" name="name" />
-          </div>
-          <div>
-            <label htmlFor="description"> Club Description </label>
-          </div>
-          <div>
-            <textarea rows="3" cols="75" type="text" id="description" name="description" />
-          </div>
-          <div>
-            <input id="update-club" type="submit" value="Update your Club" />
-          </div>
-        </form>
-
-
-        <button onClick={this.handleDelete}> Delete </button>
+      <div className="container text-center">
+        <Link to={`/clubpage/${this.props.match.params.id}`}>
+           <Button className="admin-button" variant="secondary"> Return to Club Page </Button>
+        </Link>
+        <div className="title"> {this.state.club.name} </div>
+        <Form onSubmit={this.handleUpdate} id="update-club-form">
+          <Form.Group controlId="formUpdateClub">
+            <Form.Label> Club Name </Form.Label> 
+            <Form.Control type="text" placeholder="Enter new club name here..." />
+            <Form.Label> Club Description </Form.Label> 
+            <Form.Control as="textarea" rows="3" placeholder="Enter new club description here..." />
+          </Form.Group>
+          <Button variant="primary" type="submit"> Submit </Button>
+        </Form>
+        <Button id="delete-club" variant="danger" onClick={this.handleDelete}>Delete Club</Button>
       </div>
     );
   }

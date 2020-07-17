@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 
 import CommentCard from './CommentCard';
 
@@ -18,9 +19,9 @@ class AssignmentCard extends Component {
       "assignmentID": this.props.assignment.id,
       "text": e.target[0].value,
       "userID": window.localStorage.getItem("userID"),
-      "whenCreated": new Date()
+      // "whenCreated": (new Date()).toUTCString()
     };
-    fetch("/api/comments", {method: "post", body: JSON.stringify(data)})
+    fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/comments", {method: "post", body: JSON.stringify(data)})
         .then(this.fetchComments())
         .catch(function(err) {
           //TODO #61: Centralize error output
@@ -29,8 +30,8 @@ class AssignmentCard extends Component {
   }
 
   fetchComments = () => {
-    fetch(`/api/comments?assignmentID=${this.props.assignment.id}`)
-        .then(response => response.json()).then(response => this.setState({comments: response}))
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/comments?assignmentID=${this.props.assignment.id}`)
+        .then(response => response.json()).then(commentsJson => this.setState({comments: commentsJson}))
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
@@ -45,18 +46,19 @@ class AssignmentCard extends Component {
     return (
       <div className="assignment-border">
         <div> {this.props.assignment.text} </div>
+        {/* <div> Created: {new Date(this.props.assignment.whenCreated)} </div> 
+        <div> Due: {new Date(this.props.assignment.whenDue)} </div>  */}
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
-        <form id="comment-form" onSubmit={this.onComment}>
-          <div>
-            <label htmlFor="text"> Comment: </label>
-          </div>
-          <div>
-            <textarea rows="3" cols="75" type="text" id="text" name="text" />
-          </div>
-          <div>
-            <input id="submit-comment" type="submit" value="Post" />
-          </div>
-        </form>
+        <Form id="comment-form" onSubmit={this.onComment}>
+          <Form.Group as={Row} controlId="formComment">
+            <Col xs={{"offset": 1, "span": 9}}>
+              <Form.Control type="text" placeholder="Enter a comment..." />
+            </Col>
+            <Col xs={1}>
+              <Button variant="primary" type="Submit"> Post </Button> 
+            </Col>
+          </Form.Group>
+        </Form>
       </div>
     );
   }
