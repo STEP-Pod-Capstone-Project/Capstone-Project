@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Spinner, Row, Col } from 'react-bootstrap'
 import StarRatings from 'react-star-ratings'
+import '../styles/ListPage.css'
 
 class ListPage extends Component {
 
@@ -83,19 +84,19 @@ class ListPage extends Component {
         (
           <div>
             <h2 className="mt-3">{this.state.bookList.name}</h2>
-            <hr style={{ border: "1px solid #ccc" }} />
+            <hr className="light-gray-border" />
             <h3 className="text-center mt-4">Booklist has No Books</h3>
           </div>
         )
         : (
           <div>
             <h2 className="mt-3">{this.state.bookList.name}</h2>
-            <hr style={{ border: "1px solid #ccc" }} />
+            <hr className="light-gray-border" />
 
             <div>
               {
                 this.state.gBooks.map(gBook =>
-                  <Row className="text-center border m-5 bg-light" key={gBook.id + this.props.match.params.id} style={{ border: "1px solid #ccc" }}>
+                  <Row className="text-center border m-5 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
                     <Col md={3} className="my-4 p-0 ">
                       {/* TODO(#79): Redirect user to BookPage instead of playstore */}
                       <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
@@ -114,13 +115,12 @@ class ListPage extends Component {
                     </Col>
 
                     <Col md={3} className="my-4 p-0">
-                      <a className="btn btn-primary mt-5" href={gBook.webReaderLink}>Web Reader</a>
+                      <a className="btn btn-primary mt-4 width-75" href={gBook.webReaderLink}>Web Reader</a>
                       <br />
-                      <Button className="my-4" variant="danger" onClick={() => this.deleteBook(gBook.id)}>
+                      <Button className="my-4 width-75" variant="danger" onClick={() => this.deleteBook(gBook.id)}>
                         Remove Book from List
                       </Button>
                     </Col>
-
                   </Row>)
               }
             </div>
