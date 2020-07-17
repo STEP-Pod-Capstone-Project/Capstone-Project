@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
-import { Button, Form, Spinner, Modal } from 'react-bootstrap'
+import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
 
 class CreateList extends Component {
 
@@ -8,21 +8,92 @@ class CreateList extends Component {
     super(props)
 
     this.state = {
-      loading: false,
+      creatingBookList: false, // For Spinner
+      fetchingBooks: false, // For Spinner
       showModal: false,
+      typingTimeout: 0,
+      searchTerm: "",
+      searchResults: [],
+      displayBooks: false,
+      addedBooksIDs: [],
+      addedBooks: [],
     }
+  }
+
+  getBooks = async (searchTerm) => {
+
+    this.setState({ fetchingBooks: true })
+
+    let searchResults;
+
+    if (searchTerm === "") {
+      searchResults = [];
+      
+      this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
+    }
+    else {
+      searchResults = await fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
+        .then(response => response.json())
+        .catch(err => alert(err));
+
+      if (typeof searchResults === "undefined") {
+        searchResults = [];
+      }
+
+      this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
+    }
+  }
+
+  handleSearchTermChange = (event) => {
+
+    if (this.state.typingTimeout) {
+      clearTimeout(this.state.typingTimeout);
+    }
+
+    this.setState({
+      searchTerm: event.target.value,
+      typingTimeout: setTimeout(async () => {
+        await this.getBooks(this.state.searchTerm)
+      }, 500)
+    })
+  }
+
+  addBookToList = (book) => {
+    this.state.addedBooksIDs.push(book.id);
+    this.state.addedBooks.push(book);
+
+    // Rerender
+    this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
+  }
+
+  removeBookFromList = (book) => {
+
+    const indexId = this.state.addedBooksIDs.indexOf(book.id);
+    this.state.addedBooksIDs.splice(indexId, 1);
+
+    const indexBook = this.state.addedBooks.indexOf(book);
+    this.state.addedBooks.splice(indexBook, 1)
+
+    // Rerender
+    this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
   }
 
   handleSubmit = async () => {
 
-    this.setState({ loading: true })
-
-    const name = document.getElementById("createBookListForm").value
+    let name = document.getElementById("form-booklist-name").value
     const userID = window.localStorage.getItem("userID")
+
+    if (name === "") {
+      alert("No name provided. Using default: 'To Read'")
+      name = "To Read"
+    }
+
+    this.setState({ creatingBookList: true })
 
     const newBooklist = {
       "userID": userID,
-      "name": name
+      "name": name,
+      "gbookIDs": this.state.addedBooksIDs ? this.state.addedBooksIDs : []
     }
 
     // Store BookList in Firebase
@@ -35,7 +106,7 @@ class CreateList extends Component {
       method: "GET",
     }).then(resp => resp.json());
 
-    this.setState({ loading: false, showModal: false, renderModal: false });
+    this.setState({ creatingBookList: false, showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
 
     this.props.history.push(`/listpage/${createdBookList[0].id}`);
 
@@ -54,7 +125,7 @@ class CreateList extends Component {
         <Modal
           size="lg"
           show={this.state.showModal}
-          onHide={() => this.setState({ showModal: false })}
+          onHide={() => this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })}
           aria-labelledby="create-booklists-modal">
 
           <Modal.Header closeButton>
@@ -64,22 +135,80 @@ class CreateList extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group controlId="createBookListForm">
+              <Form.Group controlId="form-booklist-name">
                 <Form.Label>Name of Booklist</Form.Label>
                 <Form.Control type="text" placeholder="Enter Name" />
               </Form.Group>
-              <Button variant="primary" type="submit" onClick={() => this.handleSubmit()} disabled={this.state.loading}>
-                Create Booklist
-                    {this.state.loading &&
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                    className="ml-4"
-                  />}
-              </Button>
+              <Form.Group controlId="form-search-term">
+                <Form.Label>Search for Books</Form.Label>
+                <Form.Control type="text" placeholder="Search for books to add" onChange={(event) => this.handleSearchTermChange(event)} />
+                {this.state.fetchingBooks &&
+                  <div className="text-center">
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="lg"
+                      role="status"
+                      aria-hidden="true"
+                      className="my-5"
+                    />
+                  </div>}
+              </Form.Group>
+
+              {
+                this.state.displayBooks &&
+
+                <div>
+                  <h3 clasName="my-4 px-4">Search Results</h3>
+                  <Row className="px-3 text-center">
+                    {this.state.searchResults.map(book =>
+                      <Col md={3} className="px-2 my-0 border" key={book.id}>
+                        <img className="img-responsive mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                        <h5 className="mt-4"> {book.title} </h5>
+                        <p className="my-1"> {book.authors.join(', ')} </p>
+                        {this.state.addedBooksIDs.includes(book.id) ?
+                          <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(book)}>Remove Book</Button>
+                          :
+                          <Button className="my-5" onClick={() => this.addBookToList(book)}>Add to Booklist</Button>}
+                      </Col>
+                    )}
+                  </Row>
+                </div>
+              }
+
+              {
+                (this.state.addedBooks.length !== 0) &&
+
+                <div>
+                  <h2 className="text-center my-4 px-4 ">Added Books</h2>
+                  <Row className="text-center px-3">
+                    {this.state.addedBooks.map(addedBook =>
+
+                      <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
+                        <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                        <h5 className="mt-4"> {addedBook.title} </h5>
+                        <p className="my-1"> {addedBook.authors.join(', ')} </p>
+                        <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>
+                      </Col>
+                    )}
+                  </Row>
+                </div>
+              }
+
+              <div className="text-center">
+                <Button className="text-center" variant="primary" type="submit" onClick={() => this.handleSubmit()} disabled={this.state.creatingBookList}>
+                  Create Booklist
+                    {this.state.creatingBookList &&
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="ml-4"
+                    />}
+                </Button>
+              </div>
             </Form>
           </Modal.Body>
         </Modal>
