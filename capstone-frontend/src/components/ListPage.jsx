@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Spinner, Row, Col } from 'react-bootstrap'
 import StarRatings from 'react-star-ratings'
+import SearchBookModal from './SearchBookModal'
 import '../styles/ListPage.css'
 
 class ListPage extends Component {
@@ -19,7 +20,7 @@ class ListPage extends Component {
 
   fetchBooks = async () => {
 
-    const bookList = await fetch(`/api/booklist?id=${this.props.match.params.id}`, {
+    const bookList = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?id=${this.props.match.params.id}`, {
       method: "GET",
     }).then(resp => resp.json());
 
@@ -33,7 +34,7 @@ class ListPage extends Component {
     const gBooks = [];
 
     await Promise.all(gbookIDs.map(async (gBookID) => {
-      const gBook = await fetch(`/api/search?gbookId=${gBookID}`).then(response => response.json())
+      const gBook = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${gBookID}`).then(response => response.json())
       gBooks.push(gBook[0]);
     }))
 
@@ -84,6 +85,10 @@ class ListPage extends Component {
         (
           <div>
             <h2 className="mt-3">{this.state.bookList.name}</h2>
+            <SearchBookModal
+              objectId={this.props.match.params.id}
+              update={this.fetchBooks}
+              btnStyle="btn btn-primary" />
             <hr className="light-gray-border" />
             <h3 className="text-center mt-4">Booklist has No Books</h3>
           </div>
@@ -91,6 +96,18 @@ class ListPage extends Component {
         : (
           <div>
             <h2 className="mt-3">{this.state.bookList.name}</h2>
+            <SearchBookModal
+              objectId={this.props.match.params.id}
+              update={this.fetchBooks}
+              putURL="/api/booklist"
+              updateJson={
+                {
+                  "id": "",
+                  "add_gbookIDs": "",
+                }
+
+              }
+              btnStyle="btn btn-primary" />
             <hr className="light-gray-border" />
 
             <div>
@@ -111,7 +128,7 @@ class ListPage extends Component {
                         starDimension="40px"
                         starSpacing="10px"
                         starRatedColor="gold" />
-                        <p className="my-3" > {gBook.authors.join(', ')} </p>
+                      <p className="my-3" > {gBook.authors.join(', ')} </p>
                     </Col>
 
                     <Col md={3} className="my-4 p-0">

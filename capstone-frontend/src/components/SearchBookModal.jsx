@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom'
 import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
 
-class CreateList extends Component {
+class SearchBookModal extends Component {
 
   constructor(props) {
     super(props)
 
     this.state = {
-      creatingBookList: false, // For Spinner
+      addingBooks: false, // For Spinner
       fetchingBooks: false, // For Spinner
       showModal: false,
       typingTimeout: 0,
@@ -28,7 +27,7 @@ class CreateList extends Component {
 
     if (searchTerm === "") {
       searchResults = [];
-      
+
       this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
     else {
@@ -64,6 +63,8 @@ class CreateList extends Component {
 
     // Rerender
     this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
+
+    console.log(this.state.addedBooksIDs)
   }
 
   removeBookFromList = (book) => {
@@ -76,41 +77,49 @@ class CreateList extends Component {
 
     // Rerender
     this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
+
+    console.log(this.state.addedBooksIDs)
   }
 
   handleSubmit = async () => {
 
-    let name = document.getElementById("form-booklist-name").value
-    const userID = window.localStorage.getItem("userID")
+    this.setState({ addingBooks: true })
 
-    if (name === "") {
-      alert("No name provided. Using default: 'To Read'")
-      name = "To Read"
+    console.log(JSON.stringify(this.props.updateJson))
+
+    console.log("Submitted", this.props.objectId, this.state.addedBooksIDs)
+
+    if (this.state.addedBooksIDs.length !== 0) {
+
+      this.state.addedBooksIDs.forEach(async bookId => {
+
+        const updateJson = {
+          "id": this.props.objectId,
+          "add_gbookIDs": bookId,
+        }
+
+        console.log("It has been put for BookList", bookId)
+
+        // Update BookList in Firebase
+        // await fetch("/api/booklist", {
+        //   method: "PUT",
+        //   body: JSON.stringify(bookListUpdateJson)
+        // });
+
+      });
+
+      this.setState({ addingBooks: false, showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
+
+      this.props.update();
     }
 
-    this.setState({ creatingBookList: true })
+    else {
 
-    const newBooklist = {
-      "userID": userID,
-      "name": name,
-      "gbookIDs": this.state.addedBooksIDs ? this.state.addedBooksIDs : []
+      console.log("nothing added")
+
+      this.setState({ addingBooks: false, showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
+
     }
-
-    // Store BookList in Firebase
-    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
-      method: "POST",
-      body: JSON.stringify(newBooklist)
-    });
-
-    const createdBookList = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}&name=${name}`, {
-      method: "GET",
-    }).then(resp => resp.json());
-
-    this.setState({ creatingBookList: false, showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
-
-    this.props.history.push(`/listpage/${createdBookList[0].id}`);
-
-    this.props.updateBookLists();
   }
 
   render() {
@@ -118,7 +127,7 @@ class CreateList extends Component {
       <div>
         <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
           <div className={this.props.textStyle}>
-            <span id="create-list-modal"> Create New List </span>
+            <span id="create-list-modal"> Search for Books to Add </span>
           </div>
         </button>
 
@@ -130,18 +139,13 @@ class CreateList extends Component {
 
           <Modal.Header closeButton>
             <Modal.Title id="create-booklists-modal">
-              Create Booklist
+              Search for Books
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group controlId="form-booklist-name">
-                <Form.Label>Name of Booklist</Form.Label>
-                <Form.Control type="text" placeholder="Enter Name" />
-              </Form.Group>
               <Form.Group controlId="form-search-term">
-                <Form.Label>Search for Books</Form.Label>
-                <Form.Control type="text" placeholder="Search for books to add" onChange={(event) => this.handleSearchTermChange(event)} />
+                <Form.Control type="text" placeholder="Search" onChange={(event) => this.handleSearchTermChange(event)} />
                 {this.state.fetchingBooks &&
                   <div className="text-center">
                     <Spinner
@@ -196,9 +200,9 @@ class CreateList extends Component {
               }
 
               <div className="text-center">
-                <Button className="text-center" variant="primary" type="submit" onClick={() => this.handleSubmit()} disabled={this.state.creatingBookList}>
-                  Create Booklist
-                    {this.state.creatingBookList &&
+                <Button className="text-center" variant="primary" onClick={() => this.handleSubmit()} disabled={this.state.addingBooks}>
+                  Add Books
+                    {this.state.addingBooks &&
                     <Spinner
                       as="span"
                       animation="border"
@@ -217,4 +221,4 @@ class CreateList extends Component {
   }
 }
 
-export default withRouter(CreateList);
+export default SearchBookModal;
