@@ -18,6 +18,10 @@ public class Comment extends BaseEntity {
     this("", "", "", "");
   }
 
+  public String getAssignmentID() {
+    return assignmentID;
+  }
+
   public String getText() {
     return text;
   }

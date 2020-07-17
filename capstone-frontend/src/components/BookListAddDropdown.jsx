@@ -1,5 +1,6 @@
 import React from 'react';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
+import CreateList from './CreateList'
 import '../styles/Book.css';
 
 const addBookToBookList = async (bookId, bookListJson) => {
@@ -16,12 +17,12 @@ const addBookToBookList = async (bookId, bookListJson) => {
   });
 }
 
-const BookListAddDropdown = ({ book, userBookLists }) => {
-  if (userBookLists.length > 0) {
+const BookListAddDropdown = ({ book, bookLists, updateBookLists }) => {
+  if (bookLists.length > 0) {
     return (
-      <DropdownButton id="dropdown-list-add" className="btn-margin center-horizontal" title="Add to List">
+      <DropdownButton id="dropdown-list-add" className="dropdown-add" title="Add to List">
         {
-          userBookLists.map(bookList =>
+          bookLists.map(bookList =>
             <Dropdown.Item key={bookList.id}
               onSelect={() => addBookToBookList(book.id, bookList.id)}>
               {bookList.name}
@@ -32,10 +33,10 @@ const BookListAddDropdown = ({ book, userBookLists }) => {
     );
   } else {
     return (
-      <DropdownButton id="dropdown-list-add" className="btn-margin center-horizontal" title="No Lists Found" variant="warning">
+      <DropdownButton id="dropdown-list-add" className="dropdown-add" title="No Lists Found" variant="warning">
         {
-          <Dropdown.Item href="/createlist">
-            <span> Create New List </span>
+          <Dropdown.Item id="create-booklist-search">
+            <CreateList updateBookLists={updateBookLists} btnStyle="btn p-0 border-0" />
           </Dropdown.Item>
         }
       </DropdownButton>

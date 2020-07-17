@@ -52,7 +52,8 @@ class BookPage extends Component {
                       </a>
                     </Row>
                     <Row>
-                      <BookListAddDropdown book={book} userBookLists={[]} />
+                      <BookListAddDropdown bookLists={props.bookLists}
+                        updateBookLists={props.updateBookLists} book={book} />
                     </Row>
                     <Row>
                       <a className="btn btn-primary btn-margin center-horizontal"

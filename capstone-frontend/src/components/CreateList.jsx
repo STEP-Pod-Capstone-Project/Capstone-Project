@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Form, Spinner } from 'react-bootstrap'
+import { withRouter } from 'react-router-dom'
+import { Button, Form, Spinner, Modal } from 'react-bootstrap'
 
 class CreateList extends Component {
 
@@ -7,17 +8,16 @@ class CreateList extends Component {
     super(props)
 
     this.state = {
-      loading: false
+      loading: false,
+      showModal: false,
     }
   }
 
-  handleSubmit = async (event) => {
+  handleSubmit = async () => {
 
     this.setState({ loading: true })
 
-    event.preventDefault();
-
-    const name = event.target[0].value
+    const name = document.getElementById("createBookListForm").value
     const userID = window.localStorage.getItem("userID")
 
     const newBooklist = {
@@ -35,37 +35,57 @@ class CreateList extends Component {
       method: "GET",
     }).then(resp => resp.json());
 
-    document.location.href = `/listpage/${createdBookList[0].id}`;
+    this.setState({ loading: false, showModal: false, renderModal: false });
 
-    this.setState({ loading: false })
+    this.props.history.push(`/listpage/${createdBookList[0].id}`);
+
+    this.props.updateBookLists();
   }
 
   render() {
     return (
       <div>
-        <h1 className="text-center mt-4"> Create Booklist </h1>
+        <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
+          <div className={this.props.textStyle}>
+            <span id="create-list-modal"> Create New List </span>
+          </div>
+        </button>
 
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Group controlId="createBookList">
-            <Form.Label>Name of Booklist</Form.Label>
-            <Form.Control type="text" placeholder="Enter Name" />
-          </Form.Group>
-          <Button variant="primary" type="submit" disabled={this.state.loading}>
-            Create Booklist
-            {this.state.loading &&
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-                className="ml-4"
-              />}
-          </Button>
-        </Form>
+        <Modal
+          size="lg"
+          show={this.state.showModal}
+          onHide={() => this.setState({ showModal: false })}
+          aria-labelledby="create-booklists-modal">
+
+          <Modal.Header closeButton>
+            <Modal.Title id="create-booklists-modal">
+              Create Booklist
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId="createBookListForm">
+                <Form.Label>Name of Booklist</Form.Label>
+                <Form.Control type="text" placeholder="Enter Name" />
+              </Form.Group>
+              <Button variant="primary" type="submit" onClick={() => this.handleSubmit()} disabled={this.state.loading}>
+                Create Booklist
+                    {this.state.loading &&
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="ml-4"
+                  />}
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }
 }
 
-export default CreateList;
+export default withRouter(CreateList);

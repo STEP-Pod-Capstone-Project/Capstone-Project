@@ -19,7 +19,7 @@ const BookSearchTile = (props) => {
           </Col>
           <Col md="auto">
             <Container className="center-vertical">
-              <BookListAddDropdown userBookLists={props.userBookLists} book={props.book} />
+              <BookListAddDropdown bookLists={props.bookLists} updateBookLists={props.updateBookLists} book={props.book} />
             </Container>
           </Col>
         </Row>

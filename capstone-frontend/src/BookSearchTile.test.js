@@ -28,7 +28,7 @@ const emptyArray = [];
 
 test('renders book search tile test', () => {
   render(<BookSearchTile book={book}
-    userBookLists={getUserBookLists()} />, container);
+    bookLists={getUserBookLists()} />, container);
 
   const bookThumbnail = document.getElementsByClassName("book-img-med")[0];
   expect(bookThumbnail).toBeInTheDocument();
@@ -48,10 +48,18 @@ test('renders book search tile test', () => {
 
 test('renders book search tile with empty bookList test', () => {
   render(<BookSearchTile book={book}
-    userBookLists={emptyArray} />, container);
+    bookLists={emptyArray} />, container);
 
   const bookListButton = document.getElementById("dropdown-list-add");
   expect(bookListButton).toBeInTheDocument();
   expect(bookListButton.innerHTML).toEqual("No Lists Found");
-
 });
+
+test('renders bookSearchTile createList btn', () => {
+  render(<App />, container);
+
+  const createBookListBtn = document.getElementById("create-list-modal");
+  expect(createBookListBtn).toBeInTheDocument();
+  expect(createBookListBtn.innerHTML).toEqual(" Create New List ");
+});
+
