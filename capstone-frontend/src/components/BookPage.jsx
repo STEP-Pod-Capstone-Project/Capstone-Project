@@ -44,15 +44,22 @@ class BookPage extends Component {
                 <Col xs={12} md={4}>
                   <Container>
                     <Row>
-                      <a className="text-decoration-none text-body center-horizontal" href={book.canonicalVolumeLink} target="_blank" rel="noopener noreferrer">
-                        <img className="book-img-lg" src={book.thumbnailLink} alt={book.title} />
+                      <a className="text-decoration-none text-body center-horizontal"
+                        href={book.canonicalVolumeLink} target="_blank"
+                        rel="noopener noreferrer">
+                        <img className="book-img-lg" src={book.thumbnailLink}
+                          alt={book.title} />
                       </a>
                     </Row>
                     <Row>
                       <BookListAddDropdown book={book} userBookLists={[]} />
                     </Row>
                     <Row>
-                      <a className="btn btn-primary btn-margin center-horizontal" href={book.webReaderLink} target="_blank" rel="noopener noreferrer">Web Reader</a>
+                      <a className="btn btn-primary btn-margin center-horizontal"
+                        href={book.webReaderLink} target="_blank"
+                        rel="noopener noreferrer">
+                        Web Reader
+                      </a>
                     </Row>
                   </Container>
                 </Col>
