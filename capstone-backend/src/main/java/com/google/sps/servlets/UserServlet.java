@@ -64,8 +64,13 @@ public class UserServlet extends HttpServlet {
         String profileImageUrl = (String) payload.get("picture");
 
         googleUser = new User(googleId, email, fullname, profileImageUrl,
-            new ImmutableMap.Builder<String, String>().put("access_token", access_token).put("idpId", idpId)
-                .put("scope", scope).put("token_id", tokenId).put("token_type", token_type).build());
+          new ImmutableMap.Builder<String, String>()
+            .put("access_token", access_token)
+            .put("idpId", idpId)
+            .put("scope", scope)
+            .put("token_id", tokenId)
+            .put("token_type", token_type)
+            .build());
 
       } else {
         System.err.println("Invalid ID token.");
