@@ -1,12 +1,9 @@
 package com.google.sps.servlets;
 
 import com.google.sps.data.BookList;
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

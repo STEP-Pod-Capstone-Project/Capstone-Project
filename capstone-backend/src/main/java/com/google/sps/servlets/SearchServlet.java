@@ -56,7 +56,8 @@ public class SearchServlet extends HttpServlet {
       }
       // make formatted url
       String gbookId = request.getParameter("gbookId");
-      formattedURL = String.format("https://www.googleapis.com/books/v1/volumes/%s", gbookId);
+
+      formattedURL = String.format("https://www.googleapis.com/books/v1/volumes/%s?country=US", gbookId);
 
     } else if (request.getParameter("searchTerm") != null || !request.getParameter("searchTerm").isEmpty()) {
       int parameterLength = request.getParameterMap().size();
