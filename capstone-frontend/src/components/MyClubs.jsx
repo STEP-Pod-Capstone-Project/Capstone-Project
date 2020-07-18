@@ -14,14 +14,14 @@ class MyClubs extends Component {
   }
 
   getMyClubs = async () => {
-    let memberClubs = await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
+    let memberClubs = await fetch(`/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
         .then(response => response.json())
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
         });
 
-    let ownerClubs = await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?ownerID=${window.localStorage.getItem("userID")}`)
+    let ownerClubs = await fetch(`/api/clubs?ownerID=${window.localStorage.getItem("userID")}`)
         .then(response => response.json())
         .catch(function(err) {
           //TODO #61: Centralize error output

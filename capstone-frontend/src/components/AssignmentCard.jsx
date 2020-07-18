@@ -22,7 +22,7 @@ class AssignmentCard extends Component {
       "userID": window.localStorage.getItem("userID"),
       "whenCreated": (new Date()).toUTCString()
     };
-    fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/comments", {method: "post", body: JSON.stringify(data)})
+    fetch("/api/comments", {method: "post", body: JSON.stringify(data)})
         .then(this.fetchComments)
         .catch(function(err) {
           //TODO #61: Centralize error output
@@ -31,7 +31,7 @@ class AssignmentCard extends Component {
   }
 
   fetchComments = () => {
-    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/comments?assignmentID=${this.props.assignment.id}`)
+    fetch(`/api/comments?assignmentID=${this.props.assignment.id}`)
         .then(response => response.json()).then(commentsJson => this.setState({comments: commentsJson}))
         .catch(function(err) {
           //TODO #61: Centralize error output
