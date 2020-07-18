@@ -13,13 +13,14 @@ class AssignmentCard extends Component {
       comments: []
     }
   }
+
   onComment = (e) => {
     e.preventDefault();
     let data = {
       "assignmentID": this.props.assignment.id,
       "text": e.target[0].value,
       "userID": window.localStorage.getItem("userID"),
-      // "whenCreated": (new Date()).toUTCString()
+      "whenCreated": (new Date()).toUTCString()
     };
     fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/comments", {method: "post", body: JSON.stringify(data)})
         .then(this.fetchComments())

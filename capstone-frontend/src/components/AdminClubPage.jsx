@@ -78,9 +78,9 @@ class AdminClubPage extends Component {
         <Form onSubmit={this.handleUpdate} id="update-club-form">
           <Form.Group controlId="formUpdateClub">
             <Form.Label> Club Name </Form.Label> 
-            <Form.Control type="text" placeholder="Enter new club name here..." />
+            <Form.Control name="name" type="text" placeholder="Enter new club name here..." />
             <Form.Label> Club Description </Form.Label> 
-            <Form.Control as="textarea" rows="3" placeholder="Enter new club description here..." />
+            <Form.Control name="description" as="textarea" rows="3" placeholder="Enter new club description here..." />
           </Form.Group>
           <Button variant="primary" type="submit"> Submit </Button>
         </Form>
