@@ -23,7 +23,7 @@ class AssignmentCard extends Component {
       "whenCreated": (new Date()).toUTCString()
     };
     fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/comments", {method: "post", body: JSON.stringify(data)})
-        .then(this.fetchComments())
+        .then(this.fetchComments)
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
@@ -47,8 +47,8 @@ class AssignmentCard extends Component {
     return (
       <div className="assignment-border">
         <div> {this.props.assignment.text} </div>
-        {/* <div> Created: {new Date(this.props.assignment.whenCreated)} </div> 
-        <div> Due: {new Date(this.props.assignment.whenDue)} </div>  */}
+        <div> Created: {(new Date(this.props.assignment.whenCreated)).toString()} </div> 
+        <div> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div>
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <Form id="comment-form" onSubmit={this.onComment}>
           <Form.Group as={Row} controlId="formComment">
