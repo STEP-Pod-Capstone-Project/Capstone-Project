@@ -86,15 +86,11 @@ class SearchBookModal extends Component {
 
     // Rerender
     this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
-
-    console.log(this.state.addedBooksIDs)
   }
 
   handleSubmit = async () => {
 
     this.setState({ addingBooks: true })
-
-    console.log("Submitted", this.props.objectId, this.state.addedBooksIDs)
 
     if (this.state.addedBooksIDs.length !== 0) {
 
@@ -115,8 +111,6 @@ class SearchBookModal extends Component {
           }
         }
 
-        console.log("It has been put", bookId)
-
         // Update BookList in Firebase
         await fetch(this.props.putURL, {
           method: "PUT",
@@ -125,14 +119,13 @@ class SearchBookModal extends Component {
 
       });
 
+      await this.props.update();
+
       this.setState({ addingBooks: false, showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
 
-      this.props.update();
     }
 
     else {
-
-      console.log("nothing added")
 
       this.setState({ addingBooks: false, showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
     }
@@ -216,7 +209,6 @@ class SearchBookModal extends Component {
                     </div>
                     :
                     <div>
-                      {console.log(this.state.addedBooks, (this.state.addedBooks.length !== 0))}
                       <h2 className="text-center my-4 px-4 ">Added Books</h2>
                       <Row className="text-center px-3">
                         {this.state.addedBooks.map(addedBook =>

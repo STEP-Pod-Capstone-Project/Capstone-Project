@@ -12,7 +12,7 @@ class ListPage extends Component {
     this.state = {
       bookList: {},
       gBooks: [],
-      loading: true,
+      loading: true, // Spinner
       empty: false
     }
   }
@@ -91,7 +91,7 @@ class ListPage extends Component {
               <Col className="text-right">
                 <SearchBookModal
                   objectId={this.props.match.params.id}
-                  update={this.fetchBooks}
+                  update={() => this.fetchBooks}
                   putURL="/api/booklist"
                   type="booklist"
                   btnStyle="btn btn-primary mt-4 mr-2" />
@@ -110,7 +110,7 @@ class ListPage extends Component {
               <Col className="text-right">
                 <SearchBookModal
                   objectId={this.props.match.params.id}
-                  update={this.fetchBooks}
+                  update={() => this.fetchBooks}
                   putURL="/api/booklist"
                   type="booklist"
                   btnStyle="btn btn-primary mt-4 mr-2" />
