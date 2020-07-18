@@ -13,7 +13,6 @@ class ListPage extends Component {
       bookList: {},
       gBooks: [],
       loading: true, // Spinner
-      empty: false
     }
   }
 
@@ -27,7 +26,7 @@ class ListPage extends Component {
     const gbookIDs = bookList[0].gbookIDs;
 
     if (!gbookIDs.length) {
-      this.setState({ loading: false, empty: true, bookList: bookList[0] });
+      this.setState({ loading: false, bookList: bookList[0] });
       return;
     }
 
@@ -38,28 +37,35 @@ class ListPage extends Component {
       gBooks.push(gBook[0]);
     }))
 
-    this.setState({ bookList: bookList[0], gBooks, loading: false });
-
+    this.setState({ gBooks, bookList: bookList[0], loading: false });
   }
 
-  componentDidMount() {
-    this.fetchBooks();
+  async componentDidMount() {
+    await this.fetchBooks();
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (this.props.match.params.id !== prevProps.match.params.id) {
-      this.setState({ loading: true, empty: false })
-      this.fetchBooks();
+      this.setState({ loading: true, gBooks: [], bookList: {} })
+      await this.fetchBooks();
     }
   }
 
-  deleteBook = (bookId) => {
 
-    const indexId = this.state.gBooks.indexOf(bookId);
-    this.state.gBooks.splice(indexId, 1);
+  deleteBook = async (bookId) => {
 
-    // Rerender
-    this.setState({ gBooks: this.state.gBooks })
+    const gBooks = this.state.gBooks.filter(gBook => gBook.id !== bookId);
+
+    const bookList = this.state.bookList;
+    bookList.gbookIDs = bookList.gbookIDs.filter(gBookId => gBookId !== bookId)
+
+    // Remove and Rerender
+    this.setState(
+      {
+        gBooks,
+        bookList,
+      }
+    )
 
     const bookListUpdateJson = {
       "id": this.props.match.params.id,
@@ -67,11 +73,10 @@ class ListPage extends Component {
     }
 
     // Update BookList in Firebase
-    fetch("/api/booklist", {
+    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
     });
-
   }
 
   render() {
@@ -85,7 +90,7 @@ class ListPage extends Component {
         <h1>Loading...</h1>
       </div>)
       :
-      (this.state.empty
+      ((this.state.gBooks.length === 0)
         ?
         (
           <div>
@@ -106,7 +111,8 @@ class ListPage extends Component {
             <h3 className="text-center mt-4">Booklist has No Books</h3>
           </div>
         )
-        : (
+        :
+        (
           <div>
             <Row>
               <Col>
@@ -125,33 +131,37 @@ class ListPage extends Component {
 
             <div>
               {
-                this.state.gBooks.map(gBook =>
-                  <Row className="text-center border m-5 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
-                    <Col md={3} className="my-4 p-0 ">
-                      {/* TODO(#79): Redirect user to BookPage instead of playstore */}
-                      <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
-                        <img className="img-responsive" src={gBook.thumbnailLink} alt={gBook.title} />
-                      </a>
-                    </Col>
+                (this.state.gBooks.length !== 0) &&
+                (
+                  this.state.gBooks.map(gBook =>
+                    <Row className="text-center border m-5 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
+                      <Col md={3} className="my-4 p-0 ">
+                        {/* TODO(#79): Redirect user to BookPage instead of playstore */}
+                        <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
+                          <img className="img-responsive" src={gBook.thumbnailLink} alt={gBook.title} />
+                        </a>
+                      </Col>
 
-                    <Col className="my-4 p-0">
-                      <h2 className="mt-4"> {gBook.title} </h2>
-                      <StarRatings
-                        rating={gBook.avgRating}
-                        starDimension="40px"
-                        starSpacing="10px"
-                        starRatedColor="gold" />
-                      <p className="my-3" > {gBook.authors.join(', ')} </p>
-                    </Col>
+                      <Col className="my-4 p-0">
+                        <h2 className="mt-4"> {gBook.title} </h2>
+                        <StarRatings
+                          rating={gBook.avgRating}
+                          starDimension="40px"
+                          starSpacing="10px"
+                          starRatedColor="gold" />
+                        <p className="my-3" > {gBook.authors.join(', ')} </p>
+                      </Col>
 
-                    <Col md={3} className="my-4 p-0">
-                      <a className="btn btn-primary mt-4 width-75" href={gBook.webReaderLink}>Web Reader</a>
-                      <br />
-                      <Button className="my-4 width-75" variant="danger" onClick={() => this.deleteBook(gBook.id)}>
-                        Remove Book from List
+                      <Col md={3} className="my-4 p-0">
+                        <a className="btn btn-primary mt-4 width-75" href={gBook.webReaderLink}>Web Reader</a>
+                        <br />
+                        <Button className="my-4 width-75" variant="danger" onClick={async () => await this.deleteBook(gBook.id)}>
+                          Remove Book from List
                       </Button>
-                    </Col>
-                  </Row>)
+                      </Col>
+                    </Row>
+                  )
+                )
               }
             </div>
 
