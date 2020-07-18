@@ -6,12 +6,13 @@ import '../styles/Groups.css';
 
 class UserCard extends Component {
   removeMember = () => {
+    const jsonBody = {
+      "remove_memberIDs": this.props.user.id, 
+      "id": this.props.club.id
+    }
     fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs`, {
-      method: "put", 
-      body: {
-        "remove_memberIDs": this.props.user.id, 
-        "id": this.props.club.id
-        }
+        method: "put", 
+        body: JSON.stringify(jsonBody)
       })
       .then(this.props.removeMember(this.props.user.id))
   }
