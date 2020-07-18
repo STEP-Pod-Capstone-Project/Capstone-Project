@@ -93,7 +93,7 @@ class ClubPage extends Component {
   render() {
     const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem("userID");
     const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />;
-    const owner = this.state.owner && <UserCard club={this.state.club} user={this.state.owner} />;
+    const owner = this.state.owner && <UserCard removeMember={this.removeMember} club={this.state.club} user={this.state.owner} />;
     const members = this.state.members.length && this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />);
     const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
     return (
