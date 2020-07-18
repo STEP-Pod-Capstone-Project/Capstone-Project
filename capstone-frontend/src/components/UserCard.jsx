@@ -26,7 +26,7 @@ class UserCard extends Component {
                                 </Button>;
     return (
       <Col className="user-card" xs={{span: "2"}} >
-        <img id="user-profile" src={this.props.user.profileImageUrl} alt="Profile Picture not found"/>
+        <img id="user-profile" src={this.props.user.profileImageUrl} alt="Profile"/>
         <div> {this.props.user.fullName} </div> 
         <Button variant="primary"> Add Friend </Button>
         {removeMember}
