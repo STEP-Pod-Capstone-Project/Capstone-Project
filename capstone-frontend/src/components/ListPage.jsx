@@ -55,6 +55,12 @@ class ListPage extends Component {
 
   deleteBook = (bookId) => {
 
+    const indexId = this.state.gBooks.indexOf(bookId);
+    this.state.gBooks.splice(indexId, 1);
+
+    // Rerender
+    this.setState({ gBooks: this.state.gBooks })
+
     const bookListUpdateJson = {
       "id": this.props.match.params.id,
       "remove_gbookIDs": bookId,
@@ -66,7 +72,6 @@ class ListPage extends Component {
       body: JSON.stringify(bookListUpdateJson)
     });
 
-    this.fetchBooks();
   }
 
   render() {
