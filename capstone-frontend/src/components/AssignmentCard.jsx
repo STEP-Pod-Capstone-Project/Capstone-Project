@@ -18,7 +18,7 @@ class AssignmentCard extends Component {
       "assignmentID": this.props.assignment.id,
       "text": e.target[0].value,
       "userID": window.localStorage.getItem("userID"),
-      // "whenCreated": (new Date()).toUTCString()
+      "whenCreated": (new Date()).toUTCString()
     };
     fetch("/api/comments", {method: "post", body: JSON.stringify(data)})
         .then(this.fetchComments())
@@ -45,8 +45,8 @@ class AssignmentCard extends Component {
     return (
       <div className="assignment-border">
         <div> {this.props.assignment.text} </div>
-        {/* <div> Created: {new Date(this.props.assignment.whenCreated)} </div> 
-        <div> Due: {new Date(this.props.assignment.whenDue)} </div>  */}
+        <div> Created: {(new Date(this.props.assignment.whenCreated)).toString()} </div> 
+        <div> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div> 
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <form id="comment-form" onSubmit={this.onComment}>
           <div>
