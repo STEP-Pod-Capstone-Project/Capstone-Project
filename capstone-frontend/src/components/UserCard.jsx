@@ -21,7 +21,7 @@ class UserCard extends Component {
     const removeMember = this.props.club 
                              && this.props.club.ownerID === window.localStorage.getItem("userID")
                              && this.props.club.ownerID !== this.props.user.id
-                             && <Button id="remove-member" variant="danger" onClick={() => this.props.removeMember(this.props.user.id)}>
+                             && <Button id="remove-member" variant="danger" onClick={this.removeMember}>
                                   Remove&nbsp;Member
                                 </Button>;
     return (

@@ -23,7 +23,11 @@ class ClubPage extends Component {
   
   removeMember = (memberID) => {
     let memberArray = this.state.members;
-    memberArray.filter((m) => m.id !== memberID);
+    let memberIDsArray = this.state.members.map(m => m.id);
+    const index = memberIDsArray.indexOf(memberID);
+    if (index > -1) {
+      memberArray.splice(index, 1);
+    }
     this.setState({members: memberArray});
   }
 
