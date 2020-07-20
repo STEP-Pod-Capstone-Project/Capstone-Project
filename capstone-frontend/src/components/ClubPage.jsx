@@ -83,7 +83,12 @@ class ClubPage extends Component {
       "whenCreated": (new Date()).toUTCString()
     };
     fetch(`/api/assignments`, {method: "post", body: JSON.stringify(data)})
-        .then(this.fetchData())
+        .then(response => response.json())
+        .then(assignmentJson => {
+          let assignments = this.state.assignments;
+          assignments.push(assignmentJson);
+          this.setState({assignments});
+        })
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
