@@ -1,6 +1,6 @@
 .book-img-lg {
-  width:256px;
   height: auto;
+  width:256px;
 }
 
 .book-search-tile {
@@ -14,8 +14,20 @@
   background: lightblue;
 }
 
+.btn-margin {
+  margin-top: 10px;
+  position: relative;
+  width: 100%;
+}
+
+#button-list-add {
+  position: relative;
+  width: 100%;
+}
+
 .center-horizontal {
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .center-vertical {
@@ -28,22 +40,11 @@
   z-index: 100;
 }
 
-.btn-margin {
-  margin-top: 10px;
-  position: relative;
-  width: 75%;
-}
-
-#button-list-add {
-  position: relative;
-  width: 100%;
-}
-
 .page-container {
-  text-align: center;
   justify-content: center;
-  padding: 15px;
   margin-top: 15px;
+  padding: 15px;
+  text-align: center;
 }
 
 #rating-label {

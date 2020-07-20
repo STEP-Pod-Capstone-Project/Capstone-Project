@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import BookListAddDropdown from './BookListAddDropdown';
+import { BookListAddDropdown } from './BookListAddDropdown';
 import StarRatings from 'react-star-ratings';
 import '../styles/Book.css';
 
-class BookPage extends Component {
+export class BookPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,7 +15,7 @@ class BookPage extends Component {
   fetchBookData = () => {
     fetch(`/api/search?gbookId=${this.props.bookId}`)
       .then(response => response.json())
-      .then(bookJson => this.setState({ book: bookJson[0] }))
+      .then(books => this.setState({ book: books[0] }))
       .catch(function (err) {
         //TODO #61: Frontend error logging
         alert(err);
@@ -38,16 +38,16 @@ class BookPage extends Component {
     return (
       <div>
         {book.authors &&
-          <div className="book-page-tile page-container">
+          <div className='book-page-tile page-container'>
             <Container>
-              <Row className="justify-content-md-center">
+              <Row className='justify-content-md-center'>
                 <Col xs={12} md={4}>
                   <Container>
                     <Row>
-                      <a className="text-decoration-none text-body center-horizontal"
-                        href={book.canonicalVolumeLink} target="_blank"
-                        rel="noopener noreferrer">
-                        <img className="book-img-lg" src={book.thumbnailLink}
+                      <a className='text-decoration-none text-body center-horizontal'
+                        href={book.canonicalVolumeLink} target='_blank'
+                        rel='noopener noreferrer'>
+                        <img className='book-img-lg' src={book.thumbnailLink}
                           alt={book.title} />
                       </a>
                     </Row>
@@ -56,9 +56,9 @@ class BookPage extends Component {
                         updateBookLists={this.props.updateBookLists} book={book} />
                     </Row>
                     <Row>
-                      <a className="btn btn-primary btn-margin center-horizontal"
-                        href={book.webReaderLink} target="_blank"
-                        rel="noopener noreferrer">
+                      <a className='btn btn-primary btn-margin center-horizontal'
+                        href={book.webReaderLink} target='_blank'
+                        rel='noopener noreferrer'>
                         Web Reader
                       </a>
                     </Row>
@@ -75,15 +75,15 @@ class BookPage extends Component {
                     <Row>
                       <StarRatings
                         rating={book.avgRating}
-                        starDimension="40px"
-                        starSpacing="10px"
-                        starRatedColor="gold"
+                        starDimension='40px'
+                        starSpacing='10px'
+                        starRatedColor='gold'
                       />
-                      {book.avgRating === 0 && <p id="rating-label">No Ratings</p>}
+                      {book.avgRating === 0 && <p id='rating-label'>No Ratings</p>}
                     </Row>
                     <Row>
                       <h3> Description </h3>
-                      <p> {this.state.book.description} </p>
+                      <p className='text-left'> {this.state.book.description} </p>
                     </Row>
                   </Container>
                 </Col>
@@ -95,5 +95,3 @@ class BookPage extends Component {
     );
   }
 }
-
-export default BookPage;

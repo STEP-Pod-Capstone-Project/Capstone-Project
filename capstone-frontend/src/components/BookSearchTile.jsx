@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import BookListAddDropdown from './BookListAddDropdown';
+import { BookListAddDropdown } from './BookListAddDropdown';
 import '../styles/Book.css';
 
 const BookSearchTile = (props) => {

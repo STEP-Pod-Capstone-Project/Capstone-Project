@@ -9,7 +9,7 @@ import Home from './components/Home';
 import Browse from './components/Browse';
 import MyBooks from './components/MyBooks';
 import MyClubs from './components/MyClubs';
-import BookPage from './components/BookPage';
+import { BookPage } from './components/BookPage';
 import ListPage from './components/ListPage'
 import ClubPage from './components/ClubPage';
 import CreateClub from './components/CreateClub';
