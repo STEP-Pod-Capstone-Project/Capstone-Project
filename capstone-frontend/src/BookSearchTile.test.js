@@ -41,10 +41,10 @@ test('renders book search tile test', async () => {
 
   const bookListButton = document.getElementById('button-list-add');
   expect(bookListButton).toBeInTheDocument();
-  expect(bookListButton.innerHTML).toEqual("Add to List");
+  expect(bookListButton.innerHTML).toEqual('Add to List');
 
   await act(async () => { bookListButton.click() });
-  const dropdownItems = document.getElementsByClassName("dropdown-item");
+  const dropdownItems = document.getElementsByClassName('dropdown-item');
   expect(dropdownItems.length).toEqual(3);
   expect(dropdownItems[0].innerHTML).toMatch(/Best Books/);
 });
