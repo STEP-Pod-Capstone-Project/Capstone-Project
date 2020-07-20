@@ -212,8 +212,15 @@ public class SearchServlet extends HttpServlet {
     String canonicalVolumeLink = canonVolumeElement != null ? canonVolumeElement.getAsString() : "";
 
     JsonElement thumbnailElement = volumeInfoObj.get("imageLinks");
-    String thumbnailLink = thumbnailElement != null ? thumbnailElement.getAsJsonObject().get("thumbnail").getAsString()
-        : "";
+    String[] sizes = {"extraLarge", "large", "medium", "small", "thumbnail"};
+    String thumbnailLink = "";
+    for (String size : sizes) {
+      JsonElement retrievedElement = thumbnailElement.getAsJsonObject().get(size);
+      if (retrievedElement != null) {
+        thumbnailLink = retrievedElement.getAsString();
+        break;
+      }
+    }
     thumbnailLink = thumbnailLink.replace("http", "https");
 
     JsonElement accessInfoElement = bookInfo.get("accessInfo");
