@@ -1,5 +1,5 @@
 /* Logout Dropdown button */
-#login div div button {
+#logout div div button {
   background: none;
   border: none;
   margin: 0px;
@@ -8,7 +8,7 @@
 }
 
 /* Login Button */
-#login div button {
+#logout div button {
   background: none;
   border-width: 0px !important;
   margin: 0px;

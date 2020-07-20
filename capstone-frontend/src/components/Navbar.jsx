@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Login } from "./Login"
+import { Logout } from "./Logout"
 import '../App.css';
 
 class Navbar extends Component {
@@ -77,7 +77,7 @@ class Navbar extends Component {
             </li>
           </ul>
         </div>
-        <Login />
+        <Logout toggleSignIn={this.props.toggleSignIn}/>
       </nav>
     );
   }
