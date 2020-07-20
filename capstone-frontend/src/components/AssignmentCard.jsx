@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 
 import CommentCard from './CommentCard';
 
@@ -12,6 +13,7 @@ class AssignmentCard extends Component {
       comments: []
     }
   }
+
   onComment = (e) => {
     e.preventDefault();
     let data = {
@@ -21,7 +23,12 @@ class AssignmentCard extends Component {
       "whenCreated": (new Date()).toUTCString()
     };
     fetch("/api/comments", {method: "post", body: JSON.stringify(data)})
-        .then(this.fetchComments())
+        .then(response => response.json())
+        .then(commentJson => {
+          let comments = this.state.comments;
+          comments.push(commentJson);
+          this.setState({comments});
+        })
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
@@ -46,19 +53,18 @@ class AssignmentCard extends Component {
       <div className="assignment-border">
         <div> {this.props.assignment.text} </div>
         <div> Created: {(new Date(this.props.assignment.whenCreated)).toString()} </div> 
-        <div> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div> 
+        <div> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div>
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
-        <form id="comment-form" onSubmit={this.onComment}>
-          <div>
-            <label htmlFor="text"> Comment: </label>
-          </div>
-          <div>
-            <textarea rows="1" cols="75" type="text" id="text" name="text" />
-          </div>
-          <div>
-            <input id="submit-comment" type="submit" value="Post" />
-          </div>
-        </form>
+        <Form id="comment-form" onSubmit={this.onComment}>
+          <Form.Group as={Row} controlId="formComment">
+            <Col xs={{"offset": 1, "span": 9}}>
+              <Form.Control type="text" placeholder="Enter a comment..." />
+            </Col>
+            <Col xs={1}>
+              <Button variant="primary" type="Submit"> Post </Button> 
+            </Col>
+          </Form.Group>
+        </Form>
       </div>
     );
   }
