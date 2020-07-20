@@ -9,16 +9,12 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
@@ -68,13 +64,13 @@ public class UserServlet extends HttpServlet {
         String profileImageUrl = (String) payload.get("picture");
 
         googleUser = new User(googleId, email, fullname, profileImageUrl,
-            new ImmutableMap.Builder<String, String>()
-              .put("access_token", access_token)
-              .put("idpId", idpId)
-              .put("scope", scope)
-              .put("token_id", tokenId)
-              .put("token_type", token_type) 
-              .build());
+          new ImmutableMap.Builder<String, String>()
+            .put("access_token", access_token)
+            .put("idpId", idpId)
+            .put("scope", scope)
+            .put("token_id", tokenId)
+            .put("token_type", token_type)
+            .build());
 
       } else {
         System.err.println("Invalid ID token.");

@@ -9,7 +9,7 @@ import Home from './components/Home';
 import Browse from './components/Browse';
 import MyBooks from './components/MyBooks';
 import MyClubs from './components/MyClubs';
-import BookPage from './components/BookPage';
+import { BookPage } from './components/BookPage';
 import ListPage from './components/ListPage'
 import ClubPage from './components/ClubPage';
 import CreateClub from './components/CreateClub';
@@ -33,6 +33,8 @@ class App extends Component {
   }
 
   fetchBookLists = async () => {
+
+    // TODO(#74): Add Spinner to LeftSide when fetching BookList from App.jsx
 
     const userID = window.localStorage.getItem("userID");
 
@@ -62,15 +64,17 @@ class App extends Component {
             <Route path='/mybooks' component={MyBooks} />
             <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
-            <Route path='/bookpage/:id' component={BookPage} />
-            <Route path='/clubpage/:id' component={(props) => (
-                <ClubPage id={props.match.params.id} />
+            <Route path='/bookpage/:id' render={(props) => (
+              <BookPage bookId={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists}/>
+            )} />
+            <Route path='/clubpage/:id' render={(props) => (
+              <ClubPage id={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
             )} />
             <Route path='/createclub' component={CreateClub} />
-          </div>
-          <RightSideBar />
         </div>
-      </Router>
+        <RightSideBar />
+        </div>
+      </Router >
     );
   }
 }
