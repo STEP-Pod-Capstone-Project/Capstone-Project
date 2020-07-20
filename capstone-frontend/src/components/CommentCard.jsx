@@ -25,12 +25,22 @@ class CommentCard extends Component {
   }
 
   render() {
-    const user = this.state.user && <div> {this.state.user.fullName}: </div>;
+    const user = this.state.user && 
+                     <span className="name"> 
+                        {this.state.user.fullName} 
+                      </span>;
     return (
-      <div className="comment-border">
-        {user}
-        <div> {this.props.comment.text} </div>
-        <div> {(new Date(this.props.comment.whenCreated)).toString()} </div>
+      <div className="comment-card">
+        <img className="profile" src={this.state.user.profileImageUrl} />
+        <div>
+          <div className="header">
+            {user}
+            <span className="date">
+              {(new Date(this.props.comment.whenCreated)).toString()}
+            </span>
+          </div>
+          <div> {this.props.comment.text} </div>
+        </div>
       </div>
     );
   }

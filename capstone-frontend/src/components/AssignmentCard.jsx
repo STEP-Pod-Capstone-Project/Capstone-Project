@@ -45,10 +45,16 @@ class AssignmentCard extends Component {
 
   render() {
     return (
-      <div className="assignment-border">
-        <div> {this.props.assignment.text} </div>
-        <div> Created: {(new Date(this.props.assignment.whenCreated)).toString()} </div> 
-        <div> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div>
+      <div className="assignment-card">
+        <div className="assignment-head">
+          <div>
+            <div className="assignment-date"> Posted: {(new Date(this.props.assignment.whenCreated)).toString()} </div> 
+            <div className="assignment-date"> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div>
+            <div className="assignment-text"> {this.props.assignment.text} </div>
+          </div>
+          <Button variant="primary"> Mark as Done </Button> 
+        </div> 
+        
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <Form id="comment-form" onSubmit={this.onComment}>
           <Form.Group as={Row} controlId="formComment">
