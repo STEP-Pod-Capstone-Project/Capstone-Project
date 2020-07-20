@@ -79,7 +79,12 @@ class ClubPage extends Component {
       "whenCreated": (new Date()).toUTCString()
     };
     fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/assignments`, {method: "post", body: JSON.stringify(data)})
-        .then(this.fetchData())
+        .then(response => response.json())
+        .then(assignmentJson => {
+          let assignments = this.state.assignments;
+          assignments.push(assignmentJson);
+          this.setState({assignments});
+        })
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 

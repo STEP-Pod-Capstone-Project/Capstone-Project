@@ -23,7 +23,12 @@ class AssignmentCard extends Component {
       "whenCreated": (new Date()).toUTCString()
     };
     fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/comments", {method: "post", body: JSON.stringify(data)})
-        .then(this.fetchComments)
+        .then(response => response.json())
+        .then(commentJson => {
+          let comments = this.state.comments;
+          comments.push(commentJson);
+          this.setState({comments});
+        })
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
