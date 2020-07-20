@@ -9,7 +9,7 @@ import Home from './components/Home';
 import Browse from './components/Browse';
 import MyBooks from './components/MyBooks';
 import MyClubs from './components/MyClubs';
-import BookPage from './components/BookPage';
+import { BookPage } from './components/BookPage';
 import ListPage from './components/ListPage'
 import ClubPage from './components/ClubPage';
 import AdminClubPage from './components/AdminClubPage';
@@ -65,16 +65,18 @@ class App extends Component {
             <Route path='/mybooks' component={MyBooks} />
             <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
-            <Route path='/bookpage/:id' component={BookPage} />
+            <Route path='/bookpage/:id' render={(props) => (
+              <BookPage bookId={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists}/>
+            )} />
             <Route path='/clubpage/:id' render={(props) => (
-                <ClubPage id={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
+              <ClubPage id={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
             )} />
             <Route path='/adminclubpage/:id' component={AdminClubPage} />
             <Route path='/createclub' component={CreateClub} />
-          </div>
-          <RightSideBar />
         </div>
-      </Router>
+        <RightSideBar />
+        </div>
+      </Router >
     );
   }
 }

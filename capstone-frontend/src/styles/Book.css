@@ -1,0 +1,53 @@
+.book-img-lg {
+  height: auto;
+  width:256px;
+}
+
+.book-search-tile {
+  border: 2px solid black;
+  margin: 10px;
+  padding: 5px;
+  text-align: center;
+}
+
+.book-search-tile:hover {
+  background: lightblue;
+}
+
+.btn-margin {
+  margin-top: 10px;
+  position: relative;
+  width: 100%;
+}
+
+#button-list-add {
+  position: relative;
+  width: 100%;
+}
+
+.center-horizontal {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center-vertical {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.center-vertical:focus-within {
+  z-index: 100;
+}
+
+.page-container {
+  justify-content: center;
+  margin-top: 15px;
+  padding: 15px;
+  text-align: center;
+}
+
+#rating-label {
+  margin: 5px;
+}
+
