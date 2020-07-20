@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Spinner } from 'react-bootstrap'
+import { Button, Spinner, Row, Col } from 'react-bootstrap'
+import StarRatings from 'react-star-ratings'
+import '../styles/ListPage.css'
 
 class ListPage extends Component {
 
@@ -7,6 +9,7 @@ class ListPage extends Component {
     super(props)
 
     this.state = {
+      bookList: {},
       gBooks: [],
       loading: true,
       empty: false
@@ -23,7 +26,7 @@ class ListPage extends Component {
     const gbookIDs = bookList[0].gbookIDs;
 
     if (!gbookIDs.length) {
-      this.setState({ loading: false, empty: true });
+      this.setState({ loading: false, empty: true, bookList: bookList[0] });
       return;
     }
 
@@ -34,7 +37,8 @@ class ListPage extends Component {
       gBooks.push(gBook[0]);
     }))
 
-    this.setState({ gBooks, loading: false });
+    this.setState({ bookList: bookList[0], gBooks, loading: false });
+
   }
 
   componentDidMount() {
@@ -77,33 +81,52 @@ class ListPage extends Component {
       :
       (this.state.empty
         ?
-        (<h1 className="text-center mt-4">Booklist has No Books</h1>)
-        : (
-          <div className="text-center mt-4">
-            {
-              this.state.gBooks.map(gBook =>
-                <div key={gBook.id + this.props.match.params.id}>
-                  <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
-                    <div>
-                      <img src={gBook.thumbnailLink} alt={gBook.title} />
-                      <br />
-                      <h2 > {gBook.title} </h2>
-                      <p > {gBook.authors.join(', ')} </p>
-                    </div>
-                  </a>
-                  <a className="btn btn-primary" href={gBook.webReaderLink}>Web Reader</a>
-                  <br />
-                  <br />
-                  <Button variant="danger" onClick={() => this.deleteBook(gBook.id)}>
-                    Remove Book from List
-              </Button>
-                  <br />
-                  <br />
-                </div>
-              )
-            }
+        (
+          <div>
+            <h2 className="mt-3">{this.state.bookList.name}</h2>
+            <hr className="light-gray-border" />
+            <h3 className="text-center mt-4">Booklist has No Books</h3>
           </div>
-        ));
+        )
+        : (
+          <div>
+            <h2 className="mt-3">{this.state.bookList.name}</h2>
+            <hr className="light-gray-border" />
+
+            <div>
+              {
+                this.state.gBooks.map(gBook =>
+                  <Row className="text-center border m-5 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
+                    <Col md={3} className="my-4 p-0 ">
+                      {/* TODO(#79): Redirect user to BookPage instead of playstore */}
+                      <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
+                        <img className="img-responsive" src={gBook.thumbnailLink} alt={gBook.title} />
+                      </a>
+                    </Col>
+
+                    <Col className="my-4 p-0">
+                      <h2 className="mt-4"> {gBook.title} </h2>
+                      <StarRatings
+                        rating={gBook.avgRating}
+                        starDimension="40px"
+                        starSpacing="10px"
+                        starRatedColor="gold" />
+                        <p className="my-3" > {gBook.authors.join(', ')} </p>
+                    </Col>
+
+                    <Col md={3} className="my-4 p-0">
+                      <a className="btn btn-primary mt-4 width-75" href={gBook.webReaderLink}>Web Reader</a>
+                      <br />
+                      <Button className="my-4 width-75" variant="danger" onClick={() => this.deleteBook(gBook.id)}>
+                        Remove Book from List
+                      </Button>
+                    </Col>
+                  </Row>)
+              }
+            </div>
+
+          </div >)
+      );
   }
 }
 
