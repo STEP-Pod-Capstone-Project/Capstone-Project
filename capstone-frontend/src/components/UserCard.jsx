@@ -17,6 +17,10 @@ class UserCard extends Component {
       .then(this.props.removeMember(this.props.user.id))
   }
 
+  addFriend = () => {
+    //TODO #86: Create friend functionality
+  }
+
   render() {
     const removeMember = this.props.club 
                              && this.props.club.ownerID === window.localStorage.getItem("userID")
@@ -28,7 +32,7 @@ class UserCard extends Component {
       <Col className="user-card" xs={{span: "2"}} >
         <img id="user-profile" src={this.props.user.profileImageUrl} alt="Profile"/>
         <div> {this.props.user.fullName} </div> 
-        <Button variant="primary"> Add Friend </Button>
+        <Button variant="primary" onClick={this.addFriend}> Add Friend </Button>
         {removeMember}
       </Col>
     );
