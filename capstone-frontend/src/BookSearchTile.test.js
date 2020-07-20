@@ -26,7 +26,7 @@ const getUserBookLists = () => {
 
 const emptyArray = [];
 
-test('renders book search tile test', () => {
+test('renders book search tile test', async () => {
   render(<Router><BookSearchTile book={book}
     bookLists={getUserBookLists()} /></Router>, container);
 
@@ -42,6 +42,11 @@ test('renders book search tile test', () => {
   const bookListButton = document.getElementById('button-list-add');
   expect(bookListButton).toBeInTheDocument();
   expect(bookListButton.innerHTML).toEqual('Add to List');
+
+  await act(async () => { bookListButton.click() });
+  const dropdownItems = document.getElementsByClassName('dropdown-item');
+  expect(dropdownItems.length).toEqual(3);
+  expect(dropdownItems[0].innerHTML).toMatch(/Best Books/);
 });
 
 test('renders book search tile with empty bookList test', () => {
@@ -49,7 +54,7 @@ test('renders book search tile with empty bookList test', () => {
     bookLists={emptyArray} /></Router>, container);
 
   const bookListButtons = document.getElementsByTagName('button')[0].className;
-    expect(bookListButtons).toMatch(/btn-success/);
+  expect(bookListButtons).toMatch(/btn-success/);
 });
 
 test('renders bookSearchTile createList btn', () => {
@@ -57,5 +62,5 @@ test('renders bookSearchTile createList btn', () => {
 
   const createBookListBtn = document.getElementById('create-list-modal');
   expect(createBookListBtn).toBeInTheDocument();
-  expect(createBookListBtn.innerHTML).toEqual(' Create New List ');
+  expect(createBookListBtn.innerHTML).toMatch(/Create New List/);
 });
