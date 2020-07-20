@@ -31,8 +31,9 @@ public class SearchServletTest {
   private String jsonResponse;
   private static final String ARTIFICIAL_BOOK_1 = "{\"id\":\"ABCD\",\"volumeInfo\":{\"title\":\""
       + "BookTitle1\",\"authors\":[],\"description\":\"Book 1 description\",\"averageRating\":2,\""
-      + "imageLinks\":{\"thumbnail\":\"Book1Link\"},\"canonicalVolumeLink\":\"canonical volume link 1\""
-      + "},\"accessInfo\":{\"webReaderLink\":\"webreader 1 link\"}}";
+      + "imageLinks\":{\"thumbnail\":\"Book1Link\", \"extraLarge\":\"Book1ExtraLarge\"},"
+      + "\"canonicalVolumeLink\":\"canonical volume link 1\"},\"accessInfo\":{\"webReaderLink\":"
+      + "\"webreader 1 link\"}}";
   private static final String ARTIFICIAL_BOOK_2 = "{\"id\":\"EFGH\",\"volumeInfo\":{\"title\":\""
       + "BookTitle2\",\"authors\":[\"Thomas\",\"Robert\"],\"description\":\"Book 2 description\",\""
       + "averageRating\":4.5,\"imageLinks\":{\"thumbnail\":\"Book2Link\"},\"canonicalVolumeLink\":\""
@@ -180,6 +181,15 @@ public class SearchServletTest {
     VolumeData volume = SearchServlet.individualBookToVolumeData(bookJson);
 
     Assert.assertTrue(checkPopulatedVolumeDataObject(volume));
+  }
+
+  @Test
+  public void checkBookJsonPrioritizesLargestThumbnailSize() {
+    JsonElement bookJson = JsonParser.parseString(ARTIFICIAL_BOOK_1);
+    VolumeData volume = SearchServlet.individualBookToVolumeData(bookJson);
+    String expectedThumbnailLink = "Book1ExtraLarge";
+
+    Assert.assertEquals(expectedThumbnailLink, volume.getThumbnailLink());
   }
 
   @Test
