@@ -7,7 +7,6 @@ class SearchBookModal extends Component {
     super(props)
 
     this.state = {
-      addingBooks: false, // For Spinner
       fetchingBooks: false, // For Spinner
       showModal: false,
       typingTimeout: 0,
@@ -90,11 +89,9 @@ class SearchBookModal extends Component {
 
   handleSubmit = async () => {
 
-    this.setState({ addingBooks: true })
-
     if (this.state.addedBooksIDs.length !== 0) {
 
-      this.state.addedBooksIDs.forEach(async bookId => {
+      await Promise.all(this.state.addedBooksIDs.map(async bookId => {
 
         var updateJson;
 
@@ -117,17 +114,17 @@ class SearchBookModal extends Component {
           body: JSON.stringify(updateJson)
         });
 
-      });
+      }));
+
+      this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
 
       await this.props.update();
-
-      this.setState({ addingBooks: false, showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
 
     }
 
     else {
 
-      this.setState({ addingBooks: false, showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
+      this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
     }
   }
 
@@ -226,17 +223,8 @@ class SearchBookModal extends Component {
               }
 
               <div className="text-center">
-                <Button className="text-center" variant="primary" onClick={() => this.handleSubmit()} disabled={this.state.addingBooks}>
+                <Button className="text-center" variant="primary" onClick={async () => await this.handleSubmit()} >
                   Add
-                    {this.state.addingBooks &&
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                      className="ml-4"
-                    />}
                 </Button>
               </div>
             </Form>

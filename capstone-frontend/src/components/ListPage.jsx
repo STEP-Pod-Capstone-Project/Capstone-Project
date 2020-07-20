@@ -51,6 +51,19 @@ class ListPage extends Component {
     }
   }
 
+  updateListPage = async () => {
+    // Restart 
+    this.setState(
+      {
+        loading: true,
+        bookList: {},
+        gBooks: [],
+      }
+    );
+
+    await this.fetchBooks();
+  }
+
 
   deleteBook = async (bookId) => {
 
@@ -72,8 +85,8 @@ class ListPage extends Component {
       "remove_gbookIDs": bookId,
     }
 
-    // Update BookList in Firebase
-    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    // Remove BookList in Firebase
+    await fetch("/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
     });
@@ -101,7 +114,7 @@ class ListPage extends Component {
               <Col className="text-right">
                 <SearchBookModal
                   objectId={this.props.match.params.id}
-                  update={() => this.fetchBooks}
+                  update={this.updateListPage}
                   putURL="/api/booklist"
                   type="booklist"
                   btnStyle="btn btn-primary mt-4 mr-2" />
@@ -121,7 +134,7 @@ class ListPage extends Component {
               <Col className="text-right">
                 <SearchBookModal
                   objectId={this.props.match.params.id}
-                  update={() => this.fetchBooks}
+                  update={this.updateListPage}
                   putURL="/api/booklist"
                   type="booklist"
                   btnStyle="btn btn-primary mt-4 mr-2" />
