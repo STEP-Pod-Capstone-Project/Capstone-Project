@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
 
-class SearchBookModal extends Component {
+export class SearchBookModal extends Component {
 
   constructor(props) {
     super(props)
@@ -58,7 +58,7 @@ class SearchBookModal extends Component {
 
   addBookToList = (book) => {
 
-    if (this.props.type === "club") {
+    if (this.props.type === 'club') {
       this.setState(
         {
           addedBooksIDs: [book.id],
@@ -93,18 +93,18 @@ class SearchBookModal extends Component {
 
       await Promise.all(this.state.addedBooksIDs.map(async bookId => {
 
-        var updateJson;
+        let updateJson;
 
-        if (this.props.type === "club") {
+        if (this.props.type === 'club') {
           updateJson = {
-            "id": this.props.objectId,
-            "add_gbookID": bookId,
+            id: this.props.objectId,
+            gbookID: bookId,
           }
         }
         else {
           updateJson = {
-            "id": this.props.objectId,
-            "add_gbookIDs": bookId,
+            id: this.props.objectId,
+            add_gbookIDs: bookId,
           }
         }
 
@@ -234,5 +234,3 @@ class SearchBookModal extends Component {
     )
   }
 }
-
-export default SearchBookModal;

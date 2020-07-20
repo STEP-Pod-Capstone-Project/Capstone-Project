@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Spinner, Row, Col } from 'react-bootstrap'
 import StarRatings from 'react-star-ratings'
-import SearchBookModal from './SearchBookModal'
+import { SearchBookModal } from './SearchBookModal'
 import '../styles/ListPage.css'
 
 class ListPage extends Component {
@@ -89,7 +89,7 @@ class ListPage extends Component {
     await fetch("/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
-    });
+    }).catch(err => alert(err));
   }
 
   render() {
