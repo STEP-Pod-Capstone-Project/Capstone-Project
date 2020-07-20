@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { GoogleLogin } from 'react-google-login';
-import { Card } from 'react-bootstrap'
+import { Card, Navbar, Nav, Button, FormControl, Form } from 'react-bootstrap'
+import '../styles/Login.css'
 
 export class Login extends Component {
 
@@ -21,11 +22,15 @@ export class Login extends Component {
   render() {
     return (
       <div>
-        <Card className="w-50">
+        <Navbar bg="primary" variant="dark">
+          <Navbar.Brand >BookBook</Navbar.Brand>
+        </Navbar>
+
+        <Card id="login-card" className="text-center">
           <Card.Header><h1 className="my-4">Welcome to BookBook</h1></Card.Header>
           <Card.Body>
-            <Card.Text>
-              <h3 className="my-3">To Get Started</h3>
+            <Card.Text id="sign-in-text">
+              <p className="mb-3 h3">To Get Started</p>
               <GoogleLogin
                 className="text-center"
                 clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
@@ -35,7 +40,6 @@ export class Login extends Component {
                 cookiePolicy={"single_host_origin"} />
             </Card.Text>
           </Card.Body>
-
         </Card>
       </div>
     )

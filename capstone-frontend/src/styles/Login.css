@@ -1,0 +1,13 @@
+#login-card {
+  width: 45em;
+  margin: 0 auto;
+  transform: translateY(50%);
+}
+
+#sign-in-text p {
+  font-weight: 400;
+}
+
+#sign-in-text button{
+  font-size: 18px !important;
+}

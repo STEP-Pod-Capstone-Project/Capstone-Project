@@ -88,7 +88,7 @@ class App extends Component {
             </>
           )
           :
-          (<div className="text-center mt-5"> <Login toggleSignIn={this.toggleSignIn}/> </div>)
+          (<Login toggleSignIn={this.toggleSignIn}/>)
         }
       </Router >
     );
