@@ -56,8 +56,20 @@ test('renders book search tile with empty bookList test', async () => {
   const bookListButton = document.getElementById("dropdown-list-add");
   expect(bookListButton).toBeInTheDocument();
   expect(bookListButton.innerHTML).toEqual("No Lists Found");
+});
 
+test('renders bookSearchTile createList btn', () => {
+  render(<App />, container);
+
+  const createBookListBtn = document.getElementById("create-list-modal");
+  expect(createBookListBtn).toBeInTheDocument();
+  expect(createBookListBtn.innerHTML).toEqual(" Create New List ");
+});
+
+<<<<<<< HEAD
   await act(async () => {bookListButton.click()});
   const dropdownItems = document.getElementsByClassName("dropdown-item");
   expect(dropdownItems[0].innerHTML).toEqual("<span>Create New List</span>");
 });
+=======
+>>>>>>> master

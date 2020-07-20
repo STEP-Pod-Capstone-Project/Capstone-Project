@@ -8,7 +8,6 @@ class BookSearchList extends Component {
     super(props);
     this.state = {
       books: [],
-      bookLists: []
     }
   }
 
@@ -19,21 +18,8 @@ class BookSearchList extends Component {
       .catch(err => console.log(err));
   }
 
-  getUserBookLists = async () => {
-
-    const userID = window.localStorage.getItem("userID");
-
-    const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
-      method: "GET",
-    }).then(resp => resp.json());
-
-    this.setState({ bookLists });
-  }
-
-
   componentDidMount() {
     this.getData();
-    this.getUserBookLists();
   }
 
   render() {
@@ -41,7 +27,7 @@ class BookSearchList extends Component {
       <div>
         {
           this.state.books.map(book =>
-            <BookSearchTile book={book} bookLists={this.state.bookLists} key={book.id} />
+            <BookSearchTile book={book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} key={book.id} />
           )
         }
       </div>
