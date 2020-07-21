@@ -31,7 +31,7 @@ test('renders right sidebar', () => {
 });
 
 test('renders nav', () => {
-  render(<Router><Navbar testing={true}/></Router>, container);
+  render(<Router><Navbar /></Router>, container);
   const navbar = document.getElementById("navbar");
   expect(navbar).toBeInTheDocument();
 });

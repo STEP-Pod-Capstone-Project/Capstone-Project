@@ -9,7 +9,7 @@ export class Logout extends Component {
     super(props);
 
     this.state = {
-      profileObj: JSON.parse(window.localStorage.getItem("profileObj")),
+      profileObj: JSON.parse(window.localStorage.getItem("profileObj")) || {},
     };
   }
 
