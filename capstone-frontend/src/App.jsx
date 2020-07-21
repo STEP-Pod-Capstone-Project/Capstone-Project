@@ -47,13 +47,22 @@ class App extends Component {
     this.setState({ bookLists });
   }
 
-  componentDidMount() {
-    this.fetchBookLists();
-    console.log(this.state.isSignIn)
+  async componentDidMount() {
+
+    console.log(window.localStorage.getItem("userID"), window.localStorage.getItem("profileObj"))
+    if (window.localStorage.getItem("userID") === null || window.localStorage.getItem("profileObj") === null) {
+      window.localStorage.removeItem("userID");
+      window.localStorage.removeItem("profileObj");
+      this.setState({isSignIn: false})
+    }
+
+    else if (this.state.isSignIn) {
+      await this.fetchBookLists();
+    }
   }
 
   toggleSignIn = () => {
-    this.setState({isSignIn : !this.state.isSignIn})
+    this.setState({ isSignIn: !this.state.isSignIn })
   }
 
 
@@ -88,7 +97,7 @@ class App extends Component {
             </>
           )
           :
-          (<Login toggleSignIn={this.toggleSignIn}/>)
+          (<Login toggleSignIn={this.toggleSignIn} />)
         }
       </Router >
     );

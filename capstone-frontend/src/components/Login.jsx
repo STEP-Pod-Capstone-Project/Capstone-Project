@@ -20,6 +20,7 @@ export class Login extends Component {
   }
 
   render() {
+    console.log(window.localStorage.getItem("userID") === null, window.localStorage.getItem("profileObj") === null)
     return (
       <div>
         <Navbar bg="primary" variant="dark">
@@ -30,9 +31,10 @@ export class Login extends Component {
           <Card.Header><h1 className="my-4">Welcome to BookBook</h1></Card.Header>
           <Card.Body>
             <Card.Text id="sign-in-text">
-              <p className="mb-3 h3">To Get Started</p>
+              <span className="h3">To Get Started</span>
+              <br />
               <GoogleLogin
-                className="text-center"
+                className="text-center mt-3"
                 clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
                 buttonText="Sign in with Google"
                 onSuccess={this.loginResponseSuccess}
