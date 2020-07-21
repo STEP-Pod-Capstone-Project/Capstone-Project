@@ -26,7 +26,7 @@ const popoutDescription = (book) => {
 
 const BookDescriptionOverlay = (props) => {
   return (
-    <OverlayTrigger trigger="hover" placement="right" overlay={popoutDescription(props.book)}>
+    <OverlayTrigger trigger='hover' placement='right' overlay={popoutDescription(props.book)}>
       {props.children}
     </OverlayTrigger>
   );
