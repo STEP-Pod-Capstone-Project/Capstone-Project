@@ -14,7 +14,6 @@ export class Logout extends Component {
   }
 
   logoutResponseSuccess = () => {
-    console.log("logout")
     window.localStorage.removeItem("userID");
     window.localStorage.removeItem("profileObj");
     this.props.toggleSignIn();

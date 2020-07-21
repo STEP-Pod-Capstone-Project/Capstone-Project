@@ -24,7 +24,7 @@ class App extends Component {
     this.state = {
       searchQuery: "",
       bookLists: [],
-      isSignIn: (window.localStorage.getItem("userID")) ? true : false,
+      isSignIn: ((window.localStorage.getItem("userID")) && (window.localStorage.getItem("profileObj"))) ? true : false,
     };
   }
 
@@ -40,7 +40,7 @@ class App extends Component {
 
     const userID = window.localStorage.getItem("userID");
 
-    const bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
+    const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
       method: "GET",
     }).then(resp => resp.json()).catch(err => console.log(err));
 
@@ -48,15 +48,8 @@ class App extends Component {
   }
 
   async componentDidMount() {
-
-    console.log(window.localStorage.getItem("userID"), window.localStorage.getItem("profileObj"))
-    if (window.localStorage.getItem("userID") === null || window.localStorage.getItem("profileObj") === null) {
-      window.localStorage.removeItem("userID");
-      window.localStorage.removeItem("profileObj");
-      this.setState({isSignIn: false})
-    }
-
-    else if (this.state.isSignIn) {
+    
+    if (this.state.isSignIn) {
       await this.fetchBookLists();
     }
   }
