@@ -17,7 +17,7 @@ const ClubGridItem = ({club}) => {
           <Card.Subtitle className="mb-2 text-muted" id="group-gbook"> Reading: {club.bookTitle} </Card.Subtitle>
           <Card.Text id="group-description"> {club.description} </Card.Text>
         </Card.Body>
-        <Card.Footer className="text-muted"> {club.memberIDs.length} Members </Card.Footer>
+        <Card.Footer className="footer text-muted"> {club.memberIDs.length} Members </Card.Footer>
       </Link>
     </Card>
   );

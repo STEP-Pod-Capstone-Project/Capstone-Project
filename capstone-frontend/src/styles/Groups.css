@@ -115,6 +115,9 @@
 
 #group-link {
   color: black;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   text-decoration: none;
 }
 
@@ -123,8 +126,12 @@
   justify-content: center;
 }
 
-.header{
-  padding: .75rem 1.25rem !important;
+.group-container .footer {
+  justify-self: end;
+}
+
+.group-container .header {
+  padding: .75rem 1.25rem;
 }
 
 .page-container {
