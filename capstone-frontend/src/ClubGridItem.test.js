@@ -15,11 +15,12 @@ document.body.appendChild(container);
 const club = {
   name: "name",
   description: "description",
-  gbook: "gbook"
+  gbook: "gbook", 
+  memberIDs: ["one", "two", "three"]
 };
 
 test('renders club tile test', () => {
-  render(<Router> <ClubGridItem name={club.name} description={club.description} ownerID={club.ownerID} gbookID={club.gbookID} /> </Router>, container);
+  render(<Router> <ClubGridItem club={club} /> </Router>, container);
 
   const name = document.getElementById("group-name");
   expect(name).toBeInTheDocument();
