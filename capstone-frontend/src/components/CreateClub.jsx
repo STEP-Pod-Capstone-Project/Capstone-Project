@@ -17,7 +17,7 @@ class CreateClub extends Component {
     }
     data.ownerID = window.localStorage.getItem("userID");
 
-    fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs", {method: "post", body: JSON.stringify(data)})
+    fetch("/api/clubs", {method: "post", body: JSON.stringify(data)})
         .then(function() {
           history.push(`/clubpage/${data.id}`);
         })

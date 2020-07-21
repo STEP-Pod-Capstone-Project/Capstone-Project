@@ -15,14 +15,14 @@ class MyClubs extends Component {
   }
 
   getMyClubs = async () => {
-    let memberClubs = await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
+    let memberClubs = await fetch(`/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
         .then(response => response.json())
         .catch(function(err) {
           //TODO #61: Centralize error output
           alert(err); 
         });
 
-    let ownerClubs = await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?ownerID=${window.localStorage.getItem("userID")}`)
+    let ownerClubs = await fetch(`/api/clubs?ownerID=${window.localStorage.getItem("userID")}`)
         .then(response => response.json())
         .catch(function(err) {
           //TODO #61: Centralize error output
@@ -33,14 +33,14 @@ class MyClubs extends Component {
     let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
     let c;
     for (c of allClubs) {
-      let owner = await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${c.ownerID}`)
+      let owner = await fetch(`/api/user?id=${c.ownerID}`)
                                 .then(response => response.json())
                                 .catch(function(err) {
                                   //TODO #61: Centralize error output
                                   alert(err); 
                                 });
       
-      let book = await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/search?gbookId=${c.gbookID}`)
+      let book = await fetch(`/api/search?gbookId=${c.gbookID}`)
                                 .then(response => response.json())
                                 .then(bookJson => bookJson[0])
                                 .catch(function(err) {
