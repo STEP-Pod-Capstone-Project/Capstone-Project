@@ -18,4 +18,4 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12
-    - run: cd capstone-frontend; ls; npm cache clean --force; npm ci; npm test; npm run build;
+    - run: cd capstone-frontend; npm cache clean --force; rm -rf node_modules package-lock.json; npm ci; npm test; sudo npm run build;
