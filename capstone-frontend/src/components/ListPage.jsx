@@ -98,8 +98,7 @@ class ListPage extends Component {
                 this.state.gBooks.map(gBook =>
                   <Row className="text-center border m-5 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
                     <Col md={3} className="my-4 p-0 ">
-                      {/* TODO(#79): Redirect user to BookPage instead of playstore */}
-                      <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
+                      <a className="text-decoration-none text-body" href={`/bookpage/${gBook.id}`}>
                         <img className="img-responsive" src={gBook.thumbnailLink} alt={gBook.title} />
                       </a>
                     </Col>
@@ -111,7 +110,7 @@ class ListPage extends Component {
                         starDimension="40px"
                         starSpacing="10px"
                         starRatedColor="gold" />
-                        <p className="my-3" > {gBook.authors.join(', ')} </p>
+                      <p className="my-3" > {gBook.authors.join(', ')} </p>
                     </Col>
 
                     <Col md={3} className="my-4 p-0">
