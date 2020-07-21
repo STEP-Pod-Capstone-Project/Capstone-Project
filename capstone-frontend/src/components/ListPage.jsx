@@ -144,8 +144,6 @@ class ListPage extends Component {
 
             <div>
               {
-                (this.state.gBooks.length !== 0) &&
-                (
                   this.state.gBooks.map(gBook =>
                     <Row className="text-center border m-5 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
                       {console.log(gBook)}
