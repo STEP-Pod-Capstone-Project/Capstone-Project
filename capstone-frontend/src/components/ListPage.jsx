@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Spinner, Row, Col } from 'react-bootstrap'
 import StarRatings from 'react-star-ratings'
+import { SearchBookModal } from './SearchBookModal'
 import '../styles/ListPage.css'
 
 class ListPage extends Component {
@@ -11,8 +12,7 @@ class ListPage extends Component {
     this.state = {
       bookList: {},
       gBooks: [],
-      loading: true,
-      empty: false
+      loading: true, // Spinner
     }
   }
 
@@ -26,7 +26,7 @@ class ListPage extends Component {
     const gbookIDs = bookList[0].gbookIDs;
 
     if (!gbookIDs.length) {
-      this.setState({ loading: false, empty: true, bookList: bookList[0] });
+      this.setState({ loading: false, bookList: bookList[0] });
       return;
     }
 
@@ -37,35 +37,59 @@ class ListPage extends Component {
       gBooks.push(gBook[0]);
     }))
 
-    this.setState({ bookList: bookList[0], gBooks, loading: false });
-
+    this.setState({ gBooks, bookList: bookList[0], loading: false });
   }
 
-  componentDidMount() {
-    this.fetchBooks();
+  async componentDidMount() {
+    await this.fetchBooks();
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (this.props.match.params.id !== prevProps.match.params.id) {
-      this.setState({ loading: true, empty: false })
-      this.fetchBooks();
+      this.setState({ loading: true, gBooks: [], bookList: {} })
+      await this.fetchBooks();
     }
   }
 
-  deleteBook = (bookId) => {
+  updateListPage = async () => {
+    // Restart 
+    this.setState(
+      {
+        loading: true,
+        bookList: {},
+        gBooks: [],
+      }
+    );
+
+    await this.fetchBooks();
+  }
+
+
+  deleteBook = async (bookId) => {
+
+    const gBooks = this.state.gBooks.filter(gBook => gBook.id !== bookId);
+
+    const bookList = this.state.bookList;
+    bookList.gbookIDs = bookList.gbookIDs.filter(gBookId => gBookId !== bookId)
+
+    // Remove and Rerender
+    this.setState(
+      {
+        gBooks,
+        bookList,
+      }
+    )
 
     const bookListUpdateJson = {
       "id": this.props.match.params.id,
       "remove_gbookIDs": bookId,
     }
 
-    // Update BookList in Firebase
-    fetch("/api/booklist", {
+    // Remove BookList in Firebase
+    await fetch("/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
-    });
-
-    this.fetchBooks();
+    }).catch(err => alert(err));
   }
 
   render() {
@@ -79,19 +103,44 @@ class ListPage extends Component {
         <h1>Loading...</h1>
       </div>)
       :
-      (this.state.empty
+      ((this.state.gBooks.length === 0)
         ?
         (
           <div>
-            <h2 className="mt-3">{this.state.bookList.name}</h2>
-            <hr className="light-gray-border" />
+            <Row>
+              <Col>
+                <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
+              </Col>
+              <Col className="text-right">
+                <SearchBookModal
+                  objectId={this.props.match.params.id}
+                  update={this.updateListPage}
+                  putURL="/api/booklist"
+                  type="booklist"
+                  btnStyle="btn btn-primary mt-4 mr-2" />
+              </Col>
+            </Row>
+            <hr className="light-gray-border mx-2 my-2" />
             <h3 className="text-center mt-4">Booklist has No Books</h3>
           </div>
         )
-        : (
+        :
+        (
           <div>
-            <h2 className="mt-3">{this.state.bookList.name}</h2>
-            <hr className="light-gray-border" />
+            <Row>
+              <Col>
+                <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
+              </Col>
+              <Col className="text-right">
+                <SearchBookModal
+                  objectId={this.props.match.params.id}
+                  update={this.updateListPage}
+                  putURL="/api/booklist"
+                  type="booklist"
+                  btnStyle="btn btn-primary mt-4 mr-2" />
+              </Col>
+            </Row>
+            <hr className="light-gray-border mx-2 my-2" />
 
             <div>
               {
@@ -111,17 +160,18 @@ class ListPage extends Component {
                         starDimension="40px"
                         starSpacing="10px"
                         starRatedColor="gold" />
-                        <p className="my-3" > {gBook.authors.join(', ')} </p>
+                      <p className="my-3" > {gBook.authors.join(', ')} </p>
                     </Col>
 
                     <Col md={3} className="my-4 p-0">
                       <a className="btn btn-primary mt-4 width-75" href={gBook.webReaderLink}>Web Reader</a>
                       <br />
-                      <Button className="my-4 width-75" variant="danger" onClick={() => this.deleteBook(gBook.id)}>
+                      <Button className="my-4 width-75" variant="danger" onClick={async () => await this.deleteBook(gBook.id)}>
                         Remove Book from List
                       </Button>
                     </Col>
-                  </Row>)
+                  </Row>
+                )
               }
             </div>
 
