@@ -40,7 +40,7 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<String> requiredFields = new ArrayList<String>( Arrays.asList("text", "userID") );
+    List<String> requiredFields = new ArrayList<String>( Arrays.asList("text", "userID", "whenCreated") );
     Comment createdComment = (Comment) Utility.post(comments, request, response, new GenericClass(Comment.class), requiredFields);
     if (createdComment != null) {
       response.setContentType("application/json;");

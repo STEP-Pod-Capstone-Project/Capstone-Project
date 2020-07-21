@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Spinner, Row, Col } from 'react-bootstrap'
 import StarRatings from 'react-star-ratings'
-import SearchBookModal from './SearchBookModal'
+import { SearchBookModal } from './SearchBookModal'
 import '../styles/ListPage.css'
 
 class ListPage extends Component {
@@ -89,7 +89,7 @@ class ListPage extends Component {
     await fetch("/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
-    });
+    }).catch(err => alert(err));
   }
 
   render() {
@@ -172,9 +172,8 @@ class ListPage extends Component {
                         <Button className="my-4 width-75" variant="danger" onClick={async () => await this.deleteBook(gBook.id)}>
                           Remove Book from List
                       </Button>
-                      </Col>
-                    </Row>
-                  )
+                    </Col>
+                  </Row>
                 )
               }
             </div>
