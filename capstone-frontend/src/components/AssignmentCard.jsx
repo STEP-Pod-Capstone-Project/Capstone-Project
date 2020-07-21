@@ -63,7 +63,6 @@ class AssignmentCard extends Component {
           </div>
           <Button onClick={this.onComplete} variant="success"> Mark as Done </Button> 
         </div> 
-        
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <Form id="comment-form" onSubmit={this.onComment}>
           <Form.Group as={Row} controlId="formComment">
