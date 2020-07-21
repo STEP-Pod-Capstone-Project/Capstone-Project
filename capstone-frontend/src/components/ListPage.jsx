@@ -144,39 +144,38 @@ class ListPage extends Component {
 
             <div>
               {
-                  this.state.gBooks.map(gBook =>
-                    <Row className="text-center border m-5 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
-                      {console.log(gBook)}
-                      <Col md={3} className="my-4 p-0 ">
-                        {/* TODO(#79): Redirect user to BookPage instead of playstore */}
-                        <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
-                          <img className="img-responsive w-50" src={gBook.thumbnailLink} alt={gBook.title} />
-                        </a>
-                      </Col>
+                this.state.gBooks.map(gBook =>
+                  <Row className="text-center border m-5 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
+                    <Col md={3} className="my-4 p-0 ">
+                      {/* TODO(#79): Redirect user to BookPage instead of playstore */}
+                      <a className="text-decoration-none text-body" href={gBook.canonicalVolumeLink}>
+                        <img className="img-responsive w-50" src={gBook.thumbnailLink} alt={gBook.title} />
+                      </a>
+                    </Col>
 
-                      <Col className="my-4 p-0">
-                        <h2 className="mt-4"> {gBook.title} </h2>
-                        <StarRatings
-                          rating={gBook.avgRating}
-                          starDimension="40px"
-                          starSpacing="10px"
-                          starRatedColor="gold" />
-                        <p className="my-3" > {gBook.authors.join(', ')} </p>
-                      </Col>
+                    <Col className="my-4 p-0">
+                      <h2 className="mt-4"> {gBook.title} </h2>
+                      <StarRatings
+                        rating={gBook.avgRating}
+                        starDimension="40px"
+                        starSpacing="10px"
+                        starRatedColor="gold" />
+                      <p className="my-3" > {gBook.authors.join(', ')} </p>
+                    </Col>
 
-                      <Col md={3} className="my-4 p-0">
-                        <a className="btn btn-primary mt-4 width-75" href={gBook.webReaderLink}>Web Reader</a>
-                        <br />
-                        <Button className="my-4 width-75" variant="danger" onClick={async () => await this.deleteBook(gBook.id)}>
-                          Remove Book from List
+                    <Col md={3} className="my-4 p-0">
+                      <a className="btn btn-primary mt-4 width-75" href={gBook.webReaderLink}>Web Reader</a>
+                      <br />
+                      <Button className="my-4 width-75" variant="danger" onClick={async () => await this.deleteBook(gBook.id)}>
+                        Remove Book from List
                       </Button>
                     </Col>
                   </Row>
                 )
               }
             </div>
-
-          </div >)
+          </div >
+        )
       );
   }
 }
