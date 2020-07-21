@@ -30,7 +30,7 @@ class CommentCard extends Component {
       <div className="comment-border">
         {user}
         <div> {this.props.comment.text} </div>
-        {/* <div> {new Date(this.props.comment.whenCreated)} </div> */}
+        <div> {(new Date(this.props.comment.whenCreated)).toString()} </div>
       </div>
     );
   }

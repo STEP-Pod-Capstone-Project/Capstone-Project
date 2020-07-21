@@ -13,6 +13,7 @@ import MyClubs from './components/MyClubs';
 import { BookPage } from './components/BookPage';
 import ListPage from './components/ListPage'
 import ClubPage from './components/ClubPage';
+import AdminClubPage from './components/AdminClubPage';
 import CreateClub from './components/CreateClub';
 import Navbar from './components/Navbar';
 import LeftSideBar from './components/LeftSideBar';
