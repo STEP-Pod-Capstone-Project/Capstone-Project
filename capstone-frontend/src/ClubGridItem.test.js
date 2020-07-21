@@ -15,8 +15,7 @@ document.body.appendChild(container);
 const club = {
   name: "name",
   description: "description",
-  ownerID: "ownerID",
-  gbookID: "gbookID"
+  gbook: "gbook"
 };
 
 test('renders club tile test', () => {
@@ -28,11 +27,8 @@ test('renders club tile test', () => {
   const description = document.getElementById("group-description");
   expect(description).toBeInTheDocument();
 
-  const ownerID = document.getElementById("group-ownerID");
-  expect(ownerID).toBeInTheDocument();
-
-  const gbookID = document.getElementById("group-gbookID");
-  expect(gbookID).toBeInTheDocument();
+  const gbook = document.getElementById("group-gbook");
+  expect(gbook).toBeInTheDocument();
 
   const link = document.getElementById("group-link");
   expect(link).toBeInTheDocument();

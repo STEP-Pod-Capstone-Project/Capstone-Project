@@ -32,28 +32,28 @@ class ClubPage extends Component {
   }
 
   fetchData = async () => {
-    await fetch(`/api/clubs?id=${this.props.id}`)
+    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?id=${this.props.id}`)
         .then(response => response.json()).then(clubJson => this.setState({club: clubJson[0]}))
         .catch(function(err) {
             //TODO #61: Centralize error output
             alert(err);
         });
 
-    await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
+    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({book: bookJson[0]}))
         .catch(function(err) {
             //TODO #61: Centralize error output
             alert(err);
         });
 
-    await fetch(`/api/assignments?clubID=${this.state.club.id}`)
+    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/assignments?clubID=${this.state.club.id}`)
         .then(response => response.json()).then(assignmentJson => this.setState({assignments: assignmentJson}))
         .catch(function(err) {
             //TODO #61: Centralize error output
             alert(err); 
         });
 
-    await fetch(`/api/user?id=${this.state.club.ownerID}`)
+    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${this.state.club.ownerID}`)
         .then(response => response.json()).then(ownerJson => this.setState({owner: ownerJson}))
         .catch(function(err) {
             //TODO #61: Centralize error output
@@ -61,7 +61,7 @@ class ClubPage extends Component {
         });
 
     for (let i = 0; i < this.state.club.memberIDs.length; i++) {
-      await fetch(`/api/user?id=${this.state.club.memberIDs[i]}`)
+      await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${this.state.club.memberIDs[i]}`)
           .then(response => response.json())
           .then(memberJson => memberJson && this.setState({members: [...this.state.members, memberJson]}))
           .catch(function(err) {
@@ -82,7 +82,7 @@ class ClubPage extends Component {
       "text": e.target[0].value,
       "whenCreated": (new Date()).toUTCString()
     };
-    fetch(`/api/assignments`, {method: "post", body: JSON.stringify(data)})
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/assignments`, {method: "post", body: JSON.stringify(data)})
         .then(response => response.json())
         .then(assignmentJson => {
           let assignments = this.state.assignments;

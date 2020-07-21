@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import '../styles/Groups.css';
 
@@ -16,7 +17,7 @@ class CreateClub extends Component {
     }
     data.ownerID = window.localStorage.getItem("userID");
 
-    fetch("/api/clubs", {method: "post", body: JSON.stringify(data)})
+    fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs", {method: "post", body: JSON.stringify(data)})
         .then(function() {
           history.push(`/clubpage/${data.id}`);
         })
@@ -26,39 +27,36 @@ class CreateClub extends Component {
         });  
   }
 
+  addMembers = () => {
+    //TODO #91: Add members modal
+  }
+
   render() {
     return (
       <div className="page-container">
-        <div className="title"> Create a Club </div>
-        <form onSubmit={this.handleSubmit} id="create-club-form">
-          <div> 
-            <label htmlFor="name"> Club Name </label> 
-          </div>
-          <div>
-            <input type="text" id="name" name="name" />
-          </div>
-          <div>
-            <label htmlFor="description"> Club Description </label>
-          </div>
-          <div>
-            <textarea rows="5" cols="75" type="text" id="description" name="description" />
-          </div>
-          <div>
-            <label htmlFor="gbookID"> gbookID </label>
-          </div>
-          <div>
-            <input type="text" id="gbookID" name="gbookID" />
-          </div>
-          <div>
-            <label htmlFor="memberIDs"> memberIDs </label>
-          </div>
-          <div>
-            <input type="text" id="memberIDs" name="memberIDs" />
-          </div>
-          <div>
-            <input id="create-club" type="submit" value="Create your Club!" />
-          </div>
-        </form>
+        <Row>
+          <Col xs={12} className="title"> Create a Club </Col>
+        </Row>
+        <Form onSubmit={this.handleSubmit} id="create-club-form">
+          <Form.Group>
+            <Form.Label> Club Name </Form.Label>
+            <Form.Control name="name" type="text" placeholder="Enter club name..." />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label> Club Description </Form.Label>
+            <Form.Control name="description" as="textarea" rows="3" placeholder="Enter club description..." />
+          </Form.Group>
+          <Row>
+            <Col xs={12}>
+               <Button variant="secondary" id="add-members" onClick={this.addMembers}> Add Members </Button> 
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <Button variant="primary" id="create-club" type="submit"> Create Club </Button>
+            </Col>
+          </Row>      
+        </Form>
       </div>
     );
   }

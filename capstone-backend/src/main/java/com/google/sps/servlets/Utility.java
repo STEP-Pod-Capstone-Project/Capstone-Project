@@ -244,6 +244,10 @@ public class Utility {
    */
   public static <T extends BaseEntity> List<T> get(CollectionReference collectionReference, HttpServletRequest request,
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+response.setHeader("Access-Control-Allow-Credentials", "true");
+response.setHeader("Access-Control-Allow-Origin", "https://3000-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io");
+response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
     List<T> retrievedObjects = new ArrayList<>();
     ApiFuture<QuerySnapshot> asyncQuery;
     if (request.getParameter("id") != null) {
@@ -410,6 +414,10 @@ public class Utility {
    */
   public static <T extends BaseEntity> T post(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass, List<String> requiredFields) throws IOException {
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+response.setHeader("Access-Control-Allow-Credentials", "true");
+response.setHeader("Access-Control-Allow-Origin", "https://3000-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io");
+response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     Class superClass = genericClass.getMyType().getSuperclass();
