@@ -31,6 +31,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -216,10 +217,10 @@ public class SearchServlet extends HttpServlet {
     ArrayList<String> sizes = new ArrayList<>(Arrays.asList("extraLarge", "large", "medium", "small", "thumbnail"));
 
     String thumbnailLink = "";
-    String greatestSize = sizes.stream().filter(size -> thumbnailElement.getAsJsonObject().get(size) != null)
-        .findFirst().get();
-    if (greatestSize != null) {
-      thumbnailLink = thumbnailElement.getAsJsonObject().get(greatestSize).getAsString();
+    Optional<String> greatestSize = sizes.stream().filter(size -> thumbnailElement.getAsJsonObject().get(size) != null)
+        .findFirst();
+    if (greatestSize.isPresent()) {
+      thumbnailLink = thumbnailElement.getAsJsonObject().get(greatestSize.get().toString()).getAsString();
     }
     thumbnailLink = thumbnailLink.replace("http", "https");
 
