@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Button, Form, Row } from 'react-bootstrap';
 
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
+import UserCard from './UserCard';
  
 import '../styles/Groups.css';
 
@@ -16,6 +19,16 @@ class ClubPage extends Component {
       owner: {}, 
       members: [], 
     }
+  }
+  
+  removeMember = (memberID) => {
+    let memberArray = this.state.members;
+    let memberIDsArray = this.state.members.map(m => m.id);
+    const index = memberIDsArray.indexOf(memberID);
+    if (index > -1) {
+      memberArray.splice(index, 1);
+    }
+    this.setState({members: memberArray});
   }
 
   fetchData = async () => {
@@ -57,16 +70,28 @@ class ClubPage extends Component {
           });
     }
   }
- 
-  handleClick = () => {
-    const history = this.props.history;
-    fetch(`/api/clubs?id=${this.props.match.params.id}`, {method: "delete"})
-        .then(function() {
-            history.push("/myclubs");
+
+  handleAssignmentPost = (e) => {
+    e.preventDefault();
+    if (window.localStorage.getItem("userID") !== this.state.club.ownerID) {
+      alert("Assignment creation failed. You do not own this club.");
+      return;
+    }
+    let data = {
+      "clubID": this.state.club.id,
+      "text": e.target[0].value,
+      "whenCreated": (new Date()).toUTCString()
+    };
+    fetch(`/api/assignments`, {method: "post", body: JSON.stringify(data)})
+        .then(response => response.json())
+        .then(assignmentJson => {
+          let assignments = this.state.assignments;
+          assignments.push(assignmentJson);
+          this.setState({assignments});
         })
         .catch(function(err) {
-            //TODO #61: Centralize error output
-            alert(err);
+          //TODO #61: Centralize error output
+          alert(err); 
         });
   }
 
@@ -75,19 +100,40 @@ class ClubPage extends Component {
   }
 
   render() {
+    const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem("userID");
     const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />;
-    const owner = this.state.owner && <div> Club Owner: {this.state.owner.fullName}, {this.state.owner.email} </div>;
-    const members = this.state.members.length && <div> Club Members: {this.state.members.map(m => m.fullName).join(", ")} </div>;
+    const owner = this.state.owner && <UserCard removeMember={this.removeMember} club={this.state.club} user={this.state.owner} />;
+    const members = this.state.members.length && this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />);
     const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
     return (
-      <div className="text-center"> 
+      <div className="container text-center"> 
+        {isOwner &&
+           <Link to={`/adminclubpage/${this.state.club.id}`}> 
+              <Button className="admin-button" variant="secondary">
+                Admin page
+              </Button>
+            </Link> 
+        }
         <div className="title"> {this.state.club.name} </div>
-        {owner}
-        {members}
+        <div> Club Owner: </div>
+        <Row className="align-items-center justify-content-center">
+          {owner}
+        </Row>
         <div className="description"> {this.state.club.description} </div>
         {bookTile}
         {assignments}
-        <button onClick={this.handleClick}> Delete </button>
+        {isOwner &&
+            <Form onSubmit={this.handleAssignmentPost} id="assignment-post-form">
+              <Form.Group controlId="formPostAssignment">
+                <Form.Label> Post a new assignment! </Form.Label> 
+                <Form.Control as="textarea" rows="3" placeholder="Enter assignment text..." />
+              </Form.Group>
+              <Button variant="primary" type="submit"> Submit </Button>
+            </Form>
+        }
+        <Row className="justify-content-center"> 
+          {members}
+        </Row>
       </div>
     );
   }
