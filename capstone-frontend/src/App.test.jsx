@@ -15,8 +15,7 @@ const getUserBookLists = () => {
     { id: '2', name: 'Fantasy' },
     { id: '3', name: 'Sci-fi' }
   ];
-  ;
-}
+};
 
 test('renders left sidebar', () => {
   render(<Router><LeftSideBar bookLists={getUserBookLists()} /></Router>, container);
