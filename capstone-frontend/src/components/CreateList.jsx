@@ -182,7 +182,7 @@ class CreateList extends Component {
                 this.state.displayBooks &&
 
                 <div>
-                  <h3 clasName="my-4 px-4">Search Results</h3>
+                  <h3 className="my-4 px-4">Search Results</h3>
                   <Row className="px-3 text-center">
                     {this.state.searchResults.map(book =>
                       <Col md={3} className="px-2 my-0 border" key={book.id}>
