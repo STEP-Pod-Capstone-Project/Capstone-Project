@@ -122,7 +122,7 @@ class CreateList extends Component {
 
     return (
       <Popover>
-        <Popover.Title as="h3">
+        <Popover.Title as='h3'>
           <a className='center-horizontal'
             href={`/bookpage/${book.id}`} target='_blank'
             rel='noopener noreferrer'>
@@ -130,7 +130,7 @@ class CreateList extends Component {
           </a>
         </Popover.Title>
         <Popover.Content>
-          <p className="font-weight-bold">Description:</p>
+          <p className='font-weight-bold'>Description:</p>
           {description}
         </Popover.Content>
       </Popover >
