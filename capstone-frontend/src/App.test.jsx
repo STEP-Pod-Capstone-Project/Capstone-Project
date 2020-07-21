@@ -18,11 +18,11 @@ const getUserBookLists = () => {
   ;
 }
 
-
 test('renders left sidebar', () => {
   render(<Router><LeftSideBar bookLists={getUserBookLists()} /></Router>, container);
 
-  const leftSidebar = document.getElementById("left-sidebar-container"); expect(leftSidebar).toBeInTheDocument();
+  const leftSidebar = document.getElementById("left-sidebar-container"); 
+  expect(leftSidebar).toBeInTheDocument();
 });
 
 test('renders right sidebar', () => {
