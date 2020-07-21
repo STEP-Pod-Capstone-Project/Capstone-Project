@@ -77,7 +77,7 @@ class Navbar extends Component {
             </li>
           </ul>
         </div>
-        <Logout toggleSignIn={this.props.toggleSignIn}/>
+        {!this.props.testing && <Logout toggleSignIn={this.props.toggleSignIn}/>}
       </nav>
     );
   }

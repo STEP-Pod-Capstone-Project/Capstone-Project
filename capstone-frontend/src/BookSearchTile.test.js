@@ -4,12 +4,8 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 
 import BookSearchTile from './components/BookSearchTile.jsx';
-import App from './App.jsx';
-import {
-  Route,
-  BrowserRouter as Router,
-  Link
-} from 'react-router-dom';
+import CreateList from './components/CreateList.jsx'
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const container = document.createElement('div');
 document.body.appendChild(container);
@@ -58,10 +54,9 @@ test('renders book search tile with empty bookList test', () => {
 });
 
 test('renders bookSearchTile createList btn', () => {
-  render(<App />, container);
+  render(<Router><CreateList bookLists={getUserBookLists()} /></Router>, container);
 
   const createBookListBtn = document.getElementById('create-list-modal');
-  console.log("Hello", createBookListBtn)
-  // expect(createBookListBtn).toBeInTheDocument();
-  // expect(createBookListBtn.innerHTML).toMatch(/Create New List/);
+  expect(createBookListBtn).toBeInTheDocument();
+  expect(createBookListBtn.innerHTML).toMatch(/Create New List/);
 });
