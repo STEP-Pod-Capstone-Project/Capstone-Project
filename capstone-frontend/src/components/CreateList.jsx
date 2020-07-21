@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
-import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
+import { Button, Form, Spinner, Modal, Col, Row, Popover, OverlayTrigger } from 'react-bootstrap'
 
 class CreateList extends Component {
 
@@ -28,7 +28,7 @@ class CreateList extends Component {
 
     if (searchTerm === "") {
       searchResults = [];
-      
+
       this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
     else {
@@ -113,6 +113,24 @@ class CreateList extends Component {
     this.props.updateBookLists();
   }
 
+  popoutDescription = (book) => {
+    return (
+      <Popover>
+        <Popover.Title as="h3">
+          <a className='text-decoration-none text-body center-horizontal'
+            href={`/bookpage/${book.id}`} target='_blank'
+            rel='noopener noreferrer'>
+            {book.title}
+          </a>
+        </Popover.Title>
+        <Popover.Content>
+          <p className="font-weight-bold">Description:</p>
+          {book.description}
+        </Popover.Content>
+      </Popover>
+    );
+  }
+
   render() {
     return (
       <div>
@@ -163,7 +181,9 @@ class CreateList extends Component {
                   <Row className="px-3 text-center">
                     {this.state.searchResults.map(book =>
                       <Col md={3} className="px-2 my-0 border" key={book.id}>
-                        <img className="img-responsive mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                        <OverlayTrigger trigger="click" placement="right" overlay={this.popoutDescription(book)}>
+                          <img className="img-responsive mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                        </OverlayTrigger>
                         <h5 className="mt-4"> {book.title} </h5>
                         <p className="my-1"> {book.authors.join(', ')} </p>
                         {this.state.addedBooksIDs.includes(book.id) ?
@@ -185,7 +205,9 @@ class CreateList extends Component {
                     {this.state.addedBooks.map(addedBook =>
 
                       <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
-                        <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                        <OverlayTrigger trigger="click" placement="right" overlay={this.popoutDescription(addedBook)}>
+                          <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                        </OverlayTrigger>
                         <h5 className="mt-4"> {addedBook.title} </h5>
                         <p className="my-1"> {addedBook.authors.join(', ')} </p>
                         <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>
