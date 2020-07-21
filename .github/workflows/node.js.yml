@@ -18,6 +18,4 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12
-    - run: cd capstone-frontend; npm ci
-    - run: cd capstone-frontend; npm run build
-    - run: cd capstone-frontend; npm test
+    - run: cd capstone-frontend; npm ci; npm test; npm run build;
