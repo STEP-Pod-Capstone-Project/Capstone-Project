@@ -114,7 +114,6 @@ class CreateList extends Component {
   }
 
   popoutDescription = (book) => {
-    // Check for greater than 500 chars, if so then substring with ...
     let description = book.description;
     if (description.length > 500) {
       description = description.substring(0, 500).concat('...');
@@ -188,7 +187,7 @@ class CreateList extends Component {
                     {this.state.searchResults.map(book =>
                       <Col md={3} className="px-2 my-0 border" key={book.id}>
                         <OverlayTrigger trigger="click" placement="right" overlay={this.popoutDescription(book)}>
-                          <img className="img-responsive mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                          <img className="img-fluid book-img-sm mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
                         </OverlayTrigger>
                         <h5 className="mt-4"> {book.title} </h5>
                         <p className="my-1"> {book.authors.join(', ')} </p>
@@ -212,7 +211,7 @@ class CreateList extends Component {
 
                       <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
                         <OverlayTrigger trigger="click" placement="right" overlay={this.popoutDescription(addedBook)}>
-                          <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                          <img className="img-responsive mt-3 p-0 rounded book-img-sm" src={addedBook.thumbnailLink} alt={addedBook.title} />
                         </OverlayTrigger>
                         <h5 className="mt-4"> {addedBook.title} </h5>
                         <p className="my-1"> {addedBook.authors.join(', ')} </p>
