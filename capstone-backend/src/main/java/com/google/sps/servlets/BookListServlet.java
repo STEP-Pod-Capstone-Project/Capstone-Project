@@ -54,11 +54,6 @@ public class BookListServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    response.setHeader("Access-Control-Allow-Methods", "GET");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin",
-        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
-
     List<BookList> retrievedBookLists = Utility.get(booklists, request, response, new GenericClass(BookList.class));
     if (retrievedBookLists != null) {
       response.setContentType("application/json;");
