@@ -31,7 +31,7 @@ class CommentCard extends Component {
                       </span>;
     return (
       <div className="comment-card">
-        <img className="profile" src={this.state.user.profileImageUrl} />
+        <img className="profile" alt="Profile" src={this.state.user.profileImageUrl} />
         <div>
           <div className="header">
             {user}
