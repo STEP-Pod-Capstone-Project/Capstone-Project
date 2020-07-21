@@ -30,7 +30,7 @@ test('renders book search tile test', async () => {
   render(<Router><BookSearchTile book={book}
     bookLists={getUserBookLists()} /></Router>, container);
 
-  const bookThumbnail = document.getElementsByClassName('book-img-med')[0];
+  const bookThumbnail = document.getElementsByClassName('book-img-md')[0];
   expect(bookThumbnail).toBeInTheDocument();
 
   const bookTitle = document.getElementsByClassName('book-title')[0];

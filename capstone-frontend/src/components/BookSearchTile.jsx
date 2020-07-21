@@ -11,7 +11,7 @@ const BookSearchTile = (props) => {
           <Col md='auto'>
             <a className='text-decoration-none text-body'
               href={`/bookpage/${props.book.id}`}>
-              <img className='book-img-med' src={props.book.thumbnailLink} alt={props.book.title} />
+              <img className='book-img-md' src={props.book.thumbnailLink} alt={props.book.title} />
             </a>
           </Col>
           <Col>
