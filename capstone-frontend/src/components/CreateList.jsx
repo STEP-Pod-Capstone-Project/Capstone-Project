@@ -114,10 +114,16 @@ class CreateList extends Component {
   }
 
   popoutDescription = (book) => {
+    // Check for greater than 500 chars, if so then substring with ...
+    let description = book.description;
+    if (description.length > 500) {
+      description = description.substring(0, 500).concat('...');
+    }
+
     return (
       <Popover>
         <Popover.Title as="h3">
-          <a className='text-decoration-none text-body center-horizontal'
+          <a className='center-horizontal'
             href={`/bookpage/${book.id}`} target='_blank'
             rel='noopener noreferrer'>
             {book.title}
@@ -125,15 +131,15 @@ class CreateList extends Component {
         </Popover.Title>
         <Popover.Content>
           <p className="font-weight-bold">Description:</p>
-          {book.description}
+          {description}
         </Popover.Content>
-      </Popover>
+      </Popover >
     );
   }
 
   render() {
     return (
-      <div>
+      <>
         <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
           <div className={this.props.textStyle}>
             <span id="create-list-modal"> Create New List </span>
@@ -234,7 +240,7 @@ class CreateList extends Component {
             </Form>
           </Modal.Body>
         </Modal>
-      </div>
+      </>
     )
   }
 }

@@ -83,6 +83,8 @@ export class BookPage extends Component {
                     </Row>
                     <Row>
                       <h3> Description </h3>
+                    </Row>
+                    <Row>
                       <p className='text-left'> {this.state.book.description} </p>
                     </Row>
                   </Container>
