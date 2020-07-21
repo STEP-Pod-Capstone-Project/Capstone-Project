@@ -1,57 +1,5 @@
-.page-container {
-  text-align: center;
-  justify-content: center;
-  padding: 15px;
-  margin-top: 15px;
-}
-
-.title {
-  font-size: 50px;
-  text-align: center;
-  margin: 15px 0px;
-}
-
-.groups-list-container {
-  margin: 40px 0px;
-  justify-content: center;
-}
-
-#create-group {
-  max-width: 200px;
-  margin: auto;
-  color: #20bf6b;
-  font-weight: 500;
-  font-size: 16px;
-  background: #ffffff;
-  padding: 10px;
-  border: 4px solid #20bf6b;
-  transition: all 0.3s ease 0s;
-}
-
-#create-group:hover {
-  background: #20bf6b;
-  color: white;
-  border-radius: 50px;
-  border-color: #20bf6b;
-  transition: all 0.3s ease 0s;  
-  text-decoration: none;
-}
-
-.group-container {
-  margin: 10px;
-  padding: 5px;
-  border: 2px solid black;
-  text-align: center;
-}
-
-form div {
-  margin-bottom: 10px;
-}
-
-.description {
-  font-size: 20px;
-  text-align: center;
-  margin: 15px 0px;
+.admin-button {
+  margin-top: 20px;
 }
 
 .assignment-card {
@@ -59,6 +7,10 @@ form div {
   border: 1px solid grey;
   box-shadow: 3px 3px 3px #888888;
   margin-bottom: 10px;
+}
+
+.assignment-card Form {
+  margin-top: 20px;
 }
 
 .assignment-date {
@@ -82,6 +34,47 @@ form div {
 .assignment-text {
   font-size: 22px;
   font-weight: 500;
+}
+
+.assignment-border {
+  border: 2px solid black;
+  margin-bottom: 10px;
+}
+
+.comment-border {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+#create-group {
+  max-width: 200px;
+  margin: auto;
+  color: #20bf6b;
+  font-weight: 500;
+  font-size: 16px;
+  background: #ffffff;
+  padding: 10px;
+  border: 4px solid #20bf6b;
+  transition: all 0.3s ease 0s;
+}
+
+#create-group:hover {
+  background: #20bf6b;
+  color: white;
+  border-radius: 50px;
+  border-color: #20bf6b;
+  transition: all 0.3s ease 0s;  
+  text-decoration: none;
+}
+
+#delete-club {
+  margin-top: 50px;
+}
+
+.description {
+  font-size: 20px;
+  text-align: center;
+  margin: 15px 0px;
 }
 
 .comment-card {
@@ -114,20 +107,33 @@ form div {
   margin-right: 10px;
 }
 
-.admin-button {
-  margin-top: 20px;
+.group-container {
+  margin: 10px;
+  padding: 5px;
+  border: 2px solid black;
+  text-align: center;
 }
 
-#delete-club {
-  margin-top: 50px;
+.groups-list-container {
+  margin: 40px 0px;
+  justify-content: center;
 }
 
-Form {
-  margin-top: 20px;
+.page-container {
+  text-align: center;
+  justify-content: center;
+  padding: 15px;
+  margin-top: 15px;
 }
 
 #remove-member {
   margin-top: 5px;
+}
+
+.title {
+  font-size: 50px;
+  text-align: center;
+  margin: 15px 0px;
 }
 
 .user-card {

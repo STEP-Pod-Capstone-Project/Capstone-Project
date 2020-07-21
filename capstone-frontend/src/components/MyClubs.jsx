@@ -28,7 +28,7 @@ class MyClubs extends Component {
           alert(err); 
         });
     
-    let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
+    let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0))
 
     this.setState({clubs: allClubs});
   }

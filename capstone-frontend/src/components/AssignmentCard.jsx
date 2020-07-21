@@ -44,6 +44,10 @@ class AssignmentCard extends Component {
         });
   }
 
+  onComplete = () => {
+    //TODO #90: Create functionality to mark assignments as complete
+  }
+
   componentDidMount() {
     this.fetchComments();
   }
@@ -57,7 +61,7 @@ class AssignmentCard extends Component {
             <div className="assignment-date"> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div>
             <div className="assignment-text"> {this.props.assignment.text} </div>
           </div>
-          <Button variant="primary"> Mark as Done </Button> 
+          <Button onClick={this.onComplete} variant="success"> Mark as Done </Button> 
         </div> 
         
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}

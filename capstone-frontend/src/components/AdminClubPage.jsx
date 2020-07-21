@@ -54,7 +54,7 @@ class AdminClubPage extends Component {
       return;
     } 
     const history = this.props.history;
-    fetch(`/api/clubs?id=${this.props.match.params.id}`, {method: "delete"})
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`, {method: "delete"})
         .then(function() {
             history.push("/myclubs");
         })

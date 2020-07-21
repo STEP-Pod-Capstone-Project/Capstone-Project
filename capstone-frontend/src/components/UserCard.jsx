@@ -10,11 +10,15 @@ class UserCard extends Component {
       "remove_memberIDs": this.props.user.id, 
       "id": this.props.club.id
     }
-    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs`, {
+    fetch(`/api/clubs`, {
         method: "put", 
         body: JSON.stringify(jsonBody)
       })
       .then(this.props.removeMember(this.props.user.id))
+  }
+
+  addFriend = () => {
+    //TODO #86: Create friend functionality
   }
 
   render() {
@@ -26,9 +30,9 @@ class UserCard extends Component {
                                 </Button>;
     return (
       <Col className="user-card" xs={{span: "2"}} >
-        <img id="user-profile" src={this.props.user.profileImageUrl} alt="Profile Picture not found"/>
+        <img id="user-profile" src={this.props.user.profileImageUrl} alt="Profile"/>
         <div> {this.props.user.fullName} </div> 
-        <Button variant="primary"> Add Friend </Button>
+        <Button variant="primary" onClick={this.addFriend}> Add Friend </Button>
         {removeMember}
       </Col>
     );
