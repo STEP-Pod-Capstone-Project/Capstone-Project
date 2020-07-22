@@ -1,4 +1,6 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom'
+
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -15,13 +17,17 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SearchIcon from '@material-ui/icons/Search';
 import HomeIcon from '@material-ui/icons/Home';
 import CollectionsIcon from '@material-ui/icons/Collections'
+import DeleteIcon from '@material-ui/icons/Delete'
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd'
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import Grid from '@material-ui/core/Grid';
 
 
 import {
@@ -43,6 +49,8 @@ import CreateClub from './CreateClub';
 import Navbar from './Navbar';
 import LeftSideBar from './LeftSideBar';
 import RightSideBar from './RightSideBar';
+
+import CreateList from './CreateList'
 
 const drawerWidth = 240;
 
@@ -106,15 +114,22 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
+  paddingNone: {
+    padding: '0',
+  }
 }));
 
-export function MiniDrawer() {
+export function MiniDrawer(props) {
+
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [openList, setOpenList] = React.useState(true);
-
-
+  const [showCreateListModal, setCreateListModal] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -126,6 +141,31 @@ export function MiniDrawer() {
 
   const handleClick = () => {
     setOpenList(!openList);
+  };
+
+  const handleCreateListClick = () => {
+    setCreateListModal(true);
+    console.log(showCreateListModal)
+  }
+
+  const deleteBookList = async (bookListId, props) => {
+
+    console.log("DELETE", bookListId, props)
+
+    // Delete BookList in Firebase
+    await fetch(`/api/booklist?id=${bookListId}`, {
+      method: "DELETE",
+    });
+
+    props.updateBookLists();
+
+    // These lines of code check if the current BookList URL has the same id as the one being deleted
+    // If so we redirect home
+    const currentUrlPath = new URL(window.location.href).pathname;
+
+    if (currentUrlPath.includes(bookListId)) {
+      props.history.push("/")
+    }
   };
 
   return (
@@ -219,14 +259,94 @@ export function MiniDrawer() {
 
           <Collapse in={openList} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
+              {
+                props.bookLists.map(bookList =>
+
+
+
+                  <Link key={bookList.id} to={`/listpage/${bookList.id}`} style={{ textDecoration: 'none', color: 'rgba(0, 0, 0, 0.87)', display: 'inherit' }}>
+
+                    <ListItem button className={classes.nested}>
+
+
+
+
+                      <ListItemIcon>
+                        <CollectionsIcon />
+                      </ListItemIcon>
+
+                      <ListItemText primary={bookList.name} />
+
+
+                      {console.log("openlist\t", open)}
+
+
+                      {open &&
+
+                      <>
+
+                      {/* <Link to={'/'} style={{ textDecoration: 'none', color: 'rgba(0, 0, 0, 0.87)', display: 'inherit' }}> */}
+                        <ListItemSecondaryAction>
+
+                          <IconButton onClick={() => deleteBookList(bookList.id, props)}>
+                            <DeleteIcon />
+                          </IconButton>
+
+
+                        </ListItemSecondaryAction>
+                        {/* </Link> */}
+
+                        </>
+                      }
+
+                    </ListItem>
+
+                    </Link>
+
+                  
+
+
+                )
+              }
+
+
+
+              <ListItem button onClick={handleCreateListClick} className={classes.nested}>
+                <ListItemIcon>
+                  <LibraryAddIcon />
+                </ListItemIcon>
+
+
+                <ListItemText primary='Create New List' />
+
+                {console.log(showCreateListModal)}
+                {
+                  showCreateListModal &&
+                  <>
+                    {console.log('got here')}
+                    <CreateList updateBookLists={props.updateBookLists} click={true} />
+                    {console.log('passed click')}
+
+                  </>
+                }
+
+              </ListItem>
+
+              <CreateList updateBookLists={props.updateBookLists} />
+
+            </List>
+            {/* </List>
+            <List component="div" disablePadding>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <CollectionsIcon />
                 </ListItemIcon>
                 <ListItemText primary="Starred" />
               </ListItem>
-            </List>
+            </List> */}
           </Collapse>
+
+
 
 
         </List>

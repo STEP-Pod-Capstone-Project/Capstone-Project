@@ -73,7 +73,7 @@ class App extends Component {
             <>
               <Navbar setSearchQuery={this.setSearchQuery} toggleSignIn={this.toggleSignIn} />
 
-              <MiniDrawer></MiniDrawer>
+              <MiniDrawer bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists}></MiniDrawer>
 
               
               

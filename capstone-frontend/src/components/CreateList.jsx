@@ -20,6 +20,20 @@ class CreateList extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+
+    console.log("Prev Props\t", prevProps)
+    console.log("Update Props\t", this.props)
+
+    // console.log("Update", this.props.click, prevProps)
+    // if (this.props.click) {
+    //   this.setState({ showModal: true });
+    // }
+
+    // console.log("Update Modal", this.state.showModal)
+
+  }
+
   getBooks = async (searchTerm) => {
 
     this.setState({ fetchingBooks: true })
@@ -28,7 +42,7 @@ class CreateList extends Component {
 
     if (searchTerm === "") {
       searchResults = [];
-      
+
       this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
     else {
@@ -115,12 +129,19 @@ class CreateList extends Component {
 
   render() {
     return (
+
+
       <div>
-        <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
-          <div className={this.props.textStyle}>
-            <span id="create-list-modal"> Create New List </span>
-          </div>
-        </button>
+
+        {console.log("modal props", this.props)}
+
+        {!this.props.click &&
+          <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
+            <div className={this.props.textStyle}>
+              <span id="create-list-modal"> Create New List </span>
+            </div>
+          </button>}
+
 
         <Modal
           size="lg"
