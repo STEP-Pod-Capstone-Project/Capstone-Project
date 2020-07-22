@@ -3,6 +3,7 @@ import {
   Route,
   BrowserRouter as Router
 } from 'react-router-dom';
+import {Row, Col} from 'react-bootstrap'
 
 import './App.css';
 import { Login } from './components/Login'
@@ -18,6 +19,9 @@ import CreateClub from './components/CreateClub';
 import Navbar from './components/Navbar';
 import LeftSideBar from './components/LeftSideBar';
 import RightSideBar from './components/RightSideBar';
+
+import { MiniDrawer } from './components/LeftSideBarNew'
+
 
 class App extends Component {
   constructor(props) {
@@ -68,26 +72,11 @@ class App extends Component {
           (
             <>
               <Navbar setSearchQuery={this.setSearchQuery} toggleSignIn={this.toggleSignIn} />
-              <div className="row">
-                <LeftSideBar bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
-                <div className="col-12 col-md-8" id="body-row">
-                  <Route exact path='/' component={Home} />
-                  <Route path='/browse/:query' render={(props) => (
-                    <Browse bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} searchQuery={props.match.params.query} />
-                  )} />
-                  <Route path='/mybooks' component={MyBooks} />
-                  <Route path='/listpage/:id' component={ListPage} />
-                  <Route path='/myclubs' component={MyClubs} />
-                  <Route path='/bookpage/:id' render={(props) => (
-                    <BookPage bookId={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
-                  )} />
-                  <Route path='/clubpage/:id' render={(props) => (
-                    <ClubPage id={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
-                  )} />
-                  <Route path='/createclub' component={CreateClub} />
-                </div>
-                <RightSideBar />
-              </div>
+
+              <MiniDrawer></MiniDrawer>
+
+              
+              
             </>
           )
           :

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { Navbar as NavbarBootstrap, Nav, Button, Form, FormControl} from 'react-bootstrap'
 import { Logout } from "./Logout"
 import '../App.css';
 
@@ -47,7 +48,22 @@ class Navbar extends Component {
     const navLibClassTwo = `dropdown-menu ${showLib ? 'show' : ''}`;
 
     return (
-      <nav id="navbar" className="navbar navbar-expand-md navbar-dark bg-primary fixed-top text-center">
+
+      <>
+      
+      <NavbarBootstrap bg="primary" variant="dark">
+        <NavbarBootstrap.Brand href="#home">Navbar</NavbarBootstrap.Brand>
+        <Nav className="mr-auto">
+          <Nav.Link href="#home">Home</Nav.Link>
+          <Nav.Link href="#features">Features</Nav.Link>
+          <Nav.Link href="#pricing">Pricing</Nav.Link>
+        </Nav>
+        <Form inline>
+          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+          <Button variant="outline-light">Search</Button>
+        </Form>
+      </NavbarBootstrap>
+      {/* <nav id="navbar" className="navbar navbar-expand-md navbar-dark bg-primary fixed-top text-center">
         <button type="button" onClick={this.toggleNavbar} className={navClassTwo}>
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -77,8 +93,9 @@ class Navbar extends Component {
             </li>
           </ul>
         </div>
-        <Logout toggleSignIn={this.props.toggleSignIn}/>
-      </nav>
+        <Logout toggleSignIn={this.props.toggleSignIn} />
+      </nav> */}
+      </>
     );
   }
 }
