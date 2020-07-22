@@ -16,17 +16,19 @@ const popoutDescription = (book) => {
           {book.title}
         </a>
       </Popover.Title>
-      <Popover.Content>
-        <p className='font-weight-bold'>Description:</p>
-        {description}
-      </Popover.Content>
+      {description.length > 0 &&
+        <Popover.Content>
+          <p className='font-weight-bold'>Description:</p>
+          {description}
+        </Popover.Content>
+      }
     </Popover >
   );
 }
 
 const BookDescriptionOverlay = (props) => {
   return (
-    <OverlayTrigger trigger='click' placement='right' overlay={popoutDescription(props.book)}>
+    <OverlayTrigger trigger='click' placement='auto' overlay={popoutDescription(props.book)}>
       {props.children}
     </OverlayTrigger>
   );

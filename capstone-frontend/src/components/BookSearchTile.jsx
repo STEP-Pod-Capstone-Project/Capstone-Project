@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { BookListAddDropdown } from './BookListAddDropdown';
+import { BookDescriptionOverlay } from './BookDescriptionOverlay';
 import '../styles/Book.css';
 
 const BookSearchTile = (props) => {
@@ -9,10 +10,9 @@ const BookSearchTile = (props) => {
       <Container>
         <Row className='justify-content-md-center'>
           <Col md='auto'>
-            <a className='text-decoration-none text-body'
-              href={`/bookpage/${props.book.id}`}>
+            <BookDescriptionOverlay book={props.book}>
               <img className='book-img-md' src={props.book.thumbnailLink} alt={props.book.title} />
-            </a>
+            </BookDescriptionOverlay>
           </Col>
           <Col>
             <div className='center-vertical'>

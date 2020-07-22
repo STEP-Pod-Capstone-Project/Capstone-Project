@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Spinner, Row, Col } from 'react-bootstrap'
 import StarRatings from 'react-star-ratings'
 import { SearchBookModal } from './SearchBookModal'
+import { BookDescriptionOverlay } from './BookDescriptionOverlay';
 import '../styles/ListPage.css'
 
 class ListPage extends Component {
@@ -147,11 +148,10 @@ class ListPage extends Component {
                 this.state.gBooks.map(gBook =>
                   <Row className="text-center border m-5 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
                     <Col md={3} className="my-4 p-0 ">
-                      <a className="text-decoration-none text-body" href={`/bookpage/${gBook.id}`}>
+                      <BookDescriptionOverlay book={gBook}>
                         <img className="img-fluid book-img-md" src={gBook.thumbnailLink} alt={gBook.title} />
-                      </a>
+                      </BookDescriptionOverlay>
                     </Col>
-
                     <Col className="my-4 p-0">
                       <h2 className="mt-4"> {gBook.title} </h2>
                       <StarRatings
