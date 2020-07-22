@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { render } from '@testing-library/react/';
+import { render } from '@testing-library/react';
 import LeftSideBar from './components/LeftSideBar';
 import Navbar from './components/Navbar';
 import RightSideBar from './components/RightSideBar';

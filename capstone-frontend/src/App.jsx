@@ -25,7 +25,7 @@ class App extends Component {
     this.state = {
       searchQuery: "",
       bookLists: [],
-      isSignIn: ((window.localStorage.getItem("userID")) && (window.localStorage.getItem("profileObj"))) ? true : false,
+      isSignedIn: ((window.localStorage.getItem("userID")) && (window.localStorage.getItem("profileObj"))) ? true : false,
     };
   }
 
@@ -50,20 +50,20 @@ class App extends Component {
 
   async componentDidMount() {
     
-    if (this.state.isSignIn) {
+    if (this.state.isSignedIn) {
       await this.fetchBookLists();
     }
   }
 
   toggleSignIn = () => {
-    this.setState({ isSignIn: !this.state.isSignIn })
+    this.setState({ isSignedIn: !this.state.isSignedIn })
   }
 
 
   render() {
     return (
       <Router>
-        {this.state.isSignIn
+        {this.state.isSignedIn
           ?
           (
             <>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Logout } from "./Logout"
+import { Logout } from './Logout';
 import '../App.css';
 
 class Navbar extends Component {

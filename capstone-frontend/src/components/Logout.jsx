@@ -25,7 +25,6 @@ export class Logout extends Component {
       <div id="logout">
 
         <DropdownButton as={ButtonGroup} title={
-
           <img id="profile_img"
             className="img-responsive rounded-circle"
             src={this.state.profileObj.imageUrl}
@@ -41,10 +40,7 @@ export class Logout extends Component {
               isSignedIn={false} />
           </Dropdown.Item>
         </DropdownButton>
-
       </div>
     )
   }
 }
-
-export default Logout
