@@ -50,7 +50,8 @@ class MyClubs extends Component {
       c.ownerName = owner.fullName;
       c.bookTitle = book.title;
     }
-
+    allClubs = await fetch(`/api/clubs`).then(response => response.json());
+    console.log(allClubs);
     this.setState({clubs: allClubs});
   }
 
