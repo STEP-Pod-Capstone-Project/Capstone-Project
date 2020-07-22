@@ -58,21 +58,12 @@ export class SearchBookModal extends Component {
 
   addBookToList = (book) => {
 
-    if (this.props.type === 'club') {
-      this.setState(
-        {
-          addedBooksIDs: [book.id],
-          addedBooks: [book]
-        }
-      )
-    }
-    else {
-      this.state.addedBooksIDs.push(book.id);
-      this.state.addedBooks.push(book);
+    this.state.addedBooksIDs.push(book.id);
+    this.state.addedBooks.push(book);
 
-      // Rerender
-      this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
-    }
+    // Rerender
+    this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
+    console.log("addbooktolist: " + this.state);
   }
 
   removeBookFromList = (book) => {
@@ -95,19 +86,10 @@ export class SearchBookModal extends Component {
 
         let updateJson;
 
-        if (this.props.type === 'club') {
-          updateJson = {
-            id: this.props.objectId,
-            gbookID: bookId,
-          }
+        updateJson = {
+          id: this.props.objectId,
+          add_gbookIDs: bookId,
         }
-        else {
-          updateJson = {
-            id: this.props.objectId,
-            add_gbookIDs: bookId,
-          }
-        }
-
         // Update BookList in Firebase
         await fetch(this.props.putURL, {
           method: "PUT",
@@ -128,6 +110,19 @@ export class SearchBookModal extends Component {
     }
   }
 
+  clubSubmit = async (gbookID) => {
+    let updateJson = {
+      id: this.props.objectId,
+      gbookID: gbookID,
+    }
+    await fetch(this.props.putURL, {
+      method: "PUT",
+      body: JSON.stringify(updateJson)
+    });
+    this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
+    this.props.update(gbookID);
+  }
+
   render() {
     return (
       <div>
@@ -145,7 +140,7 @@ export class SearchBookModal extends Component {
 
           <Modal.Header closeButton>
             <Modal.Title id="create-booklists-modal">
-              Search for Books
+              {this.props.text || "Search for Books"}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -179,7 +174,11 @@ export class SearchBookModal extends Component {
                         {this.state.addedBooksIDs.includes(book.id) ?
                           <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(book)}>Remove Book</Button>
                           :
-                          <Button className="my-5" onClick={() => this.addBookToList(book)}>Add to Booklist</Button>}
+                          this.props.type === "club" ?
+                            <Button className="my-5" onClick={async () => this.clubSubmit(book.id)}>Add</Button>
+                            :
+                            <Button className="my-5" onClick={() => this.addBookToList(book)}>Add</Button>
+                        }
                       </Col>
                     )}
                   </Row>
@@ -222,11 +221,13 @@ export class SearchBookModal extends Component {
                 )
               }
 
-              <div className="text-center">
-                <Button className="text-center" variant="primary" onClick={async () => await this.handleSubmit()} >
-                  Add
+              {this.props.type !== "club"
+                && <div className="text-center">
+                  <Button className="text-center" variant="primary" onClick={async () => await this.handleSubmit()} >
+                    Submit
                 </Button>
-              </div>
+                </div>
+              }
             </Form>
           </Modal.Body>
         </Modal>

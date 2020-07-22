@@ -10,7 +10,7 @@ class UserCard extends Component {
       "remove_memberIDs": this.props.user.id, 
       "id": this.props.club.id
     }
-    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs`, {
+    fetch(`/api/clubs`, {
         method: "put", 
         body: JSON.stringify(jsonBody)
       })
