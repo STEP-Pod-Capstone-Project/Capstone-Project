@@ -3,6 +3,9 @@ import { Popover, OverlayTrigger } from 'react-bootstrap';
 
 const popoutDescription = (book) => {
   let description = book.description;
+  if (description === undefined) {
+    description = "";
+  }
   if (description.length > 500) {
     description = description.substring(0, 500).concat('...');
   }
