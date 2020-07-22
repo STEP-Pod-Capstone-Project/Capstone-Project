@@ -42,7 +42,7 @@ class MyClubs extends Component {
       
       let book = await fetch(`/api/search?gbookId=${c.gbookID}`)
                                 .then(response => response.json())
-                                .then(bookJson => bookJson[0])
+                                .then(books => books[0])
                                 .catch(function(err) {
                                   //TODO #61: Centralize error output
                                   alert(err); 

@@ -7,7 +7,9 @@ import '../styles/Groups.css';
 const ClubGridItem = ({club}) => {
   const header = club.ownerID === window.localStorage.getItem("userID") ?
                      <Card.Header className="header text-muted"> Owner </Card.Header> :
-                     <Card.Header className="header text-muted"> Member </Card.Header>;
+                     club.memberIDs.includes(window.localStorage.getItem("userID")) ?
+                     <Card.Header className="header text-muted"> Member </Card.Header> :
+                     <Card.Header className="header text-muted"> Viewer </Card.Header>;
   return (
     <Card className="col-3 group-container">
       <Link id="group-link" to={`/clubpage/${club.id}`}>
