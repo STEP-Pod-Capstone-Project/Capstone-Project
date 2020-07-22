@@ -1,3 +1,13 @@
-.card-header {
-  padding: inherit
+#search-input {
+  padding-bottom: 0;
+}
+
+.remove-form-style {
+  margin-top: 0;
+}
+
+.remove-link-style {
+  color: rgba(0, 0, 0, 0.87); 
+  display: inherit;
+  text-decoration: none;
 }

@@ -3,7 +3,7 @@ import {
   Route,
   BrowserRouter as Router
 } from 'react-router-dom';
-import {Row, Col} from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
 
 import './App.css';
 import { Login } from './components/Login'
@@ -53,7 +53,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    
+
     if (this.state.isSignIn) {
       await this.fetchBookLists();
     }
@@ -72,11 +72,14 @@ class App extends Component {
           (
             <>
               <Navbar setSearchQuery={this.setSearchQuery} toggleSignIn={this.toggleSignIn} />
+              <MiniDrawer
+                toggleSignIn={this.toggleSignIn}
+                setSearchQuery={this.setSearchQuery}
+                toggleSignIn={this.toggleSignIn}
+                bookLists={this.state.bookLists}
+                updateBookLists={this.fetchBookLists} />
 
-              <MiniDrawer bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists}></MiniDrawer>
 
-              
-              
             </>
           )
           :

@@ -2,10 +2,29 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
 
+import clsx from 'clsx';
+// import { makeStyles, useTheme } from '@material-ui/core/styles';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
+
+
+// const useStyles = (makeStyles((theme) => ({
+//     nested: {
+//       paddingLeft: theme.spacing(4),
+//     },
+//   })));
+
+//   const classes = useStyles();
+
+
 class CreateList extends Component {
 
   constructor(props) {
     super(props)
+
+
 
     this.state = {
       creatingBookList: false, // For Spinner
@@ -20,19 +39,7 @@ class CreateList extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-
-    console.log("Prev Props\t", prevProps)
-    console.log("Update Props\t", this.props)
-
-    // console.log("Update", this.props.click, prevProps)
-    // if (this.props.click) {
-    //   this.setState({ showModal: true });
-    // }
-
-    // console.log("Update Modal", this.state.showModal)
-
-  }
+  
 
   getBooks = async (searchTerm) => {
 
@@ -133,21 +140,29 @@ class CreateList extends Component {
 
       <div>
 
-        {console.log("modal props", this.props)}
-
-        {!this.props.click &&
+        {!this.props.sideBar ?
           <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
             <div className={this.props.textStyle}>
               <span id="create-list-modal"> Create New List </span>
             </div>
-          </button>}
+          </button>
+          :
+          <ListItem button onClick={() => this.setState({ showModal: true })} className="makeStyles-nested-11" >
 
+            <ListItemIcon>
+              <LibraryAddIcon />
+            </ListItemIcon>
+
+            <ListItemText primary='Create New List' />
+          </ListItem>
+        }
 
         <Modal
           size="lg"
           show={this.state.showModal}
           onHide={() => this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })}
-          aria-labelledby="create-booklists-modal">
+          aria-labelledby="create-booklists-modal"
+          centered>
 
           <Modal.Header closeButton>
             <Modal.Title id="create-booklists-modal">

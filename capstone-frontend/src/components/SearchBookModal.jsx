@@ -141,7 +141,8 @@ export class SearchBookModal extends Component {
           size="lg"
           show={this.state.showModal}
           onHide={() => this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })}
-          aria-labelledby="create-booklists-modal">
+          aria-labelledby="create-booklists-modal"
+          centered>
 
           <Modal.Header closeButton>
             <Modal.Title id="create-booklists-modal">
