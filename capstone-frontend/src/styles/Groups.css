@@ -40,11 +40,6 @@
   font-weight: 500;
 }
 
-.comment-border {
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-}
-
 .comment-card {
   display: flex;
   align-items: center;
