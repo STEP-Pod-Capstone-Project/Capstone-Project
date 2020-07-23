@@ -1,9 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import LeftSideBar from './components/LeftSideBar';
-import Navbar from './components/Navbar';
-import RightSideBar from './components/RightSideBar';
+import { LeftSideBar } from './components/LeftSideBar';
 
 
 const container = document.createElement("div");
@@ -17,21 +15,9 @@ const getUserBookLists = () => {
   ];
 };
 
-test('renders left sidebar', () => {
+test('renders left sidebar and navbar', () => {
   render(<Router><LeftSideBar bookLists={getUserBookLists()} /></Router>, container);
 
-  const leftSidebar = document.getElementById("left-sidebar-container"); 
-  expect(leftSidebar).toBeInTheDocument();
-});
-
-test('renders right sidebar', () => {
-  render(<Router><RightSideBar />}/></Router>, container);
-  const rightSidebar = document.getElementById("right-sidebar-container");
-  expect(rightSidebar).toBeInTheDocument();
-});
-
-test('renders nav', () => {
-  render(<Router><Navbar /></Router>, container);
-  const navbar = document.getElementById("navbar");
-  expect(navbar).toBeInTheDocument();
+  const leftSidebarNavbar = document.getElementById("left-sidebar-navbar"); 
+  expect(leftSidebarNavbar).toBeInTheDocument();
 });

@@ -221,7 +221,7 @@ export const LeftSideBar = withRouter((props) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div id="left-sidebar-navbar" className={classes.root}>
       <AppBar
         style={{ backgroundColor: '#007bff' }}
         position="fixed"
@@ -330,7 +330,7 @@ export const LeftSideBar = withRouter((props) => {
 
         <Divider />
         <List>
-          <Link to="/" className="remove-link-style">
+          <Link to="/" className="remove-link-style" id="home-link">
             <ListItem button>
 
               <ListItemIcon>
@@ -341,7 +341,7 @@ export const LeftSideBar = withRouter((props) => {
             </ListItem>
           </Link>
 
-          <Link to="/browse" className="remove-link-style">
+          <Link to="/browse" className="remove-link-style" id="browse-link">
             <ListItem button>
 
               <ListItemIcon>
@@ -352,7 +352,7 @@ export const LeftSideBar = withRouter((props) => {
             </ListItem>
           </Link>
 
-          <Link to="/myreads" className="remove-link-style">
+          <Link to="/myreads" className="remove-link-style" id="mybooks-link">
             <ListItem button >
 
               <ListItemIcon>
@@ -363,7 +363,7 @@ export const LeftSideBar = withRouter((props) => {
             </ListItem>
           </Link>
 
-          <ListItem button onClick={handleClick}>
+          <ListItem button onClick={handleClick} id="mylists-link">
 
             <ListItemIcon>
               <LibraryBooksIcon />
@@ -402,7 +402,7 @@ export const LeftSideBar = withRouter((props) => {
             </List>
           </Collapse>
 
-          <Link to="/myclubs" className="remove-link-style">
+          <Link to="/myclubs" className="remove-link-style" id="myclubs-link">
             <ListItem button >
 
               <ListItemIcon>

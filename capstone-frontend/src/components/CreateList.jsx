@@ -131,7 +131,7 @@ class CreateList extends Component {
             </div>
           </button>
           :
-          <ListItem button onClick={() => this.setState({ showModal: true })} className="makeStyles-nested-11" >
+          <ListItem id="create-list-modal" button onClick={() => this.setState({ showModal: true })} className="makeStyles-nested-11" >
 
             <ListItemIcon>
               <LibraryAddIcon />
