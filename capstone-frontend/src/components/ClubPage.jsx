@@ -5,7 +5,7 @@ import { SearchBookModal } from './SearchBookModal'
 
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
-import UserCard from './UserCard';
+import { UserCard } from './UserCard';
  
 import '../styles/Groups.css';
 

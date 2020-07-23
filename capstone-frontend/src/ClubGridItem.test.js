@@ -17,7 +17,7 @@ const club = {
   description: "description",
   gbook: "gbook", 
   memberIDs: ["one", "two", "three"], 
-  requestIDs: ["four", "five"]
+  requestIDs: ["four", "five"],
 };
 
 test('renders club tile test', () => {

@@ -14,8 +14,8 @@ class ClubGridItem extends Component {
   
   requestJoin = () => {
     const putBody = {
-      "id": this.props.club.id,
-      "add_requestIDs": window.localStorage.getItem("userID")
+      id: this.props.club.id,
+      add_requestIDs: window.localStorage.getItem("userID")
     };
     fetch(`/api/clubs`, {method: "put", body: JSON.stringify(putBody)})
         .then(this.setState({requested: true}))
