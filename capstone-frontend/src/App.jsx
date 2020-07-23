@@ -84,6 +84,7 @@ class App extends Component {
                   <Route path='/clubpage/:id' render={(props) => (
                     <ClubPage id={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
                   )} />
+                  <Route path='/adminclubpage/:id' component={AdminClubPage} />
                   <Route path='/createclub' component={CreateClub} />
                 </div>
                 <RightSideBar />

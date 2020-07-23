@@ -21,7 +21,7 @@ class AdminClubPage extends Component {
         const club = clubs[0];
         this.setState({ club, requesters: [] });
         Promise.all(club.requestIDs.map(r => {
-          fetch(`/api/user?id=${r}`)
+          return fetch(`/api/user?id=${r}`)
             .then(response => response.json())
             .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }))
             .catch(function (err) {
@@ -99,13 +99,13 @@ class AdminClubPage extends Component {
         </Form>
         <div className="description"> Users who have requested to join: </div>
         <Row className="justify-content-center">
-          {this.state.requesters.map(r => {
+          {this.state.requesters.map(r =>
             <UserCard
               key={r.id}
               user={r}
               club={this.state.club}
               fetchData={this.fetchData} />
-          })}
+          )}
         </Row>
         <Button id="delete-club" variant="danger" onClick={this.handleDelete}>Delete Club</Button>
       </div>
