@@ -82,12 +82,6 @@ class AdminClubPage extends Component {
   }
 
   render() {
-    const requesters = this.state.requesters.map(m =>
-        <UserCard
-          key={m.id}
-          user={m}
-          club={this.state.club}
-          fetchData={this.fetchData} />);
     return (
       <div className="container text-center">
         <Link to={`/clubpage/${this.props.match.params.id}`}>
@@ -104,8 +98,14 @@ class AdminClubPage extends Component {
           <Button variant="primary" type="submit"> Submit </Button>
         </Form>
         <div className="description"> Users who have requested to join: </div>
-        <Row className="justify-content-center"> 
-          {requesters}
+        <Row className="justify-content-center">
+          {this.state.requesters.map(r => {
+            <UserCard
+              key={r.id}
+              user={r}
+              club={this.state.club}
+              fetchData={this.fetchData} />
+          })}
         </Row>
         <Button id="delete-club" variant="danger" onClick={this.handleDelete}>Delete Club</Button>
       </div>
