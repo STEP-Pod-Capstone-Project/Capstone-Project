@@ -5,6 +5,13 @@ import '../styles/Groups.css';
 
 
 export class UserCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isFriend: false,
+    }
+  }
+
   removeMember = () => {
     const removal = {
       remove_memberIDs: this.props.user.id,
@@ -50,7 +57,23 @@ export class UserCard extends Component {
   }
 
   addFriend = () => {
-    //TODO #86: Create friend functionality
+    const addFriend = {
+      id: window.localStorage.getItem('userID'),
+      add_friendIDs: this.props.user.id, 
+    };
+    fetch('/api/user', {method:'put', body: JSON.stringify(addFriend)})
+      .then(this.setState({isFriend: true}))
+      .catch(e => console.log(e));
+  }
+
+  removeFriend = () => {
+    const removeFriend = {
+      id: window.localStorage.getItem('userID'),
+      remove_friendIDs: this.props.user.id, 
+    }
+    fetch('/api/user', {method:'put', body: JSON.stringify(removeFriend)})
+      .then(this.setState({isFriend: true}))
+      .catch(e => console.log(e));
   }
 
   render() {
@@ -77,7 +100,9 @@ export class UserCard extends Component {
       <Col className='user-card' xs={{ span: '2' }} >
         <img id='user-profile' src={this.props.user.profileImageUrl} alt='Profile' />
         <div> {this.props.user.fullName} </div>
-        <Button className='mt-2' variant='primary' onClick={this.addFriend}> Add Friend </Button>
+        {this.state.isFriend 
+          ? <Button className='mt-2' variant='danger' onClick={this.removeFriend}> Remove Friend </Button>
+          : <Button className='mt-2' variant='primary' onClick={this.addFriend}> Add Friend </Button> }
         {isMember && removeMember}
         {isRequester && requestButtons}
       </Col>
