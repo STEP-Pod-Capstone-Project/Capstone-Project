@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 
+// Considered making this a stateless functional component used in the Overlay component.
+// When referenced as a component in the overlay prop, the Popover always appears at the
+// top left of the screen even when there is a predefined placement.
 const popoutDescription = (book) => {
   let description = book.description || "";
 
