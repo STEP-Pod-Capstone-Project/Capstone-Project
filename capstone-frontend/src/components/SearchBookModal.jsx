@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
 
+import '../styles/Modal.css'
+
 export class SearchBookModal extends Component {
 
   constructor(props) {
@@ -138,11 +140,11 @@ export class SearchBookModal extends Component {
         </button>
 
         <Modal
+          dialogClassName="modal-style"
           size="lg"
           show={this.state.showModal}
           onHide={() => this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })}
-          aria-labelledby="create-booklists-modal"
-          centered>
+          aria-labelledby="create-booklists-modal">
 
           <Modal.Header closeButton>
             <Modal.Title id="create-booklists-modal">

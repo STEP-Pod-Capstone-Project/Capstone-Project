@@ -1,26 +1,9 @@
 import React, { Component } from 'react';
-import {
-  Route,
-  BrowserRouter as Router
-} from 'react-router-dom';
-import { Row, Col } from 'react-bootstrap'
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import './App.css';
 import { Login } from './components/Login'
-import Home from './components/Home';
-import Browse from './components/Browse';
-import MyBooks from './components/MyBooks';
-import MyClubs from './components/MyClubs';
-import { BookPage } from './components/BookPage';
-import ListPage from './components/ListPage'
-import ClubPage from './components/ClubPage';
-import AdminClubPage from './components/AdminClubPage';
-import CreateClub from './components/CreateClub';
-import Navbar from './components/Navbar';
-import LeftSideBar from './components/LeftSideBar';
-import RightSideBar from './components/RightSideBar';
-
-import { MiniDrawer } from './components/LeftSideBarNew'
+import { LeftSideBar } from './components/LeftSideBar'
 
 
 class App extends Component {
@@ -53,7 +36,6 @@ class App extends Component {
   }
 
   async componentDidMount() {
-
     if (this.state.isSignIn) {
       await this.fetchBookLists();
     }
@@ -70,17 +52,11 @@ class App extends Component {
         {this.state.isSignIn
           ?
           (
-            <>
-              {/* <Navbar setSearchQuery={this.setSearchQuery} toggleSignIn={this.toggleSignIn} /> */}
-              <MiniDrawer
-                toggleSignIn={this.toggleSignIn}
-                setSearchQuery={this.setSearchQuery}
-                toggleSignIn={this.toggleSignIn}
-                bookLists={this.state.bookLists}
-                updateBookLists={this.fetchBookLists} />
-
-
-            </>
+            <LeftSideBar
+              toggleSignIn={this.toggleSignIn}
+              setSearchQuery={this.setSearchQuery}
+              bookLists={this.state.bookLists}
+              updateBookLists={this.fetchBookLists} />
           )
           :
           (<Login toggleSignIn={this.toggleSignIn} />)

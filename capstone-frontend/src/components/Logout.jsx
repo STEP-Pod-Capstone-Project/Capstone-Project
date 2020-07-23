@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { GoogleLogout } from 'react-google-login';
-import { Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap'
 
 export class Logout extends Component {
 

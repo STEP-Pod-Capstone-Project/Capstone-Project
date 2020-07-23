@@ -2,29 +2,17 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
 
-import clsx from 'clsx';
-// import { makeStyles, useTheme } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 
-
-// const useStyles = (makeStyles((theme) => ({
-//     nested: {
-//       paddingLeft: theme.spacing(4),
-//     },
-//   })));
-
-//   const classes = useStyles();
-
+import '../styles/Modal.css'
 
 class CreateList extends Component {
 
   constructor(props) {
     super(props)
-
-
 
     this.state = {
       creatingBookList: false, // For Spinner
@@ -37,9 +25,7 @@ class CreateList extends Component {
       addedBooksIDs: [],
       addedBooks: [],
     }
-  }
-
-  
+  }  
 
   getBooks = async (searchTerm) => {
 
@@ -158,11 +144,11 @@ class CreateList extends Component {
         }
 
         <Modal
+          dialogClassName="modal-style"
           size="lg"
           show={this.state.showModal}
           onHide={() => this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })}
-          aria-labelledby="create-booklists-modal"
-          centered>
+          aria-labelledby="create-booklists-modal">
 
           <Modal.Header closeButton>
             <Modal.Title id="create-booklists-modal">

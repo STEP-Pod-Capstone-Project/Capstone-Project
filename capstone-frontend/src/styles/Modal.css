@@ -1,0 +1,11 @@
+@media only screen and (max-width: 699px) {
+  .modal-style {
+    margin-top: 6rem;
+    width: 66vw;
+    margin-left: 6rem;
+  }
+}
+
+.modal-style {
+  margin-top: 6rem;
+} 
