@@ -6,7 +6,8 @@ import { Popover, OverlayTrigger } from 'react-bootstrap';
 // When referenced as a component in the overlay prop, the Popover always appears at the
 // top left of the screen even when there is a predefined placement.
 const popoutDescription = (book) => {
-  let description = book.description || "";
+  console.log("pop out\t", book)
+  let description = (typeof book !== 'undefined') ? book.description : "";
 
   if (description.length > 500) {
     description = description.substring(0, 500).concat('...');
@@ -32,9 +33,13 @@ const popoutDescription = (book) => {
 
 const BookDescriptionOverlay = (props) => {
   return (
-    <OverlayTrigger trigger='click' placement='auto' overlay={popoutDescription(props.book)}>
-      {props.children}
-    </OverlayTrigger>
+    <>
+      {props.book &&
+        <OverlayTrigger trigger='click' placement='auto' overlay={popoutDescription(props.book)}>
+          {props.children}
+        </OverlayTrigger>
+      }
+    </>
   );
 }
 

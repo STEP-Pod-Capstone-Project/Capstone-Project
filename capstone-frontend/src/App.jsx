@@ -24,8 +24,6 @@ class App extends Component {
 
   fetchBookLists = async () => {
 
-    // TODO(#74): Add Spinner to LeftSide when fetching BookList from App.jsx
-
     const userID = window.localStorage.getItem("userID");
 
     const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
@@ -36,7 +34,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    if (this.state.isSignIn) {
+    if (this.state.isSignedIn) {
       await this.fetchBookLists();
     }
   }

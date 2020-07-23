@@ -17,10 +17,11 @@ class CreateClub extends Component {
     }
     data.ownerID = window.localStorage.getItem("userID");
 
+    console.log("Create club", data)
+
     fetch("/api/clubs", {method: "post", body: JSON.stringify(data)})
-        .then(function() {
-          history.push(`/clubpage/${data.id}`);
-        })
+        .then(resp => resp.json())
+        .then(club => history.push(`/clubpage/${data.id}`))
         .catch(function(e) {
           console.log(e);
           alert("Looks like we're having trouble connecting to our database, hang tight!");

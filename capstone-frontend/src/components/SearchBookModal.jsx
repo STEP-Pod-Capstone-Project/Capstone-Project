@@ -62,6 +62,8 @@ export class SearchBookModal extends Component {
   addBookToList = (book) => {
     // Rerender
     this.setState({ addedBooksIDs: [...this.state.addedBooksIDs, book.id], addedBooks: [...this.state.addedBooks, book] })
+
+    console.log(this.state)
   }
 
   removeBookFromList = (book) => {
@@ -77,6 +79,8 @@ export class SearchBookModal extends Component {
   }
 
   handleSubmit = async () => {
+
+    console.log("actual submit")
 
     if (this.state.addedBooksIDs.length !== 0) {
 
@@ -109,20 +113,23 @@ export class SearchBookModal extends Component {
   }
 
   clubSubmit = (gbookID) => {
+
+    console.log("club submit")
     const updates = {
       id: this.props.objectId,
       gbookID: gbookID,
     }
-    fetch(this.props.putURL, {method: 'put', body: JSON.stringify(updates)})
-      .then(this.setState({ 
-        showModal: false, 
-        searchTerm: '', 
-        searchResults: [], 
-        displayBooks: false, 
-        addedBooksIDs: [], 
-        addedBooks: [] }))
+    fetch(this.props.putURL, { method: 'put', body: JSON.stringify(updates) })
+      .then(this.setState({
+        showModal: false,
+        searchTerm: '',
+        searchResults: [],
+        displayBooks: false,
+        addedBooksIDs: [],
+        addedBooks: []
+      }))
       .then(this.props.update(gbookID))
-      .catch(function(err) {
+      .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
       });
@@ -195,42 +202,22 @@ export class SearchBookModal extends Component {
               }
 
               {
-                (this.state.addedBooks.length !== 0) && (
-
-                  (this.props.type === 'club')
-                    ?
-                    <div>
-                      <h2 className='text-center my-4 px-4 '>Added Book</h2>
-                      <Row className='text-center px-3'>
-                        {
-                          <Col className="px-2 my-0 border" key={this.state.addedBooks[0].id}>
-                            <BookDescriptionOverlay book={this.state.addedBooks[0]}>
-                              <img className="img-fluid book-img-sm mt-4 p-0 rounded" src={this.state.addedBooks[0].thumbnailLink} alt={this.state.addedBooks[0].title} />
-                            </BookDescriptionOverlay>
-                            <h5 className="my-4"> {this.state.addedBooks[0].title} </h5>
-                            <p className="my-1"> {this.state.addedBooks[0].authors.join(', ')} </p>
-                            <Button className="my-4" variant="danger" onClick={() => this.removeBookFromList(this.state.addedBooks[0])}>Remove Book</Button>
-                          </Col>
-                        }
-                      </Row>
-                    </div>
-                    :
-                    <div>
-                      <h2 className='text-center my-4 px-4 '>Added Books</h2>
-                      <Row className='text-center px-3'>
-                        {this.state.addedBooks.map(addedBook =>
-                          <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
-                            <BookDescriptionOverlay book={this.state.addedBook}>
-                              <img className="img-fluid book-img-sm mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
-                            </BookDescriptionOverlay>
-                            <h5 className="mt-4"> {addedBook.title} </h5>
-                            <p className="my-1"> {addedBook.authors.join(', ')} </p>
-                            <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>
-                          </Col>
-                        )}
-                      </Row>
-                    </div>
-                )
+                (this.state.addedBooks.length !== 0) &&
+                <div>
+                  <h2 className='text-center my-4 px-4 '>Added Books</h2>
+                  <Row className='text-center px-3'>
+                    {this.state.addedBooks.map(addedBook =>
+                      <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
+                        <BookDescriptionOverlay book={addedBook}>
+                          <img className="img-fluid book-img-sm mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                        </BookDescriptionOverlay>
+                        <h5 className="mt-4"> {addedBook.title} </h5>
+                        <p className="my-1"> {addedBook.authors.join(', ')} </p>
+                        <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>
+                      </Col>
+                    )}
+                  </Row>
+                </div>
               }
 
               {this.props.type !== 'club'

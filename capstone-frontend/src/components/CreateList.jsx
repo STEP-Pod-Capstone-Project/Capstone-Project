@@ -123,8 +123,7 @@ class CreateList extends Component {
 
   render() {
     return (
-      <div>
-        
+      <>
         {!this.props.sideBar ?
           <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
             <div className={this.props.textStyle}>
@@ -237,7 +236,7 @@ class CreateList extends Component {
             </Form>
           </Modal.Body>
         </Modal>
-      </div>
+      </>
     )
   }
 }

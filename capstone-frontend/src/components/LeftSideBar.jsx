@@ -35,7 +35,7 @@ import { Route, Link } from 'react-router-dom';
 import { Row, Col } from 'react-bootstrap'
 
 import Home from './Home';
-import Logout from './Logout';
+import { Logout } from './Logout';
 import Browse from './Browse';
 import MyBooks from './MyBooks';
 import MyClubs from './MyClubs';
@@ -438,8 +438,9 @@ export const LeftSideBar = withRouter((props) => {
               <BookPage bookId={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
             )} />
             <Route path='/clubpage/:id' render={(pageProps) => (
-              <ClubPage id={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
+              <ClubPage id={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} /> 
             )} />
+            <Route path='/adminclubpage/:id' component={AdminClubPage} />
             <Route path='/createclub' component={CreateClub} />
           </Col>
           {/* TODO(#86) Add Friends to the Web App and display them in the Right Side Bar */}
