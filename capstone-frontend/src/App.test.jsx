@@ -21,3 +21,9 @@ test('renders left sidebar and navbar', () => {
   const leftSidebarNavbar = document.getElementById("left-sidebar-navbar"); 
   expect(leftSidebarNavbar).toBeInTheDocument();
 });
+
+// test('renders right sidebar', () => {
+//   render(<Router><RightSideBar />}/></Router>, container);
+//   const rightSidebar = document.getElementById("right-sidebar-container");
+//   expect(rightSidebar).toBeInTheDocument();
+// });
