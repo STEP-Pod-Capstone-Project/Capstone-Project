@@ -57,17 +57,17 @@ class UserCard extends Component {
     const removeMember = this.props.club
       && this.props.club.ownerID === window.localStorage.getItem("userID")
       && this.props.club.ownerID !== this.props.user.id
-      && <Button id="remove-member" variant="danger" onClick={this.removeMember}>
+      && <Button className="mt-2" cvariant="danger" onClick={this.removeMember}>
            Remove&nbsp;Member
          </Button>;
     const requestButtons = this.props.club
       && this.props.club.ownerID === window.localStorage.getItem("userID")
       && this.props.club.ownerID !== this.props.user.id
       && <div>
-           <Button variant="primary" onClick={this.acceptMember}>
+           <Button className="mt-2" variant="primary" onClick={this.acceptMember}>
              Accept&nbsp;Member
            </Button>
-           <Button variant="danger" onClick={this.rejectMember}>
+           <Button className="mt-2" variant="danger" onClick={this.rejectMember}>
              Reject&nbsp;Member
            </Button>
          </div>

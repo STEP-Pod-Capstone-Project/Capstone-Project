@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import UserCard from './UserCard'
 
@@ -19,7 +19,7 @@ class AdminClubPage extends Component {
     fetch(`/api/clubs?id=${this.props.match.params.id}`)
       .then(response => response.json()).then(clubs => {
         let club = clubs[0];
-        this.setState({ club });
+        this.setState({ club, requesters: [] });
         for (let i = 0; i < club.requestIDs.length; i++) {
           fetch(`/api/user?id=${club.requestIDs[i]}`)
             .then(response => response.json())
@@ -105,7 +105,9 @@ class AdminClubPage extends Component {
           </Form.Group>
           <Button variant="primary" type="submit"> Submit </Button>
         </Form>
-        {requesters}
+        <Row className="justify-content-center"> 
+          {requesters}
+        </Row>
         <Button id="delete-club" variant="danger" onClick={this.handleDelete}>Delete Club</Button>
       </div>
     );
