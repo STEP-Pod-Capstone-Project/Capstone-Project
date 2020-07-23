@@ -57,12 +57,8 @@ export class SearchBookModal extends Component {
   }
 
   addBookToList = (book) => {
-
-    this.state.addedBooksIDs.push(book.id);
-    this.state.addedBooks.push(book);
-
     // Rerender
-    this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
+    this.setState({ addedBooksIDs: [...this.state.addedBooksIDs, book.id], addedBooks: [...this.state.addedBooks, book] })
   }
 
   removeBookFromList = (book) => {
@@ -230,7 +226,7 @@ export class SearchBookModal extends Component {
 
               {this.props.type !== 'club'
                 && <div className='text-center'>
-                  <Button className='text-center' variant='primary' onClick={async () => await this.handleSubmit()} >
+                  <Button className='text-center' variant='primary' onClick={() => this.handleSubmit()} >
                     Submit
                 </Button>
                 </div>
