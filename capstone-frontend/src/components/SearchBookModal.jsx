@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
+import { BookDescriptionOverlay } from './BookDescriptionOverlay';
 
 export class SearchBookModal extends Component {
 
@@ -170,10 +171,12 @@ export class SearchBookModal extends Component {
                   <h3 className='my-4 px-4'>Search Results</h3>
                   <Row className='px-3 text-center'>
                     {this.state.searchResults.map(book =>
-                      <Col md={3} className='px-2 my-0 border' key={book.id}>
-                        <img className='img-responsive mt-3 p-0 rounded' src={book.thumbnailLink} alt={book.title} />
-                        <h5 className='mt-4'> {book.title} </h5>
-                        <p className='my-1'> {book.authors.join(', ')} </p>
+                      <Col md={3} className="px-2 my-0 border" key={book.id}>
+                        <BookDescriptionOverlay book={book}>
+                          <img className="img-fluid book-img-sm mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                        </BookDescriptionOverlay>
+                        <h5 className="mt-4"> {book.title} </h5>
+                        <p className="my-1"> {book.authors.join(', ')} </p>
                         {this.state.addedBooksIDs.includes(book.id) ?
                           <Button className='my-5' variant='danger' onClick={() => this.removeBookFromList(book)}>Remove Book</Button>
                           :
@@ -197,11 +200,13 @@ export class SearchBookModal extends Component {
                       <h2 className='text-center my-4 px-4 '>Added Book</h2>
                       <Row className='text-center px-3'>
                         {
-                          <Col className='px-2 my-0 border' key={this.state.addedBooks[0].id}>
-                            <img className='img-responsive mt-4 p-0 rounded' src={this.state.addedBooks[0].thumbnailLink} alt={this.state.addedBooks[0].title} />
-                            <h5 className='my-4'> {this.state.addedBooks[0].title} </h5>
-                            <p className='my-1'> {this.state.addedBooks[0].authors.join(', ')} </p>
-                            <Button className='my-4' variant='danger' onClick={() => this.removeBookFromList(this.state.addedBooks[0])}>Remove Book</Button>
+                          <Col className="px-2 my-0 border" key={this.state.addedBooks[0].id}>
+                            <BookDescriptionOverlay book={this.state.addedBooks[0]}>
+                              <img className="img-fluid book-img-sm mt-4 p-0 rounded" src={this.state.addedBooks[0].thumbnailLink} alt={this.state.addedBooks[0].title} />
+                            </BookDescriptionOverlay>
+                            <h5 className="my-4"> {this.state.addedBooks[0].title} </h5>
+                            <p className="my-1"> {this.state.addedBooks[0].authors.join(', ')} </p>
+                            <Button className="my-4" variant="danger" onClick={() => this.removeBookFromList(this.state.addedBooks[0])}>Remove Book</Button>
                           </Col>
                         }
                       </Row>
@@ -211,12 +216,13 @@ export class SearchBookModal extends Component {
                       <h2 className='text-center my-4 px-4 '>Added Books</h2>
                       <Row className='text-center px-3'>
                         {this.state.addedBooks.map(addedBook =>
-
-                          <Col md={3} className='px-2 my-0 border' key={addedBook.id}>
-                            <img className='img-responsive mt-3 p-0 rounded' src={addedBook.thumbnailLink} alt={addedBook.title} />
-                            <h5 className='mt-4'> {addedBook.title} </h5>
-                            <p className='my-1'> {addedBook.authors.join(', ')} </p>
-                            <Button className='my-5' variant='danger' onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>
+                          <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
+                            <BookDescriptionOverlay book={this.state.addedBook}>
+                              <img className="img-fluid book-img-sm mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                            </BookDescriptionOverlay>
+                            <h5 className="mt-4"> {addedBook.title} </h5>
+                            <p className="my-1"> {addedBook.authors.join(', ')} </p>
+                            <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>
                           </Col>
                         )}
                       </Row>
