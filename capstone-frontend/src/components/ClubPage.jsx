@@ -75,16 +75,16 @@ class ClubPage extends Component {
 
   handleAssignmentPost = (e) => {
     e.preventDefault();
-    if (window.localStorage.getItem("userID") !== this.state.club.ownerID) {
-      alert("Assignment creation failed. You do not own this club.");
+    if (window.localStorage.getItem('userID') !== this.state.club.ownerID) {
+      alert('Assignment creation failed. You do not own this club.');
       return;
     }
     let data = {
-      "clubID": this.state.club.id,
-      "text": e.target[0].value,
-      "whenCreated": (new Date()).toUTCString()
+      'clubID': this.state.club.id,
+      'text': e.target[0].value,
+      'whenCreated': (new Date()).toUTCString()
     };
-    fetch(`/api/assignments`, {method: "post", body: JSON.stringify(data)})
+    fetch(`/api/assignments`, {method: 'post', body: JSON.stringify(data)})
         .then(response => response.json())
         .then(assignmentJson => {
           let assignments = this.state.assignments;
@@ -98,7 +98,9 @@ class ClubPage extends Component {
   }
 
   handleBookChange = async (gbookID) => {
-    this.state.club.gbookID = gbookID;
+    let club = this.state.club;
+    club.gbookID = gbookID;
+    this.setState({club});
     await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({book: bookJson[0]}))
         .catch(function(err) {
@@ -112,47 +114,47 @@ class ClubPage extends Component {
   }
 
   render() {
-    const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem("userID");
+    const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem('userID');
     const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />;
     const owner = this.state.owner && <UserCard removeMember={this.removeMember} club={this.state.club} user={this.state.owner} />;
     const members = this.state.members.length && this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />);
     const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
     return (
-      <div className="container text-center"> 
+      <div className='container text-center'> 
         {isOwner &&
            <Link to={`/adminclubpage/${this.state.club.id}`}> 
-              <Button className="admin-button" variant="secondary">
+              <Button className='admin-button' variant='secondary'>
                 Admin page
               </Button>
             </Link> 
         }
-        <div className="title"> {this.state.club.name} </div>
+        <div className='title'> {this.state.club.name} </div>
         <div> Club Owner: </div>
-        <Row className="align-items-center justify-content-center">
+        <Row className='align-items-center justify-content-center'>
           {owner}
         </Row>
-        <div className="description"> {this.state.club.description} </div>
+        <div className='description'> {this.state.club.description} </div>
         {bookTile}
         {isOwner && 
           <SearchBookModal
             objectId={this.props.id}
             update={this.handleBookChange}
-            text="Change the Club's Book"
-            putURL="/api/clubs"
-            type="club"
-            btnStyle="btn btn-primary mb-4 mt-4 mr-2" />
+            text='Change the Club&quot;s Book'
+            putURL='/api/clubs'
+            type='club'
+            btnStyle='btn btn-primary mb-4 mt-4 mr-2' />
         }
         {assignments}
         {isOwner &&
-            <Form onSubmit={this.handleAssignmentPost} id="assignment-post-form">
-              <Form.Group controlId="formPostAssignment">
+            <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
+              <Form.Group controlId='formPostAssignment'>
                 <Form.Label> Post a new assignment! </Form.Label> 
-                <Form.Control as="textarea" rows="3" placeholder="Enter assignment text..." />
+                <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
               </Form.Group>
-              <Button variant="primary" type="submit"> Submit </Button>
+              <Button variant='primary' type='submit'> Submit </Button>
             </Form>
         }
-        <Row className="justify-content-center"> 
+        <Row className='justify-content-center'> 
           {members}
         </Row>
       </div>
