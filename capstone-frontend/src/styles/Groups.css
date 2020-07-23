@@ -7,10 +7,10 @@
 }
 
 .assignment-card {
-  text-align: left;
   border: 1px solid grey;
   box-shadow: 3px 3px 3px #888888;
   margin-bottom: 10px;
+  text-align: left;
 }
 
 .assignment-card Form {
@@ -38,23 +38,6 @@
 .assignment-text {
   font-size: 22px;
   font-weight: 500;
-}
-
-.assignment-border {
-  border: 2px solid black;
-  margin-bottom: 10px;
-}
-
-.club-grid-top {
-  background: lightgreen;
-  position: relative;
-  padding: 5px;
-}
-
-.club-grid-top .content {
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .comment-border {
@@ -94,12 +77,13 @@
 
 #delete-club {
   margin-top: 50px;
+  margin-bottom: 20px;
 }
 
 .description {
   font-size: 20px;
-  text-align: center;
   margin: 15px 0px;
+  text-align: center;
 }
 
 .group-container {
@@ -122,8 +106,8 @@
 }
 
 .groups-list-container {
-  margin: 40px 0px;
   justify-content: center;
+  margin: 40px 0px;
 }
 
 .group-container .footer {
@@ -135,10 +119,10 @@
 }
 
 .page-container {
-  text-align: center;
   justify-content: center;
-  padding: 15px;
   margin-top: 15px;
+  padding: 15px;
+  text-align: center;
 }
 
 #remove-member {
@@ -147,8 +131,8 @@
 
 .title {
   font-size: 50px;
-  text-align: center;
   margin: 15px 0px;
+  text-align: center;
 }
 
 .user-card {

@@ -68,7 +68,7 @@ class MyClubs extends Component {
         <Row>
           <Col xs={12} className="title"> My Clubs </Col>
         </Row>
-          <Link id="create-group" to="/createclub"> 
+          <Link to="/createclub"> 
             <Button variant="primary">
               Create New Club 
             </Button>

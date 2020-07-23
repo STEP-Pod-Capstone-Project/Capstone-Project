@@ -29,7 +29,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -212,8 +214,14 @@ public class SearchServlet extends HttpServlet {
     String canonicalVolumeLink = canonVolumeElement != null ? canonVolumeElement.getAsString() : "";
 
     JsonElement thumbnailElement = volumeInfoObj.get("imageLinks");
-    String thumbnailLink = thumbnailElement != null ? thumbnailElement.getAsJsonObject().get("thumbnail").getAsString()
-        : "";
+    ArrayList<String> sizes = new ArrayList<>(Arrays.asList("extraLarge", "large", "medium", "small", "thumbnail"));
+
+    String thumbnailLink = "";
+    Optional<String> greatestSize = sizes.stream().filter(size -> thumbnailElement.getAsJsonObject().get(size) != null)
+        .findFirst();
+    if (greatestSize.isPresent()) {
+      thumbnailLink = thumbnailElement.getAsJsonObject().get(greatestSize.get().toString()).getAsString();
+    }
     thumbnailLink = thumbnailLink.replace("http", "https");
 
     JsonElement accessInfoElement = bookInfo.get("accessInfo");
