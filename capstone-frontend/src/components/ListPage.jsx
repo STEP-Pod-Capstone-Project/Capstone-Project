@@ -173,8 +173,8 @@ class ListPage extends Component {
                 )
               }
             </div>
-
-          </div >)
+          </div >
+        )
       );
   }
 }

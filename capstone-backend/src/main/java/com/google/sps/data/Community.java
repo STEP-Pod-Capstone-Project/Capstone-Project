@@ -12,9 +12,9 @@ public class Community extends Group {
   private List<String> clubIDs;
 
   public Community(String name, String description, List<String> posts, String ownerID, 
-      List<String> memberIDs, List<String> inviteIDs, List<String> communityIDs,
-      List<String> clubIDs) {
-    super(name, description, ownerID, memberIDs, inviteIDs);
+      List<String> memberIDs, List<String> inviteIDs, List<String> requestIDs, 
+      List<String> communityIDs, List<String> clubIDs) {
+    super(name, description, ownerID, memberIDs, inviteIDs, requestIDs);
     this.posts = posts;
     this.communityIDs = communityIDs;
     this.clubIDs = clubIDs;
@@ -22,7 +22,8 @@ public class Community extends Group {
 
   public Community(String name, String description, String ownerID) {
     this(name, description, new ArrayList<String>(), ownerID, new ArrayList<String>(),
-        new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+        new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), 
+        new ArrayList<String>());
   }
 
   public Community() {

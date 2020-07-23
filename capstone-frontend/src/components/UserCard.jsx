@@ -4,17 +4,49 @@ import { Button, Col } from 'react-bootstrap';
 import '../styles/Groups.css';
 
 
-class UserCard extends Component {
+export class UserCard extends Component {
   removeMember = () => {
-    const jsonBody = {
-      "remove_memberIDs": this.props.user.id, 
-      "id": this.props.club.id
+    const removal = {
+      remove_memberIDs: this.props.user.id,
+      id: this.props.club.id
     }
-    fetch(`/api/clubs`, {
-        method: "put", 
-        body: JSON.stringify(jsonBody)
-      })
+    fetch('/api/clubs', { method: 'put', body: JSON.stringify(removal) })
       .then(this.props.removeMember(this.props.user.id))
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
+  }
+
+  acceptMember = () => {
+    if (this.props.club.requestIDs && !this.props.club.requestIDs.includes(this.props.user.id)) {
+      alert('This user did not request to join, so they cannot be accepted.');
+      return;
+    }
+    const acceptance = {
+      remove_requestIDs: this.props.user.id,
+      add_memberIDs: this.props.user.id,
+      id: this.props.club.id
+    };
+    fetch('/api/clubs', { method: 'put', body: JSON.stringify(acceptance) })
+      .then(this.props.fetchData)
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
+  }
+
+  rejectMember = () => {
+    const rejection = {
+      remove_requestIDs: this.props.user.id,
+      id: this.props.club.id
+    };
+    fetch('/api/clubs', { method: 'put', body: JSON.stringify(rejection) })
+      .then(this.props.fetchData)
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
   }
 
   addFriend = () => {
@@ -22,21 +54,33 @@ class UserCard extends Component {
   }
 
   render() {
-    const removeMember = this.props.club 
-                             && this.props.club.ownerID === window.localStorage.getItem("userID")
-                             && this.props.club.ownerID !== this.props.user.id
-                             && <Button id="remove-member" variant="danger" onClick={this.removeMember}>
-                                  Remove&nbsp;Member
-                                </Button>;
+    const isMember = this.props.club && this.props.club.memberIDs && this.props.club.memberIDs.includes(this.props.user.id);
+    const isRequester = this.props.club && !isMember && this.props.club.requestIDs && this.props.club.requestIDs.includes(this.props.user.id);
+    const removeMember = this.props.club
+      && this.props.club.ownerID === window.localStorage.getItem('userID')
+      && this.props.club.ownerID !== this.props.user.id
+      && <Button className='mt-2' variant='danger' onClick={this.removeMember}>
+        Remove&nbsp;Member
+         </Button>;
+    const requestButtons = this.props.club
+      && this.props.club.ownerID === window.localStorage.getItem('userID')
+      && this.props.club.ownerID !== this.props.user.id
+      && <div>
+        <Button className='mt-2' variant='primary' onClick={this.acceptMember}>
+          Accept&nbsp;Member
+        </Button>
+        <Button className='mt-2' variant='danger' onClick={this.rejectMember}>
+          Reject&nbsp;Member
+        </Button>
+      </div>
     return (
-      <Col className="user-card" xs={{span: "2"}} >
-        <img id="user-profile" src={this.props.user.profileImageUrl} alt="Profile"/>
-        <div> {this.props.user.fullName} </div> 
-        <Button variant="primary" onClick={this.addFriend}> Add Friend </Button>
-        {removeMember}
+      <Col className='user-card' xs={{ span: '2' }} >
+        <img id='user-profile' src={this.props.user.profileImageUrl} alt='Profile' />
+        <div> {this.props.user.fullName} </div>
+        <Button className='mt-2' variant='primary' onClick={this.addFriend}> Add Friend </Button>
+        {isMember && removeMember}
+        {isRequester && requestButtons}
       </Col>
     );
   }
-} 
- 
-export default UserCard;
+}
