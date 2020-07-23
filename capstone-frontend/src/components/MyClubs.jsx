@@ -50,7 +50,6 @@ class MyClubs extends Component {
       c.ownerName = owner.fullName;
       c.bookTitle = book.title;
     }
-
     this.setState({clubs: allClubs});
   }
 

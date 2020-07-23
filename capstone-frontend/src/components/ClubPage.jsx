@@ -5,7 +5,7 @@ import { SearchBookModal } from './SearchBookModal'
 
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
-import UserCard from './UserCard';
+import { UserCard } from './UserCard';
  
 import '../styles/Groups.css';
 
@@ -60,7 +60,8 @@ class ClubPage extends Component {
             //TODO #61: Centralize error output
             alert(err); 
         });
-
+        
+    this.setState({members: []});
     for (let i = 0; i < this.state.club.memberIDs.length; i++) {
       await fetch(`/api/user?id=${this.state.club.memberIDs[i]}`)
           .then(response => response.json())
