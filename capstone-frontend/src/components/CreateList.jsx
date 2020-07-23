@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom'
-import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
+import { withRouter } from 'react-router-dom';
+import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap';
+import { BookDescriptionOverlay } from './BookDescriptionOverlay';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -122,10 +123,8 @@ class CreateList extends Component {
 
   render() {
     return (
-
-
       <div>
-
+        
         {!this.props.sideBar ?
           <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
             <div className={this.props.textStyle}>
@@ -185,7 +184,9 @@ class CreateList extends Component {
                   <Row className="px-3 text-center">
                     {this.state.searchResults.map(book =>
                       <Col md={3} className="px-2 my-0 border" key={book.id}>
-                        <img className="img-responsive mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                        <BookDescriptionOverlay book={book}>
+                          <img className="img-fluid book-img-sm mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                        </BookDescriptionOverlay>
                         <h5 className="mt-4"> {book.title} </h5>
                         <p className="my-1"> {book.authors.join(', ')} </p>
                         {this.state.addedBooksIDs.includes(book.id) ?
@@ -207,7 +208,9 @@ class CreateList extends Component {
                     {this.state.addedBooks.map(addedBook =>
 
                       <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
-                        <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                        <BookDescriptionOverlay book={addedBook}>
+                          <img className="img-responsive mt-3 p-0 rounded book-img-sm" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                        </BookDescriptionOverlay>
                         <h5 className="mt-4"> {addedBook.title} </h5>
                         <p className="my-1"> {addedBook.authors.join(', ')} </p>
                         <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>

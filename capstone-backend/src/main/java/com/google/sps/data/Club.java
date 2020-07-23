@@ -8,13 +8,14 @@ public class Club extends Group {
   private String gbookID;
 
   public Club(String name, String description, String ownerID, List<String> memberIDs, 
-      List<String> inviteIDs, String gbookID) {
-    super(name, description, ownerID, memberIDs, inviteIDs);
+      List<String> inviteIDs, List<String> requestIDs, String gbookID) {
+    super(name, description, ownerID, memberIDs, inviteIDs, requestIDs);
     this.gbookID = gbookID;
   }
 
   public Club(String name, String description, String ownerID, String gbookID){
-    this(name, description, ownerID, new ArrayList<String>(), new ArrayList<String>(), gbookID);
+    this(name, description, ownerID, new ArrayList<String>(), new ArrayList<String>(), 
+        new ArrayList<String>(), gbookID);
   }
 
   public Club(String name, String ownerID, String gbookID) {

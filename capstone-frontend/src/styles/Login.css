@@ -1,7 +1,7 @@
 #login-card {
-  width: 45em;
   margin: 0 auto;
   transform: translateY(50%);
+  width: 45em;
 }
 
 #sign-in-text span {
