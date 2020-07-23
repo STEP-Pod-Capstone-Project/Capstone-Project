@@ -1,19 +1,13 @@
-/* Logout Dropdown button */
-#login div div button {
-  background: none;
-  border: none;
-  margin: 0px;
-  padding: 0px;
-  text-align: center;
+#login-card {
+  margin: 0 auto;
+  transform: translateY(50%);
+  width: 45em;
 }
 
-/* Login Button */
-#login div button {
-  background: none;
-  border-width: 0px !important;
-  margin: 0px;
+#sign-in-text span {
+  font-weight: 400;
 }
 
-#profile_img {
-  width: 35%;
+#sign-in-text button{
+  font-size: 18px !important;
 }
