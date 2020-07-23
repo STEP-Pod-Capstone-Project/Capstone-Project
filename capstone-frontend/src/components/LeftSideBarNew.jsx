@@ -267,6 +267,8 @@ export const MiniDrawer = withRouter((props) => {
           </div>
           <div className={classes.grow} />
 
+          <Logout toggleSignIn={props.toggleSignIn} />
+
 
         </Toolbar>
       </AppBar>
@@ -284,13 +286,14 @@ export const MiniDrawer = withRouter((props) => {
         }}
       >
         <div className={classes.toolbar}>
-                            <Logout toggleSignIn={props.toggleSignIn} />
 
-<IconButton>
-          <Avatar 
-            alt={profileObj.name} 
-            src={profileObj.imageUrl} />
-</IconButton>
+          <Link to="/" className="remove-link-style margin-auto">
+            <IconButton >
+              <Avatar
+                alt={profileObj.name}
+                src={profileObj.imageUrl} />
+            </IconButton>
+          </Link>
 
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -298,7 +301,6 @@ export const MiniDrawer = withRouter((props) => {
 
         </div>
 
-        {/* TODO(): Add Website LOGO or somthing OR PROFILE PIC */}
         <Divider />
         <List>
           <Link to="/" className="remove-link-style">
@@ -383,11 +385,21 @@ export const MiniDrawer = withRouter((props) => {
 
             </ListItem>
           </Link>
+
+          {open &&
+            <>
+              <Divider />
+              <ListItem button >
+                <Logout loginStyle={{margin: 'auto'}} toggleSignIn={props.toggleSignIn} className="margin-auto"/>
+              </ListItem>
+            </>
+          }
+
         </List>
       </Drawer>
       <main className={classes.content}>
         <Row>
-          <Col id="body-row">
+          <Col id="main-body">
             <Route exact path='/' component={Home} />
             <Route path='/browse/:query' render={(props) => (
               <Browse bookLists={props.bookLists} updateBookLists={props.updateBookLists} searchQuery={props.match.params.query} />
@@ -403,7 +415,7 @@ export const MiniDrawer = withRouter((props) => {
             )} />
             <Route path='/createclub' component={CreateClub} />
           </Col>
-          <Col md={2}>
+          <Col xs={4} md={2} id="right-sidebar">
             <RightSideBar />
           </Col>
 

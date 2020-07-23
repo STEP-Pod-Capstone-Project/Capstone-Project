@@ -2,6 +2,10 @@
   padding-bottom: 0;
 }
 
+.margin-auto {
+  margin: auto
+}
+
 .remove-form-style {
   margin-top: 0;
 }

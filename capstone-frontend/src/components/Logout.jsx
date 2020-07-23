@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { GoogleLogout } from 'react-google-login';
 import { Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap'
-import "../styles/Logout.css"
 
 export class Logout extends Component {
 
@@ -22,26 +21,12 @@ export class Logout extends Component {
 
   render() {
     return (
-      <div id="logout">
-
-        <DropdownButton as={ButtonGroup} title={
-
-          <img id="profile_img"
-            className="img-responsive rounded-circle"
-            src={this.state.profileObj.imageUrl}
-            alt={this.state.profileObj.name} />}
-
-          id="bg-vertical-dropdown-1">
-
-          <Dropdown.Item eventKey="1">
-            <GoogleLogout
-              clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
-              buttonText="Logout"
-              onLogoutSuccess={this.logoutResponseSuccess}
-              isSignedIn={false} />
-          </Dropdown.Item>
-        </DropdownButton>
-
+      <div style={this.props.loginStyle || {}}>
+        <GoogleLogout
+          clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
+          buttonText="Logout"
+          onLogoutSuccess={this.logoutResponseSuccess}
+          isSignedIn={false} />
       </div>
     )
   }

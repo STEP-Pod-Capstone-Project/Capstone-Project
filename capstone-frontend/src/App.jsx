@@ -71,7 +71,7 @@ class App extends Component {
           ?
           (
             <>
-              <Navbar setSearchQuery={this.setSearchQuery} toggleSignIn={this.toggleSignIn} />
+              {/* <Navbar setSearchQuery={this.setSearchQuery} toggleSignIn={this.toggleSignIn} /> */}
               <MiniDrawer
                 toggleSignIn={this.toggleSignIn}
                 setSearchQuery={this.setSearchQuery}

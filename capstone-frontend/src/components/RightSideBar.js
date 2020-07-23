@@ -3,8 +3,8 @@ import '../App.css';
 
 const RightSideBar = () => {
   return (
-    <div className="bg-light">
-    <h2>THE BODYYYY</h2>
+    <div>
+    <h2>THE BODY</h2>
     <br/>
 
     <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
