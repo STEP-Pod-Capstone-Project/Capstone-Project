@@ -105,6 +105,7 @@ class AdminClubPage extends Component {
           </Form.Group>
           <Button variant="primary" type="submit"> Submit </Button>
         </Form>
+        <div className="description"> Users who have requested to join: </div>
         <Row className="justify-content-center"> 
           {requesters}
         </Row>
