@@ -1,6 +1,5 @@
-.assignment-border {
-  border: 2px solid black;
-  margin-bottom: 10px;
+#add-members {
+  margin-bottom: 20px;
 }
 
 .admin-button {
@@ -76,29 +75,9 @@
   margin-right: 10px;
 }
 
-#create-group {
-  background: #ffffff;
-  border: 4px solid #20bf6b;
-  color: #20bf6b;
-  font-size: 16px;
-  font-weight: 500;
-  max-width: 200px;
-  margin: auto;
-  padding: 10px;
-  transition: all 0.3s ease 0s;
-}
-
-#create-group:hover {
-  background: #20bf6b;
-  border-color: #20bf6b;
-  border-radius: 50px;
-  color: white;
-  text-decoration: none;
-  transition: all 0.3s ease 0s;  
-}
-
 #delete-club {
   margin-top: 50px;
+  margin-bottom: 20px;
 }
 
 .description {
@@ -108,15 +87,35 @@
 }
 
 .group-container {
-  border: 2px solid black;
-  margin: 10px;
-  padding: 5px;
-  text-align: center;
+  border: 1px solid grey;
+  color: black;
+  padding: 0;
+  text-align: left;
+}
+
+.group-container:hover {
+  box-shadow: 3px 3px 3px #888888;
+}
+
+#group-link {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-decoration: none;
 }
 
 .groups-list-container {
   justify-content: center;
   margin: 40px 0px;
+}
+
+.group-container .footer {
+  justify-self: end;
+}
+
+.group-container .header {
+  padding: .75rem 1.25rem;
 }
 
 .page-container {

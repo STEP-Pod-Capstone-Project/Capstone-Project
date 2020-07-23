@@ -15,12 +15,12 @@ document.body.appendChild(container);
 const club = {
   name: "name",
   description: "description",
-  ownerID: "ownerID",
-  gbookID: "gbookID"
+  gbook: "gbook", 
+  memberIDs: ["one", "two", "three"]
 };
 
 test('renders club tile test', () => {
-  render(<Router> <ClubGridItem name={club.name} description={club.description} ownerID={club.ownerID} gbookID={club.gbookID} /> </Router>, container);
+  render(<Router> <ClubGridItem club={club} /> </Router>, container);
 
   const name = document.getElementById("group-name");
   expect(name).toBeInTheDocument();
@@ -28,11 +28,8 @@ test('renders club tile test', () => {
   const description = document.getElementById("group-description");
   expect(description).toBeInTheDocument();
 
-  const ownerID = document.getElementById("group-ownerID");
-  expect(ownerID).toBeInTheDocument();
-
-  const gbookID = document.getElementById("group-gbookID");
-  expect(gbookID).toBeInTheDocument();
+  const gbook = document.getElementById("group-gbook");
+  expect(gbook).toBeInTheDocument();
 
   const link = document.getElementById("group-link");
   expect(link).toBeInTheDocument();
