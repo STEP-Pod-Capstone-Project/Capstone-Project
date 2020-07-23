@@ -97,7 +97,6 @@ class ClubPage extends Component {
   }
 
   handleBookChange = async (gbookID) => {
-    console.log(gbookID);
     this.state.club.gbookID = gbookID;
     await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({book: bookJson[0]}))
