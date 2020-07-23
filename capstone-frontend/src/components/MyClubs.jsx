@@ -42,7 +42,7 @@ class MyClubs extends Component {
       
       let book = await fetch(`/api/search?gbookId=${c.gbookID}`)
                                 .then(response => response.json())
-                                .then(bookJson => bookJson[0])
+                                .then(books => books[0])
                                 .catch(function(err) {
                                   //TODO #61: Centralize error output
                                   alert(err); 
@@ -67,7 +67,7 @@ class MyClubs extends Component {
         <Row>
           <Col xs={12} className="title"> My Clubs </Col>
         </Row>
-          <Link id="create-group" to="/createclub"> 
+          <Link to="/createclub"> 
             <Button variant="primary">
               Create New Club 
             </Button>

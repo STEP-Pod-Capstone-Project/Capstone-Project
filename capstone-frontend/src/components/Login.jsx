@@ -1,80 +1,47 @@
 import React, { Component } from 'react'
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
-import { Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap'
-import "../styles/Login.css"
-
+import { GoogleLogin } from 'react-google-login';
+import { Card, Navbar } from 'react-bootstrap'
+import '../styles/Login.css'
 
 export class Login extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isLogin: false,
-      googleUser: {},
-      profileObj: {},
-      profileMenuCollapsed: false
-    };
-  }
-
-  toggleProfileMenu = () => {
-    this.setState({ profileMenuCollapsed: !this.state.profileMenuCollapsed });
-  }
-
   loginResponseSuccess = (response) => {
-    this.setState({ isLogin: true, googleUser: response, profileObj: response.profileObj });
 
     // Store User in Firebase
     fetch("/api/user", {
       method: "POST",
-      body: JSON.stringify(this.state.googleUser.tokenObj),
+      body: JSON.stringify(response.tokenObj),
     });
 
-    window.localStorage.setItem("userID", this.state.profileObj.googleId)
+    window.localStorage.setItem("userID", response.profileObj.googleId);
+    window.localStorage.setItem("profileObj", JSON.stringify(response.profileObj))
 
-  }
-
-  logoutResponseSuccess = () => {
-    this.setState({ isLogin: false, googleUser: {}, profileObj: {} });
+    this.props.toggleSignIn();
   }
 
   render() {
     return (
-      <div id="login">
+      <div>
+        <Navbar bg="primary" variant="dark">
+          <Navbar.Brand >BookBook</Navbar.Brand>
+        </Navbar>
 
-        {this.state.isLogin
-          ?
-          <div>
-
-            <DropdownButton as={ButtonGroup} title={
-
-              <img id="profile_img"
-                className="img-responsive rounded-circle"
-                src={this.state.profileObj.imageUrl}
-                alt={this.state.profileObj.name} />}
-
-              id="bg-vertical-dropdown-1">
-
-              <Dropdown.Item eventKey="1">
-                <GoogleLogout
-                  buttonText="Logout"
-                  onLogoutSuccess={this.logoutResponseSuccess}
-                  isSignedIn={false} />
-              </Dropdown.Item>
-            </DropdownButton>
-
-          </div>
-          :
-          <div>
-
-            <GoogleLogin
-              clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
-              buttonText="Login"
-              onSuccess={this.loginResponseSuccess}
-              isSignedIn={true}
-              cookiePolicy={"single_host_origin"} />
-
-          </div>}
+        <Card id="login-card" className="text-center">
+          <Card.Header><h1 className="my-4">Welcome to BookBook</h1></Card.Header>
+          <Card.Body>
+            <Card.Text id="sign-in-text">
+              <span className="h3">To Get Started</span>
+              <br />
+              <GoogleLogin
+                className="text-center mt-3"
+                clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
+                buttonText="Sign in with Google"
+                onSuccess={this.loginResponseSuccess}
+                isSignedIn={true}
+                cookiePolicy={"single_host_origin"} />
+            </Card.Text>
+          </Card.Body>
+        </Card>
       </div>
     )
   }

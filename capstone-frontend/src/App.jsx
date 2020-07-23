@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import './App.css';
+import { Login } from './components/Login'
 import Home from './components/Home';
 import Browse from './components/Browse';
 import MyBooks from './components/MyBooks';
@@ -24,6 +25,7 @@ class App extends Component {
     this.state = {
       searchQuery: "",
       bookLists: [],
+      isSignedIn: ((window.localStorage.getItem("userID")) && (window.localStorage.getItem("profileObj"))) ? true : false,
     };
   }
 
@@ -46,36 +48,51 @@ class App extends Component {
     this.setState({ bookLists });
   }
 
-  componentDidMount() {
-    this.fetchBookLists();
+  async componentDidMount() {
+    
+    if (this.state.isSignedIn) {
+      await this.fetchBookLists();
+    }
+  }
+
+  toggleSignIn = () => {
+    this.setState({ isSignedIn: !this.state.isSignedIn })
   }
 
 
   render() {
     return (
       <Router>
-        <Navbar setSearchQuery={this.setSearchQuery} />
-        <div className="row">
-          <LeftSideBar bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
-          <div className="col-12 col-md-8" id="body-row">
-            <Route exact path='/' component={Home} />
-            <Route path='/browse/:query' render={(props) => (
-              <Browse bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} searchQuery={props.match.params.query} />
-            )} />
-            <Route path='/mybooks' component={MyBooks} />
-            <Route path='/listpage/:id' component={ListPage} />
-            <Route path='/myclubs' component={MyClubs} />
-            <Route path='/bookpage/:id' render={(props) => (
-              <BookPage bookId={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists}/>
-            )} />
-            <Route path='/clubpage/:id' render={(props) => (
-              <ClubPage id={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
-            )} />
-            <Route path='/adminclubpage/:id' component={AdminClubPage} />
-            <Route path='/createclub' component={CreateClub} />
-        </div>
-        <RightSideBar />
-        </div>
+        {this.state.isSignedIn
+          ?
+          (
+            <>
+              <Navbar setSearchQuery={this.setSearchQuery} toggleSignIn={this.toggleSignIn} />
+              <div className="row">
+                <LeftSideBar bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
+                <div className="col-12 col-md-8" id="body-row">
+                  <Route exact path='/' component={Home} />
+                  <Route path='/browse/:query' render={(props) => (
+                    <Browse bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} searchQuery={props.match.params.query} />
+                  )} />
+                  <Route path='/mybooks' component={MyBooks} />
+                  <Route path='/listpage/:id' component={ListPage} />
+                  <Route path='/myclubs' component={MyClubs} />
+                  <Route path='/bookpage/:id' render={(props) => (
+                    <BookPage bookId={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
+                  )} />
+                  <Route path='/clubpage/:id' render={(props) => (
+                    <ClubPage id={props.match.params.id} bookLists={this.state.bookLists} updateBookLists={this.fetchBookLists} />
+                  )} />
+                  <Route path='/createclub' component={CreateClub} />
+                </div>
+                <RightSideBar />
+              </div>
+            </>
+          )
+          :
+          (<Login toggleSignIn={this.toggleSignIn} />)
+        }
       </Router >
     );
   }
