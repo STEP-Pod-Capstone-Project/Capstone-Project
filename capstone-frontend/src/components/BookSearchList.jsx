@@ -12,7 +12,7 @@ class BookSearchList extends Component {
   }
 
   getData = () => {
-    fetch(`/api/search?searchTerm=${this.props.searchQuery}`)
+    fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
       .then(booksResult => this.setState({ books: booksResult }))
       .catch(err => console.log(err));
