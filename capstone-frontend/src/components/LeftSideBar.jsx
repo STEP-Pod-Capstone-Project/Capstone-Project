@@ -398,7 +398,7 @@ export const LeftSideBar = withRouter((props) => {
                   </Link>
                 )
               }
-              <CreateList updateBookLists={props.updateBookLists} sideBar={true} />
+              <CreateList updateBookLists={props.updateBookLists} sideBar={true} closeSideBar={handleDrawerClose}/>
             </List>
           </Collapse>
 
