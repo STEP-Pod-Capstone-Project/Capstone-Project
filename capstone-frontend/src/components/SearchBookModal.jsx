@@ -63,7 +63,6 @@ export class SearchBookModal extends Component {
 
     // Rerender
     this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
-    console.log("addbooktolist: " + this.state);
   }
 
   removeBookFromList = (book) => {

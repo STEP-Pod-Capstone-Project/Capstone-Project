@@ -50,8 +50,6 @@ class UserCard extends Component {
   }
 
   render() {
-    console.log("usercard: ");
-    console.log(this.props);
     const isMember = this.props.club && this.props.club.memberIDs && this.props.club.memberIDs.includes(this.props.user.id);
     const isRequester = this.props.club && !isMember && this.props.club.requestIDs && this.props.club.requestIDs.includes(this.props.user.id);
     const removeMember = this.props.club
@@ -75,7 +73,7 @@ class UserCard extends Component {
       <Col className="user-card" xs={{ span: "2" }} >
         <img id="user-profile" src={this.props.user.profileImageUrl} alt="Profile" />
         <div> {this.props.user.fullName} </div>
-        <Button variant="primary" onClick={this.addFriend}> Add Friend </Button>
+        <Button className="mt-2" variant="primary" onClick={this.addFriend}> Add Friend </Button>
         {isMember && removeMember}
         {isRequester && requestButtons}
       </Col>
