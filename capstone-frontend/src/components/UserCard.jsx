@@ -25,7 +25,7 @@ class UserCard extends Component {
       "id": this.props.club.id
     };
     fetch("/api/clubs", { method: "put", body: JSON.stringify(jsonBody) })
-      .then(this.props.handleRequester(this.props.user.id))
+      .then(this.props.fetchData)
       .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
@@ -38,7 +38,7 @@ class UserCard extends Component {
       "id": this.props.club.id
     };
     fetch("/api/clubs", { method: "put", body: JSON.stringify(jsonBody) })
-      .then(this.props.handleRequester(this.props.user.id))
+      .then(this.props.fetchData)
       .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
@@ -53,7 +53,7 @@ class UserCard extends Component {
     console.log("usercard: ");
     console.log(this.props);
     const isMember = this.props.club && this.props.club.memberIDs && this.props.club.memberIDs.includes(this.props.user.id);
-    const isRequester = this.props.club && !isMember && this.props.club.requestIDs.includes(this.props.user.id);
+    const isRequester = this.props.club && !isMember && this.props.club.requestIDs && this.props.club.requestIDs.includes(this.props.user.id);
     const removeMember = this.props.club
       && this.props.club.ownerID === window.localStorage.getItem("userID")
       && this.props.club.ownerID !== this.props.user.id

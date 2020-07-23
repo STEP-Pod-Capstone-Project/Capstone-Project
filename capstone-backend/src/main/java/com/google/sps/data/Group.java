@@ -11,22 +11,24 @@ public abstract class Group extends BaseEntity {
   private String ownerID;
   private List<String> memberIDs;
   private List<String> inviteIDs;
+  private List<String> requestIDs;
 
   public Group(String name, String description, String ownerID, List<String> memberIDs, 
-      List<String> inviteIDs) {
+      List<String> inviteIDs, List<String> requestIDs) {
     this.name = name;
     this.description = description;
     this.ownerID = ownerID;
     this.memberIDs = memberIDs;
     this.inviteIDs = inviteIDs;
+    this.requestIDs = requestIDs;
   }
 
   public Group(String name, String description, String ownerID) {
-    this(name, description, ownerID, new ArrayList<>(), new ArrayList<>());
+    this(name, description, ownerID, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
   }
 
   public Group() {
-    this("", "", "", new ArrayList<>(), new ArrayList<>());
+    this("", "", "");
   }
  
   public String getName() {
@@ -92,6 +94,10 @@ public abstract class Group extends BaseEntity {
       return true;
     }
     return false;
+  }
+
+  public List<String> getRequestIDs() {
+    return this.requestIDs;
   }
   
 }

@@ -15,23 +15,25 @@ class AdminClubPage extends Component {
     }
   }
 
-  fetchData = async () => {
-    const club = await fetch(`/api/clubs?id=${this.props.match.params.id}`)
-      .then(response => response.json()).then(clubs => this.setState({ club: clubs[0] }))
+  fetchData = () => {
+    fetch(`/api/clubs?id=${this.props.match.params.id}`)
+      .then(response => response.json()).then(clubs => {
+        let club = clubs[0];
+        this.setState({ club });
+        for (let i = 0; i < club.requestIDs.length; i++) {
+          fetch(`/api/user?id=${club.requestIDs[i]}`)
+            .then(response => response.json())
+            .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }))
+            .catch(function (err) {
+              //TODO #61: Centralize error output
+              alert(err);
+            });
+        }
+      })
       .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
       });
-
-    for (let i = 0; i < club.requestIDs.length; i++) {
-      await fetch(`/api/user?id=${this.state.club.requestIDs[i]}`)
-        .then(response => response.json())
-        .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }))
-        .catch(function (err) {
-          //TODO #61: Centralize error output
-          alert(err);
-        });
-    }
   }
 
   handleUpdate = (e) => {
@@ -77,39 +79,17 @@ class AdminClubPage extends Component {
       });
   }
 
-  removeMember = (memberID) => {
-    let memberArray = this.state.members;
-    let memberIDsArray = this.state.members.map(m => m.id);
-    const index = memberIDsArray.indexOf(memberID);
-    if (index > -1) {
-      memberArray.splice(index, 1);
-    }
-    this.setState({members: memberArray});
-  }
-
-  handleRequester = (memberID) => {
-    let requestersArray = this.state.requestIDs;
-    let requestIDsArray = this.state.requestIDs.map(m => m.id);
-    const index = requestIDsArray.indexOf(memberID);
-    if (index > -1) {
-      requestersArray.splice(index, 1);
-    }
-    this.setState({requesters: requestersArray});
-  }
-
   componentDidMount() {
     this.fetchData();
   }
 
   render() {
-    console.log("admin: " + this.state);
-    const requesters = this.state.requesters.length &&
-      this.state.requesters.map(m =>
-        <UserCard 
+    const requesters = this.state.requesters.map(m =>
+        <UserCard
           key={m.id}
           user={m}
           club={this.state.club}
-          handleRequest = {this.handleRequester} />);
+          fetchData={this.fetchData} />);
     return (
       <div className="container text-center">
         <Link to={`/clubpage/${this.props.match.params.id}`}>
