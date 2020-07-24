@@ -11,22 +11,23 @@ class BookSearchList extends Component {
     }
   }
 
-  getData = () => {
-    fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?searchTerm=${this.props.searchQuery}`)
-      .then(response => response.json())
-      .then(booksResult => this.setState({ books: booksResult }))
-      .catch(err => console.log(err));
-  }
+  // getData = () => {
+  //   fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?searchTerm=${this.props.searchQuery}`)
+  //     .then(response => response.json())
+  //     .then(booksResult => this.setState({ books: booksResult }))
+  //     .catch(err => console.log(err));
+  // }
 
-  componentDidMount() {
-    this.getData();
-  }
+  // componentDidMount() {
+  //   this.getData();
+  // }
 
   render() {
+    console.log("booky", this.props.books);
     return (
       <div>
-        {
-          this.state.books.map(book =>
+        { this.props.books &&
+          this.props.books.map(book =>
             <BookSearchTile book={book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} key={book.id} />
           )
         }

@@ -26,6 +26,7 @@ class App extends Component {
       searchQuery: "",
       bookLists: [],
       clubs: [],
+      users: [],
       isSignedIn: ((window.localStorage.getItem("userID")) && (window.localStorage.getItem("profileObj"))) ? true : false,
     };
   }
@@ -49,29 +50,10 @@ class App extends Component {
     this.setState({ bookLists });
   }
 
-  fetchClubs = async () => {
-    // TODO(#74): Add Spinner to LeftSide when fetching Clubs from App.jsx
-    const clubs = await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/clubs`, {
-      method: "GET",
-    }).then(resp => resp.json()).catch(err => console.log(err));
-
-    clubs.forEach(async (club) => {
-      if (club.gbookID.length > 0) {
-        const books = await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?gbookId=${club.gbookID}`, {
-          method: "GET",
-        }).then(resp => resp.json()).catch(err => console.log(err));
-        club.bookTitle = books[0].title;
-      }
-    });
-
-    this.setState({ clubs });
-  }
-
   async componentDidMount() {
 
     if (this.state.isSignedIn) {
       await this.fetchBookLists();
-      await this.fetchClubs();
     }
   }
 
@@ -95,7 +77,6 @@ class App extends Component {
                   <Route path='/browse/:query' render={(props) => (
                     <Browse bookLists={this.state.bookLists}
                       updateBookLists={this.fetchBookLists}
-                      clubs={this.state.clubs}
                       searchQuery={props.match.params.query} />
                   )} />
                   <Route path='/mybooks' component={MyBooks} />
