@@ -156,22 +156,5 @@ public class UserServlet extends HttpServlet {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
-    try {
-      DocumentSnapshot user = users.document(id).get().get();
-      if (user.exists()) {
-        System.out.println("User data: " + user.getData());
-        Gson gson = new Gson();
-        response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(user));
-      } else {
-        System.err.println("No such user");
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        return;
-      }
-    } catch (Exception e) {
-      System.err.println(e);   
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
-    }
   }
 }
