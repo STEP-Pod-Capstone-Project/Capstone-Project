@@ -15,7 +15,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -69,13 +71,8 @@ public class UserServlet extends HttpServlet {
         String profileImageUrl = (String) payload.get("picture");
 
         googleUser = new User(googleId, email, fullname, profileImageUrl,
-          new ImmutableMap.Builder<String, String>()
-            .put("access_token", access_token)
-            .put("idpId", idpId)
-            .put("scope", scope)
-            .put("token_id", tokenId)
-            .put("token_type", token_type)
-            .build());
+            new ImmutableMap.Builder<String, String>().put("access_token", access_token).put("idpId", idpId)
+                .put("scope", scope).put("token_id", tokenId).put("token_type", token_type).build());
 
       } else {
         System.err.println("Invalid ID token.");
@@ -102,29 +99,28 @@ public class UserServlet extends HttpServlet {
     response.setHeader("Access-Control-Allow-Origin",
         "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
+    String userID = request.getParameter("id");
+    Map<String, Object> user = new HashMap<>();
+
+    if (userID == null) {
+      System.err.println("Error:\t" + "Null Id");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+
+    Firestore db = getFirestore();
+
     try {
-
-      String userID = request.getParameter("id");
-      Map<String, Object> user;
-
-      if (userID == null) {
-        System.err.println("Error:\t" + "Null Id");
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        return;
-      }
-
-      Firestore db = getFirestore();
-
       DocumentSnapshot document = db.collection("users").document(userID).get().get();
-
       user = document.getData();
 
-      Gson gson = new Gson();
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(user));
-
-    } catch (Exception e) {
+    } catch (ExecutionException | InterruptedException e) {
       System.err.println("Error:\t" + e.getMessage());
     }
+
+    Gson gson = new Gson();
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(user));
+
   }
 }
