@@ -53,7 +53,7 @@ class AdminClubPage extends Component {
       return;
     }
 
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs", { method: "put", body: JSON.stringify(data) })
+    fetch("/api/clubs", { method: "put", body: JSON.stringify(data) })
       .then(history.push(`/clubpage/${data.id}`))
       .catch(function (err) {
         //TODO #61: Centralize error output

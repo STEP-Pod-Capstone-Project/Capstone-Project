@@ -28,6 +28,19 @@ class CreateList extends Component {
     }
   }
 
+  initialSelectedBook = () => {
+    if (this.props.selectedBookID && this.props.selectedBook &&
+      !this.state.addedBooksIDs.includes(this.props.selectedBookID) && !this.state.addedBooks.includes(this.props.selectedBook)) {
+
+      this.setState(
+        {
+          addedBooksIDs: [...this.state.addedBooksIDs, this.props.selectedBookID],
+          addedBooks: [...this.state.addedBooks, this.props.selectedBook],
+        }
+      );
+    }
+  }
+
   getBooks = async (searchTerm) => {
 
     this.setState({ fetchingBooks: true })
@@ -84,6 +97,8 @@ class CreateList extends Component {
 
     // Rerender
     this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
+
+    console.log(this.state.addedBooksIDs, this.state.addedBooks, this.state)
   }
 
   handleSubmit = async () => {
@@ -105,7 +120,7 @@ class CreateList extends Component {
     }
 
     // Store BookList in Firebase
-    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    await fetch("/api/booklist", {
       method: "POST",
       body: JSON.stringify(newBooklist)
     });
@@ -125,7 +140,7 @@ class CreateList extends Component {
     return (
       <>
         {!this.props.sideBar ?
-          <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
+          <button className={this.props.btnStyle} onClick={() => { this.initialSelectedBook(); this.setState({ showModal: true }) }}>
             <div className={this.props.textStyle}>
               <span id="create-list-modal"> Create New List </span>
             </div>

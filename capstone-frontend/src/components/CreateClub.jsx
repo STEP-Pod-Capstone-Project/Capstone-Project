@@ -19,7 +19,7 @@ class CreateClub extends Component {
 
     console.log("Create club", data)
 
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs", {method: "post", body: JSON.stringify(data)})
+    fetch("/api/clubs", {method: "post", body: JSON.stringify(data)})
         .then(resp => resp.json())
         .then(club => history.push(`/clubpage/${data.id}`))
         .catch(function(e) {

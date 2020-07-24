@@ -87,7 +87,7 @@ class ListPage extends Component {
     }
 
     // Remove BookList in Firebase
-    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    await fetch("/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
     }).catch(err => alert(err));
