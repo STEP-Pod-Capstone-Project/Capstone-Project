@@ -76,7 +76,7 @@ class MyClubs extends Component {
         <Link to="/createclub">
           <Button variant="primary">
             Create New Club
-            </Button>
+          </Button>
         </Link>
         <CardDeck className="groups-list-container"> {clubArray} </CardDeck>
       </div>
