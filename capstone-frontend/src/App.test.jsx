@@ -22,6 +22,10 @@ test('renders left sidebar and navbar', () => {
   expect(leftSidebarNavbar).toBeInTheDocument();
 });
 
+// Commented out for now.
+// At the moment we still don't have a Friends feature so the RightSideBar is not nessesary.
+// The current RightSideBar.jsx is just a template. 
+
 // test('renders right sidebar', () => {
 //   render(<Router><RightSideBar />}/></Router>, container);
 //   const rightSidebar = document.getElementById("right-sidebar-container");

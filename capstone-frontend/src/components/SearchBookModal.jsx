@@ -62,8 +62,6 @@ export class SearchBookModal extends Component {
   addBookToList = (book) => {
     // Rerender
     this.setState({ addedBooksIDs: [...this.state.addedBooksIDs, book.id], addedBooks: [...this.state.addedBooks, book] })
-
-    console.log(this.state)
   }
 
   removeBookFromList = (book) => {
@@ -79,8 +77,6 @@ export class SearchBookModal extends Component {
   }
 
   handleSubmit = async () => {
-
-    console.log("actual submit")
 
     if (this.state.addedBooksIDs.length !== 0) {
 
@@ -113,8 +109,6 @@ export class SearchBookModal extends Component {
   }
 
   clubSubmit = (gbookID) => {
-
-    console.log("club submit")
     const updates = {
       id: this.props.objectId,
       gbookID: gbookID,

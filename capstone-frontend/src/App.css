@@ -4,9 +4,9 @@
 }
 
 #right-sidebar {
-  margin-top: 40px;
-  margin-right: -8px;
-  min-height: 100vh;   
   background-color: whitesmoke;
-  border: 1px solid #ccc
+  border: 1px solid #ccc;
+  margin-right: -8px;
+  margin-top: 40px;
+  min-height: 100vh;   
 }
