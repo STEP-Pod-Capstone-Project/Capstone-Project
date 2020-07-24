@@ -39,6 +39,7 @@ class ClubGridItem extends Component {
   }
 
   render() {
+    console.log("griditem props", this.props.club);
     const userID = window.localStorage.getItem("userID");
     const isOwner = this.props.club.ownerID === userID
     const isMember = this.props.club.memberIDs.includes(userID);
