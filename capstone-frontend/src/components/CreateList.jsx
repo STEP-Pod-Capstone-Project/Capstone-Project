@@ -105,7 +105,7 @@ class CreateList extends Component {
     }
 
     // Store BookList in Firebase
-    await fetch("/api/booklist", {
+    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
       method: "POST",
       body: JSON.stringify(newBooklist)
     });
