@@ -16,12 +16,12 @@ class AdminClubPage extends Component {
   }
 
   fetchData = () => {
-    fetch(`/api/clubs?id=${this.props.match.params.id}`)
+    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`)
       .then(response => response.json()).then(clubs => {
         const club = clubs[0];
         this.setState({ club, requesters: [] });
         Promise.all(club.requestIDs.map(r => {
-          return fetch(`/api/user?id=${r}`)
+          return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${r}`)
             .then(response => response.json())
             .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }))
             .catch(function (err) {
@@ -53,7 +53,7 @@ class AdminClubPage extends Component {
       return;
     }
 
-    fetch("/api/clubs", { method: "put", body: JSON.stringify(data) })
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs", { method: "put", body: JSON.stringify(data) })
       .then(history.push(`/clubpage/${data.id}`))
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -67,7 +67,7 @@ class AdminClubPage extends Component {
       return;
     }
     const history = this.props.history;
-    fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: "delete" })
+    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`, { method: "delete" })
       .then(function () {
         history.push("/myclubs");
       })
