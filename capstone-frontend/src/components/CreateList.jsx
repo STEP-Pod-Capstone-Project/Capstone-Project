@@ -3,6 +3,13 @@ import { withRouter } from 'react-router-dom';
 import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap';
 import { BookDescriptionOverlay } from './BookDescriptionOverlay';
 
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
+
+import '../styles/Modal.css'
+
 class CreateList extends Component {
 
   constructor(props) {
@@ -117,13 +124,25 @@ class CreateList extends Component {
   render() {
     return (
       <>
-        <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
-          <div className={this.props.textStyle}>
-            <span id="create-list-modal"> Create New List </span>
-          </div>
-        </button>
+        {!this.props.sideBar ?
+          <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
+            <div className={this.props.textStyle}>
+              <span id="create-list-modal"> Create New List </span>
+            </div>
+          </button>
+          :
+          <ListItem id="create-list-modal" button onClick={() => { this.setState({ showModal: true }); this.props.closeSideBar() }} className="jss11" >
+
+            <ListItemIcon>
+              <LibraryAddIcon />
+            </ListItemIcon>
+
+            <ListItemText primary='Create New List' />
+          </ListItem>
+        }
 
         <Modal
+          dialogClassName="modal-style"
           size="lg"
           show={this.state.showModal}
           onHide={() => this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })}

@@ -12,7 +12,8 @@ document.body.appendChild(container);
 const book = {
   title: 'Title',
   authors: ['Author'],
-  thumbnailLink: 'https://http.cat/100.jpg'
+  thumbnailLink: 'https://http.cat/100.jpg',
+  description: 'description',
 };
 const getUserBookLists = () => {
   return [{ id: '1', name: 'Best Books' },
