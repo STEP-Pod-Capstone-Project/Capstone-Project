@@ -127,7 +127,7 @@ class ClubPage extends Component {
           <Link to={`/adminclubpage/${this.state.club.id}`}>
             <Button className='admin-button' variant='secondary'>
               Admin page
-              </Button>
+            </Button>
           </Link>
         }
         <div className='title'> {this.state.club.name} </div>

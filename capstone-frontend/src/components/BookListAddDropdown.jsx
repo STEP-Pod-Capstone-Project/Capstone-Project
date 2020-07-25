@@ -36,7 +36,7 @@ const BookListAddDropdown = ({ book, bookLists, updateBookLists }) => {
     );
   } else {
     return (
-      <CreateList id='button-list-add' updateBookLists={updateBookLists} className='dropdown-add'
+      <CreateList id='button-list-add' selectedBookID={book.id} selectedBook={book} updateBookLists={updateBookLists} className='dropdown-add'
         btnStyle='btn btn-success btn-margin center-horizontal' />
     );
   }

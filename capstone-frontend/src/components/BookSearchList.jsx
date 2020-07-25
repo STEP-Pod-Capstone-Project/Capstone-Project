@@ -22,6 +22,12 @@ class BookSearchList extends Component {
     this.getData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.searchQuery !== prevProps.searchQuery) {
+      this.getData();
+    }
+  }
+
   render() {
     return (
       <div>
