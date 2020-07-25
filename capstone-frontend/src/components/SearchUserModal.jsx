@@ -104,7 +104,7 @@ export class SearchUserModal extends Component {
       <div>
         <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
           <div className={this.props.textStyle}>
-            <span id='create-list-modal'> Search for Users </span>
+            <span id='create-list-modal'> {this.props.text || 'Search for Users'} </span>
           </div>
         </button>
 
@@ -164,17 +164,24 @@ export class SearchUserModal extends Component {
                               {user.email}
                             </Card.Text>
 
-                            <Button onClick={() => console.log('click')}>
-                              Send Friend Request
-                            </Button>
-                            {this.state.addedUsers.includes(user) ?
-                              <Button variant='danger' onClick={() => this.removeUserFromCheckout(user)}>
-                                Remove from Club
+                            {this.props.type === 'friends' &&
+                              <Button onClick={() => console.log('Friend Request Sent')}>
+                                Send Friend Request
                               </Button>
-                              :
-                              <Button onClick={() => this.addUserToCheckout(user)}>
-                                Add to Club
+                            }
+
+                            {this.props.type === 'clubs' &&
+                              <>
+                                {this.state.addedUsers.includes(user) ?
+                                  <Button variant='danger' onClick={() => this.removeUserFromCheckout(user)}>
+                                    Remove from Club
                               </Button>
+                                  :
+                                  <Button onClick={() => this.addUserToCheckout(user)}>
+                                    Add to Club
+                              </Button>
+                                }
+                              </>
                             }
                           </Card.Body>
                         </Card>
@@ -185,7 +192,7 @@ export class SearchUserModal extends Component {
               }
 
               {
-                (this.state.addedUsers.length !== 0) &&
+                (this.state.addedUsers.length !== 0 && this.props.type === 'clubs') &&
                 <div>
                   <h2 className='text-center my-4 px-4 '>Added Users</h2>
                   <Row className='text-center px-3'>
@@ -212,14 +219,17 @@ export class SearchUserModal extends Component {
                 </div>
               }
 
-              {(this.state.resultsFound && this.state.searchResults.length > 0) &&
-                <div className='text-center mt-2'>
-                  <Button className='text-center' variant='primary' onClick={() => this.handleSubmit()} >
-                    Confirm
-                  </Button>
-                </div>
+              {this.props.type === 'clubs' &&
+                <>
+                  {(this.state.resultsFound && this.state.searchResults.length > 0) &&
+                    <div className='text-center mt-2'>
+                      <Button className='text-center' variant='primary' onClick={() => this.handleSubmit()} >
+                        Confirm
+                      </Button>
+                    </div>
+                  }
+                </>
               }
-
             </Form>
           </Modal.Body>
         </Modal>
