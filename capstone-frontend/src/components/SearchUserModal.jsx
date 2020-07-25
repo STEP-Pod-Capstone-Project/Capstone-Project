@@ -170,15 +170,15 @@ export class SearchUserModal extends Component {
                               </Button>
                             }
 
-                            {this.props.type === 'clubs' &&
+                            {(this.props.type === 'clubs' || this.props.type === 'booklists') &&
                               <>
                                 {this.state.addedUsers.includes(user) ?
                                   <Button variant='danger' onClick={() => this.removeUserFromCheckout(user)}>
-                                    Remove from Club
+                                    Remove
                               </Button>
                                   :
                                   <Button onClick={() => this.addUserToCheckout(user)}>
-                                    Add to Club
+                                    Add
                               </Button>
                                 }
                               </>
@@ -192,7 +192,7 @@ export class SearchUserModal extends Component {
               }
 
               {
-                (this.state.addedUsers.length !== 0 && this.props.type === 'clubs') &&
+                (this.state.addedUsers.length !== 0 && (this.props.type === 'clubs' || this.props.type === 'booklists')) &&
                 <div>
                   <h2 className='text-center my-4 px-4 '>Added Users</h2>
                   <Row className='text-center px-3'>
@@ -219,7 +219,7 @@ export class SearchUserModal extends Component {
                 </div>
               }
 
-              {this.props.type === 'clubs' &&
+              {(this.props.type === 'clubs' || this.props.type === 'booklists') &&
                 <>
                   {(this.state.resultsFound && this.state.searchResults.length > 0) &&
                     <div className='text-center mt-2'>
