@@ -29,8 +29,10 @@ class CreateList extends Component {
   }
 
   initialSelectedBook = () => {
-    if (this.props.selectedBookID && this.props.selectedBook &&
-      !this.state.addedBooksIDs.includes(this.props.selectedBookID) && !this.state.addedBooks.includes(this.props.selectedBook)) {
+    if (this.props.selectedBookID &&
+      this.props.selectedBook &&
+      !this.state.addedBooksIDs.includes(this.props.selectedBookID) &&
+      !this.state.addedBooks.includes(this.props.selectedBook)) {
 
       this.setState(
         {
@@ -97,8 +99,6 @@ class CreateList extends Component {
 
     // Rerender
     this.setState({ addedBooksIDs: this.state.addedBooksIDs, addedBooks: this.state.addedBooks })
-
-    console.log(this.state.addedBooksIDs, this.state.addedBooks, this.state)
   }
 
   handleSubmit = async () => {
