@@ -6,7 +6,7 @@ import { SearchBookModal } from './SearchBookModal'
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
 import { UserCard } from './UserCard';
- 
+
 import '../styles/Groups.css';
 
 
@@ -17,11 +17,11 @@ class ClubPage extends Component {
       club: {},
       book: {},
       assignments: [],
-      owner: {}, 
-      members: [], 
+      owner: {},
+      members: [],
     }
   }
-  
+
   removeMember = (memberID) => {
     let memberArray = this.state.members;
     let memberIDsArray = this.state.members.map(m => m.id);
@@ -29,47 +29,49 @@ class ClubPage extends Component {
     if (index > -1) {
       memberArray.splice(index, 1);
     }
-    this.setState({members: memberArray});
+    this.setState({ members: memberArray });
   }
 
   fetchData = async () => {
-    await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/clubs?id=${this.props.id}`)
-        .then(response => response.json()).then(clubJson => this.setState({club: clubJson[0]}))
-        .catch(function(err) {
-            //TODO #61: Centralize error output
-            alert(err);
-        });
+    await fetch(`/api/clubs?id=${this.props.id}`)
+      .then(response => response.json()).then(clubJson => this.setState({ club: clubJson[0] }))
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
 
-    await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?gbookId=${this.state.club.gbookID}`)
-        .then(response => response.json()).then(bookJson => this.setState({book: bookJson[0]}))
-        .catch(function(err) {
-            //TODO #61: Centralize error output
-            alert(err);
+    if (this.state.club.gbookID.length > 0) {
+      await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
+        .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
+        .catch(function (err) {
+          //TODO #61: Centralize error output
+          alert(err);
         });
+    }
 
-    await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/assignments?clubID=${this.state.club.id}`)
-        .then(response => response.json()).then(assignmentJson => this.setState({assignments: assignmentJson}))
-        .catch(function(err) {
-            //TODO #61: Centralize error output
-            alert(err); 
-        });
+    await fetch(`/api/assignments?clubID=${this.state.club.id}`)
+      .then(response => response.json()).then(assignmentJson => this.setState({ assignments: assignmentJson }))
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
 
-    await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/user?id=${this.state.club.ownerID}`)
-        .then(response => response.json()).then(ownerJson => this.setState({owner: ownerJson}))
-        .catch(function(err) {
-            //TODO #61: Centralize error output
-            alert(err); 
-        });
-        
-    this.setState({members: []});
+    await fetch(`/api/user?id=${this.state.club.ownerID}`)
+      .then(response => response.json()).then(ownerJson => this.setState({ owner: ownerJson }))
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
+
+    this.setState({ members: [] });
     for (let i = 0; i < this.state.club.memberIDs.length; i++) {
-      await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/user?id=${this.state.club.memberIDs[i]}`)
-          .then(response => response.json())
-          .then(memberJson => memberJson && this.setState({members: [...this.state.members, memberJson]}))
-          .catch(function(err) {
-            //TODO #61: Centralize error output
-            alert(err); 
-          });
+      await fetch(`/api/user?id=${this.state.club.memberIDs[i]}`)
+        .then(response => response.json())
+        .then(memberJson => memberJson && this.setState({ members: [...this.state.members, memberJson] }))
+        .catch(function (err) {
+          //TODO #61: Centralize error output
+          alert(err);
+        });
     }
   }
 
@@ -84,29 +86,29 @@ class ClubPage extends Component {
       'text': e.target[0].value,
       'whenCreated': (new Date()).toUTCString()
     };
-    fetch(`/api/assignments`, {method: 'post', body: JSON.stringify(data)})
-        .then(response => response.json())
-        .then(assignmentJson => {
-          let assignments = this.state.assignments;
-          assignments.push(assignmentJson);
-          this.setState({assignments});
-        })
-        .catch(function(err) {
-          //TODO #61: Centralize error output
-          alert(err); 
-        });
+    fetch(`/api/assignments`, { method: 'post', body: JSON.stringify(data) })
+      .then(response => response.json())
+      .then(assignmentJson => {
+        let assignments = this.state.assignments;
+        assignments.push(assignmentJson);
+        this.setState({ assignments });
+      })
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
   }
 
   handleBookChange = async (gbookID) => {
     let club = this.state.club;
     club.gbookID = gbookID;
-    this.setState({club});
+    this.setState({ club });
     await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
-        .then(response => response.json()).then(bookJson => this.setState({book: bookJson[0]}))
-        .catch(function(err) {
-            //TODO #61: Centralize error output
-            alert(err);
-        });
+      .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
   }
 
   componentDidMount() {
@@ -120,13 +122,13 @@ class ClubPage extends Component {
     const members = this.state.members.length && this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />);
     const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
     return (
-      <div className='container text-center'> 
+      <div className='container text-center'>
         {isOwner &&
-           <Link to={`/adminclubpage/${this.state.club.id}`}> 
-              <Button className='admin-button' variant='secondary'>
-                Admin page
-              </Button>
-            </Link> 
+          <Link to={`/adminclubpage/${this.state.club.id}`}>
+            <Button className='admin-button' variant='secondary'>
+              Admin page
+            </Button>
+          </Link>
         }
         <div className='title'> {this.state.club.name} </div>
         <div> Club Owner: </div>
@@ -135,7 +137,7 @@ class ClubPage extends Component {
         </Row>
         <div className='description'> {this.state.club.description} </div>
         {bookTile}
-        {isOwner && 
+        {isOwner &&
           <SearchBookModal
             objectId={this.props.id}
             update={this.handleBookChange}
@@ -146,15 +148,15 @@ class ClubPage extends Component {
         }
         {assignments}
         {isOwner &&
-            <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
-              <Form.Group controlId='formPostAssignment'>
-                <Form.Label> Post a new assignment! </Form.Label> 
-                <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
-              </Form.Group>
-              <Button variant='primary' type='submit'> Submit </Button>
-            </Form>
+          <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
+            <Form.Group controlId='formPostAssignment'>
+              <Form.Label> Post a new assignment! </Form.Label>
+              <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
+            </Form.Group>
+            <Button variant='primary' type='submit'> Submit </Button>
+          </Form>
         }
-        <Row className='justify-content-center'> 
+        <Row className='justify-content-center'>
           {members}
         </Row>
       </div>

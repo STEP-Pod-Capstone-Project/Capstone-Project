@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom'
-import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
+import { withRouter } from 'react-router-dom';
+import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap';
+import { BookDescriptionOverlay } from './BookDescriptionOverlay';
+
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
+
+import '../styles/Modal.css'
 
 class CreateList extends Component {
 
@@ -20,6 +28,21 @@ class CreateList extends Component {
     }
   }
 
+  initialSelectedBook = () => {
+    if (this.props.selectedBookID &&
+      this.props.selectedBook &&
+      !this.state.addedBooksIDs.includes(this.props.selectedBookID) &&
+      !this.state.addedBooks.includes(this.props.selectedBook)) {
+
+      this.setState(
+        {
+          addedBooksIDs: [...this.state.addedBooksIDs, this.props.selectedBookID],
+          addedBooks: [...this.state.addedBooks, this.props.selectedBook],
+        }
+      );
+    }
+  }
+
   getBooks = async (searchTerm) => {
 
     this.setState({ fetchingBooks: true })
@@ -28,7 +51,7 @@ class CreateList extends Component {
 
     if (searchTerm === "") {
       searchResults = [];
-      
+
       this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
     else {
@@ -115,14 +138,26 @@ class CreateList extends Component {
 
   render() {
     return (
-      <div>
-        <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
-          <div className={this.props.textStyle}>
-            <span id="create-list-modal"> Create New List </span>
-          </div>
-        </button>
+      <>
+        {!this.props.sideBar ?
+          <button className={this.props.btnStyle} onClick={() => { this.initialSelectedBook(); this.setState({ showModal: true }) }}>
+            <div className={this.props.textStyle}>
+              <span id="create-list-modal"> Create New List </span>
+            </div>
+          </button>
+          :
+          <ListItem id="create-list-modal" button onClick={() => { this.setState({ showModal: true }); this.props.closeSideBar() }} className="jss11" >
+
+            <ListItemIcon>
+              <LibraryAddIcon />
+            </ListItemIcon>
+
+            <ListItemText primary='Create New List' />
+          </ListItem>
+        }
 
         <Modal
+          dialogClassName="modal-style"
           size="lg"
           show={this.state.showModal}
           onHide={() => this.setState({ showModal: false, searchTerm: "", searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })}
@@ -163,7 +198,9 @@ class CreateList extends Component {
                   <Row className="px-3 text-center">
                     {this.state.searchResults.map(book =>
                       <Col md={3} className="px-2 my-0 border" key={book.id}>
-                        <img className="img-responsive mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                        <BookDescriptionOverlay book={book}>
+                          <img className="img-fluid book-img-sm mt-3 p-0 rounded" src={book.thumbnailLink} alt={book.title} />
+                        </BookDescriptionOverlay>
                         <h5 className="mt-4"> {book.title} </h5>
                         <p className="my-1"> {book.authors.join(', ')} </p>
                         {this.state.addedBooksIDs.includes(book.id) ?
@@ -185,7 +222,9 @@ class CreateList extends Component {
                     {this.state.addedBooks.map(addedBook =>
 
                       <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
-                        <img className="img-responsive mt-3 p-0 rounded" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                        <BookDescriptionOverlay book={addedBook}>
+                          <img className="img-responsive mt-3 p-0 rounded book-img-sm" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                        </BookDescriptionOverlay>
                         <h5 className="mt-4"> {addedBook.title} </h5>
                         <p className="my-1"> {addedBook.authors.join(', ')} </p>
                         <Button className="my-5" variant="danger" onClick={() => this.removeBookFromList(addedBook)}>Remove Book</Button>
@@ -212,7 +251,7 @@ class CreateList extends Component {
             </Form>
           </Modal.Body>
         </Modal>
-      </div>
+      </>
     )
   }
 }

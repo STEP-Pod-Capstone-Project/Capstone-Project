@@ -12,7 +12,8 @@ document.body.appendChild(container);
 const book = {
   title: 'Title',
   authors: ['Author'],
-  thumbnailLink: 'https://http.cat/100.jpg'
+  thumbnailLink: 'https://http.cat/100.jpg',
+  description: 'description',
 };
 const getUserBookLists = () => {
   return [{ id: '1', name: 'Best Books' },
@@ -26,7 +27,7 @@ test('renders book search tile test', async () => {
   render(<Router><BookSearchTile book={book}
     bookLists={getUserBookLists()} /></Router>, container);
 
-  const bookThumbnail = document.getElementsByClassName('book-img-med')[0];
+  const bookThumbnail = document.getElementsByClassName('book-img-md')[0];
   expect(bookThumbnail).toBeInTheDocument();
 
   const bookTitle = document.getElementsByClassName('book-title')[0];

@@ -1,6 +1,16 @@
+.book-img-sm {
+  height: auto;
+  width: 128px;
+}
+
+.book-img-md {
+  height: auto;
+  width: 164px;
+}
+
 .book-img-lg {
   height: auto;
-  width:256px;
+  width: 256px;
 }
 
 .book-search-tile {

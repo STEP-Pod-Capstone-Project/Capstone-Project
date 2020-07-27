@@ -1,3 +1,31 @@
-.card-header {
-  padding: inherit
+#search-input {
+  padding-bottom: 0.5rem;
+}
+
+.margin-auto {
+  margin: auto
+}
+
+.remove-form-style {
+  margin-top: 0;
+}
+
+.remove-link-style {
+  color: rgba(0, 0, 0, 0.87); 
+  display: inherit;
+  text-decoration: none;
+}
+
+#bookbook-btn {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.avatar-text-style {
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  margin-top: 0.4rem !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
