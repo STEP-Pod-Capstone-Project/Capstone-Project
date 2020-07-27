@@ -70,29 +70,84 @@ export class SearchUserModal extends Component {
   }
 
   componentDidMount() {
-    console.log("Mounted")
-
     if (this.props.type === 'booklists' && this.props.bookList) {
-      this.fetchBookLists();
+      this.fetchCollaborators();
     }
   }
 
-  fetchBookLists = async () => {
+  fetchCollaborators = async () => {
 
-    console.log('Props', this.props.bookList)
+    if (typeof this.props.type === 'undefined' || typeof this.props.bookList === 'undefined') {
+      return;
+    }
 
+    else if (this.props.bookList.collaboratorsIDs.length === 0) {
+      return;
+    }
 
-    const bookList = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?id=${this.props.bookList.id}`, {
-      method: "GET",
-    }).then(resp => resp.json());
+    let collaborators = [];
 
-    console.log(bookList);
+    await Promise.all(this.props.bookList.collaboratorsIDs.map(async (collaboratorId) => {
 
+      const collaborator = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${collaboratorId}`).then(resp => resp.json());
+      delete collaborator.tokenObj;
+      collaborators.push(collaborator);
+
+    }));
+
+    // Checks for owner
+    collaborators = collaborators.filter((collaborator) => collaborator.id !== this.props.bookList.id);
+
+    this.setState({ addedUsersTracker: collaborators, addedUsers: collaborators });
+
+    console.log(this.state.addedUsersTracker, this.state.addedUsers)
+  }
+
+  arrayContainsJSONId = (array, json) => {
+
+    for (const item of array) {
+      if (item.id === json.id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  addUserToBookListCollaborators = (bookList, user) => {
+
+    const bookListUpdateJson = {
+      "id": bookList.id,
+      "add_collaboratorsIDs": user.id,
+    }
+
+    // Remove BookList in Firebase
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+      method: "PUT",
+      body: JSON.stringify(bookListUpdateJson)
+    });
+  }
+
+  removeUserFromBookListCollaborators = (bookList, user) => {
+    const bookListUpdateJson = {
+      "id": bookList.id,
+      "remove_collaboratorsIDs": user.id,
+    }
+
+    // Remove BookList in Firebase
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+      method: "PUT",
+      body: JSON.stringify(bookListUpdateJson)
+    });
   }
 
   addUserToAddedUsers = (user) => {
 
-    if (!this.state.addedUsersTracker.includes(user)) {
+    if (this.props.type === 'booklists' && this.props.bookList) {
+      this.addUserToBookListCollaborators(this.props.bookList, user);
+    }
+
+    if (!this.arrayContainsJSONId(this.state.addedUsersTracker, user)) {
       this.setState({ addedUsersTracker: [...this.state.addedUsersTracker, user] })
     }
 
@@ -101,7 +156,7 @@ export class SearchUserModal extends Component {
   }
 
   addUserToAddedFriends = (user) => {
-    if (!this.state.addedUsersTracker.includes(user)) {
+    if (!this.arrayContainsJSONId(this.state.addedUsersTracker, user)) {
       this.setState({ addedUsersTracker: [...this.state.addedUsersTracker, user] })
     }
 
@@ -111,10 +166,14 @@ export class SearchUserModal extends Component {
 
   removeUserFromAddedUsers = (user) => {
 
+    if (this.props.type === 'booklists' && this.props.bookList) {
+      this.removeUserFromBookListCollaborators(this.props.bookList, user);
+    }
+
     const indexAddedUsers = this.state.addedUsers.indexOf(user);
     this.state.addedUsers.splice(indexAddedUsers, 1)
 
-    if (!this.state.addedFriends.includes(user)) {
+    if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
       const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
       this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
     }
@@ -129,7 +188,7 @@ export class SearchUserModal extends Component {
     const index = this.state.addedFriends.indexOf(user);
     this.state.addedFriends.splice(index, 1)
 
-    if (!this.state.addedUsers.includes(user)) {
+    if (!this.arrayContainsJSONId(this.state.addedUsers, user)) {
       const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
       this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
     }
@@ -153,7 +212,7 @@ export class SearchUserModal extends Component {
           dialogClassName="modal-style"
           size="lg"
           show={this.state.showModal}
-          onHide={() => this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsersTracker:[], addedUsers: [], addedFriends: [] })}
+          onHide={() => { this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsersTracker: [], addedUsers: [], addedFriends: [] }); this.fetchCollaborators(); }}
           aria-labelledby='search-users-modal'>
 
           <Modal.Header closeButton>
@@ -206,7 +265,7 @@ export class SearchUserModal extends Component {
                             </Card.Text>
 
 
-                            {this.state.addedUsers.includes(user) ?
+                            {(this.arrayContainsJSONId(this.state.addedUsers, user) && this.arrayContainsJSONId(this.state.addedUsersTracker, user)) ?
                               <Button className="my-2" variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
                                 Remove
                               </Button>
@@ -216,7 +275,7 @@ export class SearchUserModal extends Component {
                               </Button>
                             }
                             <br />
-                            {this.state.addedFriends.includes(user) ?
+                            {this.arrayContainsJSONId(this.state.addedFriends, user) ?
                               <Button variant='danger' className="mt-2 mb-1" onClick={() => this.removeUserFromAddedFriends(user)}>
                                 Remove Friend
                               </Button>
@@ -251,14 +310,23 @@ export class SearchUserModal extends Component {
                               </Card.Text>
 
 
-                              {this.state.addedUsers.includes(user) &&
-                                <Button className="my-2"  variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
+                              {this.arrayContainsJSONId(this.state.addedUsers, user) ?
+                                <Button className="my-2" variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
                                   Remove
                                 </Button>
+                                :
+                                <Button className="my-2" onClick={() => this.addUserToAddedUsers(user)}>
+                                  Add
+                                </Button>
                               }
-                              {this.state.addedFriends.includes(user) &&
+                              <br />
+                              {this.arrayContainsJSONId(this.state.addedFriends, user) ?
                                 <Button className="mt-2 mb-1" variant='danger' onClick={() => this.removeUserFromAddedFriends(user)}>
                                   Remove Friend
+                                </Button>
+                                :
+                                <Button className="mt-2 mb-1" onClick={() => this.addUserToAddedFriends(user)}>
+                                  Add Friend
                                 </Button>
                               }
                             </Card.Body>

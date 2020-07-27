@@ -112,7 +112,7 @@ class ListPage extends Component {
             <Row>
               <Col>
                 <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
-                        <SearchUserModal type='clubs' type='booklists' bookList={this.state.bookList} />
+                        <SearchUserModal type='booklists' bookList={this.state.bookList} />
 
               </Col>
               <Col className="text-right">
@@ -134,7 +134,7 @@ class ListPage extends Component {
             <Row>
               <Col>
                 <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
-                <SearchUserModal type='clubs' type='booklists' bookList={this.state.bookList} />
+                <SearchUserModal type='booklists' bookList={this.state.bookList} />
               </Col>
               <Col className="text-right">
                 <SearchBookModal
