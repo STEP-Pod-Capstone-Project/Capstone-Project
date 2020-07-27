@@ -7,7 +7,7 @@ import {
 import './App.css';
 import { Login } from './components/Login'
 import Home from './components/Home';
-import Browse from './components/Browse';
+import { Browse } from './components/Browse';
 import MyBooks from './components/MyBooks';
 import MyClubs from './components/MyClubs';
 import { BookPage } from './components/BookPage';

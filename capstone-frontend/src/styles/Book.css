@@ -6,7 +6,7 @@
 .book-search-tile {
   border: 2px solid black;
   margin: 10px;
-  padding: 5px;
+  padding: 15px 5px;
   text-align: center;
 }
 
@@ -49,5 +49,11 @@
 
 #rating-label {
   margin: 5px;
+}
+
+@media only screen and (min-width: 1000px) {
+  .center-vertical {
+    position: relative;
+  }
 }
 
