@@ -13,7 +13,7 @@ export class BookPage extends Component {
   }
 
   fetchBookData = () => {
-    fetch(`/api/search?gbookId=${this.props.bookId}`)
+    fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?gbookId=${this.props.bookId}`)
       .then(response => response.json())
       .then(books => this.setState({ book: books[0] }))
       .catch(function (err) {
