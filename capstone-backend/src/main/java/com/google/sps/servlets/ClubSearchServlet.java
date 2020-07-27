@@ -15,6 +15,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.gson.Gson;
+import com.google.sps.data.Club;
 
 @WebServlet("/api/clubSearch")
 public class ClubSearchServlet extends HttpServlet {
@@ -43,16 +44,19 @@ response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure"
     String searchTerm = request.getParameter("searchTerm");
     Query query = clubs.orderBy("name").startAt(searchTerm).endAt(searchTerm + '\uf8ff');
 
-    ArrayList<Map<String, Object>> clubs = new ArrayList<>();
+    ArrayList<Club> clubObjects = new ArrayList<>();
     try {
+      Club club;
       for (DocumentSnapshot document : query.get().get().getDocuments()) {
-        clubs.add(document.getData());
+        club = document.toObject(Club.class);
+        club.setId(document.getId());
+        clubObjects.add(club);
       }
     } catch (InterruptedException | ExecutionException e) {
       System.err.println("Error\t:" + e.getMessage());
     }
 
     response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(clubs));
+    response.getWriter().println(gson.toJson(clubObjects));
   }
 }
