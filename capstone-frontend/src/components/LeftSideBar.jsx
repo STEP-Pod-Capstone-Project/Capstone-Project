@@ -398,7 +398,7 @@ export const LeftSideBar = withRouter((props) => {
                   </Link>
                 )
               }
-              <CreateList updateBookLists={props.updateBookLists} sideBar={true} closeSideBar={handleDrawerClose}/>
+              <CreateList updateBookLists={props.updateBookLists} sideBar={true} closeSideBar={handleDrawerClose} />
             </List>
           </Collapse>
 
@@ -429,7 +429,9 @@ export const LeftSideBar = withRouter((props) => {
           <Col id="main-body">
             <Route exact path='/' component={Home} />
             <Route path='/browse/:query' render={(pageProps) => (
-              <Browse bookLists={props.bookLists} updateBookLists={props.updateBookLists} searchQuery={pageProps.match.params.query} />
+              <Browse bookLists={props.bookLists}
+                updateBookLists={props.updateBookLists}
+                searchQuery={pageProps.match.params.query} />
             )} />
             <Route path='/mybooks' component={MyBooks} />
             <Route path='/listpage/:id' component={ListPage} />
@@ -438,7 +440,7 @@ export const LeftSideBar = withRouter((props) => {
               <BookPage bookId={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
             )} />
             <Route path='/clubpage/:id' render={(pageProps) => (
-              <ClubPage id={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} /> 
+              <ClubPage id={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
             )} />
             <Route path='/adminclubpage/:id' component={AdminClubPage} />
             <Route path='/createclub' component={CreateClub} />

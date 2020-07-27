@@ -3,23 +3,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import './App.css';
 import { Login } from './components/Login'
-<<<<<<< HEAD
-import Home from './components/Home';
-import { Browse } from './components/Browse';
-import MyBooks from './components/MyBooks';
-import MyClubs from './components/MyClubs';
-import { BookPage } from './components/BookPage';
-import ListPage from './components/ListPage'
-import ClubPage from './components/ClubPage';
-import AdminClubPage from './components/AdminClubPage';
-import CreateClub from './components/CreateClub';
-import Navbar from './components/Navbar';
-import LeftSideBar from './components/LeftSideBar';
-import RightSideBar from './components/RightSideBar';
-=======
 import { LeftSideBar } from './components/LeftSideBar'
 
->>>>>>> master
 
 class App extends Component {
   constructor(props) {
