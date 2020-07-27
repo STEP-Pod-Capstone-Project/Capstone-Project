@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CardDeck } from 'react-bootstrap';
+import { CardDeck, Spinner } from 'react-bootstrap';
 import ClubGridItem from './ClubGridItem';
 
 import '../styles/Groups.css';
@@ -9,10 +9,12 @@ export class ClubSearchList extends Component {
     super(props);
     this.state = {
       clubs: [],
+      loading: true,
     }
   }
 
   getData = async () => {
+    console.log(this.state.loading);
     // Get clubs by searchQuery
     let clubs = await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/clubSearch?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
@@ -45,13 +47,14 @@ export class ClubSearchList extends Component {
       }
     }));
 
-    this._isMounted && this.setState({ clubs });
+    this._isMounted && this.setState({ clubs, loading: false });
   }
 
   componentDidMount() {
     this._isMounted = true;
 
     if (this._isMounted) {
+      this.setState({ loading: true });
       this.getData();
     }
   }
@@ -59,6 +62,7 @@ export class ClubSearchList extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.searchQuery !== prevProps.searchQuery
       || this.props.books !== prevProps.books) {
+        this.setState({ loading: true })
       this.getData();
     }
   }
@@ -68,7 +72,14 @@ export class ClubSearchList extends Component {
   }
 
   render() {
-    return (
+    return (this.state.loading
+      ?
+      (<div className="text-center mt-4">
+        <Spinner animation="border" role="status" />
+        <br />
+        <h1>Loading...</h1>
+      </div>)
+      :
       <>
         {this.state.clubs.length === 0 ?
           <p>There are no clubs for this search query.</p>
