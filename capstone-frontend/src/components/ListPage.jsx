@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Spinner, Row, Col } from 'react-bootstrap'
 import StarRatings from 'react-star-ratings'
 import { SearchBookModal } from './SearchBookModal'
+import { SearchUserModal } from './SearchUserModal'
 import { BookDescriptionOverlay } from './BookDescriptionOverlay';
 import '../styles/ListPage.css'
 
@@ -20,7 +21,7 @@ class ListPage extends Component {
 
   fetchBooks = async () => {
 
-    const bookList = await fetch(`/api/booklist?id=${this.props.match.params.id}`, {
+    const bookList = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?id=${this.props.match.params.id}`, {
       method: "GET",
     }).then(resp => resp.json());
 
@@ -34,7 +35,7 @@ class ListPage extends Component {
     const gBooks = [];
 
     await Promise.all(gbookIDs.map(async (gBookID) => {
-      const gBook = await fetch(`/api/search?gbookId=${gBookID}`).then(response => response.json())
+      const gBook = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${gBookID}`).then(response => response.json())
       gBooks.push(gBook[0]);
     }))
 
@@ -87,7 +88,7 @@ class ListPage extends Component {
     }
 
     // Remove BookList in Firebase
-    await fetch("/api/booklist", {
+    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
     }).catch(err => alert(err));
@@ -111,6 +112,8 @@ class ListPage extends Component {
             <Row>
               <Col>
                 <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
+                        <SearchUserModal type='clubs' type='booklists' bookList={this.state.bookList} />
+
               </Col>
               <Col className="text-right">
                 <SearchBookModal
@@ -131,6 +134,7 @@ class ListPage extends Component {
             <Row>
               <Col>
                 <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
+                <SearchUserModal type='clubs' type='booklists' bookList={this.state.bookList} />
               </Col>
               <Col className="text-right">
                 <SearchBookModal

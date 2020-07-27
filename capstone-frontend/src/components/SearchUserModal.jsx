@@ -35,7 +35,7 @@ export class SearchUserModal extends Component {
       this.setState({ searchResults, fetchingUsers: false, resultsFound: false })
     }
     else {
-      searchResults = await fetch(`/api/userSearch?searchTerm=${searchTerm}`)
+      searchResults = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/userSearch?searchTerm=${searchTerm}`)
         .then(response => response.json())
         .catch(err => alert(err));
 
@@ -67,6 +67,27 @@ export class SearchUserModal extends Component {
         await this.getBooks(this.state.searchTerm)
       }, 500)
     })
+  }
+
+  componentDidMount() {
+    console.log("Mounted")
+
+    if (this.props.type === 'booklists' && this.props.bookList) {
+      this.fetchBookLists();
+    }
+  }
+
+  fetchBookLists = async () => {
+
+    console.log('Props', this.props.bookList)
+
+
+    const bookList = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?id=${this.props.bookList.id}`, {
+      method: "GET",
+    }).then(resp => resp.json());
+
+    console.log(bookList);
+
   }
 
   addUserToAddedUsers = (user) => {

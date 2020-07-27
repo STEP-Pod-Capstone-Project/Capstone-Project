@@ -203,7 +203,7 @@ export const LeftSideBar = withRouter((props) => {
   const deleteBookList = async (bookListId, props, currentUrlPath) => {
 
     // Delete BookList in Firebase
-    await fetch(`/api/booklist?id=${bookListId}`, {
+    await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?id=${bookListId}`, {
       method: "DELETE",
     });
 
@@ -444,9 +444,9 @@ export const LeftSideBar = withRouter((props) => {
             <Route path='/createclub' component={CreateClub} />
           </Col>
           {/* TODO(#86) Add Friends to the Web App and display them in the Right Side Bar */}
-          {/* <div className={classes.sectionDesktop}>
+          <div className={classes.sectionDesktop}>
             <RightSideBar />
-          </div> */}
+          </div>
         </Row>
       </main>
     </div >
