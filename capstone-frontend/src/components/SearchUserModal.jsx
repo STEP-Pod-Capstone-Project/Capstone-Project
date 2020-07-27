@@ -16,7 +16,9 @@ export class SearchUserModal extends Component {
       typingTimeout: 0,
       searchTerm: '',
       searchResults: [],
+      addedUsersTracker: [],
       addedUsers: [],
+      addedFriends: [],
       resultsFound: false,
     }
   }
@@ -67,37 +69,47 @@ export class SearchUserModal extends Component {
     })
   }
 
-  addUserToCheckout = (user) => {
+  addUserToAddedUsers = (user) => {
+
+    if (!this.state.addedUsersTracker.includes(user)) {
+      this.setState({ addedUsersTracker: [...this.state.addedUsersTracker, user] })
+    }
+
     // Rerender
     this.setState({ addedUsers: [...this.state.addedUsers, user] })
   }
 
-  removeUserFromCheckout = (user) => {
-
-    const index = this.state.addedUsers.indexOf(user);
-    this.state.addedUsers.splice(index, 1)
+  addUserToAddedFriends = (user) => {
+    if (!this.state.addedUsersTracker.includes(user)) {
+      this.setState({ addedUsersTracker: [...this.state.addedUsersTracker, user] })
+    }
 
     // Rerender
-    this.setState({ addedUsers: this.state.addedUsers })
+    this.setState({ addedFriends: [...this.state.addedFriends, user] })
   }
 
-  handleSubmit = async () => {
+  removeUserFromAddedUsers = (user) => {
 
-    if (this.state.addedUsers.length !== 0) {
+    const indexAddedUsers = this.state.addedUsers.indexOf(user);
+    this.state.addedUsers.splice(indexAddedUsers, 1)
 
-      await Promise.all(this.state.addedUsers.map(async user => {
+    const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
+    this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
 
-
-      }));
-
-      this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsers: [], resultsFound: false })
-      await this.props.update();
-    }
-
-    else {
-      this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsers: [], resultsFound: false })
-    }
+    // Rerender
+    this.setState({ addedUsers: this.state.addedUsers, addedUsersTracker: this.state.addedUsersTracker })
   }
+
+  removeUserFromAddedFriends = (user) => {
+
+    const index = this.state.addedFriends.indexOf(user);
+    this.state.addedFriends.splice(index, 1)
+
+    // Rerender
+    this.setState({ addedFriends: this.state.addedFriends })
+  }
+
+
 
   render() {
     return (
@@ -164,25 +176,25 @@ export class SearchUserModal extends Component {
                               {user.email}
                             </Card.Text>
 
-                            {this.props.type === 'friends' &&
-                              <Button onClick={() => console.log('Friend Request Sent')}>
-                                Send Friend Request
-                              </Button>
-                            }
 
-                            {(this.props.type === 'clubs' || this.props.type === 'booklists') &&
-                              <>
-                                {this.state.addedUsers.includes(user) ?
-                                  <Button variant='danger' onClick={() => this.removeUserFromCheckout(user)}>
-                                    Remove
+                            {this.state.addedUsers.includes(user) ?
+                              <Button className="my-2" variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
+                                Remove
                               </Button>
-                                  :
-                                  <Button onClick={() => this.addUserToCheckout(user)}>
-                                    Add
+                              :
+                              <Button className="my-2" onClick={() => this.addUserToAddedUsers(user)}>
+                                Add
                               </Button>
-                                }
-                              </>
                             }
+                            <br />
+                            {this.state.addedFriends.includes(user) ?
+                              <Button variant='danger' className="mt-2 mb-1" onClick={() => this.removeUserFromAddedFriends(user)}>
+                                Remove Friend
+                              </Button>
+                              :
+                              <Button className="mt-2 mb-1" onClick={() => this.addUserToAddedFriends(user)}>
+                                Add Friend
+                              </Button>}
                           </Card.Body>
                         </Card>
                       </Col>
@@ -191,44 +203,41 @@ export class SearchUserModal extends Component {
                 </div>
               }
 
-              {
-                (this.state.addedUsers.length !== 0 && (this.props.type === 'clubs' || this.props.type === 'booklists')) &&
+              {(this.state.addedUsersTracker.length !== 0) &&
                 <div>
                   <h2 className='text-center my-4 px-4 '>Added Users</h2>
                   <Row className='text-center px-3'>
-                    {this.state.addedUsers.map(user =>
-                      <Col key={user.id} md={4} className="px-2 my-0">
-                        <Card >
-                          <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
-                          <Card.Body>
-                            <Card.Title>
-                              {user.fullName}
-                            </Card.Title>
-                            <Card.Text className='email-text'>
-                              {user.email}
-                            </Card.Text>
+                    {
 
-                            <Button variant='danger' onClick={() => this.removeUserFromCheckout(user)}>
-                              Remove from Club
-                            </Button>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    )}
+                      this.state.addedUsersTracker.map(user =>
+                        <Col key={user.id} md={4} className="px-2 my-0">
+                          <Card >
+                            <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
+                            <Card.Body>
+                              <Card.Title>
+                                {user.fullName}
+                              </Card.Title>
+                              <Card.Text className='email-text'>
+                                {user.email}
+                              </Card.Text>
+
+
+                              {this.state.addedUsers.includes(user) &&
+                                <Button className="my-2"  variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
+                                  Remove
+                                </Button>
+                              }
+                              {this.state.addedFriends.includes(user) &&
+                                <Button className="mt-2 mb-1" variant='danger' onClick={() => this.removeUserFromAddedFriends()}>
+                                  Remove Friend
+                                </Button>
+                              }
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      )}
                   </Row>
                 </div>
-              }
-
-              {(this.props.type === 'clubs' || this.props.type === 'booklists') &&
-                <>
-                  {(this.state.resultsFound && this.state.searchResults.length > 0) &&
-                    <div className='text-center mt-2'>
-                      <Button className='text-center' variant='primary' onClick={() => this.handleSubmit()} >
-                        Confirm
-                      </Button>
-                    </div>
-                  }
-                </>
               }
             </Form>
           </Modal.Body>

@@ -10,7 +10,6 @@ class Home extends Component {
         <div> Your Lists </div>
         <div> Your Clubs </div>
         <SearchUserModal type='clubs'/>
-        <SearchUserModal type='friends' text='Search for Friends' />
       </div>
     );
   }
