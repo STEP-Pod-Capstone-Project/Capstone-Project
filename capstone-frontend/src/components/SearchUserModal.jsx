@@ -100,7 +100,6 @@ export class SearchUserModal extends Component {
 
     this.setState({ addedUsersTracker: collaborators, addedUsers: collaborators });
 
-    console.log(this.state.addedUsersTracker, this.state.addedUsers)
   }
 
   arrayContainsJSONId = (array, json) => {
@@ -293,10 +292,9 @@ export class SearchUserModal extends Component {
 
               {(this.state.addedUsersTracker.length !== 0) &&
                 <div>
-                  <h2 className='text-center my-4 px-4 '>Added Users</h2>
+                  <h2 className='text-center my-4 px-4 '> {this.props.checkoutText || 'Added Users'}</h2>
                   <Row className='text-center px-3'>
                     {
-
                       this.state.addedUsersTracker.map(user =>
                         <Col key={user.id} md={4} className="px-2 my-0">
                           <Card >
