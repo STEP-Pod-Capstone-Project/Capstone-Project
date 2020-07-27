@@ -10,7 +10,9 @@ const BookSearchTile = (props) => {
       <Container>
         <Row className='justify-content-md-center'>
           <Col md={3}>
-            <img className='book-img-med img-fluid' src={props.book.thumbnailLink} alt={props.book.title} />
+            <BookDescriptionOverlay book={props.book}>
+              <img className='book-img-md img-fluid' src={props.book.thumbnailLink} alt={props.book.title} />
+            </BookDescriptionOverlay>
           </Col>
           <Col md={6}>
             <div className='center-vertical'>

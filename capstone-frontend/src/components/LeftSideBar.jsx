@@ -36,7 +36,7 @@ import { Row, Col } from 'react-bootstrap'
 
 import Home from './Home';
 import { Logout } from './Logout';
-import Browse from './Browse';
+import { Browse } from './Browse';
 import MyBooks from './MyBooks';
 import MyClubs from './MyClubs';
 import { BookPage } from './BookPage';

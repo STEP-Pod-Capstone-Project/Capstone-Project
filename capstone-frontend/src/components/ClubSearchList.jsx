@@ -10,7 +10,6 @@ export class ClubSearchList extends Component {
     this.state = {
       clubs: [],
     }
-    let _isMounted = false;
   }
 
   getData = async () => {
@@ -19,7 +18,6 @@ export class ClubSearchList extends Component {
       .then(response => response.json())
       .catch(err => alert(err));
 
-    console.log("clubs bef bef", clubs);
     // Get clubs by books in search
     console.log("bookys", this.props.books);
     await Promise.all(this.props.books.map(async (book) => {
@@ -31,7 +29,7 @@ export class ClubSearchList extends Component {
       }
     }));
     clubs = clubs.flat();
-    console.log("clubs bef", clubs);
+
     // Fill in book titles for all clubs
     await Promise.all(clubs.map(async (club) => {
       if (club.gbookID.length > 0) {
@@ -47,9 +45,8 @@ export class ClubSearchList extends Component {
         club.ownerName = owner.fullName;
       }
     }));
-    console.log("post clubs", clubs);
 
-    this.setState({ clubs });
+    this._isMounted && this.setState({ clubs });
   }
 
   componentDidMount() {
@@ -82,12 +79,6 @@ export class ClubSearchList extends Component {
               this.state.clubs.map(club =>
                 <ClubGridItem key={club.id} club={club} />)
             }
-            {
-            this.state.clubs.forEach(club => {
-              console.log("clubid", club.id)
-              
-        })}
-            
           </CardDeck>
         }
       </>

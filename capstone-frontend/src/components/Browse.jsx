@@ -11,13 +11,12 @@ export class Browse extends Component {
     this.state = {
       searchedBooks: [],
     }
-    let _isMounted = false;
   }
 
   getSearchedBooks = (searchQuery) => {
     fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?searchTerm=${searchQuery}`)
       .then(response => response.json())
-      .then(searchedBooks => this.setState({ searchedBooks }))
+      .then(searchedBooks => this._isMounted && this.setState({ searchedBooks }))
       .catch(err => alert(err));
   }
 
