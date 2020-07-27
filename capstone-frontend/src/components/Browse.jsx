@@ -14,7 +14,7 @@ export class Browse extends Component {
   }
 
   getSearchedBooks = (searchQuery) => {
-    fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?searchTerm=${searchQuery}`)
+    fetch(`/api/search?searchTerm=${searchQuery}`)
       .then(response => response.json())
       .then(searchedBooks => this._isMounted && this.setState({ searchedBooks }))
       .catch(err => alert(err));
@@ -76,7 +76,7 @@ export class Browse extends Component {
                   <span className='text-muted'> {this.props.searchQuery} </span>
                 </h2>
                 <hr className='light-gray-border mx-2 my-2' />
-                <p>Future users!</p>
+                <p>Future User Search</p>
               </Tab.Pane>
             </Tab.Content>
           </Row>

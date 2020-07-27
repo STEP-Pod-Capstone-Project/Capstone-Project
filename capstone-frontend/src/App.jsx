@@ -28,7 +28,7 @@ class App extends Component {
 
     const userID = window.localStorage.getItem("userID");
 
-    const bookLists = await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
+    const bookLists = await fetch(`/api/booklist?userID=${userID}`, {
       method: "GET",
     }).then(resp => resp.json()).catch(err => console.log(err));
 
