@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that stores User's data from Frontend Authentication. */
+/** Servlet that searches for a User using Firestore. */
 @WebServlet("/api/userSearch")
 public class UserSearchServlet extends HttpServlet {
 

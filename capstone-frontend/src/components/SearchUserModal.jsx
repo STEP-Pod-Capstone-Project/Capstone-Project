@@ -94,8 +94,8 @@ export class SearchUserModal extends Component {
     this.state.addedUsers.splice(indexAddedUsers, 1)
 
     if (!this.state.addedFriends.includes(user)) {
-      const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
-      this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
+      const indexAddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
+      this.state.addedUsersTracker.splice(indexAddedUsersTracker, 1)
     }
 
     // Rerender
@@ -109,12 +109,12 @@ export class SearchUserModal extends Component {
     this.state.addedFriends.splice(index, 1)
 
     if (!this.state.addedUsers.includes(user)) {
-      const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
-      this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
+      const indexAddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
+      this.state.addedUsersTracker.splice(indexAddedUsersTracker, 1)
     }
 
     // Rerender
-    this.setState({ addedFriends: this.state.addedFriends })
+    this.setState({ addedFriends: this.state.addedFriends, addedUsersTracker: this.state.addedUsersTracker })
   }
 
 
@@ -213,10 +213,9 @@ export class SearchUserModal extends Component {
 
               {(this.state.addedUsersTracker.length !== 0) &&
                 <div>
-                  <h2 className='text-center my-4 px-4 '>Added Users</h2>
+                  <h2 className='text-center my-4 px-4'>Added Users</h2>
                   <Row className='text-center px-3'>
                     {
-
                       this.state.addedUsersTracker.map(user =>
                         <Col key={user.id} md={4} className="px-2 my-0">
                           <Card >

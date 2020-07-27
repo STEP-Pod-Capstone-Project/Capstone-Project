@@ -111,6 +111,8 @@ public class UserServlet extends HttpServlet {
 
     } catch (ExecutionException | InterruptedException e) {
       System.err.println("Error:\t" + e.getMessage());
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
     }
 
     Gson gson = new Gson();
