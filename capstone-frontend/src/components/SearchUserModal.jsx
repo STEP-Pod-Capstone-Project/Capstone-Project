@@ -93,17 +93,25 @@ export class SearchUserModal extends Component {
     const indexAddedUsers = this.state.addedUsers.indexOf(user);
     this.state.addedUsers.splice(indexAddedUsers, 1)
 
-    const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
-    this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
+    if (!this.state.addedFriends.includes(user)) {
+      const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
+      this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
+    }
 
     // Rerender
     this.setState({ addedUsers: this.state.addedUsers, addedUsersTracker: this.state.addedUsersTracker })
+
   }
 
   removeUserFromAddedFriends = (user) => {
 
     const index = this.state.addedFriends.indexOf(user);
     this.state.addedFriends.splice(index, 1)
+
+    if (!this.state.addedUsers.includes(user)) {
+      const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
+      this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
+    }
 
     // Rerender
     this.setState({ addedFriends: this.state.addedFriends })
@@ -124,7 +132,7 @@ export class SearchUserModal extends Component {
           dialogClassName="modal-style"
           size="lg"
           show={this.state.showModal}
-          onHide={() => this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsers: [] })}
+          onHide={() => this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsersTracker:[], addedUsers: [], addedFriends: [] })}
           aria-labelledby='search-users-modal'>
 
           <Modal.Header closeButton>
@@ -228,7 +236,7 @@ export class SearchUserModal extends Component {
                                 </Button>
                               }
                               {this.state.addedFriends.includes(user) &&
-                                <Button className="mt-2 mb-1" variant='danger' onClick={() => this.removeUserFromAddedFriends()}>
+                                <Button className="mt-2 mb-1" variant='danger' onClick={() => this.removeUserFromAddedFriends(user)}>
                                   Remove Friend
                                 </Button>
                               }
