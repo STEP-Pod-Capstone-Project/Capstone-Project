@@ -79,7 +79,7 @@ export class BookPage extends Component {
                         starSpacing='10px'
                         starRatedColor='gold'
                       />
-                      {book.avgRating === 0 && <p id='rating-label'>No Ratings</p>}
+                      {book.avgRating === -1 && <p id='rating-label'>No Ratings</p>}
                     </Row>
                     <Row>
                       <h3> Description </h3>
