@@ -73,11 +73,7 @@ export class SearchUserModal extends Component {
       }, 500)
     })
   }
-
-  componentDidUpdate() {
-    console.log("Update INFO\t", this.state, this.props)
-  }
-
+  
   componentDidMount() {
     this.fetchCollaborators();
   }

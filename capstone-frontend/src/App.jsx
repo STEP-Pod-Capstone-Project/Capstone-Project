@@ -42,8 +42,6 @@ class App extends Component {
 
     const userID = window.localStorage.getItem("userID");
 
-    // TODO: use userID
-
     let collabBookLists = await fetch(`/api/booklist?collaboratorsIDs=${userID}`, {
       method: "GET",
     }).then(resp => resp.json()).catch(err => console.log(err));
@@ -51,8 +49,6 @@ class App extends Component {
     if (typeof collabBookLists === 'undefined') {
       collabBookLists = [];
     }
-
-    console.log(collabBookLists);
 
     this.setState({ collabBookLists })
   }
