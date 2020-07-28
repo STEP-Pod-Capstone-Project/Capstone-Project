@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { SearchUserModal } from './SearchUserModal'
 import '../App.css';
 
 class Home extends Component {
@@ -9,7 +8,6 @@ class Home extends Component {
         <div> Your Books </div>
         <div> Your Lists </div>
         <div> Your Clubs </div>
-        <SearchUserModal type='clubs'/>
       </div>
     );
   }
