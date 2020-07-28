@@ -81,8 +81,8 @@ export class ClubSearchList extends Component {
   render() {
     return (this.state.loading
       ?
-      (<div className="text-center mt-4">
-        <Spinner animation="border" role="status" />
+      (<div className='text-center mt-4'>
+        <Spinner animation='border' role='status' />
         <br />
         <h1>Loading...</h1>
       </div>)
@@ -91,7 +91,7 @@ export class ClubSearchList extends Component {
         {this.state.clubs.length === 0 ?
           <p>There are no clubs for this search query.</p>
           :
-          <CardDeck className="groups-list-container">
+          <CardDeck className='groups-list-container'>
             {
               this.state.clubs.map(club =>
                 <ClubGridItem key={club.id} club={club} />)

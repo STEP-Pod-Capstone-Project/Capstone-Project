@@ -69,8 +69,8 @@ export class Browse extends Component {
                 <hr className='light-gray-border mx-2 my-2' />
                 {this.state.loading
                   ?
-                  (<div className="text-center mt-4">
-                    <Spinner animation="border" role="status" />
+                  (<div className='text-center mt-4'>
+                    <Spinner animation='border' role='status' />
                     <br />
                     <h1>Loading...</h1>
                   </div>)
