@@ -111,11 +111,15 @@ class ListPage extends Component {
           <div>
             <Row>
               <Col>
-                <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
+                <h2 className="ml-2">{this.state.bookList.name}</h2>
+                {this.state.bookList.userID === window.localStorage.getItem('userID') ?
+                  <h5 className="mb-1 ml-2 text-muted">Owner</h5>
+                  : 
+                  <h5 className="mb-1 ml-2 text-muted">Collaborator</h5>}
               </Col>
               {this.state.bookList.userID === window.localStorage.getItem('userID') &&
-                <Col >
-                  <div id="modal-buttons" className="mt-4 mr-2">
+                <Col className="margin-auto p-0 mr-3">
+                  <div id="modal-buttons" className="mx-2">
                     <SearchUserModal
                       type='booklists'
                       bookList={this.state.bookList}
@@ -140,11 +144,15 @@ class ListPage extends Component {
           <div>
             <Row>
               <Col>
-                <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
+                <h2 className="ml-2">{this.state.bookList.name}</h2>
+                {this.state.bookList.userID === window.localStorage.getItem('userID') ?
+                  <h5 className="mb-1 ml-2 text-muted">Owner</h5>
+                  : 
+                  <h5 className="mb-1 ml-2 text-muted">Collaborator</h5>}
               </Col>
               {this.state.bookList.userID === window.localStorage.getItem('userID') &&
-                <Col >
-                  <div id="modal-buttons" className="mt-4 mr-2">
+                <Col className="margin-auto p-0 mr-3">
+                  <div id="modal-buttons" className="mx-2">
                     <SearchUserModal
                       type='booklists'
                       bookList={this.state.bookList}
