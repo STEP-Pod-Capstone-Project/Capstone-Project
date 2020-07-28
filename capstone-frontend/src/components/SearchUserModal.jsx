@@ -34,7 +34,7 @@ export class SearchUserModal extends Component {
       this.setState({ searchResults, fetchingUsers: false, resultsFound: false })
     }
     else {
-      searchResults = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/userSearch?searchTerm=${searchTerm}`)
+      searchResults = await fetch(`/api/userSearch?searchTerm=${searchTerm}`)
         .then(response => response.json())
         .catch(err => alert(err));
 
@@ -68,6 +68,10 @@ export class SearchUserModal extends Component {
     })
   }
 
+  componentDidUpdate() {
+    console.log("Update INFO\t", this.state, this.props)
+  }
+
   componentDidMount() {
     this.fetchCollaborators();
   }
@@ -86,7 +90,7 @@ export class SearchUserModal extends Component {
 
     await Promise.all(this.props.bookList.collaboratorsIDs.map(async (collaboratorId) => {
 
-      const collaborator = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${collaboratorId}`).then(resp => resp.json());
+      const collaborator = await fetch(`/api/user?id=${collaboratorId}`).then(resp => resp.json());
       delete collaborator.tokenObj;
       collaborators.push(collaborator);
 
@@ -118,7 +122,7 @@ export class SearchUserModal extends Component {
     }
 
     // Remove BookList in Firebase
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    fetch("/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
     });
@@ -131,7 +135,7 @@ export class SearchUserModal extends Component {
     }
 
     // Remove BookList in Firebase
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    fetch("/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
     });
@@ -166,34 +170,41 @@ export class SearchUserModal extends Component {
       this.removeUserFromBookListCollaborators(this.props.bookList, user);
     }
 
-    const indexAddedUsers = this.state.addedUsers.indexOf(user);
-    this.state.addedUsers.splice(indexAddedUsers, 1)
+    const addedUsers = this.state.addedUsers;
+    addedUsers.splice(addedUsers.indexOf(user), 1)
 
     if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
-      const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
-      this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
+
+      const addedUsersTracker = this.state.addedUsersTracker;
+      addedUsersTracker.splice(addedUsersTracker.indexOf(user), 1)
+
+      // Rerender
+      this.setState({ addedUsers, addedUsersTracker })
     }
-
-    // Rerender
-    this.setState({ addedUsers: this.state.addedUsers, addedUsersTracker: this.state.addedUsersTracker })
-
+    else {
+      // Rerender
+      this.setState({ addedUsers });
+    }
   }
 
   removeUserFromAddedFriends = (user) => {
 
-    const index = this.state.addedFriends.indexOf(user);
-    this.state.addedFriends.splice(index, 1)
+    const addedFriends = this.state.addedFriends;
+    addedFriends.splice(addedFriends.indexOf(user), 1)
 
-    if (!this.arrayContainsJSONId(this.state.addedUsers, user)) {
-      const indexaddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
-      this.state.addedUsersTracker.splice(indexaddedUsersTracker, 1)
+    if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
+
+      const addedUsersTracker = this.state.addedUsersTracker;
+      addedUsersTracker.splice(addedUsersTracker.indexOf(user), 1)
+
+      // Rerender
+      this.setState({ addedFriends, addedUsersTracker })
     }
-
-    // Rerender
-    this.setState({ addedFriends: this.state.addedFriends })
+    else {
+      // Rerender
+      this.setState({ addedFriends })
+    }
   }
-
-
 
   render() {
     return (
@@ -209,8 +220,7 @@ export class SearchUserModal extends Component {
           size="lg"
           show={this.state.showModal}
           onHide={() => {
-            this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsersTracker: [], addedUsers: [], addedFriends: [] });
-            this.fetchCollaborators();
+              this.setState({ showModal: false, searchTerm: '', searchResults: [], });
           }}
           aria-labelledby='search-users-modal'>
 
