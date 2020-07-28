@@ -31,10 +31,6 @@ public class ClubSearchServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Origin", "https://3000-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io");
-response.setHeader("Set-Cookie", "cross-site-cookie=name; SameSite=None; Secure");
     if (request.getParameter("searchTerm") == null || request.getParameterMap().size() > 1) {
       System.err.println("Error: Improper parameters, must only send searchTerm");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);

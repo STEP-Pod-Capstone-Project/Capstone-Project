@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tab, Nav, Row } from 'react-bootstrap';
+import { Nav, Row, Spinner, Tab } from 'react-bootstrap';
 import { BookSearchList } from './BookSearchList';
 import { ClubSearchList } from './ClubSearchList';
 
@@ -10,26 +10,31 @@ export class Browse extends Component {
     super(props);
     this.state = {
       searchedBooks: [],
+      loading: true, // Spinner
     }
   }
 
   getSearchedBooks = (searchQuery) => {
-    fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?searchTerm=${searchQuery}`)
+    fetch(`/api/search?searchTerm=${searchQuery}`)
       .then(response => response.json())
-      .then(searchedBooks => this._isMounted && this.setState({ searchedBooks }))
-      .catch(err => alert(err));
+      .then(searchedBooks => this._isMounted && this.setState({ searchedBooks, loading: false }))
+      .catch(function (err) {
+        alert(err)
+      });
   }
 
   componentDidMount() {
     this._isMounted = true;
 
     if (this._isMounted) {
+      this.setState({ loading: true });
       this.getSearchedBooks(this.props.searchQuery);
     }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.searchQuery !== prevProps.searchQuery) {
+      this.setState({ loading: true });
       this.getSearchedBooks(this.props.searchQuery);
     }
   }
@@ -62,7 +67,18 @@ export class Browse extends Component {
                   <span className='text-muted'> {this.props.searchQuery} </span>
                 </h2>
                 <hr className='light-gray-border mx-2 my-2' />
-                <BookSearchList books={this.state.searchedBooks} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />
+                {this.state.loading
+                  ?
+                  (<div className="text-center mt-4">
+                    <Spinner animation="border" role="status" />
+                    <br />
+                    <h1>Loading...</h1>
+                  </div>)
+                  :
+                  <BookSearchList books={this.state.searchedBooks}
+                    bookLists={this.props.bookLists}
+                    updateBookLists={this.props.updateBookLists} />
+                }
               </Tab.Pane>
               <Tab.Pane eventKey='2'>
                 <h2 className='mt-4 ml-2 text-sm-center'>Searching for Clubs with

@@ -14,17 +14,20 @@ export class ClubSearchList extends Component {
   }
 
   getData = async () => {
-    console.log(this.state.loading);
     // Get clubs by searchQuery
-    let clubs = await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/clubSearch?searchTerm=${this.props.searchQuery}`)
+    let clubs = await fetch(`/api/clubSearch?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
-      .catch(err => alert(err));
+      .catch(function (err) {
+        alert(err)
+      });
 
     // Get clubs by checking to see if any clubs are reading the books found in Google Books API search
     await Promise.all(this.props.books.map(async (book) => {
-      const clubsWithBook = await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/clubs?gbookID=${book.id}`)
+      const clubsWithBook = await fetch(`/api/clubs?gbookID=${book.id}`)
         .then(response => response.json())
-        .catch(err => alert(err));
+        .catch(function (err) {
+          alert(err)
+        });
       if (clubsWithBook.length > 0) {
         clubs = [...clubs, clubsWithBook];
       }
@@ -34,15 +37,19 @@ export class ClubSearchList extends Component {
     // Fill in book title and club owner for all clubs
     await Promise.all(clubs.map(async (club) => {
       if (club.gbookID.length > 0) {
-        const book = await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/search?gbookId=${club.gbookID}`)
+        const book = await fetch(`/api/search?gbookId=${club.gbookID}`)
           .then(response => response.json())
-          .catch(err => alert(err));
+          .catch(function (err) {
+            alert(err)
+          });
         club.bookTitle = book[0].title;
       }
       if (club.ownerID.length > 0) {
-        const owner = await fetch(`https://8080-c0019ecb-52af-4655-945f-b5a74df1e54b.ws-us02.gitpod.io/api/user?id=${club.ownerID}`)
+        const owner = await fetch(`/api/user?id=${club.ownerID}`)
           .then(response => response.json())
-          .catch(err => alert(err));
+          .catch(function (err) {
+            alert(err)
+          });
         club.ownerName = owner.fullName;
       }
     }));
@@ -62,7 +69,7 @@ export class ClubSearchList extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.searchQuery !== prevProps.searchQuery
       || this.props.books !== prevProps.books) {
-        this.setState({ loading: true })
+      this.setState({ loading: true })
       this.getData();
     }
   }
