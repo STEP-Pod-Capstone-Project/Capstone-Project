@@ -3,6 +3,10 @@
   float: right
 }
 
+.margin-auto {
+  margin: auto;
+}
+
 .light-gray-border {
   border: 1px solid #ccc;
 }

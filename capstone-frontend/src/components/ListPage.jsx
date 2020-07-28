@@ -164,14 +164,14 @@ class ListPage extends Component {
             <div>
               {
                 this.state.gBooks.map(gBook =>
-                  <Row className="text-center border m-3 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
-                    <Col md={3} className="my-4 p-0 ">
+                  <Row className="text-center border m-4 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
+                    <Col md={3} className="my-3 p-0 ">
                       <BookDescriptionOverlay book={gBook}>
-                        <img className="img-fluid book-img-md" src={gBook.thumbnailLink} alt={gBook.title} />
+                        <img className="img-fluid book-img-md px-3" src={gBook.thumbnailLink} alt={gBook.title} />
                       </BookDescriptionOverlay>
                     </Col>
-                    <Col className="my-4 p-0">
-                      <h2 className="mt-4"> {gBook.title} </h2>
+                    <Col className="margin-auto p-0">
+                      <h2 className="mt-4 px-3"> {gBook.title} </h2>
                       <StarRatings
                         rating={gBook.avgRating}
                         starDimension="40px"
@@ -180,11 +180,11 @@ class ListPage extends Component {
                       <p className="my-3" > {gBook.authors.join(', ')} </p>
                     </Col>
 
-                    <Col md={3} className="my-4 p-0">
+                    <Col md={3} className="margin-auto p-0">
                       <a className="btn btn-primary mt-4 width-75" href={gBook.webReaderLink}>Web Reader</a>
                       <br />
                       <Button className="my-4 width-75" variant="danger" onClick={async () => await this.deleteBook(gBook.id)}>
-                        Remove Book from List
+                        Remove Book
                       </Button>
                     </Col>
                   </Row>
