@@ -177,39 +177,45 @@ export class SearchUserModal extends Component {
       this.removeUserFromBookListCollaborators(this.props.bookList, user);
     }
 
-    const addedUsers = this.state.addedUsers;
-    addedUsers.splice(addedUsers.indexOf(user), 1)
-
     if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
-
-      const addedUsersTracker = this.state.addedUsersTracker;
-      addedUsersTracker.splice(addedUsersTracker.indexOf(user), 1)
-
+      
       // Rerender
-      this.setState({ addedUsers, addedUsersTracker })
+      this.setState(
+        {
+          addedUsers: this.state.addedUsers.filter(addedUser => addedUser.id !== user.id),
+          addedUsersTracker: this.state.addedUsersTracker.filter(addedUser => addedUser.id !== user.id),
+        }
+      );
     }
     else {
       // Rerender
-      this.setState({ addedUsers });
+      this.setState(
+        {
+          addedUsers: this.state.addedUsers.filter(addedUser => addedUser.id !== user.id),
+        }
+      );
     }
   }
 
   removeUserFromAddedFriends = (user) => {
 
-    const addedFriends = this.state.addedFriends;
-    addedFriends.splice(addedFriends.indexOf(user), 1)
-
     if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
 
-      const addedUsersTracker = this.state.addedUsersTracker;
-      addedUsersTracker.splice(addedUsersTracker.indexOf(user), 1)
-
       // Rerender
-      this.setState({ addedFriends, addedUsersTracker })
+      this.setState(
+        {
+          addedFriends: this.state.addedFriends.filter(addedFriend => addedFriend.id !== user.id),
+          addedUsersTracker: this.state.addedUsersTracker.filter(addedUser => addedUser.id !== user.id),
+        }
+      );
     }
     else {
       // Rerender
-      this.setState({ addedFriends })
+      this.setState(
+        {
+          addedFriends: this.state.addedFriends.filter(addedFriend => addedFriend.id !== user.id),
+        }
+      );
     }
   }
 
