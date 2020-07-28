@@ -24,7 +24,7 @@ export class SearchUserModal extends Component {
 
   getBooks = async (searchTerm) => {
 
-    this.setState({ fetchingUsers: true })
+    this.setState({ fetchingUsers: true });
 
     let searchResults;
 
@@ -278,7 +278,7 @@ export class SearchUserModal extends Component {
                             <Card.Title>
                               {user.fullName}
                             </Card.Title>
-                            <Card.Text className='email-text'>
+                            <Card.Text id='email-text'>
                               {user.email}
                             </Card.Text>
 
@@ -322,7 +322,7 @@ export class SearchUserModal extends Component {
                               <Card.Title>
                                 {user.fullName}
                               </Card.Title>
-                              <Card.Text className='email-text'>
+                              <Card.Text id='email-text'>
                                 {user.email}
                               </Card.Text>
 

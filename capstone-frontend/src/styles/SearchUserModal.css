@@ -2,6 +2,6 @@
   margin: auto
 }
 
-.email-text {
-  font-size: 0.9rem !important;
+#email-text {
+  font-size: 0.9rem;
 }

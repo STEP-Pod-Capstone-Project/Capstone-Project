@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that stores User's data from Frontend Authentication. */
+/** Servlet that searches for a User using Firestore. */
 @WebServlet("/api/userSearch")
 public class UserSearchServlet extends HttpServlet {
 
@@ -30,8 +30,14 @@ public class UserSearchServlet extends HttpServlet {
 
     String searchTerm = request.getParameter("searchTerm");
 
-    if (searchTerm.isEmpty() || request.getParameterMap().size() > 1) {
-      System.err.println("Error:\t" + "No Paramters Specified");
+    if (searchTerm.isEmpty()) {
+      System.err.println("Error:\t" + "Null searchTerm");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+
+    if (request.getParameterMap().size() > 1) {
+      System.err.println("Error:\t" + "Too many parameters");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
