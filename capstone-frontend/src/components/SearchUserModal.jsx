@@ -69,14 +69,12 @@ export class SearchUserModal extends Component {
   }
 
   componentDidMount() {
-    if (this.props.type === 'booklists' && this.props.bookList) {
-      this.fetchCollaborators();
-    }
+    this.fetchCollaborators();
   }
 
   fetchCollaborators = async () => {
 
-    if (typeof this.props.type === 'undefined' || typeof this.props.bookList === 'undefined') {
+    if (!(this.props.type === 'booklists' || this.props.bookList)) {
       return;
     }
 
@@ -210,7 +208,10 @@ export class SearchUserModal extends Component {
           dialogClassName="modal-style"
           size="lg"
           show={this.state.showModal}
-          onHide={() => { this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsersTracker: [], addedUsers: [], addedFriends: [] }); this.fetchCollaborators(); }}
+          onHide={() => {
+            this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsersTracker: [], addedUsers: [], addedFriends: [] });
+            this.fetchCollaborators();
+          }}
           aria-labelledby='search-users-modal'>
 
           <Modal.Header closeButton>

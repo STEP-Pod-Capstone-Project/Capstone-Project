@@ -398,7 +398,26 @@ export const LeftSideBar = withRouter((props) => {
                   </Link>
                 )
               }
-              <CreateList updateBookLists={props.updateBookLists} sideBar={true} closeSideBar={handleDrawerClose}/>
+              <Divider />
+
+              {console.log(props)}
+
+              {props.collabBookLists.map(collabBookList =>
+
+                <Link to={`/listpage/${collabBookList.id}`} key={collabBookList.id} className="remove-link-style">
+                  <ListItem button className={classes.nested} >
+
+                    <ListItemIcon>
+                      <CollectionsIcon />
+                    </ListItemIcon>
+
+                    <ListItemText primary={collabBookList.name} />
+                  </ListItem>
+                </Link>
+              )}
+
+              <Divider />
+              <CreateList updateBookLists={props.updateBookLists} sideBar={true} closeSideBar={handleDrawerClose} />
             </List>
           </Collapse>
 
@@ -438,7 +457,7 @@ export const LeftSideBar = withRouter((props) => {
               <BookPage bookId={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
             )} />
             <Route path='/clubpage/:id' render={(pageProps) => (
-              <ClubPage id={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} /> 
+              <ClubPage id={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
             )} />
             <Route path='/adminclubpage/:id' component={AdminClubPage} />
             <Route path='/createclub' component={CreateClub} />

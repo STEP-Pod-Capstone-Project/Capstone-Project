@@ -113,22 +113,23 @@ class ListPage extends Component {
               <Col>
                 <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
               </Col>
-              <Col >
-                <div id="modal-buttons" className="mt-4 mr-2">
-                  <SearchUserModal
-                    type='booklists'
-                    bookList={this.state.bookList}
-                    text='Search/View Collaborators'
-                    checkoutText='Current Collaborators'
-                    btnStyle="btn btn-primary mx-3 h-100" />
-                  <SearchBookModal
-                    objectId={this.props.match.params.id}
-                    update={this.updateListPage}
-                    putURL="/api/booklist"
-                    type="booklist"
-                    btnStyle="btn btn-primary h-100" />
-                </div>
-              </Col>
+              {this.state.bookList.userID === window.localStorage.getItem('userID') &&
+                <Col >
+                  <div id="modal-buttons" className="mt-4 mr-2">
+                    <SearchUserModal
+                      type='booklists'
+                      bookList={this.state.bookList}
+                      text='Search/View Collaborators'
+                      checkoutText='Current Collaborators'
+                      btnStyle="btn btn-primary mx-3 h-100" />
+                    <SearchBookModal
+                      objectId={this.props.match.params.id}
+                      update={this.updateListPage}
+                      putURL="/api/booklist"
+                      type="booklist"
+                      btnStyle="btn btn-primary h-100" />
+                  </div>
+                </Col>}
             </Row>
             <hr className="light-gray-border mx-2 my-2" />
             <h3 className="text-center mt-4">Booklist has No Books</h3>
@@ -140,24 +141,24 @@ class ListPage extends Component {
             <Row>
               <Col>
                 <h2 className="mt-4 ml-2">{this.state.bookList.name}</h2>
-
               </Col>
-              <Col >
-                <div id="modal-buttons" className="mt-4 mr-2">
-                  <SearchUserModal
-                    type='booklists'
-                    bookList={this.state.bookList}
-                    text='Search/View Collaborators'
-                    checkoutText='Current Collaborators'
-                    btnStyle="btn btn-primary mx-3 h-100" />
-                  <SearchBookModal
-                    objectId={this.props.match.params.id}
-                    update={this.updateListPage}
-                    putURL="/api/booklist"
-                    type="booklist"
-                    btnStyle="btn btn-primary h-100" />
-                </div>
-              </Col>
+              {this.state.bookList.userID === window.localStorage.getItem('userID') &&
+                <Col >
+                  <div id="modal-buttons" className="mt-4 mr-2">
+                    <SearchUserModal
+                      type='booklists'
+                      bookList={this.state.bookList}
+                      text='Search/View Collaborators'
+                      checkoutText='Current Collaborators'
+                      btnStyle="btn btn-primary mx-3 h-100" />
+                    <SearchBookModal
+                      objectId={this.props.match.params.id}
+                      update={this.updateListPage}
+                      putURL="/api/booklist"
+                      type="booklist"
+                      btnStyle="btn btn-primary h-100" />
+                  </div>
+                </Col>}
             </Row>
             <hr className="light-gray-border mx-2 my-2" />
 

@@ -12,6 +12,7 @@ class App extends Component {
     this.state = {
       searchQuery: "",
       bookLists: [],
+      collabBookLists: [],
       isSignedIn: ((window.localStorage.getItem("userID")) && (window.localStorage.getItem("profileObj"))) ? true : false,
     };
   }
@@ -26,16 +27,40 @@ class App extends Component {
 
     const userID = window.localStorage.getItem("userID");
 
-    const bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
+    let bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
       method: "GET",
     }).then(resp => resp.json()).catch(err => console.log(err));
 
+    if (typeof bookLists === 'undefined') {
+      bookLists = [];
+    }
+
     this.setState({ bookLists });
+  }
+
+  fetchCollabBookLists = async () => {
+
+    const userID = window.localStorage.getItem("userID");
+
+    // TODO: use userID
+
+    let collabBookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?collaboratorsIDs=${userID}`, {
+      method: "GET",
+    }).then(resp => resp.json()).catch(err => console.log(err));
+
+    if (typeof collabBookLists === 'undefined') {
+      collabBookLists = [];
+    }
+
+    console.log(collabBookLists);
+
+    this.setState({ collabBookLists })
   }
 
   componentDidMount() {
     if (this.state.isSignedIn) {
       this.fetchBookLists();
+      this.fetchCollabBookLists();
     }
   }
 
@@ -54,6 +79,7 @@ class App extends Component {
               toggleSignIn={this.toggleSignIn}
               setSearchQuery={this.setSearchQuery}
               bookLists={this.state.bookLists}
+              collabBookLists={this.state.collabBookLists}
               updateBookLists={this.fetchBookLists} />
           )
           :
