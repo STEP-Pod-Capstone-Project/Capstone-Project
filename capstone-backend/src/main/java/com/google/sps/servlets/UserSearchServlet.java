@@ -30,8 +30,14 @@ public class UserSearchServlet extends HttpServlet {
 
     String searchTerm = request.getParameter("searchTerm");
 
-    if (searchTerm.isEmpty() || request.getParameterMap().size() > 1) {
-      System.err.println("Error:\t" + "No Paramters Specified");
+    if (searchTerm.isEmpty()) {
+      System.err.println("Error:\t" + "Null searchTerm");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+
+    if (request.getParameterMap().size() > 1) {
+      System.err.println("Error:\t" + "Too many parameters");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
