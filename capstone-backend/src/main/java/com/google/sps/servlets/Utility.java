@@ -244,6 +244,11 @@ public class Utility {
    */
   public static <T extends BaseEntity> List<T> get(CollectionReference collectionReference, HttpServletRequest request,
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
+
+            response.setHeader("Access-Control-Allow-Methods", "GET");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
     List<T> retrievedObjects = new ArrayList<>();
     ApiFuture<QuerySnapshot> asyncQuery;
     if (request.getParameter("id") != null) {
@@ -410,6 +415,10 @@ public class Utility {
    */
   public static <T extends BaseEntity> T post(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass, List<String> requiredFields) throws IOException {
+            response.setHeader("Access-Control-Allow-Methods", "GET");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
     Map<String, Object> constructorFields = new HashMap<>();
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     Class superClass = genericClass.getMyType().getSuperclass();
