@@ -113,7 +113,8 @@ public class SearchServletTest {
   public void ensureJsonResponseIsInCorrectFormat() {
     // Response should be an array of JSON objects, in the form of:
     // [{book1Info}, {book2Info}...]
-
+    // Remove all whitespace as we only care about the beginning and ending characters
+    jsonResponse = jsonResponse.replaceAll("\\s","");
     Assert.assertEquals(jsonResponse.charAt(0), '[');
     Assert.assertEquals(jsonResponse.charAt(jsonResponse.length() - 1), ']');
 
