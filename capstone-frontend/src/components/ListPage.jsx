@@ -167,7 +167,7 @@ class ListPage extends Component {
                   <Row className="text-center border m-4 bg-light light-gray-border" key={gBook.id + this.props.match.params.id} >
                     <Col md={3} className="my-3 p-0 ">
                       <BookDescriptionOverlay book={gBook}>
-                        <img className="img-fluid book-img-md px-3" src={gBook.thumbnailLink} alt={gBook.title} />
+                        <img className="img-fluid book-img-md mx-2" src={gBook.thumbnailLink} alt={gBook.title} />
                       </BookDescriptionOverlay>
                     </Col>
                     <Col className="margin-auto p-0">
