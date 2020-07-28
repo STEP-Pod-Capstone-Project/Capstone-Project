@@ -33,7 +33,7 @@ export class SearchBookModal extends Component {
       this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
     else {
-      searchResults = await fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
+      searchResults = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
         .then(response => response.json())
         .catch(err => alert(err));
 
