@@ -43,10 +43,16 @@ export class SearchUserModal extends Component {
       }
 
       if (searchResults.length !== 0) {
-        this.setState({ searchResults, fetchingUsers: false, resultsFound: true }) // Guilty
+
+        // Owner cannot be a Collaborator
+        if (this.props.type === 'booklists' || this.props.bookList) {
+          searchResults = searchResults.filter(searchItem => searchItem.id !== window.localStorage.getItem('userID'))
+        }
+
+        this.setState({ searchResults, fetchingUsers: false, resultsFound: true }) // Not Guilty
       }
       else {
-        this.setState({ searchResults, fetchingUsers: false, resultsFound: false }) // Not Guilty
+        this.setState({ searchResults, fetchingUsers: false, resultsFound: false }) // Guilty
       }
     }
   }
@@ -91,6 +97,7 @@ export class SearchUserModal extends Component {
     await Promise.all(this.props.bookList.collaboratorsIDs.map(async (collaboratorId) => {
 
       const collaborator = await fetch(`/api/user?id=${collaboratorId}`).then(resp => resp.json());
+
       delete collaborator.tokenObj;
       collaborators.push(collaborator);
 
@@ -220,7 +227,7 @@ export class SearchUserModal extends Component {
           size="lg"
           show={this.state.showModal}
           onHide={() => {
-              this.setState({ showModal: false, searchTerm: '', searchResults: [], });
+            this.setState({ showModal: false, searchTerm: '', searchResults: [], });
           }}
           aria-labelledby='search-users-modal'>
 
