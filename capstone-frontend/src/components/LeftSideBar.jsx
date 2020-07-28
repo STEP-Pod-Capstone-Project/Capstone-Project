@@ -444,9 +444,9 @@ export const LeftSideBar = withRouter((props) => {
             <Route path='/createclub' component={CreateClub} />
           </Col>
           {/* TODO(#86) Add Friends to the Web App and display them in the Right Side Bar */}
-          <div className={classes.sectionDesktop}>
+          {/* <div className={classes.sectionDesktop}>
             <RightSideBar />
-          </div>
+          </div> */}
         </Row>
       </main>
     </div >

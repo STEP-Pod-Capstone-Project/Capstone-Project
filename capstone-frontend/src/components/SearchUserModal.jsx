@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
+import { Button, Form, Spinner, Modal, Col, Row, Card } from 'react-bootstrap';
 
-import { Button, Form, Spinner, Modal, Col, Row, Card } from 'react-bootstrap'
-
-import '../styles/SearchUserModal.css'
-import '../styles/Modal.css'
+import '../styles/SearchUserModal.css';
+import '../styles/Modal.css';
 
 export class SearchUserModal extends Component {
 
