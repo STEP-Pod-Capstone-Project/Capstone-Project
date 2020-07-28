@@ -46,7 +46,7 @@ class ClubGridItem extends Component {
     const isRequester = this.props.club.requestIDs.includes(userID);
     return (
       <Col xs={12} sm={6} md={3}>
-        <Card className="col-3 group-container">
+        <Card className="group-container">
           <Link id="group-link" to={`/clubpage/${this.props.club.id}`}>
             {isOwner && <Card.Header className="header text-muted"> Owner </Card.Header>}
             {isMember && <Card.Header className="header text-muted"> Member </Card.Header>}
