@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Form, Row } from 'react-bootstrap';
+import { Button, Form, Row, Spinner } from 'react-bootstrap';
 import { SearchBookModal } from './SearchBookModal'
 
 import BookSearchTile from './BookSearchTile';
@@ -19,6 +19,7 @@ class ClubPage extends Component {
       assignments: [],
       owner: {},
       members: [],
+      fetchingData: false, // Spinner
     }
   }
 
@@ -33,12 +34,20 @@ class ClubPage extends Component {
   }
 
   fetchData = async () => {
+
+    this.setState({ fetchData: true });
+
     await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?id=${this.props.id}`)
       .then(response => response.json()).then(clubJson => this.setState({ club: clubJson[0] }))
       .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
       });
+
+    if (!this.state.club) {
+      this.setState({ fetchData: false });
+      return;
+    }
 
     if (this.state.club.gbookID.length > 0) {
       await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${this.state.club.gbookID}`)
@@ -73,6 +82,8 @@ class ClubPage extends Component {
           alert(err);
         });
     }
+
+    this.setState({ fetchData: false });
   }
 
   handleAssignmentPost = (e) => {
@@ -123,45 +134,64 @@ class ClubPage extends Component {
     const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
     return (
       <div className='container text-center'>
-        {isOwner &&
-          <Link to={`/adminclubpage/${this.state.club.id}`}>
-            <Button className='admin-button' variant='secondary'>
-              Admin page
+
+        {this.state.fetchData ?
+          (<div className="text-center mt-4">
+            <Spinner variant="primary" animation="border" role="status" />
+          </div>)
+
+          :
+
+          (
+
+            <>
+
+
+
+
+              {isOwner &&
+                <Link to={`/adminclubpage/${this.state.club.id}`}>
+                  <Button className='admin-button' variant='secondary'>
+                    Admin page
             </Button>
-          </Link>
+                </Link>
+              }
+              <div className='title'> {this.state.club.name} </div>
+              <div> Club Owner: </div>
+              <Row className='align-items-center justify-content-center'>
+                {owner}
+              </Row>
+              <div className='description'> {this.state.club.description} </div>
+              {bookTile}
+              {isOwner &&
+                <SearchBookModal
+                  objectId={this.props.id}
+                  update={this.handleBookChange}
+                  text='Change the Club&quot;s Book'
+                  putURL='/api/clubs'
+                  type='club'
+                  btnStyle='btn btn-primary mb-4 mt-4 mr-2' />
+              }
+              {assignments}
+              {isOwner &&
+                <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
+                  <Form.Group controlId='formPostAssignment'>
+                    <Form.Label> Post a new assignment! </Form.Label>
+                    <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
+                  </Form.Group>
+                  <Button variant='primary' type='submit'> Submit </Button>
+                </Form>
+              }
+              <Row className='justify-content-center'>
+                {members}
+              </Row>
+            </>
+          )
         }
-        <div className='title'> {this.state.club.name} </div>
-        <div> Club Owner: </div>
-        <Row className='align-items-center justify-content-center'>
-          {owner}
-        </Row>
-        <div className='description'> {this.state.club.description} </div>
-        {bookTile}
-        {isOwner &&
-          <SearchBookModal
-            objectId={this.props.id}
-            update={this.handleBookChange}
-            text='Change the Club&quot;s Book'
-            putURL='/api/clubs'
-            type='club'
-            btnStyle='btn btn-primary mb-4 mt-4 mr-2' />
-        }
-        {assignments}
-        {isOwner &&
-          <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
-            <Form.Group controlId='formPostAssignment'>
-              <Form.Label> Post a new assignment! </Form.Label>
-              <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
-            </Form.Group>
-            <Button variant='primary' type='submit'> Submit </Button>
-          </Form>
-        }
-        <Row className='justify-content-center'>
-          {members}
-        </Row>
       </div>
     );
   }
 }
+
 
 export default ClubPage;
