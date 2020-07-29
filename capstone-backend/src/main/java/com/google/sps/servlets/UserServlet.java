@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -96,30 +97,31 @@ public class UserServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    String userID = request.getParameter("id");
+    Map<String, Object> user = new HashMap<>();
+
+    if (userID == null) {
+      System.err.println("Error:\t" + "Null Id");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+
+    Firestore db = getFirestore();
+
     try {
-
-      String userID = request.getParameter("id");
-      Map<String, Object> user;
-
-      if (userID == null) {
-        System.err.println("Error:\t" + "Null Id");
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        return;
-      }
-
-      Firestore db = getFirestore();
-
       DocumentSnapshot document = db.collection("users").document(userID).get().get();
-
       user = document.getData();
 
-      Gson gson = new Gson();
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(user));
-
-    } catch (Exception e) {
+    } catch (ExecutionException | InterruptedException e) {
       System.err.println("Error:\t" + e.getMessage());
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
     }
+
+    Gson gson = new Gson();
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(user));
+
   }
 
   @Override
