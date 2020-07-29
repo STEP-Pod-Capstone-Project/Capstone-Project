@@ -41,14 +41,12 @@ export class SearchUserModal extends Component {
       if (typeof searchResults === 'undefined') {
         searchResults = [];
       }
+      // Owner cannot be a Collaborator
+      else if (this.props.type === 'booklists' && this.props.bookList) {
+        searchResults = searchResults.filter(searchItem => searchItem.id !== window.localStorage.getItem('userID'))
+      }
 
       if (searchResults.length !== 0) {
-
-        // Owner cannot be a Collaborator
-        if (this.props.type === 'booklists' || this.props.bookList) {
-          searchResults = searchResults.filter(searchItem => searchItem.id !== window.localStorage.getItem('userID'))
-        }
-
         this.setState({ searchResults, fetchingUsers: false, resultsFound: true }) // Not Guilty
       }
       else {
@@ -80,7 +78,7 @@ export class SearchUserModal extends Component {
 
   fetchCollaborators = async () => {
 
-    if (!(this.props.type === 'booklists' || this.props.bookList)) {
+    if (!(this.props.type === 'booklists' && this.props.bookList)) {
       return;
     }
 
