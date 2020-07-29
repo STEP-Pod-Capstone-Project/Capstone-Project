@@ -11,14 +11,8 @@ class AssignmentCard extends Component {
     super(props);
     this.state = {
       comments: [], 
-      completed: false,
+      completed: this.props.assignment.completedIDs && this.props.assignment.completedIDs.includes(window.localStorage.getItem('userID')),
     }
-    fetch(`/api/assignments?id=${this.props.assignment.id}`)
-      .then(response => response.json())
-      .then(assignment => this.setState({
-        completed: assignment.completedIDs.includes(window.localStorage.getItem('userID'))
-      }))
-      .catch(e => alert(e));
   }
 
   onComment = (e) => {
