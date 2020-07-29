@@ -9,16 +9,18 @@ public class Assignment extends BaseEntity {
   private final String clubID;
   private final String whenCreated;
   private String whenDue;
+  private List<String> completedIDs;
 
-  public Assignment(String text, String clubID, String whenCreated, String whenDue) {
+  public Assignment(String text, String clubID, String whenCreated, String whenDue, List<String> completedIDs) {
     this.text = text;
     this.clubID = clubID;
     this.whenCreated = whenCreated;
     this.whenDue = whenDue;
+    this.completedIDs = completedIDs;
   }
 
   public Assignment() {
-    this("", "", "", "");
+    this("", "", "", "", new ArrayList<>());
   }
 
   public String getText() {
@@ -43,5 +45,13 @@ public class Assignment extends BaseEntity {
 
   public void setWhenDue(String whenDue) {
     this.whenDue = whenDue;
+  }
+
+  public List<String> getCompletedIDs() {
+    return completedIDs;
+  }
+
+  public void setCompletedIDs(List<String> completedIDs) {
+    this.completedIDs = completedIDs;
   }
 }

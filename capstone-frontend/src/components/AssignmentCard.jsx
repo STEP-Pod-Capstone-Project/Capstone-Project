@@ -10,8 +10,15 @@ class AssignmentCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      comments: []
+      comments: [], 
+      completed: false,
     }
+    fetch(`/api/assignments?id=${this.props.assignment.id}`)
+      .then(response => response.json())
+      .then(assignment => this.setState({
+        completed: assignment.completedIDs.includes(window.localStorage.getItem('userID'))
+      }))
+      .catch(e => alert(e));
   }
 
   onComment = (e) => {
@@ -45,7 +52,25 @@ class AssignmentCard extends Component {
   }
 
   onComplete = () => {
-    //TODO #90: Create functionality to mark assignments as complete
+    console.log('complete');
+    const completeAssignment = {
+      id: this.props.assignment.id,
+      add_completedIDs: window.localStorage.getItem('userID')
+    }
+    fetch('/api/assignments', {method:'put', body: JSON.stringify(completeAssignment)})
+        .then(this.setState({completed: true}))
+        .catch(e => alert(e));
+  }
+
+    onUncomplete = () => {
+    console.log('uncomplete');
+    const uncompleteAssignment = {
+      id: this.props.assignment.id,
+      remove_completedIDs: window.localStorage.getItem('userID')
+    }
+    fetch('/api/assignments', {method:'put', body: JSON.stringify(uncompleteAssignment)})
+        .then(this.setState({completed: false}))
+        .catch(e => alert(e));
   }
 
   componentDidMount() {
@@ -61,7 +86,9 @@ class AssignmentCard extends Component {
             <div className="assignment-date"> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div>
             <div className="assignment-text"> {this.props.assignment.text} </div>
           </div>
-          <Button onClick={this.onComplete} variant="success"> Mark as Done </Button> 
+          {this.state.completed 
+            ? <Button onClick={this.onUncomplete} variant="danger"> Unmark as Done </Button>
+            : <Button onClick={this.onComplete} variant="success"> Mark as Done </Button>} 
         </div> 
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <Form id="comment-form" onSubmit={this.onComment}>
