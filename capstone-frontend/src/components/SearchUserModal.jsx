@@ -73,7 +73,7 @@ export class SearchUserModal extends Component {
       }, 500)
     })
   }
-  
+
   componentDidMount() {
     this.fetchCollaborators();
   }
@@ -120,26 +120,26 @@ export class SearchUserModal extends Component {
   addUserToBookListCollaborators = (bookList, user) => {
 
     const bookListUpdateJson = {
-      "id": bookList.id,
-      "add_collaboratorsIDs": user.id,
+      id: bookList.id,
+      add_collaboratorsIDs: user.id,
     }
 
-    // Remove BookList in Firebase
+    // Add Collaboartor to Booklist in Firebase
     fetch("/api/booklist", {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
     });
   }
 
   removeUserFromBookListCollaborators = (bookList, user) => {
     const bookListUpdateJson = {
-      "id": bookList.id,
-      "remove_collaboratorsIDs": user.id,
+      id: bookList.id,
+      remove_collaboratorsIDs: user.id,
     }
 
-    // Remove BookList in Firebase
+    // Remove Collaboartor to Booklist in Firebase
     fetch("/api/booklist", {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
     });
   }
@@ -174,7 +174,7 @@ export class SearchUserModal extends Component {
     }
 
     if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
-      
+
       // Rerender
       this.setState(
         {
@@ -283,22 +283,24 @@ export class SearchUserModal extends Component {
                             </Card.Text>
 
 
-                            {(this.arrayContainsJSONId(this.state.addedUsers, user) && this.arrayContainsJSONId(this.state.addedUsersTracker, user)) ?
-                              <Button className="my-2 w-75" variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
-                                Remove
+                            {(this.arrayContainsJSONId(this.state.addedUsers, user) &&
+                              this.arrayContainsJSONId(this.state.addedUsersTracker, user))
+                              ?
+                              <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
+                                {this.props.removeBtnText || 'Remove'}
                               </Button>
                               :
-                              <Button className="my-2 w-75" onClick={() => this.addUserToAddedUsers(user)}>
-                                Add
+                              <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
+                                {this.props.addBtnText || 'Add'}
                               </Button>
                             }
                             <br />
                             {this.arrayContainsJSONId(this.state.addedFriends, user) ?
-                              <Button variant='danger' className="mt-2 mb-1 w-75" onClick={() => this.removeUserFromAddedFriends(user)}>
+                              <Button variant='danger' className='mt-2 mb-1 w-75' onClick={() => this.removeUserFromAddedFriends(user)}>
                                 Remove Friend
                               </Button>
                               :
-                              <Button className="mt-2 mb-1 w-75" onClick={() => this.addUserToAddedFriends(user)}>
+                              <Button className='mt-2 mb-1 w-75' onClick={() => this.addUserToAddedFriends(user)}>
                                 Add Friend
                               </Button>}
                           </Card.Body>
@@ -328,21 +330,21 @@ export class SearchUserModal extends Component {
 
 
                               {this.arrayContainsJSONId(this.state.addedUsers, user) ?
-                                <Button className="my-2 w-75" variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
-                                  Remove
+                                <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
+                                  {this.props.removeBtnText || 'Remove'}
                                 </Button>
                                 :
-                                <Button className="my-2 w-75" onClick={() => this.addUserToAddedUsers(user)}>
-                                  Add
+                                <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
+                                  {this.props.addBtnText || 'Add'}
                                 </Button>
                               }
                               <br />
                               {this.arrayContainsJSONId(this.state.addedFriends, user) ?
-                                <Button className="mt-2 mb-1 w-75" variant='danger' onClick={() => this.removeUserFromAddedFriends(user)}>
+                                <Button className='mt-2 mb-1 w-75' variant='danger' onClick={() => this.removeUserFromAddedFriends(user)}>
                                   Remove Friend
                                 </Button>
                                 :
-                                <Button className="mt-2 mb-1 w-75" onClick={() => this.addUserToAddedFriends(user)}>
+                                <Button className='mt-2 mb-1 w-75' onClick={() => this.addUserToAddedFriends(user)}>
                                   Add Friend
                                 </Button>
                               }
