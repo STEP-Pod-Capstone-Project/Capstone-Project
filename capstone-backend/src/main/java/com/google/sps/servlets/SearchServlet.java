@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SearchServlet extends HttpServlet {
 
   public final static int DEFAULT_MAX_RESULTS = 5;
+  public final static String DEFAULT_THUMBNAIL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/4/48/Gray_book_question.png";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -141,7 +142,8 @@ public class SearchServlet extends HttpServlet {
       }
     }
 
-    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+    response.setCharacterEncoding("UTF8");
     response.getWriter().println(gson.toJson(volumes));
   }
 
@@ -221,13 +223,15 @@ public class SearchServlet extends HttpServlet {
     JsonElement thumbnailElement = volumeInfoObj.get("imageLinks");
     ArrayList<String> sizes = new ArrayList<>(Arrays.asList("extraLarge", "large", "medium", "small", "thumbnail"));
 
-    String thumbnailLink = "";
-    Optional<String> greatestSize = sizes.stream().filter(size -> thumbnailElement.getAsJsonObject().get(size) != null)
-        .findFirst();
-    if (greatestSize.isPresent()) {
-      thumbnailLink = thumbnailElement.getAsJsonObject().get(greatestSize.get().toString()).getAsString();
+    String thumbnailLink = DEFAULT_THUMBNAIL_IMAGE;
+    if (thumbnailElement != null) {
+      Optional<String> greatestSize = sizes.stream()
+          .filter(size -> thumbnailElement.getAsJsonObject().get(size) != null).findFirst();
+      if (greatestSize.isPresent()) {
+        thumbnailLink = thumbnailElement.getAsJsonObject().get(greatestSize.get().toString()).getAsString();
+      }
+      thumbnailLink = thumbnailLink.replace("http:", "https:");
     }
-    thumbnailLink = thumbnailLink.replace("http", "https");
 
     JsonElement accessInfoElement = bookInfo.get("accessInfo");
     String webReaderLink = accessInfoElement != null

@@ -138,6 +138,10 @@
   margin: 10px;
 }
 
+.user-card Button {
+  width: 90%;
+}
+
 #user-profile {
   border-radius: 50%;
 }

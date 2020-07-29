@@ -400,8 +400,6 @@ export const LeftSideBar = withRouter((props) => {
               }
               <Divider />
 
-              {console.log(props)}
-
               {props.collabBookLists.map(collabBookList =>
 
                 <Link to={`/listpage/${collabBookList.id}`} key={collabBookList.id} className="remove-link-style">
