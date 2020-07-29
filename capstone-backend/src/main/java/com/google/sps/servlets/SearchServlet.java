@@ -225,7 +225,7 @@ public class SearchServlet extends HttpServlet {
       if (greatestSize.isPresent()) {
         thumbnailLink = thumbnailElement.getAsJsonObject().get(greatestSize.get().toString()).getAsString();
       }
-      thumbnailLink = thumbnailLink.replace("http", "https");
+      thumbnailLink = thumbnailLink.replace("http:", "https:");
     }
 
     JsonElement accessInfoElement = bookInfo.get("accessInfo");
