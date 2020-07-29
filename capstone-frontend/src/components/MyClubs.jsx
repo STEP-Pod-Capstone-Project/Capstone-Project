@@ -28,8 +28,14 @@ class MyClubs extends Component {
         //TODO #61: Centralize error output
         alert(err);
       });
-    if (!memberClubs) memberClubs = [];
-    if (!ownerClubs) ownerClubs = [];
+
+    if (!memberClubs) {
+      memberClubs = [];
+    }
+    if (!ownerClubs) {
+      ownerClubs = [];
+    }
+    
     let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
     let c;
     for (c of allClubs) {
