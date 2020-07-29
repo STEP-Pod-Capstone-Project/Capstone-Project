@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 @WebServlet("/api/clubs")
 public class ClubServlet extends HttpServlet {
   private Firestore db;
@@ -33,10 +34,9 @@ public class ClubServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     List<Club> retrievedClubs;
 
-    // If searchTerm is present, search for Clubs in Firestore using prefix matching 
+    // If searchTerm is present, search for Clubs in Firestore using prefix matching
     if (request.getParameter("searchTerm") != null) {
       if (request.getParameterMap().size() > 1) {
         System.err.println("Error: Improper parameters, must send searchTerm without other parameters");
