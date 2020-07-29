@@ -110,18 +110,6 @@ public class SearchServletTest {
   }
 
   @Test
-  public void ensureJsonResponseIsInCorrectFormat() {
-    // Response should be an array of JSON objects, in the form of:
-    // [{book1Info}, {book2Info}...]
-
-    Assert.assertEquals(jsonResponse.charAt(0), '[');
-    Assert.assertEquals(jsonResponse.charAt(jsonResponse.length() - 1), ']');
-
-    Assert.assertEquals(jsonResponse.charAt(1), '{');
-    Assert.assertEquals(jsonResponse.charAt(jsonResponse.length() - 2), '}');
-  }
-
-  @Test
   public void ensureDefaultNumberOfBooksInResponse() {
     // Response should contain the number of default results, since there was no
     // parameter included
