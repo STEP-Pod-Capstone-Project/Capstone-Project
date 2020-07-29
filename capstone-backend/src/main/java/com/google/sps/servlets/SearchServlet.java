@@ -46,6 +46,7 @@ public class SearchServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     String fullOutput = "";
     String formattedURL = "";
 

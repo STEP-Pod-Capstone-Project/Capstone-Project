@@ -53,6 +53,7 @@ public class BookListServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     List<BookList> retrievedBookLists = Utility.get(booklists, request, response, new GenericClass(BookList.class));
     if (retrievedBookLists != null) {
       response.setContentType("application/json;");
