@@ -10,12 +10,26 @@ class Home extends Component {
 
     this.state = {
       clubs: [],
+      myBookListsMap: new Map(),
+      sharedBookListsMap: new Map(),
     };
   }
 
   componentDidMount() {
     this.fetchClubs();
-    this.fetchBookLists();
+  }
+
+  componentDidUpdate(prevProps) {
+
+          console.log(this.props, prevProps);
+
+    if (this.props.bookLists.length !== prevProps.bookLists.length) {
+      this.fetchBookListsImages(this.props.bookLists, 'own');
+    }
+
+    if (this.props.collabBookLists.length !== prevProps.collabBookLists.length) {
+      this.fetchBookListsImages(this.props.collabBookLists, 'shared');
+    }
   }
 
   fetchClubs = async () => {
@@ -31,18 +45,47 @@ class Home extends Component {
     this.setState({ clubs });
   }
 
-  fetchBookLists = async () => {
+  fetchBookListsImages = async (bookLists, type) => {
 
-    const userID = window.localStorage.getItem('userID');
+    let bookListsMap = new Map();
 
-    const bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`).then(resp => resp.json())[0];
+    await Promise.all(bookLists.map(async bookList => {
 
-    console.log("bookLists", bookLists)
+      if (bookList.gbookIDs.length === 0) {
+        bookListsMap.set(bookList, [])
+        return;
+      }
 
+      let gBooks = [];
+
+      // Reduce to four elements
+      const bookIDs = bookList.gbookIDs.slice(0, 4);
+
+      await Promise.all(bookIDs.map(async gBookId => {
+
+        const gBook = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${gBookId}`).then(resp => resp.json());
+
+        gBooks.push(gBook[0]);
+
+
+      }));
+
+      bookListsMap.set(bookList, gBooks);
+    }))
+
+    console.log('Map', bookListsMap)
+
+    if (type === 'own') {
+      this.setState({ myBookListsMap: bookListsMap });
+    }
+    else if (type === 'shared') {
+      this.setState({ sharedBookListsMap: bookListsMap });
+    }
   }
 
 
   render() {
+    console.log('this.state', this.state)
     return (
       <div>
         <h1 className="text-center">Clubs</h1>
