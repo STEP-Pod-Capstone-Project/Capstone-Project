@@ -12,23 +12,35 @@ class MyBooks extends Component {
 
   fetchBooks = () => {
     fetch(`/api/books?userID=${window.localStorage.getItem('userID')}`)
-        .then(response => response.json())
-        .then(books => this.setState({books}))
-        .catch(e => console.log(e));
+      .then(response => response.json())
+      .then(bookObjects => {
+        this.setState({ books: [] });
+        for (b of bookObjects) {
+          fetch(`/api/search?gbookId=${b.gbookID}`)
+            .then(response => response.json())
+            .then(books => books[0])
+            .then(book => book && this.setState({ books: [...this.state.books, book] }))
+            .catch(e => console.log(e));
+        }
+      })
+      .catch(e => console.log(e));
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.fetchBooks();
   }
 
   render() {
-    let bookTiles = this.state.books.map(b => <BookSearchTile book={b} 
-                                                              location='list'
-                                                              bookLists={this.props.bookLists} 
-                                                              updateBookLists={this.props.updateBookLists} 
-                                                              key={book.id} />)
+    let bookTiles = this.state.books.length && this.state.books[0].authors ? this.state.books.map(b => <BookSearchTile book={b}
+      location='search'
+      bookLists={this.props.bookLists}
+      updateBookLists={this.props.updateBookLists}
+      key={b.id} />)
+      : <div> Add Some Books! </div>
     return (
-      {bookTiles}
+      <div>
+        {bookTiles}
+      </div>
     );
   }
 }

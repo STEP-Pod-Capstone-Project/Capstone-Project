@@ -352,7 +352,7 @@ export const LeftSideBar = withRouter((props) => {
             </ListItem>
           </Link>
 
-          <Link to="/myreads" className="remove-link-style" id="mybooks-link">
+          <Link to="/mybooks" className="remove-link-style" id="mybooks-link">
             <ListItem button >
 
               <ListItemIcon>
@@ -431,7 +431,9 @@ export const LeftSideBar = withRouter((props) => {
             <Route path='/browse/:query' render={(pageProps) => (
               <Browse bookLists={props.bookLists} updateBookLists={props.updateBookLists} searchQuery={pageProps.match.params.query} />
             )} />
-            <Route path='/mybooks' component={MyBooks} />
+            <Route path='/mybooks' render={() => (
+              <BookPage bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
+            )} />
             <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' render={(pageProps) => (
