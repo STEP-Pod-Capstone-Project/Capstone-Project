@@ -12,6 +12,8 @@ class App extends Component {
     this.state = {
       searchQuery: "",
       bookLists: [],
+      clubs: [],
+      users: [],
       isSignedIn: ((window.localStorage.getItem("userID")) && (window.localStorage.getItem("profileObj"))) ? true : false,
     };
   }
