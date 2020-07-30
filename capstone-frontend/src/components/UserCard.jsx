@@ -63,7 +63,7 @@ export class UserCard extends Component {
   addFriend = () => {
     const addFriend = {
       id: window.localStorage.getItem('userID'),
-      add_friendIDs: this.props.user.id, 
+      add_friendIDs: this.props.user.id,
     };
     fetch('/api/user', {method:'put', body: JSON.stringify(addFriend)})
       .then(this.setState({isFriend: true}))
@@ -73,7 +73,7 @@ export class UserCard extends Component {
   removeFriend = () => {
     const removeFriend = {
       id: window.localStorage.getItem('userID'),
-      remove_friendIDs: this.props.user.id, 
+      remove_friendIDs: this.props.user.id,
     }
     fetch('/api/user', {method:'put', body: JSON.stringify(removeFriend)})
       .then(this.setState({isFriend: false}))
@@ -100,13 +100,14 @@ export class UserCard extends Component {
           Reject&nbsp;Member
         </Button>
       </div>
+    const friendButton = this.state.isFriend
+      ? <Button className='mt-2' variant='danger' onClick={this.removeFriend}> Remove Friend </Button>
+      : <Button className='mt-2' variant='primary' onClick={this.addFriend}> Add Friend </Button>;
     return (
       <Col className='user-card' xs={12} sm={6} md={2} >
         <img id='user-profile' src={this.props.user.profileImageUrl} alt='Profile' />
         <div> {this.props.user.fullName} </div>
-        {this.state.isFriend 
-          ? <Button className='mt-2' variant='danger' onClick={this.removeFriend}> Remove Friend </Button>
-          : <Button className='mt-2' variant='primary' onClick={this.addFriend}> Add Friend </Button> }
+        {window.localStorage.getItem('userID') !== this.props.user.id && friendButton}
         {isMember && removeMember}
         {isRequester && requestButtons}
       </Col>
