@@ -402,7 +402,7 @@ export const LeftSideBar = withRouter((props) => {
 
               {props.collabBookLists.map(collabBookList =>
 
-                <Link to={`/listpage/${collabBookList.id}`} key={collabBookList.id} className="remove-link-style">
+                <Link to={`/listpage/${collabBookList.id}`} key={collabBookList.id} className='remove-link-style'>
                   <ListItem button className={classes.nested} >
                     <ListItemIcon>
                       <CollectionsIcon />
