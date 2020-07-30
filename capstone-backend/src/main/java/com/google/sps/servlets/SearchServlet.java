@@ -130,11 +130,13 @@ public class SearchServlet extends HttpServlet {
         return;
       }
     } else if (request.getParameter("searchTerm") != null) {
-      volumes.addAll(convertResponseToVolumeData(fullOutput));
-      if (volumes.size() == 0) {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      // Check for empty response
+      Collection<VolumeData> volumesRetrieved = convertResponseToVolumeData(fullOutput);
+      if(volumesRetrieved == null || volumesRetrieved.size() == 0) {
+        response.sendError(HttpServletResponse.SC_NO_CONTENT);
         return;
       }
+      volumes.addAll(convertResponseToVolumeData(fullOutput));
     }
 
     Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
@@ -160,6 +162,9 @@ public class SearchServlet extends HttpServlet {
     // Get the items element from the output and convert it into the array of book
     // jsons
     JsonElement items = dataInfo.get("items");
+    if (items == null) {
+      return null;
+    }
     JsonArray itemsInfo = items.getAsJsonArray();
 
     for (JsonElement book : itemsInfo) {
