@@ -35,7 +35,7 @@ export class SearchUserModal extends Component {
       this.setState({ searchResults, fetchingUsers: false, resultsFound: false })
     }
     else {
-      searchResults = await fetch(`/api/userSearch?searchTerm=${searchTerm}`)
+      searchResults = await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/userSearch?searchTerm=${searchTerm}`)
         .then(response => response.json())
         .catch(err => alert(err));
 

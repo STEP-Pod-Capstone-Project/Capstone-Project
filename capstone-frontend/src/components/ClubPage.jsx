@@ -7,6 +7,9 @@ import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
 import { UserCard } from './UserCard';
 
+import TextField from '@material-ui/core/TextField';
+
+
 import '../styles/Groups.css';
 
 
@@ -41,7 +44,7 @@ class ClubPage extends Component {
       });
 
     if (this.state.club.gbookID.length > 0) {
-      await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
+      await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
         .catch(function (err) {
           //TODO #61: Centralize error output
@@ -49,14 +52,14 @@ class ClubPage extends Component {
         });
     }
 
-    await fetch(`/api/assignments?clubID=${this.state.club.id}`)
+    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/assignments?clubID=${this.state.club.id}`)
       .then(response => response.json()).then(assignmentJson => this.setState({ assignments: assignmentJson }))
       .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
       });
 
-    await fetch(`/api/user?id=${this.state.club.ownerID}`)
+    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${this.state.club.ownerID}`)
       .then(response => response.json()).then(ownerJson => this.setState({ owner: ownerJson }))
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -65,7 +68,7 @@ class ClubPage extends Component {
 
     this.setState({ members: [] });
     for (let i = 0; i < this.state.club.memberIDs.length; i++) {
-      await fetch(`/api/user?id=${this.state.club.memberIDs[i]}`)
+      await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${this.state.club.memberIDs[i]}`)
         .then(response => response.json())
         .then(memberJson => memberJson && this.setState({ members: [...this.state.members, memberJson] }))
         .catch(function (err) {
@@ -81,12 +84,14 @@ class ClubPage extends Component {
       alert('Assignment creation failed. You do not own this club.');
       return;
     }
+    const dueDate = document.getElementById("due-date").value;
     let data = {
       'clubID': this.state.club.id,
       'text': e.target[0].value,
-      'whenCreated': (new Date()).toUTCString()
+      'whenCreated': (new Date()).toUTCString(), 
+      'whenDue': dueDate
     };
-    fetch(`/api/assignments`, { method: 'post', body: JSON.stringify(data) })
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/assignments`, { method: 'post', body: JSON.stringify(data) })
       .then(response => response.json())
       .then(assignmentJson => {
         let assignments = this.state.assignments;
@@ -103,7 +108,7 @@ class ClubPage extends Component {
     let club = this.state.club;
     club.gbookID = gbookID;
     this.setState({ club });
-    await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
+    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/search?gbookId=${this.state.club.gbookID}`)
       .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -142,7 +147,7 @@ class ClubPage extends Component {
             objectId={this.props.id}
             update={this.handleBookChange}
             text='Change the Club&quot;s Book'
-            putURL='/api/clubs'
+            putURL='https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs'
             type='club'
             btnStyle='btn btn-primary mb-4 mt-4 mr-2' />
         }
@@ -153,7 +158,18 @@ class ClubPage extends Component {
               <Form.Label> Post a new assignment! </Form.Label>
               <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
             </Form.Group>
-            <Button variant='primary' type='submit'> Submit </Button>
+            <div>
+              <TextField
+                id="due-date"
+                label="Due Date"
+                type="datetime-local"
+                defaultValue={new Date().toString()}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </div>
+            <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
           </Form>
         }
         <Row className='justify-content-center'>

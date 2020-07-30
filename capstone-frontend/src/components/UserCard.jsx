@@ -10,7 +10,7 @@ export class UserCard extends Component {
     this.state = {
       isFriend: false,
     }
-    fetch(`/api/user?id=${window.localStorage.getItem('userID')}`)
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${window.localStorage.getItem('userID')}`)
       .then(response => response.json())
       .then(user => this.setState({isFriend:user.friendIDs.includes(this.props.user.id)}))
       .catch(e => alert(e));
@@ -21,7 +21,7 @@ export class UserCard extends Component {
       remove_memberIDs: this.props.user.id,
       id: this.props.club.id
     }
-    fetch('/api/clubs', { method: 'put', body: JSON.stringify(removal) })
+    fetch('https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs', { method: 'put', body: JSON.stringify(removal) })
       .then(this.props.removeMember(this.props.user.id))
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -39,7 +39,7 @@ export class UserCard extends Component {
       add_memberIDs: this.props.user.id,
       id: this.props.club.id
     };
-    fetch('/api/clubs', { method: 'put', body: JSON.stringify(acceptance) })
+    fetch('https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs', { method: 'put', body: JSON.stringify(acceptance) })
       .then(this.props.fetchData)
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -52,7 +52,7 @@ export class UserCard extends Component {
       remove_requestIDs: this.props.user.id,
       id: this.props.club.id
     };
-    fetch('/api/clubs', { method: 'put', body: JSON.stringify(rejection) })
+    fetch('https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs', { method: 'put', body: JSON.stringify(rejection) })
       .then(this.props.fetchData)
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -65,7 +65,7 @@ export class UserCard extends Component {
       id: window.localStorage.getItem('userID'),
       add_friendIDs: this.props.user.id, 
     };
-    fetch('/api/user', {method:'put', body: JSON.stringify(addFriend)})
+    fetch('https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user', {method:'put', body: JSON.stringify(addFriend)})
       .then(this.setState({isFriend: true}))
       .catch(e => alert(e));
   }
@@ -75,7 +75,7 @@ export class UserCard extends Component {
       id: window.localStorage.getItem('userID'),
       remove_friendIDs: this.props.user.id, 
     }
-    fetch('/api/user', {method:'put', body: JSON.stringify(removeFriend)})
+    fetch('https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user', {method:'put', body: JSON.stringify(removeFriend)})
       .then(this.setState({isFriend: false}))
       .catch(e => console.log(e));
   }
