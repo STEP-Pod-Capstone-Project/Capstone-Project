@@ -28,7 +28,6 @@ class BookSearchTile extends Component {
     }
     fetch('/api/books', {method:'post', body: JSON.stringify(readBook)})
         .then(response => response.json())
-        .then(books => books[0])
         .then(bookObject => this.setState({hasRead: true, bookObject}))
         .catch(e => console.log(e));
   }
