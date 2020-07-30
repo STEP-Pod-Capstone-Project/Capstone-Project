@@ -24,7 +24,7 @@ const getUserBookLists = () => {
 const emptyArray = [];
 
 test('renders book search tile test', async () => {
-  render(<Router><BookSearchTile book={book}
+  render(<Router><BookSearchTile book={book} 
     bookLists={getUserBookLists()} /></Router>, container);
 
   const bookThumbnail = document.getElementsByClassName('book-img-md')[0];

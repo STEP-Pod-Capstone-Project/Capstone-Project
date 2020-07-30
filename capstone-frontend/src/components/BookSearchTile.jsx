@@ -57,13 +57,13 @@ class BookSearchTile extends Component {
           </BookDescriptionOverlay>
         </Col>
         <Col className="my-4 p-0">
-          <h2 className="mt-4"> {this.props.book.title} </h2>
+          <h2 className="mt-4" id='book-title'> {this.props.book.title} </h2>
           <StarRatings
             rating={this.props.book.avgRating}
             starDimension="40px"
             starSpacing="10px"
             starRatedColor="gold" />
-          <p className="my-3" > {this.props.book.authors.join(', ')} </p>
+          <p className="my-3" id='book-authors'> {this.props.book.authors.join(', ')} </p>
         </Col>
 
         <Col md={3} className="my-4 p-0">
