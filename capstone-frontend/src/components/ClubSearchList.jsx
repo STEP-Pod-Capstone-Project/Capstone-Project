@@ -26,15 +26,14 @@ export class ClubSearchList extends Component {
       return fetch(`/api/clubs?gbookID=${book.id}`)
         .then(response => response.json())
         .then(clubsWithBook => {
-          if (clubsWithBook > 0) {
-            clubs.push(clubsWithBook)
+          if (clubsWithBook.length > 0) {
+            clubs = clubs.concat(clubsWithBook)
           }
         })
         .catch(function (err) {
           alert(err)
         });
     }));
-    clubs = clubs.flat();
 
     // Fill in book title and club owner for all clubs
     await Promise.all(clubs.map(club => {
