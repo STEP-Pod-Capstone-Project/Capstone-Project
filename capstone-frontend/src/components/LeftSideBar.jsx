@@ -429,7 +429,8 @@ export const LeftSideBar = withRouter((props) => {
           <Col id="main-body">
             <Route exact path='/' component={Home} />
             <Route path='/browse/:query' render={(pageProps) => (
-              <Browse bookLists={props.bookLists}
+              <Browse
+                bookLists={props.bookLists}
                 updateBookLists={props.updateBookLists}
                 searchQuery={pageProps.match.params.query} />
             )} />
