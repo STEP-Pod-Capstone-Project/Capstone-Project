@@ -24,16 +24,16 @@ const getUserBookLists = () => {
 const emptyArray = [];
 
 test('renders book search tile test', async () => {
-  render(<Router><BookSearchTile book={book} 
+  render(<Router><BookSearchTile book={book} location={'search'}
     bookLists={getUserBookLists()} /></Router>, container);
 
   const bookThumbnail = document.getElementsByClassName('book-img-md')[0];
   expect(bookThumbnail).toBeInTheDocument();
 
-  const bookTitle = document.getElementsByClassName('book-title')[0];
+  const bookTitle = document.getElementById('book-title');
   expect(bookTitle).toBeInTheDocument();
 
-  const bookAuthor = document.getElementsByClassName('book-authors')[0];
+  const bookAuthor = document.getElementById('book-authors');
   expect(bookAuthor).toBeInTheDocument();
 
   const bookListButton = document.getElementById('button-list-add');
