@@ -42,14 +42,14 @@ class ListPage extends Component {
     this.setState({ gBooks, bookList: bookList[0], loading: false });
   }
 
-  async componentDidMount() {
-    await this.fetchBooks();
+  componentDidMount() {
+    this.fetchBooks();
   }
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.props.match.params.id !== prevProps.match.params.id) {
       this.setState({ loading: true, gBooks: [], bookList: {} })
-      await this.fetchBooks();
+      this.fetchBooks();
     }
   }
 
