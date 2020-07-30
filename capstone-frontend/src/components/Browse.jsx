@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Nav, Row, Spinner, Tab } from 'react-bootstrap';
 import { BookSearchList } from './BookSearchList';
 import { ClubSearchList } from './ClubSearchList';
+import { UserSearchList } from './UserSearchList';
 
 export class Browse extends Component {
   constructor(props) {
@@ -86,7 +87,7 @@ export class Browse extends Component {
                   <span className='text-muted'> {this.props.searchQuery} </span>
               </h2>
               <hr className='light-gray-border mx-2 my-2' />
-              <p>Future User Search</p>
+              <UserSearchList searchQuery={this.props.searchQuery} />
             </Tab.Pane>
           </Tab.Content>
         </Row>
