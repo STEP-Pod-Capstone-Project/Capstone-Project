@@ -35,9 +35,9 @@ class App extends Component {
     this.setState({ bookLists });
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (this.state.isSignedIn) {
-      await this.fetchBookLists();
+      this.fetchBookLists();
     }
   }
 

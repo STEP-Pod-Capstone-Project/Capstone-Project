@@ -101,7 +101,7 @@ export class UserCard extends Component {
         </Button>
       </div>
     return (
-      <Col className='user-card' xs={{ span: '2' }} >
+      <Col className='user-card' xs={12} sm={6} md={2} >
         <img id='user-profile' src={this.props.user.profileImageUrl} alt='Profile' />
         <div> {this.props.user.fullName} </div>
         {this.state.isFriend 

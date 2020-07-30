@@ -144,10 +144,10 @@ export class SearchBookModal extends Component {
           size="lg"
           show={this.state.showModal}
           onHide={() => this.setState({ showModal: false, searchTerm: '', searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })}
-          aria-labelledby='create-booklists-modal'>
+          aria-labelledby='search-books-modal'>
 
           <Modal.Header closeButton>
-            <Modal.Title id='create-booklists-modal'>
+            <Modal.Title id='search-books-modal'>
               {this.props.text || 'Search for Books'}
             </Modal.Title>
           </Modal.Header>
@@ -214,10 +214,10 @@ export class SearchBookModal extends Component {
                 </div>
               }
 
-              {this.props.type !== 'club'
+              {(this.props.type !== 'club' && this.state.searchResults.length > 0)
                 && <div className='text-center'>
-                  <Button className='text-center' variant='primary' onClick={() => this.handleSubmit()} >
-                    Submit
+                  <Button className='text-center mt-3' variant='primary' onClick={() => this.handleSubmit()} >
+                    Confirm
                 </Button>
                 </div>
               }
