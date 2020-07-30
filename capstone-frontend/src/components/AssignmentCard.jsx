@@ -10,8 +10,9 @@ class AssignmentCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      comments: [], 
-      completed: this.props.assignment.completedIDs && this.props.assignment.completedIDs.includes(window.localStorage.getItem('userID')),
+      comments: [],
+      completed: this.props.assignment.completedIDs &&
+        this.props.assignment.completedIDs.includes(window.localStorage.getItem('userID')),
     }
   }
 
@@ -23,48 +24,46 @@ class AssignmentCard extends Component {
       "userID": window.localStorage.getItem("userID"),
       "whenCreated": (new Date()).toUTCString()
     };
-    fetch("/api/comments", {method: "post", body: JSON.stringify(data)})
-        .then(response => response.json())
-        .then(commentJson => {
-          let comments = this.state.comments;
-          comments.push(commentJson);
-          this.setState({comments});
-        })
-        .catch(function(err) {
-          //TODO #61: Centralize error output
-          alert(err); 
-        });
+    fetch("/api/comments", { method: "post", body: JSON.stringify(data) })
+      .then(response => response.json())
+      .then(commentJson => {
+        let comments = this.state.comments;
+        comments.push(commentJson);
+        this.setState({ comments });
+      })
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
   }
 
   fetchComments = () => {
     fetch(`/api/comments?assignmentID=${this.props.assignment.id}`)
-        .then(response => response.json()).then(commentsJson => this.setState({comments: commentsJson}))
-        .catch(function(err) {
-          //TODO #61: Centralize error output
-          alert(err); 
-        });
+      .then(response => response.json()).then(commentsJson => this.setState({ comments: commentsJson }))
+      .catch(function (err) {
+        //TODO #61: Centralize error output
+        alert(err);
+      });
   }
 
   onComplete = () => {
-    console.log('complete');
     const completeAssignment = {
       id: this.props.assignment.id,
       add_completedIDs: window.localStorage.getItem('userID')
     }
-    fetch('/api/assignments', {method:'put', body: JSON.stringify(completeAssignment)})
-        .then(this.setState({completed: true}))
-        .catch(e => alert(e));
+    fetch('/api/assignments', { method: 'put', body: JSON.stringify(completeAssignment) })
+      .then(this.setState({ completed: true }))
+      .catch(e => alert(e));
   }
 
-    onUncomplete = () => {
-    console.log('uncomplete');
+  onUncomplete = () => {
     const uncompleteAssignment = {
       id: this.props.assignment.id,
       remove_completedIDs: window.localStorage.getItem('userID')
     }
-    fetch('/api/assignments', {method:'put', body: JSON.stringify(uncompleteAssignment)})
-        .then(this.setState({completed: false}))
-        .catch(e => alert(e));
+    fetch('/api/assignments', { method: 'put', body: JSON.stringify(uncompleteAssignment) })
+      .then(this.setState({ completed: false }))
+      .catch(e => alert(e));
   }
 
   componentDidMount() {
@@ -76,28 +75,28 @@ class AssignmentCard extends Component {
       <div className="assignment-card">
         <div className="assignment-head">
           <div>
-            <div className="assignment-date"> Posted: {(new Date(this.props.assignment.whenCreated)).toString()} </div> 
+            <div className="assignment-date"> Posted: {(new Date(this.props.assignment.whenCreated)).toString()} </div>
             <div className="assignment-date"> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div>
             <div className="assignment-text"> {this.props.assignment.text} </div>
           </div>
-          {this.state.completed 
+          {this.state.completed
             ? <Button onClick={this.onUncomplete} variant="danger"> Unmark as Done </Button>
-            : <Button onClick={this.onComplete} variant="success"> Mark as Done </Button>} 
-        </div> 
+            : <Button onClick={this.onComplete} variant="success"> Mark as Done </Button>}
+        </div>
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <Form id="comment-form" onSubmit={this.onComment}>
           <Form.Group as={Row} controlId="formComment">
-            <Col xs={{"offset": 1, "span": 9}}>
+            <Col xs={{ "offset": 1, "span": 9 }}>
               <Form.Control type="text" placeholder="Enter a comment..." />
             </Col>
             <Col xs={1}>
-              <Button variant="primary" type="Submit"> Post </Button> 
+              <Button variant="primary" type="Submit"> Post </Button>
             </Col>
           </Form.Group>
         </Form>
       </div>
     );
   }
-} 
- 
+}
+
 export default AssignmentCard;
