@@ -6,6 +6,7 @@ import '../styles/Login.css'
 export class Login extends Component {
 
   loginResponseSuccess = (response) => {
+    console.log(response);
 
     // Store User in Firebase
     fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user", {
@@ -34,7 +35,7 @@ export class Login extends Component {
               <br />
               <GoogleLogin
                 className="text-center mt-3"
-                scope='https://www.googleapis.com/auth/calendar'
+                scope={'https://www.googleapis.com/auth/calendar'}
                 clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
                 buttonText="Sign in with Google"
                 onSuccess={this.loginResponseSuccess}
