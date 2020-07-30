@@ -33,7 +33,7 @@ class BookSearchList extends Component {
       <div>
         {
           this.state.books.map(book =>
-            <BookSearchTile book={book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} key={book.id} />
+            <BookSearchTile book={book} location={'search'} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} key={book.id} />
           )
         }
       </div>
