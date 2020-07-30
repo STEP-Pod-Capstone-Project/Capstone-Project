@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { UserCard } from './UserCard'
+import { UserCard } from './UserCard';
+import TextField from '@material-ui/core/TextField';
 
 
 import '../styles/Groups.css';
@@ -12,28 +13,29 @@ class AdminClubPage extends Component {
     this.state = {
       club: {},
       requesters: [],
+      memberEmails: [],
     }
   }
 
   fetchData = () => {
-    fetch(`/api/clubs?id=${this.props.match.params.id}`)
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`)
       .then(response => response.json()).then(clubs => {
         const club = clubs[0];
-        this.setState({ club, requesters: [] });
+        this.setState({ club, requesters: [], members: [] });
         Promise.all(club.requestIDs.map(r => {
-          return fetch(`/api/user?id=${r}`)
+          return fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${r}`)
             .then(response => response.json())
             .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }))
-            .catch(function (err) {
-              //TODO #61: Centralize error output
-              alert(err);
-            });
+            .catch(e => console.log(e));
+        }))
+        Promise.all(club.memberIDs.map(m => {
+          return fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${m}`)
+            .then(response => response.json())
+            .then(member => member && this.setState({ members: [...this.state.members, member] }))
+            .catch(e => console.log(e));
         }))
       })
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   handleUpdate = (e) => {
@@ -43,7 +45,7 @@ class AdminClubPage extends Component {
     const formElements = document.getElementById("update-club-form").elements;
     for (let i = 0; i < formElements.length; i++) {
       if (formElements[i].name.length !== 0 &&
-          formElements[i].type !== "submit" && formElements[i].value.length !== 0) {
+        formElements[i].type !== "submit" && formElements[i].value.length !== 0) {
         data[formElements[i].name] = formElements[i].value;
       }
     }
@@ -53,7 +55,7 @@ class AdminClubPage extends Component {
       return;
     }
 
-    fetch("/api/clubs", { method: "put", body: JSON.stringify(data) })
+    fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs", { method: "put", body: JSON.stringify(data) })
       .then(history.push(`/clubpage/${data.id}`))
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -67,7 +69,7 @@ class AdminClubPage extends Component {
       return;
     }
     const history = this.props.history;
-    fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: "delete" })
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`, { method: "delete" })
       .then(function () {
         history.push("/myclubs");
       })
@@ -75,6 +77,34 @@ class AdminClubPage extends Component {
         //TODO #61: Centralize error output
         alert(err);
       });
+  }
+
+  handleMeetingPost = (e) => {
+    const memberEmails = this.state.members.map(m => {
+      return {email: m.email};
+    });
+    const event = {
+      'summary': e.target.name.value,
+      'location': e.target.location.value,
+      'description': e.target.name.description,
+      'start': {
+        'dateTime': document.getElementById("start-datetime").value,
+        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+      },
+      'end': {
+        'dateTime': document.getElementById("end-datetime").value,
+        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+      },
+      'attendees': memberEmails,
+      'reminders': {
+        'useDefault': false,
+        'overrides': [
+          { 'method': 'email', 'minutes': 24 * 60 },
+          { 'method': 'popup', 'minutes': 10 }
+        ]
+      }
+    };
+
   }
 
   componentDidMount() {
@@ -94,6 +124,41 @@ class AdminClubPage extends Component {
             <Form.Control name="name" type="text" placeholder="Enter new club name here..." />
             <Form.Label> Club Description </Form.Label>
             <Form.Control name="description" as="textarea" rows="3" placeholder="Enter new club description here..." />
+          </Form.Group>
+          <Button variant="primary" type="submit"> Submit </Button>
+        </Form>
+
+        <div className='description'> Create a Meeting </div>
+        <Form onSubmit={this.handleMeetingPost} id="meeting-post-form">
+          <Form.Group controlId="formPostMeeting">
+            <Form.Label> Meeting Name </Form.Label>
+            <Form.Control name="summary" type="text" placeholder="Enter meeting name here..." />
+            <Form.Label> Meeting Location </Form.Label>
+            <Form.Control name="location" type="text" placeholder="Enter meeting location here..." />
+            <Form.Label> Meeting Description </Form.Label>
+            <Form.Control name="description" as="textarea" rows="3" placeholder="Enter meeting description here..." />
+            <div>
+              <TextField
+                id="start-datetime"
+                label="Start DateTime"
+                type="datetime-local"
+                defaultValue={new Date().toString()}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </div>
+            <div>
+              <TextField
+                id="end-datetime"
+                label="End DateTime"
+                type="datetime-local"
+                defaultValue={new Date().toString()}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </div>
           </Form.Group>
           <Button variant="primary" type="submit"> Submit </Button>
         </Form>

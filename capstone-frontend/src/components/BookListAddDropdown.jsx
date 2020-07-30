@@ -11,7 +11,7 @@ const addBookToBookList = async (book, bookList) => {
   }
 
   // Update BookList in Firebase
-  fetch('/api/booklist', {
+  fetch('https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/booklist', {
     method: "PUT",
     body: JSON.stringify(bookListUpdate),
   }).catch(err => alert('BookList could not be updated: ' + err));

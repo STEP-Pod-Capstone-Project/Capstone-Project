@@ -17,7 +17,7 @@ class ClubGridItem extends Component {
       id: this.props.club.id,
       add_requestIDs: window.localStorage.getItem("userID")
     };
-    fetch(`/api/clubs`, { method: "put", body: JSON.stringify(putBody) })
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs`, { method: "put", body: JSON.stringify(putBody) })
       .then(this.setState({ requested: true }))
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -30,7 +30,7 @@ class ClubGridItem extends Component {
       "id": this.props.club.id,
       "remove_requestIDs": window.localStorage.getItem("userID")
     };
-    fetch(`/api/clubs`, { method: "put", body: JSON.stringify(putBody)})
+    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs`, { method: "put", body: JSON.stringify(putBody)})
         .then(this.setState({ requested: false }))
         .catch(function (err) {
           //TODO #61: Centralize error output

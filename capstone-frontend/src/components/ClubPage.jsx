@@ -36,7 +36,7 @@ class ClubPage extends Component {
   }
 
   fetchData = async () => {
-    await fetch(`/api/clubs?id=${this.props.id}`)
+    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?id=${this.props.id}`)
       .then(response => response.json()).then(clubJson => this.setState({ club: clubJson[0] }))
       .catch(function (err) {
         //TODO #61: Centralize error output
