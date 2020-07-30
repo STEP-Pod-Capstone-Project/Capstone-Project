@@ -6,7 +6,6 @@ import '../styles/Login.css'
 export class Login extends Component {
 
   loginResponseSuccess = (response) => {
-    console.log(response);
 
     // Store User in Firebase
     fetch("https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user", {
@@ -14,6 +13,7 @@ export class Login extends Component {
       body: JSON.stringify(response.tokenObj),
     });
 
+    window.localStorage.setItem('auth', response.getAuthResponse(true));
     window.localStorage.setItem("userID", response.profileObj.googleId);
     window.localStorage.setItem("profileObj", JSON.stringify(response.profileObj))
 

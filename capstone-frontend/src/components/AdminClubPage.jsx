@@ -3,9 +3,9 @@ import { Button, Form, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { UserCard } from './UserCard';
 import TextField from '@material-ui/core/TextField';
-
-
 import '../styles/Groups.css';
+
+const {google} = require('googleapis');
 
 class AdminClubPage extends Component {
   constructor(props) {
@@ -80,8 +80,10 @@ class AdminClubPage extends Component {
   }
 
   handleMeetingPost = (e) => {
+    const auth = window.localStorage.get('auth');
+    const calendar = google.calendar({ version: 'v3', auth });
     const memberEmails = this.state.members.map(m => {
-      return {email: m.email};
+      return { email: m.email };
     });
     const event = {
       'summary': e.target.name.value,
@@ -104,6 +106,15 @@ class AdminClubPage extends Component {
         ]
       }
     };
+
+    // var request = calendar.events.insert({
+    //   'calendarId': 'primary',
+    //   'resource': event
+    // });
+
+    // request.execute(function (event) {
+    //   console.log('Event created: ' + event.htmlLink);
+    // });
 
   }
 
