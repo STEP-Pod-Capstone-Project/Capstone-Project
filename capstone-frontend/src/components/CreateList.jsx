@@ -223,7 +223,7 @@ class CreateList extends Component {
 
                       <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
                         <BookDescriptionOverlay book={addedBook}>
-                          <img className="img-responsive mt-3 p-0 rounded book-img-sm" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                          <img className="img-fluid mt-3 p-0 rounded book-img-sm" src={addedBook.thumbnailLink} alt={addedBook.title} />
                         </BookDescriptionOverlay>
                         <h5 className="mt-4"> {addedBook.title} </h5>
                         <p className="my-1"> {addedBook.authors.join(', ')} </p>
