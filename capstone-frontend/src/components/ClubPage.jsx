@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Form, Row } from 'react-bootstrap';
 import { SearchBookModal } from './SearchBookModal'
-
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
 import { UserCard } from './UserCard';
-
 import TextField from '@material-ui/core/TextField';
-
 
 import '../styles/Groups.css';
 
