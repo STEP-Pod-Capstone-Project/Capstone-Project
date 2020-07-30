@@ -63,7 +63,7 @@ export class UserCard extends Component {
   addFriend = () => {
     const addFriend = {
       id: window.localStorage.getItem('userID'),
-      add_friendIDs: this.props.user.id,
+      add_friendIDs: this.props.user.id, 
     };
     fetch('/api/user', {method:'put', body: JSON.stringify(addFriend)})
       .then(this.setState({isFriend: true}))
@@ -73,7 +73,7 @@ export class UserCard extends Component {
   removeFriend = () => {
     const removeFriend = {
       id: window.localStorage.getItem('userID'),
-      remove_friendIDs: this.props.user.id,
+      remove_friendIDs: this.props.user.id, 
     }
     fetch('/api/user', {method:'put', body: JSON.stringify(removeFriend)})
       .then(this.setState({isFriend: false}))
