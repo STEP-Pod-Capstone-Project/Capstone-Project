@@ -12,7 +12,7 @@ class CommentCard extends Component {
   }
 
   fetchUserData = async () => {
-    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${this.props.comment.userID}`)
+    await fetch(`/api/user?id=${this.props.comment.userID}`)
         .then(response => response.json()).then(userJson => this.setState({user: userJson}))
         .catch(function(err) {
             //TODO #61: Centralize error output

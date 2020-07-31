@@ -203,7 +203,7 @@ export const LeftSideBar = withRouter((props) => {
   const deleteBookList = async (bookListId, props, currentUrlPath) => {
 
     // Delete BookList in Firebase
-    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/booklist?id=${bookListId}`, {
+    await fetch(`/api/booklist?id=${bookListId}`, {
       method: "DELETE",
     });
 
