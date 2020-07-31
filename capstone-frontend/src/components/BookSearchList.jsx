@@ -8,7 +8,7 @@ const BookSearchList = ({ books, bookLists, updateBookLists }) => {
     <div>
       {books &&
         books.map(book =>
-          <BookSearchTile book={book} bookLists={bookLists} updateBookLists={updateBookLists} key={book.id} />
+          <BookSearchTile book={book} location={'search'} bookLists={bookLists} updateBookLists={updateBookLists} key={book.id} />
         )
       }
     </div>
