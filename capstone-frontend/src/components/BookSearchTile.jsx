@@ -40,7 +40,7 @@ class BookSearchTile extends Component {
     fetch(`/api/books?userID=${window.localStorage.getItem('userID')}&gbookID=${this.props.book.id}`)
       .then(response => response.json()).then(books => {
         if (books.length === 1) {
-          this.setState({hasRead: books.length === 1, bookObject: books[0]});
+          this.setState({hasRead: true, bookObject: books[0]});
         }
       })
       .catch(e => console.log(e));
