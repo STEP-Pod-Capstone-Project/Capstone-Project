@@ -11,13 +11,13 @@ export class UserSearchList extends Component {
     }
   }
 
-  getUsers = async () => {
+  getUsers = () => {
     // Get users by searchQuery
-    await fetch(`/api/userSearch?searchTerm=${this.props.searchQuery}`)
+    fetch(`/api/userSearch?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
       .then(users => this._isMounted && this.setState({ users, loading: false }))
       .catch(function (err) {
-        alert(err)
+        console.log(err)
       });
   }
 
