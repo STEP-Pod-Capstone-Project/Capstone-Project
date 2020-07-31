@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { UserCard } from './UserCard';
 import TextField from '@material-ui/core/TextField';
 import '../styles/Groups.css';
-// import google from 'googleapis';
 
 
 class AdminClubPage extends Component {
@@ -13,7 +12,7 @@ class AdminClubPage extends Component {
     this.state = {
       club: {},
       requesters: [],
-      memberEmails: [],
+      members: [],
     }
   }
 
@@ -81,55 +80,22 @@ class AdminClubPage extends Component {
 
   handleMeetingPost = (e) => {
     e.preventDefault();
-    const auth = window.localStorage.getItem('auth');
-    // const calendar = google.calendar({ version: 'v3', auth });
-    const memberEmails = this.state.members.map(m => {
-      return { email: m.email };
-    });
-    console.log(document.getElementById('start-datetime').value);
-    const backendMeeting = {
+    const meeting = {
+      token: JSON.parse(window.localStorage.getItem('token')),
       clubID: this.props.match.params.id, 
-      summary: e.target.name.value,
-      location: e.target.name.value, 
-      description: e.target.name.value,
-      startDateTime: document.getElementById('start-datetime').value, 
-      endDateTime: document.getElementById('end-datetime').value, 
-      eventAttendees: memberEmails.map(m => m.email),
-      organizerEmail: window.localStorage.getItem('profileObj').email, 
-      organizerName: window.localStorage.getItem('profileObj').fullName,
+      summary: e.target.summary.value,
+      location: e.target.location.value, 
+      description: e.target.description.value,
+      startDateTime: new Date(document.getElementById('start-datetime').value).getTime(), 
+      endDateTime: new Date(document.getElementById('end-datetime').value).getTime(), 
+      attendeeEmails: this.state.members.map(m => m.email),
+      organizerEmail: JSON.parse(window.localStorage.getItem('profileObj')).email, 
     }
-    fetch('/api/meetings', {method: 'post', body: JSON.stringify(backendMeeting)})
+    console.log(meeting);
+    fetch('https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/meetings', {method: 'post', body: JSON.stringify(meeting)})
+        .then(response => response.json())
+        .then(json => console.log(json))
         .catch(e => console.log(e));
-    const event = {
-      'summary': e.target.name.value,
-      'location': e.target.location.value,
-      'description': e.target.name.description,
-      'start': {
-        'dateTime': document.getElementById('start-datetime').value,
-        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-      },
-      'end': {
-        'dateTime': document.getElementById('end-datetime').value,
-        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-      },
-      'attendees': memberEmails,
-      'reminders': {
-        'useDefault': false,
-        'overrides': [
-          { 'method': 'email', 'minutes': 24 * 60 },
-          { 'method': 'popup', 'minutes': 10 }
-        ]
-      }
-    };
-
-    // var request = calendar.events.insert({
-    //   'calendarId': 'primary',
-    //   'resource': event
-    // });
-
-    // request.execute(function (event) {
-    //   console.log('Event created: ' + event.htmlLink);
-    // });
   }
 
   componentDidMount() {

@@ -10,31 +10,29 @@ public class Meeting extends BaseEntity {
   private String description;
   private String startDateTime;
   private String endDateTime;
-  private List<String> eventAttendees;
+  private List<String> attendeeEmails;
   private String organizerEmail;
-  private String organizerName;
 
   public Meeting(String clubID, String summary, String location, String description, 
-      String startDateTime, String endDateTime, List<String> eventAttendees, 
-      String organizerEmail, String organizerName) {
+      String startDateTime, String endDateTime, List<String> attendeeEmails, 
+      String organizerEmail) {
     this.clubID = clubID;
     this.summary = summary;
     this.location = location;
     this.description = description;
     this.startDateTime = startDateTime;
     this.endDateTime = endDateTime;
-    this.eventAttendees = eventAttendees;
+    this.attendeeEmails = attendeeEmails;
     this.organizerEmail = organizerEmail;
-    this.organizerName = organizerName;    
   }
 
   public Meeting(String clubID, String summary, String startDateTime, String endDateTime, 
-      List<String> eventAttendees, String organizerEmail, String organizerName) {
-    this(clubID, summary, "", "", startDateTime, endDateTime, eventAttendees, organizerEmail, organizerName);    
+      List<String> attendeeEmails, String organizerEmail) {
+    this(clubID, summary, "", "", startDateTime, endDateTime, attendeeEmails, organizerEmail);    
   }
 
   public Meeting() {
-    this("", "", "", "", new ArrayList<>(), "", "");
+    this("", "", "", "", new ArrayList<>(), "");
   }
 
   public String getClubID() {
@@ -81,12 +79,12 @@ public class Meeting extends BaseEntity {
     this.endDateTime = endDateTime;
   }
 
-  public List<String> getEventAttendees() {
-    return eventAttendees;
+  public List<String> getAttendeeEmails() {
+    return attendeeEmails;
   }
 
-  public void setEventAttendees(List<String> eventAttendees) {
-    this.eventAttendees = eventAttendees;
+  public void setAttendeeEmails(List<String> attendeeEmails) {
+    this.attendeeEmails = attendeeEmails;
   }
 
   public String getOrganizerEmail() {
@@ -95,13 +93,5 @@ public class Meeting extends BaseEntity {
 
   public void setOrganizerEmail(String organizerEmail) {
     this.organizerEmail = organizerEmail;
-  }
-
-  public String getOrganizerName() {
-    return organizerName;
-  }
-
-  public void setOrganizerName(String organizerName) {
-    this.organizerName = organizerName;
   }
 }
