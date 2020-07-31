@@ -45,6 +45,10 @@ export class SearchUserModal extends Component {
       else if (this.props.type === 'booklists' && this.props.bookList) {
         searchResults = searchResults.filter(searchItem => searchItem.id !== window.localStorage.getItem('userID'))
       }
+      // Owner cannot be a Member
+      else if (this.props.type === 'clubs' && this.props.club) {
+        searchResults = searchResults.filter(searchItem => searchItem.id !== window.localStorage.getItem('userID'))
+      }
 
       if (searchResults.length !== 0) {
         this.setState({ searchResults, fetchingUsers: false, resultsFound: true }) // Not Guilty
@@ -170,6 +174,9 @@ export class SearchUserModal extends Component {
     if (this.props.type === 'booklists' && this.props.bookList) {
       this.addUserToBookListCollaborators(this.props.bookList, user);
     }
+    else if (this.props.type === 'clubs' && this.props.club) {
+      this.addUserToClubMembers(this.props.club, user);
+    }
 
     if (!this.arrayContainsJSONId(this.state.addedUsersTracker, user)) {
       this.setState({ addedUsersTracker: [...this.state.addedUsersTracker, user] })
@@ -192,6 +199,10 @@ export class SearchUserModal extends Component {
 
     if (this.props.type === 'booklists' && this.props.bookList) {
       this.removeUserFromBookListCollaborators(this.props.bookList, user);
+    }
+
+    if (this.props.type === 'clubs' && this.props.club) {
+      this.removeUserFromClubMembers(this.props.club, user);
     }
 
     if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
@@ -322,7 +333,7 @@ export class SearchUserModal extends Component {
                                 {this.arrayContainsJSONId(this.state.addedFriends, user) ?
                                   <Button variant='danger' className='mt-2 mb-1 w-75' onClick={() => this.removeUserFromAddedFriends(user)}>
                                     Remove Friend
-                              </Button>
+                                </Button>
                                   :
                                   <Button className='mt-2 mb-1 w-75' onClick={() => this.addUserToAddedFriends(user)}>
                                     Add Friend

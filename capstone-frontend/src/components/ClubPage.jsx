@@ -160,9 +160,11 @@ class ClubPage extends Component {
                         </Button>
                       </Link>
                       <SearchUserModal
+                        type='clubs'
+                        club={this.state.club}
                         text='Search/View Members'
                         checkoutText='Current Members'
-                        btnStyle="btn btn-primary mx-3 my-aut" />
+                        btnStyle='btn btn-primary mx-3 my-auto' />
                       <SearchBookModal
                         objectId={this.props.id}
                         update={this.handleBookChange}
@@ -176,10 +178,12 @@ class ClubPage extends Component {
                   <Col className="m-auto p-0 mr-3">
                     <div id="modal-buttons" className="mx-2">
                       <SearchUserModal
+                        type='clubs'
                         userType='viewer'
+                        club={this.state.club}
                         text='View Members'
                         checkoutText='Current Members'
-                        btnStyle="btn btn-primary mx-3 my-aut" />
+                        btnStyle='btn btn-primary mx-3 my-auto' />
                     </div>
                   </Col>}
               </Row>

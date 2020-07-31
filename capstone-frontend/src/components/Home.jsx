@@ -4,7 +4,6 @@ import { CardDeck, Tabs, Tab, Card, Spinner, Button } from 'react-bootstrap';
 import ClubGridItem from './ClubGridItem.jsx'
 import { BookDescriptionOverlay } from "./BookDescriptionOverlay";
 import CreateList from './CreateList'
-import SearchUserModal from './SearchUserModal'
 import '../App.css';
 import '../styles/Home.css'
 
@@ -144,13 +143,6 @@ class Home extends Component {
           onSelect={(key) => this.setState({ key })} >
 
           <Tab eventKey='Clubs - Owner' title='Clubs - Owner'>
-
-            <SearchUserModal
-              type='club'
-              club={this.state.club}
-              text='Search/View Members'
-              checkoutText='Current Members'
-              btnStyle='btn btn-primary mx-3 h-100' />
 
             {this.state.fetchingClubsOwned ?
               <div className='text-center mt-4'>
