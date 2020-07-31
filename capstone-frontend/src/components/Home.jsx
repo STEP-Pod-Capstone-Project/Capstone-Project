@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { CardDeck, Tabs, Tab, Card } from 'react-bootstrap';
+import { CardDeck, Tabs, Tab, Card, Spinner } from 'react-bootstrap';
 import ClubGridItem from './ClubGridItem.jsx'
 import { BookDescriptionOverlay } from "./BookDescriptionOverlay";
 import '../App.css';
@@ -15,8 +15,11 @@ class Home extends Component {
       clubs: [],
       myBookListsMap: new Map(),
       sharedBookListsMap: new Map(),
-      key: 'Booklists', // For Bootstrap Tabs
+      key: 'Shared Booklists', // For Bootstrap Tabs
       screenWidth: window.outerWidth,
+      fetchingClubs: false, // For Spinner
+      fetchingBookLists: false, // For Spinner
+      fetchingBookListsShared: false, // For Spinner
     };
   }
 
@@ -49,6 +52,8 @@ class Home extends Component {
 
   fetchClubs = async () => {
 
+    this.setState({ fetchingClubs: true });
+
     const userID = window.localStorage.getItem('userID');
 
     const clubsOwner = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?ownerID=${userID}`).then(resp => resp.json());
@@ -57,10 +62,18 @@ class Home extends Component {
 
     const clubs = [...clubsOwner, ...clubsMember];
 
-    this.setState({ clubs });
+    this.setState({ clubs, fetchingClubs: false });
   }
 
   fetchBookListsImages = async (bookLists, type) => {
+
+    if (type === 'own') {
+      this.setState({ fetchingBookLists: true });
+    }
+    else if (type === 'shared') {
+      this.setState({ fetchingBookListsShared: true });
+    }
+
 
     let bookListsMap = new Map();
 
@@ -98,10 +111,10 @@ class Home extends Component {
     }))
 
     if (type === 'own') {
-      this.setState({ myBookListsMap: bookListsMap });
+      this.setState({ myBookListsMap: bookListsMap, fetchingBookLists: false });
     }
     else if (type === 'shared') {
-      this.setState({ sharedBookListsMap: bookListsMap });
+      this.setState({ sharedBookListsMap: bookListsMap, fetchingBookListsShared: false });
     }
   }
 
@@ -114,90 +127,114 @@ class Home extends Component {
           activeKey={this.state.key}
           onSelect={(key) => this.setState({ key })} >
 
-          <Tab eventKey="Clubs" title="Clubs">
-            <CardDeck className='groups-list-container'>
-              {this.state.clubs.map(club =>
-                <ClubGridItem key={club.id} club={club} />)}
-            </CardDeck>
+          <Tab eventKey='Clubs' title='Clubs'>
+
+            {this.state.fetchingClubs ?
+              <div className='text-center mt-4'>
+                <Spinner animation='border' role='status' variant='primary' />
+              </div>
+              :
+              <CardDeck className='groups-list-container'>
+                {this.state.clubs.map(club =>
+                  <ClubGridItem key={club.id} club={club} />)}
+              </CardDeck>
+            }
           </Tab>
 
-          <Tab eventKey="Booklists" title="Booklists">
+          <Tab eventKey='Booklists' title='Booklists'>
 
-            {[...this.state.myBookListsMap.keys()].map(bookList => {
+            {this.state.fetchingBookLists ?
+              <div className='text-center mt-4'>
+                <Spinner animation='border' role='status' variant='primary' />
+              </div>
+              :
+              <>
+                {[...this.state.myBookListsMap.keys()].map(bookList => {
 
-              const books = this.state.myBookListsMap.get(bookList);
+                  const books = this.state.myBookListsMap.get(bookList);
 
-              return (
-                <Card key={bookList.id} className="m-4">
+                  return (
+                    <Card key={bookList.id} className="m-4">
 
-                  <Link to={`/listpage/${bookList.id}`}>
-                    <Card.Header>
-                      <Card.Title id='booklist-card-font-size-title' className='text-muted'>{bookList.name}</Card.Title>
-                    </Card.Header>
-                  </Link>
+                      <Link to={`/listpage/${bookList.id}`}>
+                        <Card.Header>
+                          <Card.Title id='booklist-card-font-size-title' className='text-muted'>{bookList.name}</Card.Title>
+                        </Card.Header>
+                      </Link>
 
-                  {books.length !== 0
-                    ?
-                    <div id='booklist-content' className='m-auto'>
-                      {books.map(book =>
-                        <Card.Body key={book.id} >
-                          <BookDescriptionOverlay book={book}>
-                            <Card.Img className='img-fluid my-1 light-gray-border book-img-lg' variant='top' src={book.thumbnailLink} />
-                          </BookDescriptionOverlay>
-                          <Card.Title id='booklist-card-book-title-font-size' className='mt-4 mb-1 text-center book-img-text-width'>{book.title}</Card.Title>
-                        </Card.Body>)}
-                    </div>
-                    :
-                    <Card.Body>
-                      <Card.Text>Booklist contains no books</Card.Text>
-                    </Card.Body>}
+                      {books.length !== 0
+                        ?
+                        <div id='booklist-content' className='m-auto'>
+                          {books.map(book =>
+                            <Card.Body key={book.id} >
+                              <BookDescriptionOverlay book={book}>
+                                <Card.Img className='img-fluid my-1 light-gray-border book-img-lg' variant='top' src={book.thumbnailLink} />
+                              </BookDescriptionOverlay>
+                              <Card.Title id='booklist-card-book-title-font-size' className='mt-4 mb-1 text-center book-img-text-width'>{book.title}</Card.Title>
+                            </Card.Body>)}
+                        </div>
+                        :
+                        <Card.Body>
+                          <Card.Text>Booklist contains no books</Card.Text>
+                        </Card.Body>}
 
-                  <Card.Footer>
-                    <Card.Text id='booklist-card-font-size-footer' className='text-muted'>{bookList.collaboratorsIDs.length} Collaborators</Card.Text>
-                  </Card.Footer>
-                </Card>
-              )
-            })}
+                      <Card.Footer>
+                        <Card.Text id='booklist-card-font-size-footer' className='text-muted'>{bookList.collaboratorsIDs.length} Collaborators</Card.Text>
+                      </Card.Footer>
+                    </Card>
+                  )
+                })}
+              </>
+            }
           </Tab>
 
-          <Tab eventKey="Shared Booklists" title="Shared Booklists" >
-            {[...this.state.sharedBookListsMap.keys()].map(bookList => {
+          <Tab eventKey='Shared Booklists' title='Shared Booklists' >
 
-              const books = this.state.sharedBookListsMap.get(bookList);
+            {this.state.fetchingBookListsShared ?
+              <div className='text-center mt-4'>
+                <Spinner animation='border' role='status' variant='primary' />
+              </div>
+              :
+              <>
+                {[...this.state.sharedBookListsMap.keys()].map(bookList => {
 
-              console.log(bookList, books)
+                  const books = this.state.sharedBookListsMap.get(bookList);
 
-              return (
-                <Card key={bookList.id} className="m-4">
+                  console.log(bookList, books)
 
-                  <Link to={`/listpage/${bookList.id}`}>
-                    <Card.Header>
-                      <Card.Title id='booklist-card-font-size-title' className='text-muted'>{bookList.name}</Card.Title>
-                    </Card.Header>
-                  </Link>
+                  return (
+                    <Card key={bookList.id} className='m-4'>
 
-                  {books.length !== 0
-                    ?
-                    <div id='booklist-content' className='m-auto'>
-                      {books.map(book =>
-                        <Card.Body key={book.id} >
-                          <BookDescriptionOverlay book={book}>
-                            <Card.Img className='img-fluid my-1 light-gray-border book-img-lg' variant='top' src={book.thumbnailLink} />
-                          </BookDescriptionOverlay>
-                          <Card.Title id='booklist-card-book-title-font-size' className='mt-4 mb-1 text-center book-img-text-width'>{book.title}</Card.Title>
-                        </Card.Body>)}
-                    </div>
-                    :
-                    <Card.Body>
-                      <Card.Text>Booklist contains no books</Card.Text>
-                    </Card.Body>}
+                      <Link to={`/listpage/${bookList.id}`}>
+                        <Card.Header>
+                          <Card.Title id='booklist-card-font-size-title' className='text-muted'>{bookList.name}</Card.Title>
+                        </Card.Header>
+                      </Link>
 
-                  <Card.Footer>
-                    <Card.Text id='booklist-card-font-size-footer' className='text-muted'>{bookList.collaboratorsIDs.length} Collaborators</Card.Text>
-                  </Card.Footer>
-                </Card>
-              )
-            })}
+                      {books.length !== 0
+                        ?
+                        <div id='booklist-content' className='m-auto'>
+                          {books.map(book =>
+                            <Card.Body key={book.id} >
+                              <BookDescriptionOverlay book={book}>
+                                <Card.Img className='img-fluid my-1 light-gray-border book-img-lg' variant='top' src={book.thumbnailLink} />
+                              </BookDescriptionOverlay>
+                              <Card.Title id='booklist-card-book-title-font-size' className='mt-4 mb-1 text-center book-img-text-width'>{book.title}</Card.Title>
+                            </Card.Body>)}
+                        </div>
+                        :
+                        <Card.Body>
+                          <Card.Text>Booklist contains no books</Card.Text>
+                        </Card.Body>}
+
+                      <Card.Footer>
+                        <Card.Text id='booklist-card-font-size-footer' className='text-muted'>{bookList.collaboratorsIDs.length} Collaborators</Card.Text>
+                      </Card.Footer>
+                    </Card>
+                  )
+                })}
+              </>
+            }
           </Tab>
         </Tabs>
       </div>
