@@ -18,7 +18,7 @@ export class ClubSearchList extends Component {
     let clubs = await fetch(`/api/clubs?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
       .catch(function (err) {
-        alert(err)
+        console.log(err)
       });
 
     // Get clubs by checking to see if any clubs are reading the books found in Google Books API search
@@ -31,7 +31,7 @@ export class ClubSearchList extends Component {
           }
         })
         .catch(function (err) {
-          alert(err)
+          console.log(err)
         });
     }));
 
@@ -66,8 +66,7 @@ export class ClubSearchList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.searchQuery !== prevProps.searchQuery
-        || this.props.books !== prevProps.books) {
+    if (this.props.books !== prevProps.books) {
       this.setState({ loading: true })
       this.getData();
     }
