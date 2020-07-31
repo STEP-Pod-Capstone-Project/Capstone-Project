@@ -33,15 +33,18 @@ export class SearchBookModal extends Component {
       this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
     else {
-      searchResults = await fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
-        .then(response => response.json())
-        .catch(err => alert(err));
-
-      if (typeof searchResults === 'undefined') {
-        searchResults = [];
-      }
-
-      this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
+      fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            return [];
+          }
+        })
+        .then(searchResults => {
+          this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
+        })
+        .catch(err => console.log(err));
     }
   }
 
