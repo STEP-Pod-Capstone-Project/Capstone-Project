@@ -117,7 +117,7 @@ class ListPage extends Component {
                   : 
                   <h5 className="mb-1 ml-2 text-muted">Collaborator</h5>}
               </Col>
-              {this.state.bookList.userID === window.localStorage.getItem('userID') &&
+              {this.state.bookList.userID === window.localStorage.getItem('userID') ? 
                 <Col className="margin-auto p-0 mr-3">
                   <div id="modal-buttons" className="mx-2">
                     <SearchUserModal
@@ -132,6 +132,18 @@ class ListPage extends Component {
                       putURL="/api/booklist"
                       type="booklist"
                       btnStyle="btn btn-primary h-100" />
+                  </div>
+                </Col>
+                :
+                <Col className="margin-auto p-0 mr-3">
+                  <div id="modal-buttons" className="mx-2">
+                    <SearchUserModal
+                      type='booklists'
+                      userType='viewer'
+                      bookList={this.state.bookList}
+                      text='View Collaborators'
+                      checkoutText='Current Collaborators'
+                      btnStyle="btn btn-primary mx-3 h-100" />
                   </div>
                 </Col>}
             </Row>
@@ -150,7 +162,7 @@ class ListPage extends Component {
                   : 
                   <h5 className="mb-1 ml-2 text-muted">Collaborator</h5>}
               </Col>
-              {this.state.bookList.userID === window.localStorage.getItem('userID') &&
+              {this.state.bookList.userID === window.localStorage.getItem('userID') ?
                 <Col className="margin-auto p-0 mr-3">
                   <div id="modal-buttons" className="mx-2">
                     <SearchUserModal
@@ -165,6 +177,18 @@ class ListPage extends Component {
                       putURL="/api/booklist"
                       type="booklist"
                       btnStyle="btn btn-primary h-100" />
+                  </div>
+                </Col>
+                :
+                <Col className="margin-auto p-0 mr-3">
+                  <div id="modal-buttons" className="mx-2">
+                    <SearchUserModal
+                      type='booklists'
+                      userType='viewer'
+                      bookList={this.state.bookList}
+                      text='View Collaborators'
+                      checkoutText='Current Collaborators'
+                      btnStyle="btn btn-primary mx-3 h-100" />
                   </div>
                 </Col>}
             </Row>

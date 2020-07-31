@@ -240,6 +240,8 @@ export class SearchUserModal extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
+              {this.props.userType !== 'viewer' &&
+              <>
               <Form.Group controlId='form-search-term'>
                 <Form.Control type='text' placeholder='Search' onChange={(event) => this.handleSearchTermChange(event)} />
                 {this.state.fetchingUsers &&
@@ -307,6 +309,8 @@ export class SearchUserModal extends Component {
                     )}
                   </Row>
                 </div>
+              }
+              </>
               }
 
               {(this.state.addedUsersTracker.length !== 0) &&
