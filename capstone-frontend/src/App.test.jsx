@@ -26,7 +26,7 @@ const getUserCollabBookLists = () => {
 test('renders left sidebar and navbar', () => {
   render(<Router><LeftSideBar bookLists={getUserBookLists()} collabBookLists={getUserCollabBookLists()} /></Router>, container);
 
-  const leftSidebarNavbar = document.getElementById("left-sidebar-navbar");
+  const leftSidebarNavbar = document.getElementById('left-sidebar-navbar');
   expect(leftSidebarNavbar).toBeInTheDocument();
 });
 
