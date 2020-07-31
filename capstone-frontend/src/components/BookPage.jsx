@@ -47,7 +47,7 @@ export class BookPage extends Component {
                       <a className='text-decoration-none text-body center-horizontal'
                         href={book.canonicalVolumeLink} target='_blank'
                         rel='noopener noreferrer'>
-                        <img className='book-img-lg' src={book.thumbnailLink}
+                        <img className='book-img-lg img-fluid' src={book.thumbnailLink}
                           alt={book.title} />
                       </a>
                     </Row>
@@ -79,7 +79,7 @@ export class BookPage extends Component {
                         starSpacing='10px'
                         starRatedColor='gold'
                       />
-                      {book.avgRating === 0 && <p id='rating-label'>No Ratings</p>}
+                      {book.avgRating < 1 && <p id='rating-label'>No Ratings</p>}
                     </Row>
                     <Row>
                       <h3> Description </h3>

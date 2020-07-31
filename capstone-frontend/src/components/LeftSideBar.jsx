@@ -36,7 +36,7 @@ import { Row, Col } from 'react-bootstrap'
 
 import Home from './Home';
 import { Logout } from './Logout';
-import Browse from './Browse';
+import { Browse } from './Browse';
 import MyBooks from './MyBooks';
 import MyClubs from './MyClubs';
 import { BookPage } from './BookPage';
@@ -444,7 +444,10 @@ export const LeftSideBar = withRouter((props) => {
           <Col id="main-body">
             <Route exact path='/' component={Home} />
             <Route path='/browse/:query' render={(pageProps) => (
-              <Browse bookLists={props.bookLists} updateBookLists={props.updateBookLists} searchQuery={pageProps.match.params.query} />
+              <Browse
+                bookLists={props.bookLists}
+                updateBookLists={props.updateBookLists}
+                searchQuery={pageProps.match.params.query} />
             )} />
             <Route path='/mybooks' component={MyBooks} />
             <Route path='/listpage/:id' component={ListPage} />
