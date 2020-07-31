@@ -117,7 +117,7 @@ class ListPage extends Component {
                   : 
                   <h5 className='mb-1 ml-2 text-muted'>Collaborator</h5>}
               </Col>
-              {this.state.bookList.userID === window.localStorage.getItem('userID') &&
+              {this.state.bookList.userID === window.localStorage.getItem('userID') ?
                 <Col className='margin-auto p-0 mr-3'>
                   <div id='modal-buttons' className='mx-2'>
                     <SearchUserModal
@@ -162,7 +162,7 @@ class ListPage extends Component {
                   : 
                   <h5 className='mb-1 ml-2 text-muted'>Collaborator</h5>}
               </Col>
-              {this.state.bookList.userID === window.localStorage.getItem('userID') &&
+              {this.state.bookList.userID === window.localStorage.getItem('userID') ?
                 <Col className='margin-auto p-0 mr-3'>
                   <div id='modal-buttons' className='mx-2'>
                     <SearchUserModal
