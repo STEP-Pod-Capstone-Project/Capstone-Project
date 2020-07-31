@@ -38,6 +38,11 @@ public class UserServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    response.setHeader("Access-Control-Allow-Methods", "GET");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
+
     try {
 
       JsonObject googleUserTokenObjJSON = Utility.createRequestBodyJson(request);
@@ -69,13 +74,8 @@ public class UserServlet extends HttpServlet {
         String profileImageUrl = (String) payload.get("picture");
 
         googleUser = new User(googleId, email, fullname, profileImageUrl,
-            new ImmutableMap.Builder<String, String>()
-              .put("access_token", access_token)
-              .put("idpId", idpId)
-              .put("scope", scope)
-              .put("token_id", tokenId)
-              .put("token_type", token_type)
-              .build());
+            new ImmutableMap.Builder<String, String>().put("access_token", access_token).put("idpId", idpId)
+                .put("scope", scope).put("token_id", tokenId).put("token_type", token_type).build());
 
       } else {
         System.err.println("Invalid ID token.");
@@ -96,6 +96,11 @@ public class UserServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    response.setHeader("Access-Control-Allow-Methods", "GET");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
     String userID = request.getParameter("id");
     Map<String, Object> user = new HashMap<>();
@@ -145,11 +150,9 @@ public class UserServlet extends HttpServlet {
     Map<String, Object> update = new HashMap<>();
     if (jsonObject.keySet().contains("add_friendIDs")) {
       update.put("friendIDs", FieldValue.arrayUnion(jsonObject.get("add_friendIDs").getAsString()));
-    }
-    else if (jsonObject.keySet().contains("remove_friendIDs")) {
+    } else if (jsonObject.keySet().contains("remove_friendIDs")) {
       update.put("friendIDs", FieldValue.arrayRemove(jsonObject.get("remove_friendIDs").getAsString()));
-    }
-    else {
+    } else {
       System.err.println("Error: The user put method does not support at least one of the given keys.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
