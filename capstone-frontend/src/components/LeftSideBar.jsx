@@ -45,7 +45,7 @@ import ClubPage from './ClubPage';
 import AdminClubPage from './AdminClubPage';
 import CreateClub from './CreateClub';
 import CreateList from './CreateList'
-import RightSideBar from './RightSideBar';
+// import RightSideBar from './RightSideBar';
 
 import '../styles/LeftSideBar.css'
 
@@ -447,7 +447,7 @@ export const LeftSideBar = withRouter((props) => {
         <Row>
           <Col id="main-body">
             <Route exact path='/' render={(pageProps) => (
-              <Home bookLists={props.bookLists} collabBookLists={props.collabBookLists} updateBookLists={props.updateBookLists} />
+              <Home updateBookLists={props.updateBookLists} />
             )} />
             <Route path='/browse/:query' render={(pageProps) => (
               <Browse bookLists={props.bookLists} updateBookLists={props.updateBookLists} searchQuery={pageProps.match.params.query} />

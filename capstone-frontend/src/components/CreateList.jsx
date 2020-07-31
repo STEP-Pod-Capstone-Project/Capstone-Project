@@ -142,7 +142,7 @@ class CreateList extends Component {
         {!this.props.sideBar ?
           <button className={this.props.btnStyle} onClick={() => { this.initialSelectedBook(); this.setState({ showModal: true }) }}>
             <div className={this.props.textStyle}>
-              <span id="create-list-modal"> Create New List </span>
+              <span id="create-list-modal"> Create New BookList </span>
             </div>
           </button>
           :
