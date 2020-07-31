@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Spinner, Row, Col } from 'react-bootstrap'
 import BookSearchTile from './BookSearchTile';
-import { SearchBookModal } from './SearchBookModal'
+import { SearchBookModal } from './SearchBookModal';
+import { SearchUserModal } from './SearchUserModal';
 import '../styles/ListPage.css'
 
 class ListPage extends Component {
