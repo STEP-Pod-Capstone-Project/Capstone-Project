@@ -151,7 +151,7 @@ class ClubPage extends Component {
                     :
                     <h5 className="mb-1 ml-2 text-muted">Member</h5>}
                 </Col>
-                {isOwner &&
+                {isOwner ?
                   <Col className="m-auto p-0 mr-3">
                     <div id="modal-buttons" className="mx-2">
                       <Link to={`/adminclubpage/${this.state.club.id}`}>
@@ -170,6 +170,16 @@ class ClubPage extends Component {
                         putURL='/api/clubs'
                         type='club'
                         btnStyle='btn btn-primary my-auto mr-2' />
+                    </div>
+                  </Col>
+                  :
+                  <Col className="m-auto p-0 mr-3">
+                    <div id="modal-buttons" className="mx-2">
+                      <SearchUserModal
+                        userType='viewer'
+                        text='View Members'
+                        checkoutText='Current Members'
+                        btnStyle="btn btn-primary mx-3 my-aut" />
                     </div>
                   </Col>}
               </Row>
