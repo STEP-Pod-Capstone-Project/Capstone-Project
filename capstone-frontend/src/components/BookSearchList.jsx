@@ -1,45 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../App.css';
 
 import BookSearchTile from './BookSearchTile';
 
-class BookSearchList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      books: [],
-    }
-  }
-
-  getData = () => {
-    fetch(`/api/search?searchTerm=${this.props.searchQuery}`)
-      .then(response => response.json())
-      .then(booksResult => this.setState({ books: booksResult }))
-      .catch(err => console.log(err));
-  }
-
-  componentDidMount() {
-    this.getData();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.searchQuery !== prevProps.searchQuery) {
-      this.getData();
-    }
-  }
-
-  render() {
-    return (
-      <div>
-        {
-          this.state.books.map(book =>
-            <BookSearchTile book={book} location={'search'} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} key={book.id} />
-          )
-        }
-      </div>
-    );
-  }
+const BookSearchList = ({ books, bookLists, updateBookLists }) => {
+  return (
+    <div>
+      {books &&
+        books.map(book =>
+          <BookSearchTile book={book} location={'search'} bookLists={bookLists} updateBookLists={updateBookLists} key={book.id} />
+        )
+      }
+    </div>
+  );
 }
 
-
-export default BookSearchList;
+export { BookSearchList };
