@@ -185,6 +185,7 @@ class CreateList extends Component {
                       size="lg"
                       role="status"
                       aria-hidden="true"
+                      variant='primary'
                       className="my-5"
                     />
                   </div>}

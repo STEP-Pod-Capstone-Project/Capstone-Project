@@ -98,11 +98,7 @@ class ListPage extends Component {
     return this.state.loading
       ?
       (<div className="text-center mt-4">
-        <Spinner animation="border" role="status">
-          <span className="sr-only">Loading...</span>
-        </Spinner>
-        <br />
-        <h1>Loading...</h1>
+        <Spinner animation="border" role="status" variant="primary" />
       </div>)
       :
       ((this.state.gBooks.length === 0)
@@ -114,7 +110,7 @@ class ListPage extends Component {
                 <h2 className='ml-2'>{this.state.bookList.name}</h2>
                 {this.state.bookList.userID === window.localStorage.getItem('userID') ?
                   <h5 className='mb-1 ml-2 text-muted'>Owner</h5>
-                  : 
+                  :
                   <h5 className='mb-1 ml-2 text-muted'>Collaborator</h5>}
               </Col>
               {this.state.bookList.userID === window.localStorage.getItem('userID') ?
@@ -159,7 +155,7 @@ class ListPage extends Component {
                 <h2 className='ml-2'>{this.state.bookList.name}</h2>
                 {this.state.bookList.userID === window.localStorage.getItem('userID') ?
                   <h5 className='mb-1 ml-2 text-muted'>Owner</h5>
-                  : 
+                  :
                   <h5 className='mb-1 ml-2 text-muted'>Collaborator</h5>}
               </Col>
               {this.state.bookList.userID === window.localStorage.getItem('userID') ?
