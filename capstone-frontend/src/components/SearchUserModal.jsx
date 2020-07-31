@@ -78,6 +78,12 @@ export class SearchUserModal extends Component {
 
   componentDidMount() {
     this.fetchCollaborators();
+
+    if (this.props.club.memberIDs) {
+      if (this.props.club.memberIDs.length > 0) {
+        this.fetchMembers();
+      }
+    }
   }
 
   fetchCollaborators = async () => {
@@ -101,11 +107,37 @@ export class SearchUserModal extends Component {
 
     }));
 
-    // Checks for owner
-    collaborators = collaborators.filter((collaborator) => collaborator.id !== this.props.bookList.id);
+    // Owner cannot be a Collaborator
+    collaborators = collaborators.filter((collaborator) => collaborator.id !== this.props.bookList.userID);
 
     this.setState({ addedUsersTracker: collaborators, addedUsers: collaborators });
+  }
 
+  fetchMembers = async () => {
+
+    if (!(this.props.type === 'clubs' && this.props.club)) {
+      return;
+    }
+
+    else if (this.props.club.memberIDs.length === 0) {
+      return;
+    }
+
+    let members = [];
+
+    await Promise.all(this.props.club.memberIDs.map(async (memberId) => {
+
+      const member = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${memberId}`).then(resp => resp.json());
+
+      delete member.tokenObj;
+      members.push(member);
+
+    }));
+
+    // Owner cannot be a Member
+    members = members.filter((member) => member.id !== this.props.club.ownerID);
+
+    this.setState({ addedUsersTracker: members, addedUsers: members });
   }
 
   arrayContainsJSONId = (array, json) => {
@@ -206,7 +238,6 @@ export class SearchUserModal extends Component {
     }
 
     if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
-
       // Rerender
       this.setState(
         {
@@ -228,7 +259,6 @@ export class SearchUserModal extends Component {
   removeUserFromAddedFriends = (user) => {
 
     if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
-
       // Rerender
       this.setState(
         {
@@ -245,6 +275,35 @@ export class SearchUserModal extends Component {
         }
       );
     }
+  }
+
+  addFriend = (user) => {
+
+    const addFriendJson = {
+      id: window.localStorage.getItem('userID'),
+      add_friendIDs: user.id,
+    };
+
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user", {
+      method: 'PUT',
+      body: JSON.stringify(addFriendJson)
+    }).catch(e => console.log(e));
+
+    this.addUserToAddedFriends(user);
+  }
+
+  removeFriend = (user) => {
+
+    const removeFriendJson = {
+      id: window.localStorage.getItem('userID'),
+      remove_friendIDs: user.id,
+    }
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user", { 
+      method: 'PUT', 
+      body: JSON.stringify(removeFriendJson) 
+    }).catch(e => console.log(e));
+
+    this.removeUserFromAddedFriends(user);
   }
 
   render() {
@@ -294,15 +353,12 @@ export class SearchUserModal extends Component {
                     this.state.searchResults &&
 
                     <div>
-
                       {this.state.searchResults.length > 0 &&
-                        <h3 className='my-4 px-4'>Search Results</h3>
-                      }
+                        <h3 className='my-4 px-4'>Search Results</h3>}
 
                       <Row className='px-3 text-center'>
                         {(!this.state.resultsFound && this.state.searchTerm !== '') &&
-                          <h4 className='margin-auto py-4'>No Users Found</h4>
-                        }
+                          <h4 className='margin-auto py-4'>No Users Found</h4>}
 
                         {this.state.searchResults.map(user =>
 
@@ -327,17 +383,18 @@ export class SearchUserModal extends Component {
                                   :
                                   <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
                                     {this.props.addBtnText || 'Add'}
-                                  </Button>
-                                }
+                                  </Button>}
+
                                 <br />
+
                                 {this.arrayContainsJSONId(this.state.addedFriends, user) ?
-                                  <Button variant='danger' className='mt-2 mb-1 w-75' onClick={() => this.removeUserFromAddedFriends(user)}>
+                                  <Button variant='danger' className='mt-2 mb-1 w-75' onClick={() => this.removeFriend(user)}>
                                     Remove Friend
-                                </Button>
+                                  </Button>
                                   :
-                                  <Button className='mt-2 mb-1 w-75' onClick={() => this.addUserToAddedFriends(user)}>
+                                  <Button className='mt-2 mb-1 w-75' onClick={() => this.addFriend(user)}>
                                     Add Friend
-                              </Button>}
+                                  </Button>}
                               </Card.Body>
                             </Card>
                           </Col>
@@ -381,11 +438,11 @@ export class SearchUserModal extends Component {
                               {user.id !== window.localStorage.getItem('userID') &&
                                 <>
                                   {this.arrayContainsJSONId(this.state.addedFriends, user) ?
-                                    <Button className='mt-2 mb-1 w-75' variant='danger' onClick={() => this.removeUserFromAddedFriends(user)}>
+                                    <Button className='mt-2 mb-1 w-75' variant='danger' onClick={() => this.removeFriend(user)}>
                                       Remove Friend
                                 </Button>
                                     :
-                                    <Button className='mt-2 mb-1 w-75' onClick={() => this.addUserToAddedFriends(user)}>
+                                    <Button className='mt-2 mb-1 w-75' onClick={() => this.addFriend(user)}>
                                       Add Friend
                                 </Button>
                                   }
