@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Form, Row } from 'react-bootstrap';
 import { SearchBookModal } from './SearchBookModal'
-
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
 import { UserCard } from './UserCard';
-
 import TextField from '@material-ui/core/TextField';
-
 
 import '../styles/Groups.css';
 
@@ -84,7 +81,7 @@ class ClubPage extends Component {
       alert('Assignment creation failed. You do not own this club.');
       return;
     }
-    const dueDate = document.getElementById("due-date").value;
+    const dueDate = document.getElementById('due-date').value;
     let data = {
       'clubID': this.state.club.id,
       'text': e.target[0].value,
@@ -160,9 +157,9 @@ class ClubPage extends Component {
             </Form.Group>
             <div>
               <TextField
-                id="due-date"
-                label="Due Date"
-                type="datetime-local"
+                id='due-date'
+                label='Due Date'
+                type='datetime-local'
                 defaultValue={new Date().toString()}
                 InputLabelProps={{
                   shrink: true,

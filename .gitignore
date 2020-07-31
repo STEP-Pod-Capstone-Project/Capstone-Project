@@ -3,5 +3,3 @@ target/
 
 # Google Cloud SDK
 google-cloud-sdk/
-
-node_modules/

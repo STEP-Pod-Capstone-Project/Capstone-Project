@@ -47,7 +47,7 @@ public class MeetingServlet extends HttpServlet {
     gson = new Gson();
   }
 
-  public static Credential createCredentialWithAccessTokenOnly(HttpTransport transport, JsonFactory jsonFactory,
+  public static Credential createCredential(HttpTransport transport, JsonFactory jsonFactory,
       TokenResponse tokenResponse) {
     return new Credential(BearerToken.authorizationHeaderAccessMethod()).setFromTokenResponse(tokenResponse);
   }
@@ -77,7 +77,7 @@ public class MeetingServlet extends HttpServlet {
     token.setTokenType(tokenJson.get("token_type").getAsString());
     token.setScope(tokenJson.get("scope").getAsString());
     token.setExpiresInSeconds(tokenJson.get("expires_in").getAsLong());
-    Credential credentials = createCredentialWithAccessTokenOnly(new NetHttpTransport(), new JacksonFactory(), token);
+    Credential credentials = createCredential(new NetHttpTransport(), new JacksonFactory(), token);
     Calendar service = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credentials)
         .setApplicationName("bookbook").build();
     Set<String> keySet = jsonObject.keySet();
