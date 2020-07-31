@@ -122,7 +122,6 @@ export class SearchUserModal extends Component {
       add_collaboratorsIDs: user.id,
     }
 
-    // Remove BookList in Firebase
     fetch("/api/booklist", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
@@ -135,10 +134,34 @@ export class SearchUserModal extends Component {
       remove_collaboratorsIDs: user.id,
     }
 
-    // Remove BookList in Firebase
     fetch("/api/booklist", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
+    });
+  }
+
+  addUserToClubMembers = (club, user) => {
+
+    const clubUpdateJson = {
+      id: club.id,
+      add_memberIDs: user.id,
+    }
+
+    fetch("/api/clubs", {
+      method: 'PUT',
+      body: JSON.stringify(clubUpdateJson)
+    });
+  }
+
+  removeUserFromClubMembers = (club, user) => {
+    const clubUpdateJson = {
+      id: club.id,
+      remove_memberIDs: user.id,
+    }
+
+    fetch("/api/clubs", {
+      method: 'PUT',
+      body: JSON.stringify(clubUpdateJson)
     });
   }
 
