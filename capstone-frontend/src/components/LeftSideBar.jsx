@@ -398,6 +398,21 @@ export const LeftSideBar = withRouter((props) => {
                   </Link>
                 )
               }
+              <Divider />
+
+              {props.collabBookLists.map(collabBookList =>
+
+                <Link to={`/listpage/${collabBookList.id}`} key={collabBookList.id} className='remove-link-style'>
+                  <ListItem button className={classes.nested} >
+                    <ListItemIcon>
+                      <CollectionsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={collabBookList.name} />
+                  </ListItem>
+                </Link>
+              )}
+
+              <Divider />
               <CreateList updateBookLists={props.updateBookLists} sideBar={true} closeSideBar={handleDrawerClose} />
             </List>
           </Collapse>
