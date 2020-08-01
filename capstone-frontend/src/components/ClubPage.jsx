@@ -123,6 +123,16 @@ class ClubPage extends Component {
       });
   }
 
+  handleMemberChange = async (member, type) => {
+    if (type === 'add') {
+      this.setState({ members: [...this.state.members, member] });
+    }
+    else if (type === 'remove') {
+      const members = this.state.members.filter(knownMember => knownMember.id !== member.id); 
+      this.setState({ members });
+    }
+  }
+
   componentDidMount() {
     this.fetchData();
   }
@@ -161,6 +171,7 @@ class ClubPage extends Component {
                       </Link>
                       <SearchUserModal
                         type='clubs'
+                        update={this.handleMemberChange}
                         club={this.state.club}
                         text='Search/View Members'
                         checkoutText='Current Members'

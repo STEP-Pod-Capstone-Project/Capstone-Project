@@ -80,6 +80,8 @@ export class SearchUserModal extends Component {
     this.fetchCollaborators();
     this.fetchFriends();
 
+    // TODO: Update ClubPage based on user input
+
     if (this.props.club && this.props.type === 'clubs') {
       if (this.props.club.memberIDs) {
         if (this.props.club.memberIDs.length > 0) {
@@ -256,6 +258,7 @@ export class SearchUserModal extends Component {
     }
     else if (this.props.type === 'clubs' && this.props.club) {
       this.addUserToClubMembers(this.props.club, user);
+      this.props.update(user, 'add');
     }
 
     if (!this.arrayContainsJSONId(this.state.addedUsersTracker, user)) {
@@ -283,6 +286,7 @@ export class SearchUserModal extends Component {
 
     if (this.props.type === 'clubs' && this.props.club) {
       this.removeUserFromClubMembers(this.props.club, user);
+      this.props.update(user, 'remove');
     }
 
     if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
