@@ -12,7 +12,7 @@ export class UserCard extends Component {
     }
     fetch(`/api/user?id=${window.localStorage.getItem('userID')}`)
       .then(response => response.json())
-      .then(user => this.setState({isFriend:user.friendIDs.includes(this.props.user.id)}))
+      .then(user => this.setState({isFriend: user.friendIDs && user.friendIDs.includes(this.props.user.id)}))
       .catch(e => alert(e));
   }
 

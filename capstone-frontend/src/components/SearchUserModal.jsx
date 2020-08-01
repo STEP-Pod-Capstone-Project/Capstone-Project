@@ -97,8 +97,8 @@ export class SearchUserModal extends Component {
 
     }));
 
-    // Checks for owner
-    collaborators = collaborators.filter((collaborator) => collaborator.id !== this.props.bookList.id);
+    // Owner cannot be a Collaborator
+    collaborators = collaborators.filter((collaborator) => collaborator.id !== this.props.bookList.userID);
 
     this.setState({ addedUsersTracker: collaborators, addedUsers: collaborators });
 
