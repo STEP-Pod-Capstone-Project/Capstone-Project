@@ -18,8 +18,8 @@ class MeetingCard extends Component {
 
   render() {
     const isOwner = JSON.parse(window.localStorage.getItem('profileObj')).email === this.props.meeting.organizerEmail;
-    const meetingStart = moment(new Date(parseInt(this.props.meeting.startDateTime, 10))).format('MM/DD/YYYY, h:mm a');
-    const meetingEnd = moment(new Date(parseInt(this.props.meeting.endDateTime, 10))).format('MM/DD/YYYY, h:mm a');
+    const meetingStart = moment(new Date(parseInt(this.props.meeting.startDateTime, 10))).format('MMMM Do YYYY, h:mm a');
+    const meetingEnd = moment(new Date(parseInt(this.props.meeting.endDateTime, 10))).format('MMMM Do YYYY, h:mm a');
     return (
       <Col xs={12} md={6} sm={3}>
         <Card className='group-container'>

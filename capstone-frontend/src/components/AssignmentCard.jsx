@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-
+import moment from 'moment';
 import CommentCard from './CommentCard';
 
 import '../styles/Groups.css';
@@ -53,12 +53,14 @@ class AssignmentCard extends Component {
   }
 
   render() {
+    const assignmentPosted = moment(new Date(this.props.assignment.whenCreated)).format('MMMM Do YYYY, h:mm a');
+    const assignmentDue = moment(new Date(this.props.assignment.whenDue)).format('MMMM Do YYYY, h:mm a');
     return (
       <div className="assignment-card">
         <div className="assignment-head">
           <div>
-            <div className="assignment-date"> Posted: {(new Date(this.props.assignment.whenCreated)).toString()} </div> 
-            <div className="assignment-date"> Due: {(new Date(this.props.assignment.whenDue)).toString()} </div>
+            <div className="assignment-date"> Posted: {assignmentPosted} </div> 
+            <div className="assignment-date"> Due: {assignmentDue} </div>
             <div className="assignment-text"> {this.props.assignment.text} </div>
           </div>
           <Button onClick={this.onComplete} variant="success"> Mark as Done </Button> 
