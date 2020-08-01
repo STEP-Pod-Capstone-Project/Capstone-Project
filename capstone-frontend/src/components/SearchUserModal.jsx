@@ -166,14 +166,14 @@ export class SearchUserModal extends Component {
 
     const userID = window.localStorage.getItem('userID')
 
-    const user = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${userID}`).then(resp => resp.json());
+    const user = await fetch(`/api/user?id=${userID}`).then(resp => resp.json());
     delete user.tokenObj;
 
     let friends = [];
 
     await Promise.all(user.friendIDs.map(async friendId => {
 
-      const friend = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${friendId}`).then(resp => resp.json());
+      const friend = await fetch(`/api/user?id=${friendId}`).then(resp => resp.json());
       delete friend.tokenObj;
 
       friends.push(friend)
