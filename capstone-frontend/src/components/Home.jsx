@@ -54,7 +54,7 @@ class Home extends Component {
       const clubsOwned = await fetch(`/api/clubs?ownerID=${userID}`).then(resp => resp.json());
       this.setState({ clubsOwned, fetchingClubsOwned: false });
     }
-    else if (type = 'shared') {
+    else if (type === 'shared') {
       this.setState({ fetchingClubsMember: true });
       const clubsMember = await fetch(`/api/clubs?memberIDs=${userID}`).then(resp => resp.json());
       this.setState({ clubsMember, fetchingClubsMember: false });

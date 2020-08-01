@@ -78,12 +78,30 @@ export class SearchUserModal extends Component {
 
   componentDidMount() {
     this.fetchCollaborators();
+    this.fetchFriends();
 
-    if (this.props.club.memberIDs) {
-      if (this.props.club.memberIDs.length > 0) {
-        this.fetchMembers();
+    if (this.props.club && this.props.type === 'clubs') {
+      if (this.props.club.memberIDs) {
+        if (this.props.club.memberIDs.length > 0) {
+          this.fetchMembers();
+        }
       }
     }
+  }
+
+  removeDuplicatesArrayJsonId = (array) => {
+
+    let helperArrayIDs = [];
+    let newArray = [];
+
+    for (const item of array) {
+      if(!helperArrayIDs.includes(item.id)) {
+        helperArrayIDs.push(item.id);
+        newArray.push(item);
+      }
+    }
+
+    return newArray;
   }
 
   fetchCollaborators = async () => {
@@ -110,7 +128,9 @@ export class SearchUserModal extends Component {
     // Owner cannot be a Collaborator
     collaborators = collaborators.filter((collaborator) => collaborator.id !== this.props.bookList.userID);
 
-    this.setState({ addedUsersTracker: collaborators, addedUsers: collaborators });
+    const addedUsersTracker = this.removeDuplicatesArrayJsonId([...this.state.addedUsersTracker, ...collaborators]);
+
+    this.setState({ addedUsersTracker, addedUsers: collaborators });
   }
 
   fetchMembers = async () => {
@@ -137,7 +157,35 @@ export class SearchUserModal extends Component {
     // Owner cannot be a Member
     members = members.filter((member) => member.id !== this.props.club.ownerID);
 
-    this.setState({ addedUsersTracker: members, addedUsers: members });
+    const addedUsersTracker = this.removeDuplicatesArrayJsonId([...this.state.addedUsersTracker, ...members]);
+
+    this.setState({ addedUsersTracker, addedUsers: members });
+  }
+
+  fetchFriends = async () => {
+
+    const userID = window.localStorage.getItem('userID')
+
+    const user = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${userID}`).then(resp => resp.json());
+    delete user.tokenObj;
+
+    let friends = [];
+
+    await Promise.all(user.friendIDs.map(async friendId => {
+
+      const friend = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${friendId}`).then(resp => resp.json());
+      delete friend.tokenObj;
+
+      friends.push(friend)
+    }));
+
+
+    // User cannot be a friend
+    friends = friends.filter((friend) => friend.id !== userID);
+
+    const addedUsersTracker = this.removeDuplicatesArrayJsonId([...this.state.addedUsersTracker, ...friends]);
+
+    this.setState({ addedUsersTracker, addedFriends: friends });
   }
 
   arrayContainsJSONId = (array, json) => {
