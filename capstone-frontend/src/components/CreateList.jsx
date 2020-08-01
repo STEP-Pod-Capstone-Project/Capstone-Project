@@ -56,13 +56,7 @@ class CreateList extends Component {
     }
     else {
       fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
-        .then(response => {
-          if (response.status === 200) {
-            return response.json();
-          } else {
-            return [];
-          }
-        })
+        .then(response => response.status === 200 ? response.json() : [])
         .then(searchResults => {
           this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
         })

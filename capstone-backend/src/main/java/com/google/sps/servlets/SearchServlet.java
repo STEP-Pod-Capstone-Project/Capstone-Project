@@ -132,7 +132,7 @@ public class SearchServlet extends HttpServlet {
     } else if (request.getParameter("searchTerm") != null) {
       // Check for empty response
       Collection<VolumeData> volumesRetrieved = convertResponseToVolumeData(fullOutput);
-      if(volumesRetrieved == null || volumesRetrieved.size() == 0) {
+      if (volumesRetrieved == null || volumesRetrieved.size() == 0) {
         response.sendError(HttpServletResponse.SC_NO_CONTENT);
         return;
       }

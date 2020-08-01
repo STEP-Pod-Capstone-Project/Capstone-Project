@@ -14,13 +14,7 @@ export class Browse extends Component {
 
   getSearchedBooks = (searchQuery) => {
     fetch(`/api/search?searchTerm=${searchQuery}`)
-      .then(response => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          return [];
-        }
-      })
+      .then(response => response.status === 200 ? response.json() : [])
       .then(searchedBooks => this._isMounted && this.setState({ searchedBooks, loading: false }))
       .catch(function (err) {
         console.log(err);
