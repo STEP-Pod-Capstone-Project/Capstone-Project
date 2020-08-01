@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Form, Row } from 'react-bootstrap';
+import { Button, CardDeck, Form, Row } from 'react-bootstrap';
 import { SearchBookModal } from './SearchBookModal'
-
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
 import { UserCard } from './UserCard';
+import MeetingCard from './MeetingCard';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -22,6 +22,7 @@ class ClubPage extends Component {
       assignments: [],
       owner: {},
       members: [],
+      meetings: [],
     }
   }
 
@@ -76,6 +77,11 @@ class ClubPage extends Component {
           alert(err);
         });
     }
+
+    await fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/meetings?clubID=${this.state.club.id}`)
+      .then(response => response.json()).then(meetings => this.setState({ meetings }))
+      .catch(e => console.log(e));
+    
   }
 
   handleAssignmentPost = (e) => {
@@ -116,6 +122,16 @@ class ClubPage extends Component {
       });
   }
 
+  deleteMeeting = (meetingID) => {
+    let meetings = this.state.meetings;
+    let meetingIDsArray = this.state.meetings.map(m => m.id);
+    const index = meetingIDsArray.indexOf(meetingID);
+    if (index > -1) {
+      meetings.splice(index, 1);
+    }
+    this.setState({ meetings });
+  }
+
   componentDidMount() {
     this.fetchData();
   }
@@ -136,11 +152,11 @@ class ClubPage extends Component {
           </Link>
         }
         <div className='title'> {this.state.club.name} </div>
-        <div> Club Owner: </div>
-        <Row className='align-items-center justify-content-center'>
-          {owner}
-        </Row>
         <div className='description'> {this.state.club.description} </div>
+        <div> Upcoming Meetings: </div>
+        <CardDeck className='groups-list-container'>
+          {this.state.meetings.map(m => <MeetingCard meeting={m} />)}
+        </CardDeck>
         {bookTile}
         {isOwner &&
           <SearchBookModal
@@ -172,8 +188,13 @@ class ClubPage extends Component {
             <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
           </Form>
         }
+        <div> Club Members: </div>
         <Row className='justify-content-center'>
           {members}
+        </Row>
+        <div> Club Owner: </div>
+        <Row className='align-items-center justify-content-center'>
+          {owner}
         </Row>
       </div>
     );

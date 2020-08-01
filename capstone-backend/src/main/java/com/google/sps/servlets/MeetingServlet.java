@@ -75,10 +75,25 @@ public class MeetingServlet extends HttpServlet {
     gson = new Gson();
   }
 
-  public static Credential createCredentialWithAccessTokenOnly(HttpTransport transport, JsonFactory jsonFactory,
+  public Credential createCredentialWithAccessTokenOnly(HttpTransport transport, JsonFactory jsonFactory,
       TokenResponse tokenResponse) {
     return new Credential(BearerToken.authorizationHeaderAccessMethod()).setFromTokenResponse(tokenResponse);
   }
+
+  public Calendar createCalendar(JsonObject jsonObject) {
+    TokenResponse token = new TokenResponse();
+    JsonObject tokenJson = jsonObject.get("token").getAsJsonObject();
+    token.setAccessToken(tokenJson.get("access_token").getAsString());
+    token.setTokenType(tokenJson.get("token_type").getAsString());
+    token.setScope(tokenJson.get("scope").getAsString());
+    token.setExpiresInSeconds(tokenJson.get("expires_in").getAsLong());
+    Credential credentials = createCredentialWithAccessTokenOnly(new NetHttpTransport(), new JacksonFactory(), token);
+    Calendar service = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credentials)
+        .setApplicationName("bookbook").build();
+    return service;
+  }
+
+
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -99,15 +114,7 @@ public class MeetingServlet extends HttpServlet {
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(createdMeeting));
     }
-    TokenResponse token = new TokenResponse();
-    JsonObject tokenJson = jsonObject.get("token").getAsJsonObject();
-    token.setAccessToken(tokenJson.get("access_token").getAsString());
-    token.setTokenType(tokenJson.get("token_type").getAsString());
-    token.setScope(tokenJson.get("scope").getAsString());
-    token.setExpiresInSeconds(tokenJson.get("expires_in").getAsLong());
-    Credential credentials = createCredentialWithAccessTokenOnly(new NetHttpTransport(), new JacksonFactory(), token);
-    Calendar service = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credentials)
-        .setApplicationName("bookbook").build();
+    Calendar service = createCalendar(jsonObject);
     Set<String> keySet = jsonObject.keySet();
     Event event = new Event();
     if (keySet.contains("summary")) {
@@ -166,5 +173,8 @@ public class MeetingServlet extends HttpServlet {
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Utility.delete(meetings, request, response);
+    JsonObject jsonObject = Utility.createRequestBodyJson(request);
+    Calendar service = createCalendar(jsonObject);
+    service.events().delete("primary", "eventId").execute();
   }
 }
