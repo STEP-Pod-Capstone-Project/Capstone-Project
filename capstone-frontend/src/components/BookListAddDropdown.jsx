@@ -22,7 +22,7 @@ const addBookToBookList = async (book, bookList) => {
 const BookListAddDropdown = ({ book, bookLists, updateBookLists }) => {
   if (bookLists.length > 0) {
     return (
-      <DropdownButton id='button-list-add' className='dropdown-add btn-margin center-horizontal'
+      <DropdownButton id='button-list-add' className='btn btn-primary mt-4 width-75'
         title='Add to List'>
         {
           bookLists.map(bookList =>
