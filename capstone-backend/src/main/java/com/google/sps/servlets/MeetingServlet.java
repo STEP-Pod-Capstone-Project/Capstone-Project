@@ -107,16 +107,9 @@ public class MeetingServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    List<String> requiredFields = new ArrayList<String>(Arrays.asList("clubID", "startDateTime", "endDateTime"));
-    Meeting createdMeeting = (Meeting) Utility.postHelper(meetings, jsonObject, response, new GenericClass(Meeting.class),
-        requiredFields);
-    if (createdMeeting != null) {
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(createdMeeting));
-    }
+    Event event = new Event();
     Calendar service = createCalendar(jsonObject);
     Set<String> keySet = jsonObject.keySet();
-    Event event = new Event();
     if (keySet.contains("summary")) {
       event.setSummary(jsonObject.get("summary").getAsString());
     }
@@ -159,6 +152,15 @@ public class MeetingServlet extends HttpServlet {
     event.setOrganizer(organizer);
     String calendarId = "primary";
     event = service.events().insert(calendarId, event).execute();
+    String eventID = event.getId();
+    jsonObject.addProperty("eventID", eventID);
+    List<String> requiredFields = new ArrayList<String>(Arrays.asList("clubID", "startDateTime", "endDateTime"));
+    Meeting createdMeeting = (Meeting) Utility.postHelper(meetings, jsonObject, response, new GenericClass(Meeting.class),
+        requiredFields);
+    if (createdMeeting != null) {
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(createdMeeting));
+    }
   }
 
   @Override
@@ -175,6 +177,12 @@ public class MeetingServlet extends HttpServlet {
     Utility.delete(meetings, request, response);
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     Calendar service = createCalendar(jsonObject);
-    service.events().delete("primary", "eventId").execute();
+    if (jsonObject.keySet().contains("eventID")) {
+      service.events().delete("primary", jsonObject.get("eventID").getAsString()).execute();
+    }
+    else {
+      System.err.println("Error: No eventID supplied");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+    }
   }
 }

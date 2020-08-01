@@ -17,18 +17,18 @@ class AdminClubPage extends Component {
   }
 
   fetchData = () => {
-    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`)
+    fetch(`/api/clubs?id=${this.props.match.params.id}`)
       .then(response => response.json()).then(clubs => {
         const club = clubs[0];
         this.setState({ club, requesters: [], members: [] });
         Promise.all(club.requestIDs.map(r => {
-          return fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${r}`)
+          return fetch(`/api/user?id=${r}`)
             .then(response => response.json())
             .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }))
             .catch(e => console.log(e));
         }))
         Promise.all(club.memberIDs.map(m => {
-          return fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/user?id=${m}`)
+          return fetch(`/api/user?id=${m}`)
             .then(response => response.json())
             .then(member => member && this.setState({ members: [...this.state.members, member] }))
             .catch(e => console.log(e));
@@ -54,7 +54,7 @@ class AdminClubPage extends Component {
       return;
     }
 
-    fetch('https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs', { method: 'put', body: JSON.stringify(data) })
+    fetch('/api/clubs', { method: 'put', body: JSON.stringify(data) })
       .then(history.push(`/clubpage/${data.id}`))
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -68,7 +68,7 @@ class AdminClubPage extends Component {
       return;
     }
     const history = this.props.history;
-    fetch(`https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/clubs?id=${this.props.match.params.id}`, { method: 'delete' })
+    fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: 'delete' })
       .then(function () {
         history.push('/myclubs');
       })
@@ -90,11 +90,9 @@ class AdminClubPage extends Component {
       endDateTime: new Date(document.getElementById('end-datetime').value).getTime(), 
       attendeeEmails: this.state.members.map(m => m.email),
       organizerEmail: JSON.parse(window.localStorage.getItem('profileObj')).email, 
-    }
-    console.log(meeting);
-    fetch('https://8080-bfda3bef-a7ee-4ff4-91c6-c56fa0a00eba.ws-us02.gitpod.io/api/meetings', {method: 'post', body: JSON.stringify(meeting)})
+    };
+    fetch('/api/meetings', {method: 'post', body: JSON.stringify(meeting)})
         .then(response => response.json())
-        .then(json => console.log(json))
         .catch(e => console.log(e));
   }
 

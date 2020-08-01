@@ -9,6 +9,7 @@ class MeetingCard extends Component {
   deleteMeeting = () => {
     const deleteToken = {
       token: JSON.parse(window.localStorage.getItem('token')),
+      eventID: this.props.meeting.eventID,
     };
     fetch(`/api/meetings?id=${this.props.meeting.id}`, { method: 'delete', body: JSON.stringify(deleteToken) })
       .then(this.props.deleteMeeting(this.props.meeting.id))
