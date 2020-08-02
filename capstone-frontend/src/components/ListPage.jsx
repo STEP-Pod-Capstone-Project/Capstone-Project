@@ -130,20 +130,20 @@ class ListPage extends Component {
                   </div>
                 </Col>
                 :
-                <Col className="margin-auto p-0 mr-3">
-                  <div id="modal-buttons" className="mx-2">
+                <Col className='margin-auto p-0 mr-3'>
+                  <div id='modal-buttons' className='mx-2'>
                     <SearchUserModal
                       type='booklists'
                       userType='viewer'
                       bookList={this.state.bookList}
                       text='View Collaborators'
                       checkoutText='Current Collaborators'
-                      btnStyle="btn btn-primary mx-3 h-100" />
+                      btnStyle='btn btn-primary mx-3 h-100' />
                   </div>
                 </Col>}
             </Row>
-            <hr className="light-gray-border mx-2 my-2" />
-            <h3 className="text-center mt-4">Booklist has No Books</h3>
+            <hr className='light-gray-border mx-2 my-2' />
+            <h3 className='text-center mt-4'>Booklist has No Books</h3>
           </div>
         )
         :
@@ -175,19 +175,19 @@ class ListPage extends Component {
                   </div>
                 </Col>
                 :
-                <Col className="margin-auto p-0 mr-3">
-                  <div id="modal-buttons" className="mx-2">
+                <Col className='margin-auto p-0 mr-3'>
+                  <div id='modal-buttons' className='mx-2'>
                     <SearchUserModal
                       type='booklists'
                       userType='viewer'
                       bookList={this.state.bookList}
                       text='View Collaborators'
                       checkoutText='Current Collaborators'
-                      btnStyle="btn btn-primary mx-3 h-100" />
+                      btnStyle='btn btn-primary mx-3 h-100' />
                   </div>
                 </Col>}
             </Row>
-            <hr className="light-gray-border mx-2 my-2" />
+            <hr className='light-gray-border mx-2 my-2' />
 
             <div>
               {

@@ -208,6 +208,7 @@ export class SearchUserModal extends Component {
       add_collaboratorsIDs: user.id,
     }
 
+    // Add Collaborator to Booklist in Firebase
     fetch("/api/booklist", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
@@ -220,6 +221,7 @@ export class SearchUserModal extends Component {
       remove_collaboratorsIDs: user.id,
     }
 
+    // Remove Collaborator to Booklist in Firebase
     fetch("/api/booklist", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)

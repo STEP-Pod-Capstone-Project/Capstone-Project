@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { CardDeck, Tabs, Tab, Card, Spinner, Button } from 'react-bootstrap';
-import ClubGridItem from './ClubGridItem.jsx'
+import ClubGridItem from './ClubGridItem.jsx';
 import { BookDescriptionOverlay } from "./BookDescriptionOverlay";
-import CreateList from './CreateList'
+import CreateList from './CreateList';
 import '../App.css';
-import '../styles/Home.css'
+import '../styles/Home.css';
 
-class Home extends Component {
+export class Home extends Component {
 
   constructor(props) {
     super(props);
@@ -51,12 +51,19 @@ class Home extends Component {
 
     if (type === 'own') {
       this.setState({ fetchingClubsOwned: true });
-      const clubsOwned = await fetch(`/api/clubs?ownerID=${userID}`).then(resp => resp.json());
+
+      const clubsOwned = await fetch(`/api/clubs?ownerID=${userID}`)
+        .then(resp => resp.json())
+        .catch(err => console.log(err));
+
       this.setState({ clubsOwned, fetchingClubsOwned: false });
     }
     else if (type === 'shared') {
       this.setState({ fetchingClubsMember: true });
-      const clubsMember = await fetch(`/api/clubs?memberIDs=${userID}`).then(resp => resp.json());
+
+      const clubsMember = await fetch(`/api/clubs?memberIDs=${userID}`)
+        .then(resp => resp.json())
+        .catch(err => console.log(err));
       this.setState({ clubsMember, fetchingClubsMember: false });
     }
   }
@@ -106,7 +113,7 @@ class Home extends Component {
       if (this.state.screenWidth <= 425) {
         bookIDs = bookList.gbookIDs.slice(0, 1);
       }
-      // Reduce to three elements if on table
+      // Reduce to three elements if on tablet
       else if (this.state.screenWidth >= 426 && this.state.screenWidth <= 768) {
         bookIDs = bookList.gbookIDs.slice(0, 3);
       }
@@ -237,7 +244,7 @@ class Home extends Component {
                   </>
                   :
                   <div className='text-center'>
-                    <h3 className="mt-5">No Booklists Found</h3>
+                    <h3 className='mt-5'>No Booklists Found</h3>
                     <CreateList updateBookLists={this.props.updateBookLists} btnStyle='btn btn-primary mt-4' />
                   </div>}
               </>
@@ -291,7 +298,7 @@ class Home extends Component {
                     })}
                   </>
                   :
-                  <h3 className="text-center mt-5">No Shared BookLists Found</h3>}
+                  <h3 className='text-center mt-5'>No Shared Booklists Found</h3>}
               </>
             }
           </Tab>
@@ -300,5 +307,3 @@ class Home extends Component {
     );
   }
 }
-
-export default Home;
