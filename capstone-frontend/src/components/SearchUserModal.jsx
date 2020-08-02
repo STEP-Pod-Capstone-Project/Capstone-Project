@@ -97,7 +97,7 @@ export class SearchUserModal extends Component {
     let newArray = [];
 
     for (const item of array) {
-      if(!helperArrayIDs.includes(item.id)) {
+      if (!helperArrayIDs.includes(item.id)) {
         helperArrayIDs.push(item.id);
         newArray.push(item);
       }
@@ -168,14 +168,20 @@ export class SearchUserModal extends Component {
 
     const userID = window.localStorage.getItem('userID')
 
-    const user = await fetch(`/api/user?id=${userID}`).then(resp => resp.json());
+    const user = await fetch(`/api/user?id=${userID}`)
+      .then(resp => resp.json())
+      .catch(err => console.log(err));
+
     delete user.tokenObj;
 
     let friends = [];
 
     await Promise.all(user.friendIDs.map(async friendId => {
 
-      const friend = await fetch(`/api/user?id=${friendId}`).then(resp => resp.json());
+      const friend = await fetch(`/api/user?id=${friendId}`)
+        .then(resp => resp.json())
+        .catch(err => console.log(err));
+        
       delete friend.tokenObj;
 
       friends.push(friend)
@@ -352,9 +358,9 @@ export class SearchUserModal extends Component {
       id: window.localStorage.getItem('userID'),
       remove_friendIDs: user.id,
     }
-    fetch("/api/user", { 
-      method: 'PUT', 
-      body: JSON.stringify(removeFriendJson) 
+    fetch("/api/user", {
+      method: 'PUT',
+      body: JSON.stringify(removeFriendJson)
     }).catch(e => console.log(e));
 
     this.removeUserFromAddedFriends(user);

@@ -123,7 +123,7 @@ class ClubPage extends Component {
       });
   }
 
-  handleMemberChange = async (member, type) => {
+  handleMemberChange = (member, type) => {
     if (type === 'add') {
       this.setState({ members: [...this.state.members, member] });
     }
