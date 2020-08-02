@@ -35,43 +35,28 @@ class ClubPage extends Component {
   fetchData = async () => {
     await fetch(`/api/clubs?id=${this.props.id}`)
       .then(response => response.json()).then(clubJson => this.setState({ club: clubJson[0] }))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
 
     if (this.state.club.gbookID.length > 0) {
       await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
-        .catch(function (err) {
-          //TODO #61: Centralize error output
-          alert(err);
-        });
+        .catch(e => console.log(e));
     }
 
     await fetch(`/api/assignments?clubID=${this.state.club.id}`)
       .then(response => response.json()).then(assignmentJson => this.setState({ assignments: assignmentJson }))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
 
     await fetch(`/api/user?id=${this.state.club.ownerID}`)
       .then(response => response.json()).then(ownerJson => this.setState({ owner: ownerJson }))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
 
     this.setState({ members: [] });
     for (let i = 0; i < this.state.club.memberIDs.length; i++) {
       await fetch(`/api/user?id=${this.state.club.memberIDs[i]}`)
         .then(response => response.json())
         .then(memberJson => memberJson && this.setState({ members: [...this.state.members, memberJson] }))
-        .catch(function (err) {
-          //TODO #61: Centralize error output
-          alert(err);
-        });
+        .catch(e => console.log(e));
     }
   }
 
@@ -93,10 +78,7 @@ class ClubPage extends Component {
         assignments.push(assignmentJson);
         this.setState({ assignments });
       })
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   handleBookChange = async (gbookID) => {
@@ -105,10 +87,7 @@ class ClubPage extends Component {
     this.setState({ club });
     await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
       .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   componentDidMount() {

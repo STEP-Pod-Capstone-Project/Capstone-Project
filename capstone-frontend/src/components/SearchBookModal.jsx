@@ -35,7 +35,7 @@ export class SearchBookModal extends Component {
     else {
       searchResults = await fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
         .then(response => response.json())
-        .catch(err => alert(err));
+        .catch(e => console.log(e));
 
       if (typeof searchResults === 'undefined') {
         searchResults = [];
@@ -123,10 +123,7 @@ export class SearchBookModal extends Component {
         addedBooks: []
       }))
       .then(this.props.update(gbookID))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
 
   }
 

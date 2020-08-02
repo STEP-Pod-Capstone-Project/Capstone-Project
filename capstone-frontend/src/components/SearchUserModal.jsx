@@ -36,7 +36,7 @@ export class SearchUserModal extends Component {
     else {
       searchResults = await fetch(`/api/userSearch?searchTerm=${searchTerm}`)
         .then(response => response.json())
-        .catch(err => alert(err));
+        .catch(e => console.log(e));
 
       if (typeof searchResults === 'undefined') {
         searchResults = [];

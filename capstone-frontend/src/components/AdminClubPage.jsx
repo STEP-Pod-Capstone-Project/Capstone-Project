@@ -24,16 +24,10 @@ class AdminClubPage extends Component {
           return fetch(`/api/user?id=${r}`)
             .then(response => response.json())
             .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }))
-            .catch(function (err) {
-              //TODO #61: Centralize error output
-              alert(err);
-            });
+            .catch(e => console.log(e));
         }))
       })
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(console.log(e));
   }
 
   handleUpdate = (e) => {
@@ -55,10 +49,7 @@ class AdminClubPage extends Component {
 
     fetch("/api/clubs", { method: "put", body: JSON.stringify(data) })
       .then(history.push(`/clubpage/${data.id}`))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => conso..log(e));
   }
 
   handleDelete = () => {
@@ -71,10 +62,7 @@ class AdminClubPage extends Component {
       .then(function () {
         history.push("/myclubs");
       })
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   componentDidMount() {

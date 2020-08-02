@@ -57,7 +57,7 @@ class CreateList extends Component {
     else {
       searchResults = await fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
         .then(response => response.json())
-        .catch(err => alert(err));
+        .catch(e => console.log(e));
 
       if (typeof searchResults === "undefined") {
         searchResults = [];

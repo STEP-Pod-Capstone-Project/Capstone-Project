@@ -17,17 +17,11 @@ class MyClubs extends Component {
   getMyClubs = async () => {
     let memberClubs = await fetch(`/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
       .then(response => response.json())
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
 
     let ownerClubs = await fetch(`/api/clubs?ownerID=${window.localStorage.getItem("userID")}`)
       .then(response => response.json())
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
     if (!memberClubs) memberClubs = [];
     if (!ownerClubs) ownerClubs = [];
     let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
@@ -35,10 +29,7 @@ class MyClubs extends Component {
     for (c of allClubs) {
       let owner = await fetch(`/api/user?id=${c.ownerID}`)
         .then(response => response.json())
-        .catch(function (err) {
-          //TODO #61: Centralize error output
-          alert(err);
-        });
+        .catch(e => console.log(e));
       let book;
       if (c.gbookID === '') {
         book = { title: 'Nothing yet' };
@@ -47,10 +38,7 @@ class MyClubs extends Component {
         book = await fetch(`/api/search?gbookId=${c.gbookID}`)
           .then(response => response.json())
           .then(books => books[0])
-          .catch(function (err) {
-            //TODO #61: Centralize error output
-            alert(err);
-          });
+          .catch(e => console.log(e));
       }
 
       c.ownerName = owner.fullName;
