@@ -27,7 +27,7 @@ class AdminClubPage extends Component {
             .catch(e => console.log(e));
         }))
       })
-      .catch(console.log(e));
+      .catch(e => console.log(e));
   }
 
   handleUpdate = (e) => {
