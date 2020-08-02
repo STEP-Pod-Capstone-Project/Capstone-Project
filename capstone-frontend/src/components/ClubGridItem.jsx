@@ -21,7 +21,7 @@ class ClubGridItem extends Component {
         .then(this.setState({requested: true}))
         .catch(function(err) {
           //TODO #61: Centralize error output
-          alert(err);
+          console.log(err);
         });
   }
 
@@ -34,7 +34,7 @@ class ClubGridItem extends Component {
         .then(this.setState({requested: false}))
         .catch(function(err) {
           //TODO #61: Centralize error output
-          alert(err);
+          console.log(err);
         });
   }
 

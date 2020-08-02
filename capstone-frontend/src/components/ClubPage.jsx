@@ -134,11 +134,10 @@ class ClubPage extends Component {
     const members = this.state.members.length && this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />);
     const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
     return (
-      <div >
-
+      <div>
         {this.state.fetchData ?
-          (<div className="text-center mt-4">
-            <Spinner variant="primary" animation="border" role="status" />
+          (<div className='text-center mt-4'>
+            <Spinner variant='primary' animation='border' role='status' />
           </div>)
           :
           (
@@ -152,8 +151,8 @@ class ClubPage extends Component {
                     <h5 className="mb-1 ml-2 text-muted">Member</h5>}
                 </Col>
                 {isOwner ?
-                  <Col className="m-auto p-0 mr-3">
-                    <div id="modal-buttons" className="mx-2">
+                  <Col className='m-auto p-0 mr-3'>
+                    <div id='modal-buttons' className='mx-2'>
                       <Link to={`/adminclubpage/${this.state.club.id}`}>
                         <Button className='admin-button my-auto' variant='secondary'>
                           Admin page
@@ -173,17 +172,17 @@ class ClubPage extends Component {
                     </div>
                   </Col>
                   :
-                  <Col className="m-auto p-0 mr-3">
-                    <div id="modal-buttons" className="mx-2">
+                  <Col className='m-auto p-0 mr-3'>
+                    <div id='modal-buttons' className='mx-2'>
                       <SearchUserModal
                         userType='viewer'
                         text='View Members'
                         checkoutText='Current Members'
-                        btnStyle="btn btn-primary mx-3 my-aut" />
+                        btnStyle='btn btn-primary mx-3 my-aut' />
                     </div>
                   </Col>}
               </Row>
-              <hr className="light-gray-border mx-2 my-2" />
+              <hr className='light-gray-border mx-2 my-2' />
 
               <div className='text-center'>
                 <h3> Club Owner: </h3>
@@ -213,6 +212,5 @@ class ClubPage extends Component {
     );
   }
 }
-
 
 export default ClubPage;
