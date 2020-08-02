@@ -111,12 +111,25 @@ class ClubPage extends Component {
       });
   }
 
+  leaveClub = () => {
+    const userID = window.localStorage.getItem('userID');
+    const removeMember = {
+      id: this.props.id,
+      remove_memberIDs: userID,
+    };
+    fetch('/api/clubs', { method: 'put', body: JSON.stringify(removeMember)})
+        .then(this.removeMember(userID))
+        .then(this.props.history.push('/'))
+        .catch(e => console.log(e));
+  }
+
   componentDidMount() {
     this.fetchData();
   }
 
   render() {
-    const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem('userID');
+    const userID = window.localStorage.getItem('userID');
+    const isOwner = this.state.owner && this.state.club.ownerID === userID;
     const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />;
     const owner = this.state.owner && <UserCard removeMember={this.removeMember} club={this.state.club} user={this.state.owner} />;
     const members = this.state.members.length && this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />);
@@ -147,7 +160,7 @@ class ClubPage extends Component {
             btnStyle='btn btn-primary mb-4 mt-4 mr-2' />
         }
         {assignments}
-        {isOwner &&
+        {isOwner ?
           <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
             <Form.Group controlId='formPostAssignment'>
               <Form.Label> Post a new assignment! </Form.Label>
@@ -155,6 +168,10 @@ class ClubPage extends Component {
             </Form.Group>
             <Button variant='primary' type='submit'> Submit </Button>
           </Form>
+          :
+          <Button variant='danger' onClick={this.leaveClub}>
+            Leave Club
+          </Button>
         }
         <Row className='justify-content-center'>
           {members}
