@@ -49,7 +49,7 @@ class AdminClubPage extends Component {
 
     fetch("/api/clubs", { method: "put", body: JSON.stringify(data) })
       .then(history.push(`/clubpage/${data.id}`))
-      .catch(e => conso..log(e));
+      .catch(e => console.log(e));
   }
 
   handleDelete = () => {
