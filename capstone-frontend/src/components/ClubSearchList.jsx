@@ -15,7 +15,7 @@ export class ClubSearchList extends Component {
 
   getData = async () => {
     // Get clubs by searchQuery
-    let clubs = await fetch(`/api/clubs?searchTerm=${this.props.searchQuery}`)
+    let clubs = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
       .catch(function (err) {
         alert(err)
@@ -23,7 +23,7 @@ export class ClubSearchList extends Component {
 
     // Get clubs by checking to see if any clubs are reading the books found in Google Books API search
     await Promise.all(this.props.books.map(book => {
-      return fetch(`/api/clubs?gbookID=${book.id}`)
+      return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?gbookID=${book.id}`)
         .then(response => response.json())
         .then(clubsWithBook => {
           if (clubsWithBook.length > 0) {
@@ -38,7 +38,7 @@ export class ClubSearchList extends Component {
     // Fill in book title and club owner for all clubs
     await Promise.all(clubs.map(club => {
       if (club.gbookID.length > 0) {
-        return fetch(`/api/search?gbookId=${club.gbookID}`)
+        return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${club.gbookID}`)
           .then(response => response.json())
           .then(book => club.bookTitle = book[0].title)
           .catch(function (err) {
@@ -46,7 +46,7 @@ export class ClubSearchList extends Component {
           });
       }
       if (club.ownerID.length > 0) {
-        return fetch(`/api/user?id=${club.ownerID}`)
+        return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${club.ownerID}`)
           .then(response => response.json())
           .then(owner => club.ownerName = owner.fullName)
           .catch(function (err) {

@@ -15,14 +15,12 @@ export class SearchUserModal extends Component {
       typingTimeout: 0,
       searchTerm: '',
       searchResults: [],
-      addedUsersTracker: [],
       addedUsers: [],
-      addedFriends: [],
       resultsFound: false,
     }
   }
 
-  getBooks = async (searchTerm) => {
+  getUsers = async (searchTerm) => {
 
     this.setState({ fetchingUsers: true });
 
@@ -34,9 +32,9 @@ export class SearchUserModal extends Component {
       this.setState({ searchResults, fetchingUsers: false, resultsFound: false })
     }
     else {
-      searchResults = await fetch(`/api/userSearch?searchTerm=${searchTerm}`)
+      searchResults = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/userSearch?searchTerm=${searchTerm}`)
         .then(response => response.json())
-        .catch(err => alert(err));
+        .catch(err => console.log(err));
 
       if (typeof searchResults === 'undefined') {
         searchResults = [];
@@ -71,14 +69,13 @@ export class SearchUserModal extends Component {
     this.setState({
       searchTerm: event.target.value,
       typingTimeout: setTimeout(async () => {
-        await this.getBooks(this.state.searchTerm)
+        await this.getUsers(this.state.searchTerm)
       }, 500)
     })
   }
 
   componentDidMount() {
     this.fetchCollaborators();
-    this.fetchFriends();
 
     // TODO: Update ClubPage based on user input
 
@@ -120,7 +117,7 @@ export class SearchUserModal extends Component {
 
     await Promise.all(this.props.bookList.collaboratorsIDs.map(async (collaboratorId) => {
 
-      const collaborator = await fetch(`/api/user?id=${collaboratorId}`).then(resp => resp.json());
+      const collaborator = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${collaboratorId}`).then(resp => resp.json());
 
       delete collaborator.tokenObj;
       collaborators.push(collaborator);
@@ -130,9 +127,7 @@ export class SearchUserModal extends Component {
     // Owner cannot be a Collaborator
     collaborators = collaborators.filter((collaborator) => collaborator.id !== this.props.bookList.userID);
 
-    const addedUsersTracker = this.removeDuplicatesArrayJsonId([...this.state.addedUsersTracker, ...collaborators]);
-
-    this.setState({ addedUsersTracker, addedUsers: collaborators });
+    this.setState({ addedUsers: collaborators });
   }
 
   fetchMembers = async () => {
@@ -149,7 +144,7 @@ export class SearchUserModal extends Component {
 
     await Promise.all(this.props.club.memberIDs.map(async (memberId) => {
 
-      const member = await fetch(`/api/user?id=${memberId}`).then(resp => resp.json());
+      const member = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${memberId}`).then(resp => resp.json());
 
       delete member.tokenObj;
       members.push(member);
@@ -159,41 +154,7 @@ export class SearchUserModal extends Component {
     // Owner cannot be a Member
     members = members.filter((member) => member.id !== this.props.club.ownerID);
 
-    const addedUsersTracker = this.removeDuplicatesArrayJsonId([...this.state.addedUsersTracker, ...members]);
-
-    this.setState({ addedUsersTracker, addedUsers: members });
-  }
-
-  fetchFriends = async () => {
-
-    const userID = window.localStorage.getItem('userID')
-
-    const user = await fetch(`/api/user?id=${userID}`)
-      .then(resp => resp.json())
-      .catch(err => console.log(err));
-
-    delete user.tokenObj;
-
-    let friends = [];
-
-    await Promise.all(user.friendIDs.map(async friendId => {
-
-      const friend = await fetch(`/api/user?id=${friendId}`)
-        .then(resp => resp.json())
-        .catch(err => console.log(err));
-        
-      delete friend.tokenObj;
-
-      friends.push(friend)
-    }));
-
-
-    // User cannot be a friend
-    friends = friends.filter((friend) => friend.id !== userID);
-
-    const addedUsersTracker = this.removeDuplicatesArrayJsonId([...this.state.addedUsersTracker, ...friends]);
-
-    this.setState({ addedUsersTracker, addedFriends: friends });
+    this.setState({ addedUsers: members });
   }
 
   arrayContainsJSONId = (array, json) => {
@@ -215,7 +176,7 @@ export class SearchUserModal extends Component {
     }
 
     // Add Collaborator to Booklist in Firebase
-    fetch("/api/booklist", {
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
     });
@@ -228,7 +189,7 @@ export class SearchUserModal extends Component {
     }
 
     // Remove Collaborator to Booklist in Firebase
-    fetch("/api/booklist", {
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
     });
@@ -241,7 +202,7 @@ export class SearchUserModal extends Component {
       add_memberIDs: user.id,
     }
 
-    fetch("/api/clubs", {
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs", {
       method: 'PUT',
       body: JSON.stringify(clubUpdateJson)
     });
@@ -253,7 +214,7 @@ export class SearchUserModal extends Component {
       remove_memberIDs: user.id,
     }
 
-    fetch("/api/clubs", {
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs", {
       method: 'PUT',
       body: JSON.stringify(clubUpdateJson)
     });
@@ -269,21 +230,8 @@ export class SearchUserModal extends Component {
       this.props.update(user, 'add');
     }
 
-    if (!this.arrayContainsJSONId(this.state.addedUsersTracker, user)) {
-      this.setState({ addedUsersTracker: [...this.state.addedUsersTracker, user] })
-    }
-
     // Rerender
-    this.setState({ addedUsers: [...this.state.addedUsers, user] })
-  }
-
-  addUserToAddedFriends = (user) => {
-    if (!this.arrayContainsJSONId(this.state.addedUsersTracker, user)) {
-      this.setState({ addedUsersTracker: [...this.state.addedUsersTracker, user] })
-    }
-
-    // Rerender
-    this.setState({ addedFriends: [...this.state.addedFriends, user] })
+    this.setState({ addedUsers: [...this.state.addedUsers, user] });
   }
 
   removeUserFromAddedUsers = (user) => {
@@ -297,73 +245,8 @@ export class SearchUserModal extends Component {
       this.props.update(user, 'remove');
     }
 
-    if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
-      // Rerender
-      this.setState(
-        {
-          addedUsers: this.state.addedUsers.filter(addedUser => addedUser.id !== user.id),
-          addedUsersTracker: this.state.addedUsersTracker.filter(addedUser => addedUser.id !== user.id),
-        }
-      );
-    }
-    else {
-      // Rerender
-      this.setState(
-        {
-          addedUsers: this.state.addedUsers.filter(addedUser => addedUser.id !== user.id),
-        }
-      );
-    }
-  }
-
-  removeUserFromAddedFriends = (user) => {
-
-    if (!this.arrayContainsJSONId(this.state.addedFriends, user)) {
-      // Rerender
-      this.setState(
-        {
-          addedFriends: this.state.addedFriends.filter(addedFriend => addedFriend.id !== user.id),
-          addedUsersTracker: this.state.addedUsersTracker.filter(addedUser => addedUser.id !== user.id),
-        }
-      );
-    }
-    else {
-      // Rerender
-      this.setState(
-        {
-          addedFriends: this.state.addedFriends.filter(addedFriend => addedFriend.id !== user.id),
-        }
-      );
-    }
-  }
-
-  addFriend = (user) => {
-
-    const addFriendJson = {
-      id: window.localStorage.getItem('userID'),
-      add_friendIDs: user.id,
-    };
-
-    fetch("/api/user", {
-      method: 'PUT',
-      body: JSON.stringify(addFriendJson)
-    }).catch(e => console.log(e));
-
-    this.addUserToAddedFriends(user);
-  }
-
-  removeFriend = (user) => {
-
-    const removeFriendJson = {
-      id: window.localStorage.getItem('userID'),
-      remove_friendIDs: user.id,
-    }
-    fetch("/api/user", {
-      method: 'PUT',
-      body: JSON.stringify(removeFriendJson)
-    }).catch(e => console.log(e));
-
-    this.removeUserFromAddedFriends(user);
+    // Rerender
+    this.setState({ addedUsers: this.state.addedUsers.filter(addedUser => addedUser.id !== user.id) });
   }
 
   render() {
@@ -434,8 +317,7 @@ export class SearchUserModal extends Component {
                                 </Card.Text>
 
 
-                                {(this.arrayContainsJSONId(this.state.addedUsers, user) &&
-                                  this.arrayContainsJSONId(this.state.addedUsersTracker, user))
+                                {(this.arrayContainsJSONId(this.state.addedUsers, user))
                                   ?
                                   <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
                                     {this.props.removeBtnText || 'Remove'}
@@ -443,17 +325,6 @@ export class SearchUserModal extends Component {
                                   :
                                   <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
                                     {this.props.addBtnText || 'Add'}
-                                  </Button>}
-
-                                <br />
-
-                                {this.arrayContainsJSONId(this.state.addedFriends, user) ?
-                                  <Button variant='danger' className='mt-2 mb-1 w-75' onClick={() => this.removeFriend(user)}>
-                                    Remove Friend
-                                  </Button>
-                                  :
-                                  <Button className='mt-2 mb-1 w-75' onClick={() => this.addFriend(user)}>
-                                    Add Friend
                                   </Button>}
                               </Card.Body>
                             </Card>
@@ -465,12 +336,12 @@ export class SearchUserModal extends Component {
                 </>
               }
 
-              {(this.state.addedUsersTracker.length !== 0) &&
+              {(this.state.addedUsers.length !== 0) &&
                 <div>
                   <h2 className='text-center my-4 px-4 '> {this.props.checkoutText || 'Added Users'}</h2>
                   <Row className='text-center px-3'>
                     {
-                      this.state.addedUsersTracker.map(user =>
+                      this.state.addedUsers.map(user =>
                         <Col key={user.id} md={4} className="px-2 my-0">
                           <Card >
                             <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
@@ -494,20 +365,6 @@ export class SearchUserModal extends Component {
                                     </Button>}
                                   <br />
                                 </>}
-
-                              {user.id !== window.localStorage.getItem('userID') &&
-                                <>
-                                  {this.arrayContainsJSONId(this.state.addedFriends, user) ?
-                                    <Button className='mt-2 mb-1 w-75' variant='danger' onClick={() => this.removeFriend(user)}>
-                                      Remove Friend
-                                </Button>
-                                    :
-                                    <Button className='mt-2 mb-1 w-75' onClick={() => this.addFriend(user)}>
-                                      Add Friend
-                                </Button>
-                                  }
-                                </>
-                              }
                             </Card.Body>
                           </Card>
                         </Col>
