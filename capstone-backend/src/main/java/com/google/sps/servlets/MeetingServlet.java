@@ -47,9 +47,10 @@ public class MeetingServlet extends HttpServlet {
     gson = new Gson();
   }
 
-  public static Credential createCredential(HttpTransport transport, JsonFactory jsonFactory,
+  private static Credential createCredential(HttpTransport transport, JsonFactory jsonFactory,
       TokenResponse tokenResponse) {
-    return new Credential(BearerToken.authorizationHeaderAccessMethod()).setFromTokenResponse(tokenResponse);
+    return new Credential(BearerToken.authorizationHeaderAccessMethod())
+                  .setFromTokenResponse(tokenResponse);
   }
 
   @Override
@@ -107,7 +108,6 @@ public class MeetingServlet extends HttpServlet {
       JsonArray jsonArray = jsonObject.get("attendeeEmails").getAsJsonArray();
       Type listType = new TypeToken<List<String>>() {}.getType();
       List<String> attendeeEmails = gson.fromJson(jsonArray, listType);
-      for (String e : attendeeEmails) System.out.println(e);
       event
           .setAttendees(attendeeEmails.stream().map(e -> new EventAttendee().setEmail(e)).collect(Collectors.toList()));
     }
