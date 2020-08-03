@@ -456,15 +456,21 @@ export const LeftSideBar = withRouter((props) => {
               <BookPage bookId={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
             )} />
             <Route path='/clubpage/:id' render={(pageProps) => (
-              <ClubPage id={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
+              <ClubPage
+                id={pageProps.match.params.id}
+                bookLists={props.bookLists}
+                updateBookLists={props.updateBookLists}
+                updateFriendsList={props.updateFriendsList}
+              />
             )} />
-            <Route path='/adminclubpage/:id' component={AdminClubPage} />
+            <Route path='/adminclubpage/:id' render={() => (
+              <AdminClubPage updateFriendsList={props.updateFriendsList} />
+            )} />
             <Route path='/createclub' component={CreateClub} />
           </Col>
-          {/* TODO(#86) Add Friends to the Web App and display them in the Right Side Bar */}
-          {/* <div className={classes.sectionDesktop}>
-            <RightSideBar />
-          </div> */}
+          <div className={classes.sectionDesktop}>
+            <RightSideBar friendsList={props.friendsList} />
+          </div>
         </Row>
       </main>
     </div >

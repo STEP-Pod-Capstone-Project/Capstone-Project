@@ -13,6 +13,7 @@ class App extends Component {
       searchQuery: "",
       bookLists: [],
       collabBookLists: [],
+      userFriends: [],
       isSignedIn: ((window.localStorage.getItem("userID")) && (window.localStorage.getItem("profileObj"))) ? true : false,
     };
   }
@@ -54,6 +55,18 @@ class App extends Component {
     this.setState({ collabBookLists })
   }
 
+  fetchUserFriends = async () => {
+    const userID = window.localStorage.getItem('userID');
+    let userFriends = await fetch(`/api/user?id=${userID}`, {
+      method: 'GET',
+    }).then(resp => resp.json())
+      .catch(e => console.log(e));
+
+    if (userFriends !== undefined) {
+      this.setState({ userFriends });
+    }
+  }
+
   componentDidMount() {
     if (this.state.isSignedIn) {
       this.fetchBookLists();
@@ -77,7 +90,10 @@ class App extends Component {
               setSearchQuery={this.setSearchQuery}
               bookLists={this.state.bookLists}
               collabBookLists={this.state.collabBookLists}
-              updateBookLists={this.fetchBookLists} />
+              updateBookLists={this.fetchBookLists}
+              friendsList={this.userFriends}
+              updateFriendsList={this.fetchUserFriends}
+            />
           )
           :
           (<Login toggleSignIn={this.toggleSignIn} />)

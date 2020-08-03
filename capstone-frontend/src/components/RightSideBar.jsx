@@ -1,9 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
@@ -31,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RightSideBar() {
+export default function RightSideBar(props) {
   const classes = useStyles();
 
   return (
@@ -46,6 +48,19 @@ export default function RightSideBar() {
       >
         <div className={classes.toolbar} />
         <Divider />
+        <List>
+          {props.friendsList.map(friend => (
+            <ListItem button key={friend.email}>
+              <ListItemAvatar>
+                <Avatar
+                  alt={friend.email + ' image'}
+                  src={friend.profileImageUrl}
+                />
+              </ListItemAvatar>
+              <ListItemText primary={friend.fullName} />
+            </ListItem>
+          ))}
+        </List>
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem button key={text}>

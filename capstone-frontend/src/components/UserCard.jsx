@@ -68,6 +68,7 @@ export class UserCard extends Component {
     fetch('/api/user', {method:'put', body: JSON.stringify(addFriend)})
       .then(this.setState({isFriend: true}))
       .catch(e => alert(e));
+    this.props.updateFriendsList();
   }
 
   removeFriend = () => {
@@ -78,6 +79,7 @@ export class UserCard extends Component {
     fetch('/api/user', {method:'put', body: JSON.stringify(removeFriend)})
       .then(this.setState({isFriend: false}))
       .catch(e => console.log(e));
+    this.props.updateFriendsList();
   }
 
   render() {

@@ -104,7 +104,8 @@ class AdminClubPage extends Component {
               key={r.id}
               user={r}
               club={this.state.club}
-              fetchData={this.fetchData} />
+              fetchData={this.fetchData}
+              updateFriendsList={this.props.updateFriendsList} />
           )}
         </Row>
         <Button id="delete-club" variant="danger" onClick={this.handleDelete}>Delete Club</Button>
