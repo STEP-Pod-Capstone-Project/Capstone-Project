@@ -136,7 +136,7 @@ public class SearchServlet extends HttpServlet {
         response.sendError(HttpServletResponse.SC_NO_CONTENT);
         return;
       }
-      volumes.addAll(convertResponseToVolumeData(fullOutput));
+      volumes.addAll(volumesRetrieved);
     }
 
     Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
