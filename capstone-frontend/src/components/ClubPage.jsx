@@ -97,7 +97,7 @@ class ClubPage extends Component {
     let data = {
       clubID: this.state.club.id,
       text: e.target[0].value,
-      whenCreated: (new Date()).toUTCString(), 
+      whenCreated: (new Date()).toUTCString(),
       whenDue: dueDate,
     };
     fetch(`/api/assignments`, { method: 'post', body: JSON.stringify(data) })
@@ -195,24 +195,24 @@ class ClubPage extends Component {
                 {bookTile}
                 {assignments}
                 {isOwner &&
-          <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
-            <Form.Group controlId='formPostAssignment'>
-              <Form.Label> Post a new assignment! </Form.Label>
-              <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
-            </Form.Group>
-            <div>
-              <TextField
-                id='due-date'
-                label='Due Date'
-                type='datetime-local'
-                defaultValue={new Date().toString()}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </div>
-            <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
-          </Form>
+                  <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
+                    <Form.Group controlId='formPostAssignment'>
+                      <Form.Label> Post a new assignment! </Form.Label>
+                      <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
+                    </Form.Group>
+                    <div>
+                      <TextField
+                        id='due-date'
+                        label='Due Date'
+                        type='datetime-local'
+                        defaultValue={new Date().toString()}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </div>
+                    <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
+                  </Form>}
                 <Row className='justify-content-center'>
                   {members}
                 </Row>
