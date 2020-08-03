@@ -45,7 +45,7 @@ import ClubPage from './ClubPage';
 import AdminClubPage from './AdminClubPage';
 import CreateClub from './CreateClub';
 import CreateList from './CreateList'
-import RightSideBar from './RightSideBar';
+import { RightSideBar } from './RightSideBar';
 
 import '../styles/LeftSideBar.css'
 
@@ -465,8 +465,8 @@ export const LeftSideBar = withRouter((props) => {
                 updateFriendsList={props.updateFriendsList}
               />
             )} />
-            <Route path='/adminclubpage/:id' render={() => (
-              <AdminClubPage updateFriendsList={props.updateFriendsList} />
+            <Route path='/adminclubpage/:id' render={(pageProps) => (
+              <AdminClubPage updateFriendsList={props.updateFriendsList} id={pageProps.match.params.id} />
             )} />
             <Route path='/createclub' component={CreateClub} />
           </Col>

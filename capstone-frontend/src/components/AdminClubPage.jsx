@@ -16,7 +16,7 @@ class AdminClubPage extends Component {
   }
 
   fetchData = () => {
-    fetch(`/api/clubs?id=${this.props.match.params.id}`)
+    fetch(`/api/clubs?id=${this.props.id}`)
       .then(response => response.json()).then(clubs => {
         const club = clubs[0];
         this.setState({ club, requesters: [] });
@@ -67,7 +67,7 @@ class AdminClubPage extends Component {
       return;
     }
     const history = this.props.history;
-    fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: "delete" })
+    fetch(`/api/clubs?id=${this.props.id}`, { method: "delete" })
       .then(function () {
         history.push("/myclubs");
       })
@@ -84,7 +84,7 @@ class AdminClubPage extends Component {
   render() {
     return (
       <div className="container text-center">
-        <Link to={`/clubpage/${this.props.match.params.id}`}>
+        <Link to={`/clubpage/${this.props.id}`}>
           <Button className="admin-button" variant="secondary"> Return to Club Page </Button>
         </Link>
         <div className="title"> {this.state.club.name} </div>

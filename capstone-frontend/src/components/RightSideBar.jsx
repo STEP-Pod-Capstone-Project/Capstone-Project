@@ -7,13 +7,10 @@ import Drawer from '@material-ui/core/Drawer';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 
 const drawerWidth = 180;
 
@@ -40,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RightSideBar(props) {
+export const RightSideBar = (props) => {
   const classes = useStyles();
   const [openList, setOpenList] = React.useState(true);
 
@@ -52,13 +49,13 @@ export default function RightSideBar(props) {
     <div className={classes.root}>
       <Drawer
         className={classes.drawer}
-        variant="permanent"
+        variant='permanent'
         classes={{
           paper: classes.drawerPaper,
         }}
-        anchor="right"
+        anchor='right'
       >
-        <div className={classes.toolbar} />
+        <div id='right-sidebar-container' className={classes.toolbar} />
         <ListItem button onClick={handleClick} >
           <ListItemIcon>
             <ContactsIcon />
