@@ -83,10 +83,10 @@ class ClubPage extends Component {
     }
     const dueDate = document.getElementById('due-date').value;
     let data = {
-      'clubID': this.state.club.id,
-      'text': e.target[0].value,
-      'whenCreated': (new Date()).toUTCString(), 
-      'whenDue': dueDate
+      clubID: this.state.club.id,
+      text: e.target[0].value,
+      whenCreated: (new Date()).toUTCString(), 
+      whenDue: dueDate,
     };
     fetch(`/api/assignments`, { method: 'post', body: JSON.stringify(data) })
       .then(response => response.json())
