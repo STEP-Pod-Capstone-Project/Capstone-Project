@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap'
+import { Button, Form, Spinner, Modal, Col, Row } from 'react-bootstrap';
 import { BookDescriptionOverlay } from './BookDescriptionOverlay';
 
-import '../styles/Modal.css'
+import '../styles/Modal.css';
 
 export class SearchBookModal extends Component {
 
@@ -160,6 +160,7 @@ export class SearchBookModal extends Component {
                       size='lg'
                       role='status'
                       aria-hidden='true'
+                      variant='primary'
                       className='my-5'
                     />
                   </div>}

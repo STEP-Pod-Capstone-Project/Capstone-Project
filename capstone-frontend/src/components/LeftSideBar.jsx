@@ -34,7 +34,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { Route, Link } from 'react-router-dom';
 import { Row, Col } from 'react-bootstrap'
 
-import Home from './Home';
+import { Home } from './Home';
 import { Logout } from './Logout';
 import { Browse } from './Browse';
 import MyBooks from './MyBooks';
@@ -45,7 +45,7 @@ import ClubPage from './ClubPage';
 import AdminClubPage from './AdminClubPage';
 import CreateClub from './CreateClub';
 import CreateList from './CreateList'
-import RightSideBar from './RightSideBar';
+// import RightSideBar from './RightSideBar';
 
 import '../styles/LeftSideBar.css'
 
@@ -398,6 +398,25 @@ export const LeftSideBar = withRouter((props) => {
                   </Link>
                 )
               }
+
+              {props.collabBookLists.length !== 0 &&
+                <>
+                  <Divider />
+                  {props.collabBookLists.map(collabBookList =>
+
+                    <Link to={`/listpage/${collabBookList.id}`} key={collabBookList.id} className='remove-link-style'>
+                      <ListItem button className={classes.nested} >
+                        <ListItemIcon>
+                          <CollectionsIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={collabBookList.name} />
+                      </ListItem>
+                    </Link>
+                  )}
+                </>
+              }
+
+              <Divider />
               <CreateList updateBookLists={props.updateBookLists} sideBar={true} closeSideBar={handleDrawerClose} />
             </List>
           </Collapse>
@@ -427,7 +446,9 @@ export const LeftSideBar = withRouter((props) => {
       <main className={classes.content}>
         <Row>
           <Col id="main-body">
-            <Route exact path='/' component={Home} />
+            <Route exact path='/' render={(pageProps) => (
+              <Home updateBookLists={props.updateBookLists} />
+            )} />
             <Route path='/browse/:query' render={(pageProps) => (
               <Browse
                 bookLists={props.bookLists}

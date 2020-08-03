@@ -139,11 +139,11 @@ class CreateList extends Component {
         {!this.props.sideBar ?
           <button className={this.props.btnStyle} onClick={() => { this.initialSelectedBook(); this.setState({ showModal: true }) }}>
             <div className={this.props.textStyle}>
-              <span id="create-list-modal"> Create New List </span>
+              <span id="create-list-modal"> Create New BookList </span>
             </div>
           </button>
           :
-          <ListItem id="create-list-modal" button onClick={() => { this.setState({ showModal: true }); this.props.closeSideBar() }} className="jss11" >
+          <ListItem id='create-list-modal' button onClick={() => { this.setState({ showModal: true }); this.props.closeSideBar() }} className='jss11 makeStyles-nested-11' >
 
             <ListItemIcon>
               <LibraryAddIcon />
@@ -182,6 +182,7 @@ class CreateList extends Component {
                       size="lg"
                       role="status"
                       aria-hidden="true"
+                      variant="primary"
                       className="my-5"
                     />
                   </div>}
@@ -220,7 +221,7 @@ class CreateList extends Component {
 
                       <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
                         <BookDescriptionOverlay book={addedBook}>
-                          <img className="img-responsive mt-3 p-0 rounded book-img-sm" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                          <img className="img-fluid mt-3 p-0 rounded book-img-sm" src={addedBook.thumbnailLink} alt={addedBook.title} />
                         </BookDescriptionOverlay>
                         <h5 className="mt-4"> {addedBook.title} </h5>
                         <p className="my-1"> {addedBook.authors.join(', ')} </p>
