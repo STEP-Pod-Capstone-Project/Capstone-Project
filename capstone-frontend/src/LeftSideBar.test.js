@@ -11,11 +11,20 @@ const getUserBookLists = () => {
   return [
     { id: '1', name: 'Best Books' },
     { id: '2', name: 'Fantasy' },
-    { id: '3', name: 'Sci-fi' }];
-}
+    { id: '3', name: 'Sci-fi' }
+  ];
+};
+
+const getUserCollabBookLists = () => {
+  return [
+    { id: '4', name: 'Mauro Books' },
+    { id: '5', name: 'Star Wars' },
+    { id: '6', name: 'Non-Fiction' }
+  ];
+};
 
 test('renders sidebar test', () => {
-  render(<Router> <LeftSideBar bookLists={getUserBookLists()} /> </Router>, container);
+  render(<Router> <LeftSideBar bookLists={getUserBookLists()} collabBookLists={getUserCollabBookLists()} /> </Router>, container);
 
   const homeLink = document.getElementById("home-link");
   expect(homeLink).toBeInTheDocument();

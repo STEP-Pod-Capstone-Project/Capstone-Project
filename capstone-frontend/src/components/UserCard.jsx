@@ -12,7 +12,7 @@ export class UserCard extends Component {
     }
     fetch(`/api/user?id=${window.localStorage.getItem('userID')}`)
       .then(response => response.json())
-      .then(user => this.setState({isFriend:user.friendIDs.includes(this.props.user.id)}))
+      .then(user => this.setState({isFriend: user.friendIDs && user.friendIDs.includes(this.props.user.id)}))
       .catch(e => alert(e));
   }
 
@@ -100,13 +100,14 @@ export class UserCard extends Component {
           Reject&nbsp;Member
         </Button>
       </div>
+    const friendButton = this.state.isFriend
+      ? <Button className='mt-2' variant='danger' onClick={this.removeFriend}> Remove Friend </Button>
+      : <Button className='mt-2' variant='primary' onClick={this.addFriend}> Add Friend </Button>;
     return (
       <Col className='user-card' xs={12} sm={6} md={2} >
         <img id='user-profile' src={this.props.user.profileImageUrl} alt='Profile' />
         <div> {this.props.user.fullName} </div>
-        {this.state.isFriend 
-          ? <Button className='mt-2' variant='danger' onClick={this.removeFriend}> Remove Friend </Button>
-          : <Button className='mt-2' variant='primary' onClick={this.addFriend}> Add Friend </Button> }
+        {window.localStorage.getItem('userID') !== this.props.user.id && friendButton}
         {isMember && removeMember}
         {isRequester && requestButtons}
       </Col>

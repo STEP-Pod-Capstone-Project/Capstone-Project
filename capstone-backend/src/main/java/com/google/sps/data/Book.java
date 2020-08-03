@@ -1,35 +1,27 @@
 package com.google.sps.data;
 
 
-public class Book {
+public class Book extends BaseEntity {
     
-  private final String id;
   private final String userID;
   private final String gbookID;
-  private boolean hasRead;
   private int rating;
   private String review;
 
  
-  public Book(String id, String userID, String gbookID, boolean hasRead, int rating, String review) {
-    this.id = id;
+  public Book(String userID, String gbookID, int rating, String review) {
     this.userID = userID;
     this.gbookID = gbookID;
-    this.hasRead = hasRead;
     this.rating = rating;
     this.review = review;
   }
  
-  public Book(String id, String userID, String gbookID) {
-    this(id, userID, gbookID, false, -1, "");
+  public Book(String userID, String gbookID) {
+    this(userID, gbookID, -1, "");
   }
 
   public Book() {
-    this("", "", "", false, -1, "");
-  }
-
-  public String getID() {
-    return id;
+    this("", "");
   }
  
   public String getUserID() {
@@ -38,22 +30,6 @@ public class Book {
 
   public String getGbookID() {
     return this.gbookID;
-  }
-
-  public boolean hasRead() {
-    return this.hasRead;
-  }
-
-  public void read(int rating, String review) {
-    hasRead = true;
-    this.rating = rating;
-    this.review = review;
-  }
-
-  public void unRead() {
-    hasRead = false;
-    rating = -1;
-    review = "";
   }
 
   public int getRating() {
@@ -71,5 +47,4 @@ public class Book {
   public void setReview(String review) {
     this.review = review;
   }
-
 }
