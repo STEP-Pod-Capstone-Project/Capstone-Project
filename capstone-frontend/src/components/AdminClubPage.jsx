@@ -24,14 +24,12 @@ class AdminClubPage extends Component {
         Promise.all(club.requestIDs.map(r => {
           return fetch(`/api/user?id=${r}`)
             .then(response => response.json())
-            .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }))
-            .catch(e => console.log(e));
+            .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }));
         }))
         Promise.all(club.memberIDs.map(m => {
           return fetch(`/api/user?id=${m}`)
             .then(response => response.json())
-            .then(member => member && this.setState({ members: [...this.state.members, member] }))
-            .catch(e => console.log(e));
+            .then(member => member && this.setState({ members: [...this.state.members, member] }));
         }))
       })
       .catch(e => console.log(e));
