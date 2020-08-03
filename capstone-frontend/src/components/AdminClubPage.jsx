@@ -80,20 +80,41 @@ class AdminClubPage extends Component {
 
   handleMeetingPost = (e) => {
     e.preventDefault();
+    const start = moment(new Date(document.getElementById('start-datetime').value));
+    const end = moment(new Date(document.getElementById('end-datetime').value));
+    let rrule = '';
+    if (document.getElementById('None').checked) {
+      rrule = '';
+    } else if (document.getElementById('Daily').checked) {
+      rrule = 'RRULE:FREQ=DAILY;INTERVAL=1'
+    } else if (document.getElementById('Weekly').checked) {
+      const day = start.format('dd');
+      rrule = `RRULE:FREQ=WEEKLY;BYDAY=${day};INTERVAL=1`
+    } else if (document.getElementById('Monthly').checked) {
+      const monthDay = start.format('D');
+      rrule = `RRULE:FREQ=MONTHLY;BYMONTHDAY=${monthDay};INTERVAL=1`
+    } else if (document.getElementById('Yearly').checked) {
+      const month = start.format('M');
+      const monthDay = start.format('D');
+      rrule = `RRULE:FREQ=YEARLY;BYMONTH=${month};BYMONTHDAY=${monthDay};INTERVAL=1`
+    } else {
+      rrule = '';
+    }
     const meeting = {
       token: JSON.parse(window.localStorage.getItem('token')),
-      clubID: this.props.match.params.id, 
+      clubID: this.props.match.params.id,
       summary: e.target.summary.value,
-      location: e.target.location.value, 
+      location: e.target.location.value,
       description: e.target.description.value,
-      startDateTime: new Date(document.getElementById('start-datetime').value).getTime(), 
-      endDateTime: new Date(document.getElementById('end-datetime').value).getTime(), 
+      startDateTime: new Date(document.getElementById('start-datetime')).value.getTime(),
+      endDateTime: new Date(document.getElementById('end-datetime')).value.getTime(),
       attendeeEmails: this.state.members.map(m => m.email),
-      organizerEmail: JSON.parse(window.localStorage.getItem('profileObj')).email, 
+      organizerEmail: JSON.parse(window.localStorage.getItem('profileObj')).email,
+      recurrence: rrule,
     };
-    fetch('/api/meetings', {method: 'post', body: JSON.stringify(meeting)})
-        .then(response => response.json())
-        .catch(e => console.log(e));
+    fetch('/api/meetings', { method: 'post', body: JSON.stringify(meeting) })
+      .then(response => response.json())
+      .catch(e => console.log(e));
   }
 
   componentDidMount() {
@@ -147,6 +168,41 @@ class AdminClubPage extends Component {
                   shrink: true,
                 }}
               />
+              <Form.Label as="legend" column sm={2}>
+                Recurrence
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Check
+                  type="radio"
+                  label="None"
+                  name="recurrenceRadios"
+                  id="None"
+                />
+                <Form.Check
+                  type="radio"
+                  label="Daily"
+                  name="recurrenceRadios"
+                  id="Daily"
+                />
+                <Form.Check
+                  type="radio"
+                  label="Weekly"
+                  name="recurrenceRadios"
+                  id="Weekly"
+                />
+                <Form.Check
+                  type="radio"
+                  label="Monthly"
+                   name="recurrenceRadios"
+                  id="Monthly"
+                />
+                <Form.Check
+                  type="radio"
+                  label="Yearly"
+                  name="formHorizontalRadios"
+                  id="Yearly"
+                />
+              </Col>
             </div>
           </Form.Group>
           <Button variant='primary' type='submit'> Submit </Button>

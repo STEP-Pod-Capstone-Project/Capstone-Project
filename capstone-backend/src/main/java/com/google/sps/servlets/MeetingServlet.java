@@ -150,6 +150,10 @@ public class MeetingServlet extends HttpServlet {
       organizer.setEmail(jsonObject.get("organizerEmail").getAsString());
     }
     event.setOrganizer(organizer);
+    if (keySet.contains("recurrence") && jsonObject.get("recurrence").getAsString().length() > 0) {
+      String[] recurrence = new String[] {jsonObject.get("recurrence").getAsString()};
+      event.setRecurrence(Arrays.asList(recurrence));
+    }
     String calendarId = "primary";
     event = service.events().insert(calendarId, event).execute();
     String eventID = event.getId();

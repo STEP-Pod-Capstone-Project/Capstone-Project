@@ -13,10 +13,11 @@ public class Meeting extends BaseEntity {
   private String endDateTime;
   private List<String> attendeeEmails;
   private String organizerEmail;
+  private String recurrence;
 
   public Meeting(String eventID, String clubID, String summary, String location,
       String description, String startDateTime, String endDateTime, 
-      List<String> attendeeEmails, String organizerEmail) {
+      List<String> attendeeEmails, String organizerEmail, String recurrence) {
     this.eventID = eventID;
     this.clubID = clubID;
     this.summary = summary;
@@ -26,11 +27,12 @@ public class Meeting extends BaseEntity {
     this.endDateTime = endDateTime;
     this.attendeeEmails = attendeeEmails;
     this.organizerEmail = organizerEmail;
+    this.recurrence = recurrence;
   }
 
   public Meeting(String eventID, String clubID, String summary, String startDateTime, 
       String endDateTime, List<String> attendeeEmails, String organizerEmail) {
-    this(eventID, clubID, summary, "", "", startDateTime, endDateTime, attendeeEmails, organizerEmail);    
+    this(eventID, clubID, summary, "", "", startDateTime, endDateTime, attendeeEmails, organizerEmail, "");    
   }
 
   public Meeting() {
@@ -99,5 +101,13 @@ public class Meeting extends BaseEntity {
 
   public void setOrganizerEmail(String organizerEmail) {
     this.organizerEmail = organizerEmail;
+  }
+
+  public String getRecurrence() {
+    return recurrence;
+  }
+
+  public void setRecurrence(String recurrence) {
+    this.recurrence = recurrence;
   }
 }
