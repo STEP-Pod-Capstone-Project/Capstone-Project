@@ -118,7 +118,13 @@ class ClubPage extends Component {
   render() {
     const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem('userID');
     const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />;
-    const owner = this.state.owner && <UserCard removeMember={this.removeMember} club={this.state.club} user={this.state.owner} />;
+    const owner = this.state.owner &&
+      <UserCard
+        removeMember={this.removeMember}
+        club={this.state.club}
+        user={this.state.owner}
+        updateFriendsList={this.props.updateFriendsList}
+      />;
     const members = this.state.members.length && this.state.members.map(m =>
       <UserCard
         key={m.id}

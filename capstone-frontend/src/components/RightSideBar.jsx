@@ -1,7 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
+import Collapse from '@material-ui/core/Collapse';
+import ContactsIcon from '@material-ui/icons/Contacts';
 import Drawer from '@material-ui/core/Drawer';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -24,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
+    nested: {
+    paddingRight: theme.spacing(5),
+  },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   content: {
@@ -35,6 +42,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RightSideBar(props) {
   const classes = useStyles();
+  const [openList, setOpenList] = React.useState(true);
+
+  const handleClick = () => {
+    setOpenList(!openList);
+  };
 
   return (
     <div className={classes.root}>
@@ -47,37 +59,29 @@ export default function RightSideBar(props) {
         anchor="right"
       >
         <div className={classes.toolbar} />
-        <Divider />
-        <List>
-          {props.friendsList.map(friend => (
-            <ListItem button key={friend.email}>
-              <ListItemAvatar>
-                <Avatar
-                  alt={friend.email + ' image'}
-                  src={friend.profileImageUrl}
-                />
-              </ListItemAvatar>
-              <ListItemText primary={friend.fullName} />
-            </ListItem>
-          ))}
-        </List>
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <ListItem button onClick={handleClick} >
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary='My Friends' />
+          {openList ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openList} timeout='auto' unmountOnExit>
+          <List component='div' disablePadding>
+            {console.log(props.friendsList)}
+            {props.friendsList.map(friend => (
+              <ListItem button key={friend.email} className={classes.nested}>
+                <ListItemAvatar>
+                  <Avatar
+                    alt={friend.email + ' image'}
+                    src={friend.profileImageUrl}
+                  />
+                </ListItemAvatar>
+                <ListItemText primary={friend.fullName} />
+              </ListItem>
+            ))}
+          </List>
+        </Collapse>
       </Drawer>
     </div>
   );

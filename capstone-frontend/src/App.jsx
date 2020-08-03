@@ -55,22 +55,24 @@ class App extends Component {
     this.setState({ collabBookLists })
   }
 
-  fetchUserFriends = async () => {
+  fetchUserFriends = () => {
     const userID = window.localStorage.getItem('userID');
-    let userFriends = await fetch(`/api/user?id=${userID}`, {
+    fetch(`/api/user?id=${userID}`, {
       method: 'GET',
     }).then(resp => resp.json())
-      .catch(e => console.log(e));
-
-    if (userFriends !== undefined) {
-      this.setState({ userFriends });
-    }
+      .then(user => user.friendIDs && Promise.all(user.friendIDs.map(friendID => {
+        return fetch(`/api/user?id=${friendID}`)
+          .then(response => response.json())
+      })))
+      .then(friends => friends && this.setState({ userFriends: friends }))
+      .catch(e => console.log(e))
   }
 
   componentDidMount() {
     if (this.state.isSignedIn) {
       this.fetchBookLists();
       this.fetchCollabBookLists();
+      this.fetchUserFriends();
     }
   }
 
@@ -91,7 +93,7 @@ class App extends Component {
               bookLists={this.state.bookLists}
               collabBookLists={this.state.collabBookLists}
               updateBookLists={this.fetchBookLists}
-              friendsList={this.userFriends}
+              friendsList={this.state.userFriends}
               updateFriendsList={this.fetchUserFriends}
             />
           )
