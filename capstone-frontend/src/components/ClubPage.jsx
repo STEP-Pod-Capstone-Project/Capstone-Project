@@ -34,11 +34,13 @@ class ClubPage extends Component {
 
   fetchData = async () => {
     const club = await fetch(`/api/clubs?id=${this.props.id}`)
-      .then(response => response.json()).then(clubJson => this.setState({ club: clubJson[0] }))
+      .then(response => response.json()).then(clubJson => clubJson[0])
       .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
       });
+    
+    this.setState({ club });
 
     if (club.gbookID.length > 0) {
       fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
@@ -155,9 +157,9 @@ class ClubPage extends Component {
         }
         {assignments}
         {isOwner &&
-          <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
+          <Form className='mt-4 mb-4' onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
             <Form.Group controlId='formPostAssignment'>
-              <Form.Label> Post a new assignment! </Form.Label>
+              <Form.Label> Post a new assignment: </Form.Label>
               <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
             </Form.Group>
             <Button variant='primary' type='submit'> Submit </Button>
