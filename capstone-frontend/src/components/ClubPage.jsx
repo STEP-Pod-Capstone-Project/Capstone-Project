@@ -33,15 +33,15 @@ class ClubPage extends Component {
   }
 
   fetchData = async () => {
-    await fetch(`/api/clubs?id=${this.props.id}`)
+    const club = await fetch(`/api/clubs?id=${this.props.id}`)
       .then(response => response.json()).then(clubJson => this.setState({ club: clubJson[0] }))
       .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
       });
 
-    if (this.state.club.gbookID.length > 0) {
-      await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
+    if (club.gbookID.length > 0) {
+      fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
         .catch(function (err) {
           //TODO #61: Centralize error output
@@ -49,14 +49,14 @@ class ClubPage extends Component {
         });
     }
 
-    await fetch(`/api/assignments?clubID=${this.state.club.id}`)
+    fetch(`/api/assignments?clubID=${club.id}`)
       .then(response => response.json()).then(assignmentJson => this.setState({ assignments: assignmentJson }))
       .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
       });
 
-    await fetch(`/api/user?id=${this.state.club.ownerID}`)
+    fetch(`/api/user?id=${club.ownerID}`)
       .then(response => response.json()).then(ownerJson => this.setState({ owner: ownerJson }))
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -64,8 +64,8 @@ class ClubPage extends Component {
       });
 
     this.setState({ members: [] });
-    for (let i = 0; i < this.state.club.memberIDs.length; i++) {
-      await fetch(`/api/user?id=${this.state.club.memberIDs[i]}`)
+    for (let i = 0; i < club.memberIDs.length; i++) {
+      fetch(`/api/user?id=${club.memberIDs[i]}`)
         .then(response => response.json())
         .then(memberJson => memberJson && this.setState({ members: [...this.state.members, memberJson] }))
         .catch(function (err) {
@@ -117,10 +117,17 @@ class ClubPage extends Component {
 
   render() {
     const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem('userID');
-    const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />;
+    const bookTile = this.state.book.authors 
+        ? <BookSearchTile book={this.state.book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />
+        : <div> No book yet! </div>
     const owner = this.state.owner && <UserCard removeMember={this.removeMember} club={this.state.club} user={this.state.owner} />;
-    const members = this.state.members.length && this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />);
-    const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
+    const members = this.state.members.length > 0 
+        ? this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />)
+        : <div> No members yet! </div>;
+    const assignments = this.state.assignments.length > 0 
+        ? <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>
+        : <div> No assignments yet! </div>;
+            
     return (
       <div className='container text-center'>
         {isOwner &&
