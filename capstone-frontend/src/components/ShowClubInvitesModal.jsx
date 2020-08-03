@@ -29,10 +29,6 @@ export class ShowClubInvitesModal extends Component {
     else {
       this.setState({ fetchingInviteClubs: false });
     }
-
-
-
-    console.log('inviteRequestClubs', this.state.inviteRequestClubs);
   }
 
   acceptInvite = (inviteClub) => {
@@ -67,7 +63,6 @@ export class ShowClubInvitesModal extends Component {
   }
 
   limitDescription = (description) => {
-    console.log('description', description)
     if (description.length > 50) {
       return description = description.substring(0, 50).concat('...');
     }

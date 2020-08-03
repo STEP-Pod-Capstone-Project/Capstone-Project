@@ -75,6 +75,8 @@ class MyClubs extends Component {
 
   updateMyClubs = async (newClub ) => {
 
+    const userID = window.localStorage.getItem('userID');
+
     this.setState({fetchingClubs: true});
 
     const clubBook = await fetch(`/api/search?gbookId=${newClub.gbookID}`)
@@ -82,6 +84,7 @@ class MyClubs extends Component {
         .catch(err => console.log(err));
 
     newClub.bookTitle = clubBook.title;
+    newClub.memberIDs.push(userID);
 
     this.setState({clubs: [...this.state.clubs, newClub], fetchingClubs: false, })
   }
