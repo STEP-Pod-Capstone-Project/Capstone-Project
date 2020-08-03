@@ -27,7 +27,7 @@ class App extends Component {
 
     const userID = window.localStorage.getItem("userID");
 
-    let bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
+    let bookLists = await fetch(`/api/booklist?userID=${userID}`, {
       method: "GET",
     }).then(resp => resp.json()).catch(err => console.log(err));
 
@@ -42,7 +42,7 @@ class App extends Component {
 
     const userID = window.localStorage.getItem('userID');
 
-    let collabBookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?collaboratorsIDs=${userID}`, {
+    let collabBookLists = await fetch(`/api/booklist?collaboratorsIDs=${userID}`, {
       method: "GET",
     }).then(resp => resp.json())
       .catch(err => console.log(err));

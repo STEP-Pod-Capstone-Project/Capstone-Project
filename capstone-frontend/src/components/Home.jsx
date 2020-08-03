@@ -52,7 +52,7 @@ export class Home extends Component {
     if (type === 'own') {
       this.setState({ fetchingClubsOwned: true });
 
-      const clubsOwned = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?ownerID=${userID}`)
+      const clubsOwned = await fetch(`/api/clubs?ownerID=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
 
@@ -61,7 +61,7 @@ export class Home extends Component {
     else if (type === 'shared') {
       this.setState({ fetchingClubsMember: true });
 
-      const clubsMember = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?memberIDs=${userID}`)
+      const clubsMember = await fetch(`/api/clubs?memberIDs=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
       this.setState({ clubsMember, fetchingClubsMember: false });
@@ -77,7 +77,7 @@ export class Home extends Component {
     if (type === 'own') {
       this.setState({ fetchingBookListsOwned: true });
 
-      bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`)
+      bookLists = await fetch(`/api/booklist?userID=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
 
@@ -88,7 +88,7 @@ export class Home extends Component {
     else if (type === 'shared') {
       this.setState({ fetchingBookListsShared: true });
 
-      bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?collaboratorsIDs=${userID}`)
+      bookLists = await fetch(`/api/booklist?collaboratorsIDs=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
 
@@ -124,7 +124,7 @@ export class Home extends Component {
 
       await Promise.all(bookIDs.map(async gBookId => {
 
-        const gBook = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${gBookId}`).then(resp => resp.json());
+        const gBook = await fetch(`/api/search?gbookId=${gBookId}`).then(resp => resp.json());
 
         gBooks.push(gBook[0]);
       }));
