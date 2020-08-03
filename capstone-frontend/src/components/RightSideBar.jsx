@@ -68,7 +68,6 @@ export default function RightSideBar(props) {
         </ListItem>
         <Collapse in={openList} timeout='auto' unmountOnExit>
           <List component='div' disablePadding>
-            {console.log(props.friendsList)}
             {props.friendsList.map(friend => (
               <ListItem button key={friend.email} className={classes.nested}>
                 <ListItemAvatar>
