@@ -52,20 +52,43 @@ export class Home extends Component {
     if (type === 'own') {
       this.setState({ fetchingClubsOwned: true });
 
-      const clubsOwned = await fetch(`/api/clubs?ownerID=${userID}`)
+      let clubsOwned = await fetch(`/api/clubs?ownerID=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
+
+      clubsOwned = await this.fetchClubBook(clubsOwned);
 
       this.setState({ clubsOwned, fetchingClubsOwned: false });
     }
     else if (type === 'shared') {
       this.setState({ fetchingClubsMember: true });
 
-      const clubsMember = await fetch(`/api/clubs?memberIDs=${userID}`)
+      let clubsMember = await fetch(`/api/clubs?memberIDs=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
+
+      clubsMember = await this.fetchClubBook(clubsMember);
+
       this.setState({ clubsMember, fetchingClubsMember: false });
     }
+  }
+
+  fetchClubBook = (clubs) => {
+
+    clubs.map(async club => {
+      if (club.gbookID.length > 0) {
+        const book = await fetch(`/api/search?gbookId=${club.gbookID}`)
+          .then(response => response.json())
+          .catch(err => console.log(err));
+
+        club.bookTitle = book[0].title;
+      }
+      else {
+        club.bookTitle = "Nothing Yet";
+      }
+    });
+
+    return clubs;
   }
 
   fetchBookLists = async (type) => {
