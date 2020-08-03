@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Button, Form, Row, Col, Spinner } from 'react-bootstrap';
 import { SearchBookModal } from './SearchBookModal';
 import { SearchUserModal } from './SearchUserModal'
-
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
 import { UserCard } from './UserCard';
+import TextField from '@material-ui/core/TextField';
 
 import '../styles/Groups.css';
 
@@ -93,10 +93,12 @@ class ClubPage extends Component {
       alert('Assignment creation failed. You do not own this club.');
       return;
     }
+    const dueDate = document.getElementById('due-date').value;
     let data = {
-      'clubID': this.state.club.id,
-      'text': e.target[0].value,
-      'whenCreated': (new Date()).toUTCString()
+      clubID: this.state.club.id,
+      text: e.target[0].value,
+      whenCreated: (new Date()).toUTCString(),
+      whenDue: dueDate,
     };
     fetch(`/api/assignments`, { method: 'post', body: JSON.stringify(data) })
       .then(response => response.json())
@@ -222,9 +224,19 @@ class ClubPage extends Component {
                       <Form.Label> Post a new assignment! </Form.Label>
                       <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
                     </Form.Group>
-                    <Button variant='primary' type='submit'> Submit </Button>
-                  </Form>
-                }
+                    <div>
+                      <TextField
+                        id='due-date'
+                        label='Due Date'
+                        type='datetime-local'
+                        defaultValue={new Date().toString()}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </div>
+                    <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
+                  </Form>}
                 <Row className='justify-content-center'>
                   {members}
                 </Row>

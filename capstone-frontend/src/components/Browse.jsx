@@ -15,10 +15,10 @@ export class Browse extends Component {
 
   getSearchedBooks = (searchQuery) => {
     fetch(`/api/search?searchTerm=${searchQuery}`)
-      .then(response => response.json())
+      .then(response => response.status === 200 ? response.json() : [])
       .then(searchedBooks => this._isMounted && this.setState({ searchedBooks, loading: false }))
       .catch(function (err) {
-        alert(err)
+        console.log(err);
       });
   }
 
