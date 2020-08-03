@@ -4,14 +4,16 @@ import '../App.css';
 import BookSearchTile from './BookSearchTile';
 
 const BookSearchList = ({ books, bookLists, updateBookLists }) => {
-  return (
-    <div>
-      {books &&
-        books.map(book =>
-          <BookSearchTile book={book} location={'search'} bookLists={bookLists} updateBookLists={updateBookLists} key={book.id} />
-        )
-      }
-    </div>
+  return (books.length === 0 ?
+    <p>There are no books for this search query.</p>
+    :
+    books.map(book =>
+      <BookSearchTile
+        book={book}
+        bookLists={bookLists}
+        updateBookLists={updateBookLists}
+        key={book.id} />
+    )
   );
 }
 
