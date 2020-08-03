@@ -87,7 +87,7 @@ export class Browse extends Component {
                   <span className='text-muted'> {this.props.searchQuery} </span>
               </h2>
               <hr className='light-gray-border mx-2 my-2' />
-              <UserSearchList searchQuery={this.props.searchQuery} />
+              <UserSearchList searchQuery={this.props.searchQuery} updateFriendsList={this.props.updateFriendsList}/>
             </Tab.Pane>
           </Tab.Content>
         </Row>

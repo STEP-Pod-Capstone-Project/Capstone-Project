@@ -447,7 +447,9 @@ export const LeftSideBar = withRouter((props) => {
               <Browse
                 bookLists={props.bookLists}
                 updateBookLists={props.updateBookLists}
-                searchQuery={pageProps.match.params.query} />
+                searchQuery={pageProps.match.params.query}
+                updateFriendsList={props.updateFriendsList}
+              />
             )} />
             <Route path='/mybooks' component={MyBooks} />
             <Route path='/listpage/:id' component={ListPage} />
