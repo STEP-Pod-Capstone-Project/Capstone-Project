@@ -5,7 +5,7 @@ import moment from 'moment';
 import '../styles/Groups.css';
 
 
-class MeetingCard extends Component {
+export class MeetingCard extends Component {
   deleteMeeting = () => {
     const deleteToken = {
       token: JSON.parse(window.localStorage.getItem('token')),
@@ -30,13 +30,11 @@ class MeetingCard extends Component {
             {isOwner && <Button variant='danger' onClick={this.deleteMeeting}> Delete Meeting </Button>}
           </Card.Body>
           <Card.Footer className='text-muted'> 
-            <div> Start: {meetingStart} </div> 
-            <div> End: {meetingEnd} </div> 
+            <span className='block'> Start: {meetingStart} </span> 
+            <span className='block'> End: {meetingEnd} </span> 
           </Card.Footer>
         </Card>
       </Col>
     );
   }
 }
-
-export default MeetingCard;

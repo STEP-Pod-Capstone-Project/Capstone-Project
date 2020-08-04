@@ -6,17 +6,15 @@ import '../styles/Login.css'
 export class Login extends Component {
 
   loginResponseSuccess = (response) => {
-    console.log(response.tokenObj);
 
     // Store User in Firebase
     fetch("/api/user", {
       method: "POST",
       body: JSON.stringify(response.tokenObj),
     });
-    console.log(response.tokenObj);
     window.localStorage.setItem('token', JSON.stringify(response.tokenObj));
-    window.localStorage.setItem("userID", response.profileObj.googleId);
-    window.localStorage.setItem("profileObj", JSON.stringify(response.profileObj));
+    window.localStorage.setItem('userID', response.profileObj.googleId);
+    window.localStorage.setItem('profileObj', JSON.stringify(response.profileObj));
 
     this.props.toggleSignIn();
   }
