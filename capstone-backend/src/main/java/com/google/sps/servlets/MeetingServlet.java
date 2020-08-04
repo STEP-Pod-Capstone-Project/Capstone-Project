@@ -147,10 +147,10 @@ public class MeetingServlet extends HttpServlet {
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Utility.delete(meetings, request, response);
-    JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    Calendar service = createCalendar(jsonObject);
-    if (jsonObject.keySet().contains("eventID")) {
-      service.events().delete("primary", jsonObject.get("eventID").getAsString()).execute();
+    JsonObject deleteBody = Utility.createRequestBodyJson(request);
+    Calendar service = createCalendar(deleteBody);
+    if (deleteBody.keySet().contains("eventID")) {
+      service.events().delete("primary", deleteBody.get("eventID").getAsString()).execute();
     }
     else {
       System.err.println("Error: No eventID supplied");

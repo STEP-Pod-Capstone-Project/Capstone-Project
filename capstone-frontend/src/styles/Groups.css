@@ -40,6 +40,10 @@
   font-weight: 500;
 }
 
+.block {
+  display: block;
+}
+
 .comment-card {
   display: flex;
   align-items: center;

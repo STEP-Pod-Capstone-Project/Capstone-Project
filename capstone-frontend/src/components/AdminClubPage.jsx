@@ -54,7 +54,7 @@ class AdminClubPage extends Component {
     }
 
     fetch('/api/clubs', { method: 'put', body: JSON.stringify(data) })
-      .then(history.push(`/clubpage/${data.id}`))
+      .then(() => history.push(`/clubpage/${data.id}`))
       .catch(e => console.log(e));
   }
 
@@ -65,7 +65,7 @@ class AdminClubPage extends Component {
     }
     const history = this.props.history;
     fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: 'delete' })
-      .then(history.push('/myclubs'))
+      .then(() => history.push('/myclubs'))
       .catch(e => console.log(e));
   }
 
@@ -84,7 +84,7 @@ class AdminClubPage extends Component {
       organizerEmail: JSON.parse(window.localStorage.getItem('profileObj')).email, 
     };
     fetch('/api/meetings', {method: 'post', body: JSON.stringify(meeting)})
-        .then(history.push(`/clubpage/${meeting.clubID}`))
+        .then(() => history.push(`/clubpage/${meeting.clubID}`))
         .catch(e => console.log(e));
   }
 
