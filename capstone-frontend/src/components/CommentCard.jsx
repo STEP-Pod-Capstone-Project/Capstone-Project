@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 
 import '../styles/Groups.css';
 
@@ -26,6 +27,7 @@ class CommentCard extends Component {
                      <span className="name"> 
                         {this.state.user.fullName} 
                       </span>;
+    const commentCreated = moment(new Date(this.props.comment.whenCreated)).format('MMMM Do YYYY, h:mm a');
     return (
       <div className="comment-card">
         <img className="profile" alt="Profile" src={this.state.user.profileImageUrl} />
@@ -33,7 +35,7 @@ class CommentCard extends Component {
           <div className="header">
             {user}
             <span className="date">
-              {(new Date(this.props.comment.whenCreated)).toString()}
+              {commentCreated}
             </span>
           </div>
           <div> {this.props.comment.text} </div>
