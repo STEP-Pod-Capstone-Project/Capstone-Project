@@ -3,6 +3,7 @@ import { Spinner, Row, Col } from 'react-bootstrap'
 import BookSearchTile from './BookSearchTile';
 import { SearchBookModal } from './SearchBookModal';
 import { SearchUserModal } from './SearchUserModal';
+import UpdateList from './UpdateList';
 import '../styles/ListPage.css'
 
 class ListPage extends Component {
@@ -20,7 +21,7 @@ class ListPage extends Component {
 
   fetchBooks = async () => {
 
-    const bookList = await fetch(`/api/booklist?id=${this.props.match.params.id}`, {
+    const bookList = await fetch(`/api/booklist?id=${this.props.id}`, {
       method: "GET",
     }).then(resp => resp.json());
 
@@ -46,7 +47,7 @@ class ListPage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.id !== prevProps.match.params.id) {
+    if (this.props.id !== prevProps.id) {
       this.setState({ loading: true, gBooks: [], bookList: {} })
       this.fetchBooks();
     }
@@ -82,8 +83,8 @@ class ListPage extends Component {
     )
 
     const bookListUpdateJson = {
-      "id": this.props.match.params.id,
-      "remove_gbookIDs": bookId,
+      id: this.props.id,
+      remove_gbookIDs: bookId,
     }
 
     // Remove BookList in Firebase
@@ -115,6 +116,13 @@ class ListPage extends Component {
               {this.state.bookList.userID === window.localStorage.getItem('userID') ?
                 <Col className='margin-auto p-0 mr-3'>
                   <div id='modal-buttons' className='mx-2'>
+                    <UpdateList
+                      id='button-list-add'
+                      btnStyle='btn btn-primary h-100'
+                      bookListId={this.props.id}
+                      updateListPage={this.updateListPage}
+                      deleteBookList={this.props.deleteBookList}
+                      updateBookLists={this.props.updateBookLists} />
                     <SearchUserModal
                       type='booklists'
                       bookList={this.state.bookList}
@@ -122,7 +130,7 @@ class ListPage extends Component {
                       checkoutText='Current Collaborators'
                       btnStyle='btn btn-primary mx-3 h-100' />
                     <SearchBookModal
-                      objectId={this.props.match.params.id}
+                      objectId={this.props.id}
                       update={this.updateListPage}
                       putURL='/api/booklist'
                       type='booklist'
@@ -160,6 +168,13 @@ class ListPage extends Component {
               {this.state.bookList.userID === window.localStorage.getItem('userID') ?
                 <Col className='margin-auto p-0 mr-3'>
                   <div id='modal-buttons' className='mx-2'>
+                    <UpdateList
+                      id='button-list-add'
+                      btnStyle='btn btn-primary h-100'
+                      bookListId={this.props.id}
+                      updateListPage={this.updateListPage}
+                      deleteBookList={this.props.deleteBookList}
+                      updateBookLists={this.props.updateBookLists} />
                     <SearchUserModal
                       type='booklists'
                       bookList={this.state.bookList}
@@ -167,7 +182,7 @@ class ListPage extends Component {
                       checkoutText='Current Collaborators'
                       btnStyle='btn btn-primary mx-3 h-100' />
                     <SearchBookModal
-                      objectId={this.props.match.params.id}
+                      objectId={this.props.id}
                       update={this.updateListPage}
                       putURL='/api/booklist'
                       type='booklist'
