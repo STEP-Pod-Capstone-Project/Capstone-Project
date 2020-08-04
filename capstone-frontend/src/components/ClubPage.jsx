@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Button, CardDeck, Col, Form, Row, Spinner } from 'react-bootstrap';
 import { SearchBookModal } from './SearchBookModal';
 import { SearchUserModal } from './SearchUserModal'
@@ -51,6 +51,12 @@ class ClubPage extends Component {
     }
 
     this.setState({ club });
+
+    if (club.ownerID !== window.localStorage.getItem('userID') 
+        && !club.memberIDs.includes(window.localStorage.getItem('userID'))) {
+      alert('You are not a member of this club!');
+      this.props.history.push('/myclubs');
+    }
 
     if (club.gbookID.length > 0) {
       fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
@@ -288,4 +294,4 @@ class ClubPage extends Component {
   }
 }
 
-export default ClubPage;
+export default withRouter(ClubPage);
