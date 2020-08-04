@@ -59,5 +59,5 @@ test('renders bookSearchTile createList btn', () => {
 
   const createBookListBtn = document.getElementById('create-list-modal');
   expect(createBookListBtn).toBeInTheDocument();
-  expect(createBookListBtn.innerHTML).toMatch(/Create New List/);
+  expect(createBookListBtn.innerHTML).toMatch(/ Create New BookList /);
 });
