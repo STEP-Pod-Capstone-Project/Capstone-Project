@@ -52,8 +52,8 @@ class ClubPage extends Component {
 
     this.setState({ club });
 
-    if (!club.memberIDs.includes(window.localStorage.getItem('userID')) 
-        && club.ownerID !== window.localStorage.getItem('userID')) {
+    if (club.ownerID !== window.localStorage.getItem('userID') 
+        && !club.memberIDs.includes(window.localStorage.getItem('userID'))) {
       alert('You are not a member of this club!');
       this.props.history.push('/myclubs');
     }
