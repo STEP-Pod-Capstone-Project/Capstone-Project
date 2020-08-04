@@ -112,7 +112,7 @@ export class SearchUserModal extends Component {
     }
 
 
-    let collaborators = Promise.all(this.props.bookList.collaboratorsIDs.map((collaboratorId) => {
+    let collaborators = await Promise.all(this.props.bookList.collaboratorsIDs.map((collaboratorId) => {
       return fetch(`/api/user?id=${collaboratorId}`).then(resp => resp.json()).then(collaborator => {
         delete collaborator.tokenObj;
         return collaborator;
@@ -143,8 +143,6 @@ export class SearchUserModal extends Component {
           return member;
         });
     }));
-
-    console.log('members, this.props.club.memberIDs', members, this.props.club.memberIDs);
 
     // Owner cannot be a Member
     members = members.filter((member) => member.id !== this.props.club.ownerID);
