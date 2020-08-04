@@ -36,7 +36,7 @@ export class SearchUserModal extends Component {
     else {
       searchResults = await fetch(`/api/userSearch?searchTerm=${searchTerm}`)
         .then(response => response.json())
-        .catch(err => alert(err));
+        .catch(e => console.log(e));
 
       if (typeof searchResults === 'undefined') {
         searchResults = [];
@@ -238,75 +238,80 @@ export class SearchUserModal extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group controlId='form-search-term'>
-                <Form.Control type='text' placeholder='Search' onChange={(event) => this.handleSearchTermChange(event)} />
-                {this.state.fetchingUsers &&
-                  <div className='text-center'>
-                    <Spinner
-                      as='span'
-                      animation='border'
-                      size='lg'
-                      role='status'
-                      aria-hidden='true'
-                      className='my-5'
-                    />
-                  </div>}
-              </Form.Group>
+              {this.props.userType !== 'viewer' &&
+                <>
+                  <Form.Group controlId='form-search-term'>
+                    <Form.Control type='text' placeholder='Search' onChange={(event) => this.handleSearchTermChange(event)} />
+                    {this.state.fetchingUsers &&
+                      <div className='text-center'>
+                        <Spinner
+                          as='span'
+                          animation='border'
+                          size='lg'
+                          role='status'
+                          aria-hidden='true'
+                          variant='primary'
+                          className='my-5'
+                        />
+                      </div>}
+                  </Form.Group>
 
-              {
-                this.state.searchResults &&
+                  {
+                    this.state.searchResults &&
 
-                <div>
+                    <div>
 
-                  {this.state.searchResults.length > 0 &&
-                    <h3 className='my-4 px-4'>Search Results</h3>
-                  }
+                      {this.state.searchResults.length > 0 &&
+                        <h3 className='my-4 px-4'>Search Results</h3>
+                      }
 
-                  <Row className='px-3 text-center'>
-                    {(!this.state.resultsFound && this.state.searchTerm !== '') &&
-                      <h4 className='margin-auto py-4'>No Users Found</h4>
-                    }
+                      <Row className='px-3 text-center'>
+                        {(!this.state.resultsFound && this.state.searchTerm !== '') &&
+                          <h4 className='margin-auto py-4'>No Users Found</h4>
+                        }
 
-                    {this.state.searchResults.map(user =>
+                        {this.state.searchResults.map(user =>
 
-                      <Col key={user.id} md={4} className="px-2 my-0">
-                        <Card >
-                          <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
-                          <Card.Body>
-                            <Card.Title>
-                              {user.fullName}
-                            </Card.Title>
-                            <Card.Text id='email-text'>
-                              {user.email}
-                            </Card.Text>
+                          <Col key={user.id} md={4} className="px-2 my-0">
+                            <Card >
+                              <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
+                              <Card.Body>
+                                <Card.Title>
+                                  {user.fullName}
+                                </Card.Title>
+                                <Card.Text id='email-text'>
+                                  {user.email}
+                                </Card.Text>
 
 
-                            {(this.arrayContainsJSONId(this.state.addedUsers, user) &&
-                              this.arrayContainsJSONId(this.state.addedUsersTracker, user))
-                              ?
-                              <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
-                                {this.props.removeBtnText || 'Remove'}
+                                {(this.arrayContainsJSONId(this.state.addedUsers, user) &&
+                                  this.arrayContainsJSONId(this.state.addedUsersTracker, user))
+                                  ?
+                                  <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
+                                    {this.props.removeBtnText || 'Remove'}
+                                  </Button>
+                                  :
+                                  <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
+                                    {this.props.addBtnText || 'Add'}
+                                  </Button>
+                                }
+                                <br />
+                                {this.arrayContainsJSONId(this.state.addedFriends, user) ?
+                                  <Button variant='danger' className='mt-2 mb-1 w-75' onClick={() => this.removeUserFromAddedFriends(user)}>
+                                    Remove Friend
                               </Button>
-                              :
-                              <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
-                                {this.props.addBtnText || 'Add'}
-                              </Button>
-                            }
-                            <br />
-                            {this.arrayContainsJSONId(this.state.addedFriends, user) ?
-                              <Button variant='danger' className='mt-2 mb-1 w-75' onClick={() => this.removeUserFromAddedFriends(user)}>
-                                Remove Friend
-                              </Button>
-                              :
-                              <Button className='mt-2 mb-1 w-75' onClick={() => this.addUserToAddedFriends(user)}>
-                                Add Friend
+                                  :
+                                  <Button className='mt-2 mb-1 w-75' onClick={() => this.addUserToAddedFriends(user)}>
+                                    Add Friend
                               </Button>}
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    )}
-                  </Row>
-                </div>
+                              </Card.Body>
+                            </Card>
+                          </Col>
+                        )}
+                      </Row>
+                    </div>
+                  }
+                </>
               }
 
               {(this.state.addedUsersTracker.length !== 0) &&
@@ -326,25 +331,31 @@ export class SearchUserModal extends Component {
                                 {user.email}
                               </Card.Text>
 
+                              {this.props.userType !== 'viewer' &&
+                                <>
+                                  {this.arrayContainsJSONId(this.state.addedUsers, user) ?
+                                    <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
+                                      {this.props.removeBtnText || 'Remove'}
+                                    </Button>
+                                    :
+                                    <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
+                                      {this.props.addBtnText || 'Add'}
+                                    </Button>}
+                                  <br />
+                                </>}
 
-                              {this.arrayContainsJSONId(this.state.addedUsers, user) ?
-                                <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
-                                  {this.props.removeBtnText || 'Remove'}
+                              {user.id !== window.localStorage.getItem('userID') &&
+                                <>
+                                  {this.arrayContainsJSONId(this.state.addedFriends, user) ?
+                                    <Button className='mt-2 mb-1 w-75' variant='danger' onClick={() => this.removeUserFromAddedFriends(user)}>
+                                      Remove Friend
                                 </Button>
-                                :
-                                <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
-                                  {this.props.addBtnText || 'Add'}
+                                    :
+                                    <Button className='mt-2 mb-1 w-75' onClick={() => this.addUserToAddedFriends(user)}>
+                                      Add Friend
                                 </Button>
-                              }
-                              <br />
-                              {this.arrayContainsJSONId(this.state.addedFriends, user) ?
-                                <Button className='mt-2 mb-1 w-75' variant='danger' onClick={() => this.removeUserFromAddedFriends(user)}>
-                                  Remove Friend
-                                </Button>
-                                :
-                                <Button className='mt-2 mb-1 w-75' onClick={() => this.addUserToAddedFriends(user)}>
-                                  Add Friend
-                                </Button>
+                                  }
+                                </>
                               }
                             </Card.Body>
                           </Card>

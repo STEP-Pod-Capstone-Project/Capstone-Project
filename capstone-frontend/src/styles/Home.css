@@ -1,0 +1,24 @@
+.light-gray-border {
+  border: 1px solid #ccc;
+}
+
+#booklist-content {
+  display: flex;
+}
+
+#booklist-card-font-size-title {
+  font-size: 1.5rem;
+}
+
+#booklist-card-font-size-footer {
+  font-size: 1.25rem;
+}
+
+.book-img-lg {
+  height: auto;
+  width: 256px;
+}
+
+.book-img-text-width {
+  width: 256px;
+}
