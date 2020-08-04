@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, CardDeck, Col, Row } from 'react-bootstrap';
+import { Button, CardDeck, Col, Row, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import ClubGridItem from './ClubGridItem';
@@ -10,11 +10,16 @@ class MyClubs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clubs: []
+      clubs: [],
+      fetchingClubs: false, // Spinner
     }
   }
 
   getMyClubs = async () => {
+
+    this.setState({ fetchingClubs: true });
+
+
     let memberClubs = await fetch(`/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
       .then(response => response.json())
       .catch(e => console.log(e));
@@ -22,11 +27,19 @@ class MyClubs extends Component {
     let ownerClubs = await fetch(`/api/clubs?ownerID=${window.localStorage.getItem("userID")}`)
       .then(response => response.json())
       .catch(e => console.log(e));
-    if (!memberClubs) memberClubs = [];
-    if (!ownerClubs) ownerClubs = [];
+
+    if (!memberClubs) {
+      memberClubs = [];
+      this.setState({ fetchingClubs: false });
+    }
+    if (!ownerClubs) {
+      ownerClubs = [];
+      this.setState({ fetchingClubs: false });
+    }
+
     let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
     let c;
-    for (c of allClubs) {
+    for await (c of allClubs) {
       let owner = await fetch(`/api/user?id=${c.ownerID}`)
         .then(response => response.json())
         .catch(e => console.log(e));
@@ -44,7 +57,7 @@ class MyClubs extends Component {
       c.ownerName = owner.fullName;
       c.bookTitle = book.title;
     }
-    this.setState({ clubs: allClubs });
+    this.setState({ clubs: allClubs, fetchingClubs: false });
   }
 
   componentDidMount() {
@@ -66,9 +79,15 @@ class MyClubs extends Component {
             Create New Club
           </Button>
         </Link>
-        <CardDeck className="groups-list-container"> {clubArray} </CardDeck>
-      </div>
 
+        {this.state.fetchingClubs ?
+          (<div className="text-center mt-4">
+            <Spinner variant="primary" animation="border" role="status" />
+          </div>)
+          :
+          <CardDeck className="groups-list-container"> {clubArray} </CardDeck>
+        }
+      </div>
     );
   }
 }

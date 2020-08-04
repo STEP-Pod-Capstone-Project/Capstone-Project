@@ -43,7 +43,7 @@ class App extends Component {
     const userID = window.localStorage.getItem('userID');
 
     let collabBookLists = await fetch(`/api/booklist?collaboratorsIDs=${userID}`, {
-      method: 'GET',
+      method: "GET",
     }).then(resp => resp.json())
       .catch(err => console.log(err));
 

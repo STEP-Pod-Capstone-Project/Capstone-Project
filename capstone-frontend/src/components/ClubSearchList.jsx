@@ -58,8 +58,7 @@ export class ClubSearchList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.searchQuery !== prevProps.searchQuery
-        || this.props.books !== prevProps.books) {
+    if (this.props.books !== prevProps.books) {
       this.setState({ loading: true })
       this.getData();
     }
