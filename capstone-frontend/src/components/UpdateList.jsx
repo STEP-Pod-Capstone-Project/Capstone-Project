@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Button, Form, Modal } from 'react-bootstrap';
 
-import '../styles/Modal.css'
+import '../styles/Modal.css';
 
-export class UpdateList extends Component {
+class UpdateList extends Component {
 
   constructor(props) {
     super(props)
@@ -27,12 +28,17 @@ export class UpdateList extends Component {
       name: this.state.newName,
     }
 
-    fetch(`/api/clubs`, {
+    fetch(`/api/booklist`, {
       method: 'PUT',
       body: JSON.stringify(updatedBookListJson)
     })
 
     this.props.updateListPage();
+  }
+
+  handleDelete = () => {
+    const currentUrl = window.location.pathname;
+    this.props.deleteBookList(this.props.bookListId, this.props, currentUrl);
   }
 
   render() {
@@ -65,10 +71,17 @@ export class UpdateList extends Component {
               <div className='text-center'>
                 <Button
                   className='text-center'
-                  variant='primary' type='submit'
+                  variant='primary'
+                  type='submit'
                   onClick={() => this.handleSubmit()}
                   disabled={this.state.newName.length === 0}>
                   Update Booklist
+                </Button>
+                <Button
+                  className='text-center ml-3'
+                  variant='danger'
+                  onClick={() => this.handleDelete()}>
+                  Delete Booklist
                 </Button>
               </div>
             </Form>
@@ -78,3 +91,5 @@ export class UpdateList extends Component {
     )
   }
 }
+
+export default withRouter(UpdateList);
