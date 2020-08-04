@@ -16,47 +16,33 @@ class MyClubs extends Component {
   }
 
   getMyClubs = async () => {
-
     this.setState({ fetchingClubs: true });
-
-    let memberClubs = await fetch(`/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
-      .then(response => response.json())
-      .catch(e => console.log(e));
-
-    let ownerClubs = await fetch(`/api/clubs?ownerID=${window.localStorage.getItem("userID")}`)
-      .then(response => response.json())
-      .catch(e => console.log(e));
-
-    if (!memberClubs) {
-      memberClubs = [];
-      this.setState({ fetchingClubs: false });
-    }
-    if (!ownerClubs) {
-      ownerClubs = [];
-      this.setState({ fetchingClubs: false });
-    }
-
-    let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
-    let c;
-    for await (c of allClubs) {
-      let owner = await fetch(`/api/user?id=${c.ownerID}`)
+    let memberClubs = [];
+    let ownerClubs = [];
+    await Promise.all([
+      fetch(`/api/clubs?memberIDs=${window.localStorage.getItem('userID')}`)
         .then(response => response.json())
-        .catch(e => console.log(e));
-      let book;
-      if (c.gbookID === '') {
-        book = { title: 'Nothing yet' };
-      }
-      else {
-        book = await fetch(`/api/search?gbookId=${c.gbookID}`)
+        .then(clubs => clubs.length ? memberClubs = clubs : this.setState({ fetchingClubs: false }))
+        .catch(e => console.error(e)),
+      fetch(`/api/clubs?ownerID=${window.localStorage.getItem('userID')}`)
+        .then(response => response.json())
+        .then(clubs => clubs.length ? ownerClubs = clubs : this.setState({ fetchingClubs: false }))
+        .catch(e => console.error(e))
+    ]);
+    let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
+    await Promise.all(
+      allClubs.map(c =>
+        fetch(`/api/search?gbookId=${c.gbookID}`)
           .then(response => response.json())
           .then(books => books[0])
-          .catch(e => console.log(e));
-      }
-
-      c.ownerName = owner.fullName;
-      c.bookTitle = book.title;
-    }
-    this.setState({ clubs: allClubs, fetchingClubs: false });
+          .then(book => book.authors && book.authors.length
+            ? c.bookTitle = book.title
+            : c.bookTitle = 'Nothing yet'
+          )
+          .catch(e => console.error(e))
+      )
+    )
+      .then(this.setState({ clubs: allClubs, fetchingClubs: false }));
   }
 
   componentDidMount() {
