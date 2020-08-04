@@ -14,10 +14,12 @@ public class Meeting extends BaseEntity {
   private List<String> attendeeEmails;
   private String organizerEmail;
   private String recurrence;
+  private String timezone; 
 
   public Meeting(String eventID, String clubID, String summary, String location,
       String description, String startDateTime, String endDateTime, 
-      List<String> attendeeEmails, String organizerEmail, String recurrence) {
+      List<String> attendeeEmails, String organizerEmail, String recurrence, 
+      String timezone) {
     this.eventID = eventID;
     this.clubID = clubID;
     this.summary = summary;
@@ -28,11 +30,12 @@ public class Meeting extends BaseEntity {
     this.attendeeEmails = attendeeEmails;
     this.organizerEmail = organizerEmail;
     this.recurrence = recurrence;
+    this.timezone = timezone;
   }
 
   public Meeting(String eventID, String clubID, String summary, String startDateTime, 
       String endDateTime, List<String> attendeeEmails, String organizerEmail) {
-    this(eventID, clubID, summary, "", "", startDateTime, endDateTime, attendeeEmails, organizerEmail, "");    
+    this(eventID, clubID, summary, "", "", startDateTime, endDateTime, attendeeEmails, organizerEmail, "", "");    
   }
 
   public Meeting() {
@@ -109,5 +112,13 @@ public class Meeting extends BaseEntity {
 
   public void setRecurrence(String recurrence) {
     this.recurrence = recurrence;
+  }
+
+  public String getTimezone() {
+    return timezone;
+  }
+
+  public void setTimezone(String timezone) {
+    this.timezone = timezone;
   }
 }

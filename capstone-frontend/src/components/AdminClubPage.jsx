@@ -80,8 +80,10 @@ class AdminClubPage extends Component {
   }
 
   handleMeetingPost = (e) => {
+    const history = this.props.history;
     e.preventDefault();
     const start = moment(new Date(document.getElementById('start-datetime').value));
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     let rrule = '';
     if (document.getElementById('None').checked) {
       rrule = '';
@@ -111,9 +113,10 @@ class AdminClubPage extends Component {
       attendeeEmails: this.state.members.map(m => m.email),
       organizerEmail: JSON.parse(window.localStorage.getItem('profileObj')).email,
       recurrence: rrule,
+      timezone: timezone,
     };
     fetch('/api/meetings', { method: 'post', body: JSON.stringify(meeting) })
-      .then(response => response.json())
+      .then(() => history.push(`/clubpage/${meeting.clubID}`))      
       .catch(e => console.log(e));
   }
 
@@ -171,10 +174,10 @@ class AdminClubPage extends Component {
             </div>
           </Form.Group>
           <Form.Group> 
-             <Form.Label as="legend" column sm={2}>
+             <Form.Label as="legend" column xs={12}>
                 Recurrence
               </Form.Label>
-              <Col sm={10}>
+              <Col xs={12}>
                 <Form.Check
                   type="radio"
                   label="None"
