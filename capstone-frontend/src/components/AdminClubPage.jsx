@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Form, Row } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { UserCard } from './UserCard';
 import TextField from '@material-ui/core/TextField';
+import moment from 'moment';
 import '../styles/Groups.css';
 
 
@@ -81,7 +82,6 @@ class AdminClubPage extends Component {
   handleMeetingPost = (e) => {
     e.preventDefault();
     const start = moment(new Date(document.getElementById('start-datetime').value));
-    const end = moment(new Date(document.getElementById('end-datetime').value));
     let rrule = '';
     if (document.getElementById('None').checked) {
       rrule = '';
@@ -106,8 +106,8 @@ class AdminClubPage extends Component {
       summary: e.target.summary.value,
       location: e.target.location.value,
       description: e.target.description.value,
-      startDateTime: new Date(document.getElementById('start-datetime')).value.getTime(),
-      endDateTime: new Date(document.getElementById('end-datetime')).value.getTime(),
+      startDateTime: new Date(document.getElementById('start-datetime').value).getTime(),
+      endDateTime: new Date(document.getElementById('end-datetime').value).getTime(),
       attendeeEmails: this.state.members.map(m => m.email),
       organizerEmail: JSON.parse(window.localStorage.getItem('profileObj')).email,
       recurrence: rrule,
@@ -168,7 +168,10 @@ class AdminClubPage extends Component {
                   shrink: true,
                 }}
               />
-              <Form.Label as="legend" column sm={2}>
+            </div>
+          </Form.Group>
+          <Form.Group> 
+             <Form.Label as="legend" column sm={2}>
                 Recurrence
               </Form.Label>
               <Col sm={10}>
@@ -203,7 +206,6 @@ class AdminClubPage extends Component {
                   id="Yearly"
                 />
               </Col>
-            </div>
           </Form.Group>
           <Button variant='primary' type='submit'> Submit </Button>
         </Form>
