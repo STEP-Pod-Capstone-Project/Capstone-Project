@@ -40,6 +40,10 @@
   font-weight: 500;
 }
 
+.block {
+  display: block;
+}
+
 .comment-card {
   display: flex;
   align-items: center;
@@ -102,7 +106,7 @@
 
 .groups-list-container {
   justify-content: center;
-  margin: 40px 0px;
+  margin: 20px 0px;
 }
 
 .group-container .footer {

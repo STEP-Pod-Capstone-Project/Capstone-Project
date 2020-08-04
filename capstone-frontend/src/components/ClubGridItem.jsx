@@ -17,12 +17,9 @@ class ClubGridItem extends Component {
       id: this.props.club.id,
       add_requestIDs: window.localStorage.getItem("userID")
     };
-    fetch(`/api/clubs`, {method: "put", body: JSON.stringify(putBody)})
-        .then(this.setState({requested: true}))
-        .catch(function(err) {
-          //TODO #61: Centralize error output
-          console.log(err);
-        });
+    fetch(`/api/clubs`, { method: "put", body: JSON.stringify(putBody) })
+      .then(this.setState({ requested: true }))
+      .catch(e => console.log(e));
   }
 
   unRequestJoin = () => {
@@ -30,12 +27,9 @@ class ClubGridItem extends Component {
       "id": this.props.club.id,
       "remove_requestIDs": window.localStorage.getItem("userID")
     };
-    fetch(`/api/clubs`, {method: "put", body: JSON.stringify(putBody)})
-        .then(this.setState({requested: false}))
-        .catch(function(err) {
-          //TODO #61: Centralize error output
-          console.log(err);
-        });
+    fetch(`/api/clubs`, { method: "put", body: JSON.stringify(putBody)})
+        .then(this.setState({ requested: false }))
+        .catch(e => console.log(e));
   }
 
   render() {
