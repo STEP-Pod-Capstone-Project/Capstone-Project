@@ -95,13 +95,17 @@ public class MeetingServlet extends HttpServlet {
     if (keySet.contains("startDateTime")) {
       long startDateTime = jsonObject.get("startDateTime").getAsLong();
       DateTime dateTime = new DateTime(startDateTime);
-      EventDateTime start = new EventDateTime().setDateTime(dateTime);
+      EventDateTime start = new EventDateTime()
+                              .setDateTime(dateTime)
+                              .setTimeZone(jsonObject.get("timezone").getAsString());
       event.setStart(start);
     }
     if (keySet.contains("endDateTime")) {
       long endDateTime = jsonObject.get("endDateTime").getAsLong();
       DateTime dateTime = new DateTime(endDateTime);
-      EventDateTime end = new EventDateTime().setDateTime(dateTime);
+      EventDateTime end = new EventDateTime()
+                          .setDateTime(dateTime)
+                          .setTimeZone(jsonObject.get("timezone").getAsString());
       event.setEnd(end);
     }
     if (keySet.contains("attendeeEmails")) {
@@ -122,6 +126,10 @@ public class MeetingServlet extends HttpServlet {
       organizer.setEmail(jsonObject.get("organizerEmail").getAsString());
     }
     event.setOrganizer(organizer);
+    if (keySet.contains("recurrence") && jsonObject.get("recurrence").getAsString().length() > 0) {
+      String[] recurrence = new String[] {jsonObject.get("recurrence").getAsString()};
+      event.setRecurrence(Arrays.asList(recurrence));
+    }
     String calendarId = "primary";
     event = service.events().insert(calendarId, event).execute();
     String eventID = event.getId();
