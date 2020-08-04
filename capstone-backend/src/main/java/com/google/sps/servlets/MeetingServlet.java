@@ -53,6 +53,21 @@ public class MeetingServlet extends HttpServlet {
                   .setFromTokenResponse(tokenResponse);
   }
 
+  public Calendar createCalendar(JsonObject jsonObject) {
+    TokenResponse token = new TokenResponse();
+    JsonObject tokenJson = jsonObject.get("token").getAsJsonObject();
+    token.setAccessToken(tokenJson.get("access_token").getAsString());
+    token.setTokenType(tokenJson.get("token_type").getAsString());
+    token.setScope(tokenJson.get("scope").getAsString());
+    token.setExpiresInSeconds(tokenJson.get("expires_in").getAsLong());
+    Credential credentials = createCredential(new NetHttpTransport(), new JacksonFactory(), token);
+    Calendar service = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credentials)
+        .setApplicationName("bookbook").build();
+    return service;
+  }
+
+
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<Meeting> retrievedMeetings = Utility.get(meetings, request, response, new GenericClass(Meeting.class));
@@ -65,24 +80,9 @@ public class MeetingServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    List<String> requiredFields = new ArrayList<String>(Arrays.asList("clubID", "startDateTime", "endDateTime"));
-    Meeting createdMeeting = (Meeting) Utility.postHelper(meetings, jsonObject, response, new GenericClass(Meeting.class),
-        requiredFields);
-    if (createdMeeting != null) {
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(createdMeeting));
-    }
-    TokenResponse token = new TokenResponse();
-    JsonObject tokenJson = jsonObject.get("token").getAsJsonObject();
-    token.setAccessToken(tokenJson.get("access_token").getAsString());
-    token.setTokenType(tokenJson.get("token_type").getAsString());
-    token.setScope(tokenJson.get("scope").getAsString());
-    token.setExpiresInSeconds(tokenJson.get("expires_in").getAsLong());
-    Credential credentials = createCredential(new NetHttpTransport(), new JacksonFactory(), token);
-    Calendar service = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credentials)
-        .setApplicationName("bookbook").build();
-    Set<String> keySet = jsonObject.keySet();
     Event event = new Event();
+    Calendar service = createCalendar(jsonObject);
+    Set<String> keySet = jsonObject.keySet();
     if (keySet.contains("summary")) {
       event.setSummary(jsonObject.get("summary").getAsString());
     }
@@ -124,6 +124,15 @@ public class MeetingServlet extends HttpServlet {
     event.setOrganizer(organizer);
     String calendarId = "primary";
     event = service.events().insert(calendarId, event).execute();
+    String eventID = event.getId();
+    jsonObject.addProperty("eventID", eventID);
+    List<String> requiredFields = new ArrayList<String>(Arrays.asList("clubID", "startDateTime", "endDateTime"));
+    Meeting createdMeeting = (Meeting) Utility.postHelper(meetings, jsonObject, response, new GenericClass(Meeting.class),
+        requiredFields);
+    if (createdMeeting != null) {
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(createdMeeting));
+    }
   }
 
   @Override
@@ -138,5 +147,14 @@ public class MeetingServlet extends HttpServlet {
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Utility.delete(meetings, request, response);
+    JsonObject deleteBody = Utility.createRequestBodyJson(request);
+    Calendar service = createCalendar(deleteBody);
+    if (deleteBody.keySet().contains("eventID")) {
+      service.events().delete("primary", deleteBody.get("eventID").getAsString()).execute();
+    }
+    else {
+      System.err.println("Error: No eventID supplied");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+    }
   }
 }

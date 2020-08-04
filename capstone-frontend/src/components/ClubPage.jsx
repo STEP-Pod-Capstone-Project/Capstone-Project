@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Form, Row, Col, Spinner } from 'react-bootstrap';
+import { Button, CardDeck, Col, Form, Row, Spinner } from 'react-bootstrap';
 import { SearchBookModal } from './SearchBookModal';
 import { SearchUserModal } from './SearchUserModal'
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
 import { UserCard } from './UserCard';
+import { MeetingCard } from './MeetingCard';
 import TextField from '@material-ui/core/TextField';
 
 import '../styles/Groups.css';
@@ -20,6 +21,7 @@ class ClubPage extends Component {
       assignments: [],
       owner: {},
       members: [],
+      meetings: [],
       fetchingData: false, // Spinner
     }
   }
@@ -53,23 +55,29 @@ class ClubPage extends Component {
     if (club.gbookID.length > 0) {
       fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
     }
     fetch(`/api/assignments?clubID=${club.id}`)
       .then(response => response.json()).then(assignmentJson => this.setState({ assignments: assignmentJson }))
-      .catch(e => console.log(e));
+      .catch(e => console.error(e));
 
     fetch(`/api/user?id=${club.ownerID}`)
       .then(response => response.json()).then(ownerJson => this.setState({ owner: ownerJson }))
-      .catch(e => console.log(e));
+      .catch(e => console.error(e));
 
     this.setState({ members: [] });
     for (let i = 0; i < club.memberIDs.length; i++) {
       fetch(`/api/user?id=${club.memberIDs[i]}`)
         .then(response => response.json())
         .then(memberJson => memberJson && this.setState({ members: [...this.state.members, memberJson] }))
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
     }
+
+    fetch(`/api/meetings?clubID=${club.id}`)
+      .then(response => response.json())
+      .then(meetings => this.setState({ meetings }))
+      .catch(e => console.error(e));
+
     this.setState({ fetchData: false });
   }
 
@@ -93,7 +101,7 @@ class ClubPage extends Component {
         assignments.push(assignmentJson);
         this.setState({ assignments });
       })
-      .catch(e => console.log(e));
+      .catch(e => console.error(e));
   }
 
   handleBookChange = async (gbookID) => {
@@ -102,7 +110,7 @@ class ClubPage extends Component {
     this.setState({ club });
     await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
       .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
-      .catch(e => console.log(e));
+      .catch(e => console.error(e));
   }
 
   leaveClub = () => {
@@ -114,7 +122,17 @@ class ClubPage extends Component {
     fetch('/api/clubs', { method: 'put', body: JSON.stringify(removeMember)})
         .then(this.removeMember(userID))
         .then(this.props.history.push('/'))
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
+  }
+
+  deleteMeeting = (meetingID) => {
+    const meetings = [...this.state.meetings];
+    const meetingIDsArray = this.state.meetings.map(m => m.id);
+    const index = meetingIDsArray.indexOf(meetingID);
+    if (index > -1) {
+      meetings.splice(index, 1);
+    }
+    this.setState({ meetings });
   }
 
   componentDidMount() {
@@ -197,7 +215,11 @@ class ClubPage extends Component {
               <hr className='light-gray-border mx-2 my-2' />
 
               <div className='text-center'>
-                <div className='description'> {this.state.club.description} </div>
+                <span className='description block'> {this.state.club.description} </span>
+                <span className='block'> Upcoming Meetings: </span>
+                  <CardDeck className='groups-list-container'>
+                    {this.state.meetings.map(m => <MeetingCard meeting={m} deleteMeeting={this.deleteMeeting} />)}
+                  </CardDeck>
                 {bookTile}
                 {assignments}
                 {isOwner ?
@@ -223,13 +245,14 @@ class ClubPage extends Component {
                   <Button variant='danger' onClick={this.leaveClub}>
                     Leave Club
                   </Button>}
+                <span className='block'> Club Members: </span>
                 <Row className='justify-content-center'>
                   {members}
                 </Row>
-                <div> Club Owner: </div>
-                  <Row className='align-items-center justify-content-center'>
-                    {owner}
-                  </Row>
+                <span className='block'> Club Owner: </span>
+                <Row className='align-items-center justify-content-center'>
+                  {owner}
+                </Row>
               </div>
             </>
           )

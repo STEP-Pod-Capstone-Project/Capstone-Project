@@ -54,7 +54,7 @@ class AdminClubPage extends Component {
     }
 
     fetch('/api/clubs', { method: 'put', body: JSON.stringify(data) })
-      .then(history.push(`/clubpage/${data.id}`))
+      .then(() => history.push(`/clubpage/${data.id}`))
       .catch(e => console.log(e));
   }
 
@@ -65,13 +65,12 @@ class AdminClubPage extends Component {
     }
     const history = this.props.history;
     fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: 'delete' })
-      .then(function () {
-        history.push('/myclubs');
-      })
+      .then(() => history.push('/myclubs'))
       .catch(e => console.log(e));
   }
 
   handleMeetingPost = (e) => {
+    const history = this.props.history;
     e.preventDefault();
     const meeting = {
       token: JSON.parse(window.localStorage.getItem('token')),
@@ -83,10 +82,9 @@ class AdminClubPage extends Component {
       endDateTime: new Date(document.getElementById('end-datetime').value).getTime(), 
       attendeeEmails: this.state.members.map(m => m.email),
       organizerEmail: JSON.parse(window.localStorage.getItem('profileObj')).email, 
-    }
+    };
     fetch('/api/meetings', {method: 'post', body: JSON.stringify(meeting)})
-        .then(response => response.json())
-        .then(json => console.log(json))
+        .then(() => history.push(`/clubpage/${meeting.clubID}`))
         .catch(e => console.log(e));
   }
 

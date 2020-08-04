@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Meeting extends BaseEntity {
+  private final String eventID;
   private final String clubID;
   private String summary;
   private String location;
@@ -13,9 +14,10 @@ public class Meeting extends BaseEntity {
   private List<String> attendeeEmails;
   private String organizerEmail;
 
-  public Meeting(String clubID, String summary, String location, String description, 
-      String startDateTime, String endDateTime, List<String> attendeeEmails, 
-      String organizerEmail) {
+  public Meeting(String eventID, String clubID, String summary, String location,
+      String description, String startDateTime, String endDateTime, 
+      List<String> attendeeEmails, String organizerEmail) {
+    this.eventID = eventID;
     this.clubID = clubID;
     this.summary = summary;
     this.location = location;
@@ -26,13 +28,17 @@ public class Meeting extends BaseEntity {
     this.organizerEmail = organizerEmail;
   }
 
-  public Meeting(String clubID, String summary, String startDateTime, String endDateTime, 
-      List<String> attendeeEmails, String organizerEmail) {
-    this(clubID, summary, "", "", startDateTime, endDateTime, attendeeEmails, organizerEmail);    
+  public Meeting(String eventID, String clubID, String summary, String startDateTime, 
+      String endDateTime, List<String> attendeeEmails, String organizerEmail) {
+    this(eventID, clubID, summary, "", "", startDateTime, endDateTime, attendeeEmails, organizerEmail);    
   }
 
   public Meeting() {
-    this("", "", "", "", new ArrayList<>(), "");
+    this("", "", "", "", "", new ArrayList<>(), "");
+  }
+
+  public String getEventID() {
+    return eventID;
   }
 
   public String getClubID() {

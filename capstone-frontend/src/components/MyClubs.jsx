@@ -19,7 +19,6 @@ class MyClubs extends Component {
 
     this.setState({ fetchingClubs: true });
 
-
     let memberClubs = await fetch(`/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
       .then(response => response.json())
       .catch(e => console.log(e));
