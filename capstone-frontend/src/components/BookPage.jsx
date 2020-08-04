@@ -53,7 +53,7 @@ export class BookPage extends Component {
                         updateBookLists={this.props.updateBookLists} book={book} />
                     </Row>
                     <Row>
-                      <a className='btn btn-primary btn-margin center-horizontal'
+                      <a className='w-75 btn btn-primary btn-margin center-horizontal'
                         href={book.webReaderLink} target='_blank'
                         rel='noopener noreferrer'>
                         Web Reader

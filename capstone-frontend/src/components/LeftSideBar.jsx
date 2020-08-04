@@ -37,7 +37,7 @@ import { Row, Col } from 'react-bootstrap'
 import { Home } from './Home';
 import { Logout } from './Logout';
 import { Browse } from './Browse';
-import MyBooks from './MyBooks';
+import { MyBooks } from './MyBooks';
 import MyClubs from './MyClubs';
 import { BookPage } from './BookPage';
 import ListPage from './ListPage'
@@ -352,7 +352,7 @@ export const LeftSideBar = withRouter((props) => {
             </ListItem>
           </Link>
 
-          <Link to="/myreads" className="remove-link-style" id="mybooks-link">
+          <Link to="/mybooks" className="remove-link-style" id="mybooks-link">
             <ListItem button >
 
               <ListItemIcon>
@@ -455,7 +455,9 @@ export const LeftSideBar = withRouter((props) => {
                 updateBookLists={props.updateBookLists}
                 searchQuery={pageProps.match.params.query} />
             )} />
-            <Route path='/mybooks' component={MyBooks} />
+            <Route path='/mybooks' render={() => (
+              <MyBooks bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
+            )} />
             <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' render={(pageProps) => (
