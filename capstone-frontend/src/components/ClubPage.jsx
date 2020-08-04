@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, CardDeck, Form, Row } from 'react-bootstrap';
-import { SearchBookModal } from './SearchBookModal'
+import { Button, CardDeck, Col, Form, Row, Spinner } from 'react-bootstrap';
+import { SearchBookModal } from './SearchBookModal';
+import { SearchUserModal } from './SearchUserModal'
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
 import { UserCard } from './UserCard';
 import MeetingCard from './MeetingCard';
-
 import TextField from '@material-ui/core/TextField';
-
 
 import '../styles/Groups.css';
 
@@ -23,6 +22,7 @@ class ClubPage extends Component {
       owner: {},
       members: [],
       meetings: [],
+      fetchingData: false, // Spinner
     }
   }
 
@@ -37,19 +37,26 @@ class ClubPage extends Component {
   }
 
   fetchData = async () => {
+    this.setState({ fetchData: true });
+
     await fetch(`/api/clubs?id=${this.props.id}`)
       .then(response => response.json()).then(clubJson => this.setState({ club: clubJson[0] }))
       .catch(function (err) {
         //TODO #61: Centralize error output
-        alert(err);
+        console.log(err);
       });
+
+    if (!this.state.club) {
+      this.setState({ fetchData: false });
+      return;
+    }
 
     if (this.state.club.gbookID.length > 0) {
       await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
         .catch(function (err) {
           //TODO #61: Centralize error output
-          alert(err);
+          console.log(err);
         });
     }
 
@@ -57,14 +64,14 @@ class ClubPage extends Component {
       .then(response => response.json()).then(assignmentJson => this.setState({ assignments: assignmentJson }))
       .catch(function (err) {
         //TODO #61: Centralize error output
-        alert(err);
+        console.log(err);
       });
 
     await fetch(`/api/user?id=${this.state.club.ownerID}`)
       .then(response => response.json()).then(ownerJson => this.setState({ owner: ownerJson }))
       .catch(function (err) {
         //TODO #61: Centralize error output
-        alert(err);
+        console.log(err);
       });
 
     this.setState({ members: [] });
@@ -74,7 +81,7 @@ class ClubPage extends Component {
         .then(memberJson => memberJson && this.setState({ members: [...this.state.members, memberJson] }))
         .catch(function (err) {
           //TODO #61: Centralize error output
-          alert(err);
+          console.log(err);
         });
     }
 
@@ -82,6 +89,7 @@ class ClubPage extends Component {
       .then(response => response.json()).then(meetings => this.setState({ meetings }))
       .catch(e => console.log(e));
     
+    this.setState({ fetchData: false });
   }
 
   handleAssignmentPost = (e) => {
@@ -90,12 +98,12 @@ class ClubPage extends Component {
       alert('Assignment creation failed. You do not own this club.');
       return;
     }
-    const dueDate = document.getElementById("due-date").value;
+    const dueDate = document.getElementById('due-date').value;
     let data = {
-      'clubID': this.state.club.id,
-      'text': e.target[0].value,
-      'whenCreated': (new Date()).toUTCString(), 
-      'whenDue': dueDate
+      clubID: this.state.club.id,
+      text: e.target[0].value,
+      whenCreated: (new Date()).toUTCString(),
+      whenDue: dueDate,
     };
     fetch(`/api/assignments`, { method: 'post', body: JSON.stringify(data) })
       .then(response => response.json())
@@ -106,7 +114,7 @@ class ClubPage extends Component {
       })
       .catch(function (err) {
         //TODO #61: Centralize error output
-        alert(err);
+        console.log(err);
       });
   }
 
@@ -118,7 +126,7 @@ class ClubPage extends Component {
       .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
       .catch(function (err) {
         //TODO #61: Centralize error output
-        alert(err);
+        console.log(err);
       });
   }
 
@@ -143,59 +151,95 @@ class ClubPage extends Component {
     const members = this.state.members.length && this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />);
     const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
     return (
-      <div className='container text-center'>
-        {isOwner &&
-          <Link to={`/adminclubpage/${this.state.club.id}`}>
-            <Button className='admin-button' variant='secondary'>
-              Admin page
-            </Button>
-          </Link>
+      <div>
+        {this.state.fetchData ?
+          (<div className='text-center mt-4'>
+            <Spinner variant='primary' animation='border' role='status' />
+          </div>)
+          :
+          (
+            <>
+              <Row>
+                <Col>
+                  <h2 className="ml-2">{this.state.club.name}</h2>
+                  {isOwner ?
+                    <h5 className="mb-1 ml-2 text-muted">Owner</h5>
+                    :
+                    <h5 className="mb-1 ml-2 text-muted">Member</h5>}
+                </Col>
+                {isOwner ?
+                  <Col className='m-auto p-0 mr-3'>
+                    <div id='modal-buttons' className='mx-2'>
+                      <Link to={`/adminclubpage/${this.state.club.id}`}>
+                        <Button className='admin-button my-auto' variant='secondary'>
+                          Admin page
+                        </Button>
+                      </Link>
+                      <SearchUserModal
+                        text='Search/View Members'
+                        checkoutText='Current Members'
+                        btnStyle="btn btn-primary mx-3 my-aut" />
+                      <SearchBookModal
+                        objectId={this.props.id}
+                        update={this.handleBookChange}
+                        text='Change the Club&quot;s Book'
+                        putURL='/api/clubs'
+                        type='club'
+                        btnStyle='btn btn-primary my-auto mr-2' />
+                    </div>
+                  </Col>
+                  :
+                  <Col className='m-auto p-0 mr-3'>
+                    <div id='modal-buttons' className='mx-2'>
+                      <SearchUserModal
+                        userType='viewer'
+                        text='View Members'
+                        checkoutText='Current Members'
+                        btnStyle='btn btn-primary mx-3 my-aut' />
+                    </div>
+                  </Col>}
+              </Row>
+              <hr className='light-gray-border mx-2 my-2' />
+
+              <div className='text-center'>
+                <div className='description'> {this.state.club.description} </div>
+                <div> Upcoming Meetings: </div>
+                  <CardDeck className='groups-list-container'>
+                    {this.state.meetings.map(m => <MeetingCard meeting={m} deleteMeeting={this.deleteMeeting} />)}
+                  </CardDeck>
+                {bookTile}
+                {assignments}
+                {isOwner &&
+                  <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
+                    <Form.Group controlId='formPostAssignment'>
+                      <Form.Label> Post a new assignment! </Form.Label>
+                      <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
+                    </Form.Group>
+                    <div>
+                      <TextField
+                        id='due-date'
+                        label='Due Date'
+                        type='datetime-local'
+                        defaultValue={new Date().toString()}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </div>
+                    <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
+                  </Form>}
+                <div> Club Members: </div>
+                <Row className='justify-content-center'>
+                  {members}
+                </Row>
+                <div> Club Owner: </div>
+                <Row className='align-items-center justify-content-center'>
+                  {owner}
+                </Row>
+              </div>
+            </>
+          )
         }
-        <div className='title'> {this.state.club.name} </div>
-        <div className='description'> {this.state.club.description} </div>
-        <div> Upcoming Meetings: </div>
-        <CardDeck className='groups-list-container'>
-          {this.state.meetings.map(m => <MeetingCard meeting={m} deleteMeeting={this.deleteMeeting} />)}
-        </CardDeck>
-        {bookTile}
-        {isOwner &&
-          <SearchBookModal
-            objectId={this.props.id}
-            update={this.handleBookChange}
-            text='Change the Club&quot;s Book'
-            putURL='/api/clubs'
-            type='club'
-            btnStyle='btn btn-primary mb-4 mt-4 mr-2' />
-        }
-        {assignments}
-        {isOwner &&
-          <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
-            <Form.Group controlId='formPostAssignment'>
-              <Form.Label> Post a new assignment! </Form.Label>
-              <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
-            </Form.Group>
-            <div>
-              <TextField
-                id="due-date"
-                label="Due Date"
-                type="datetime-local"
-                defaultValue={new Date().toString()}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </div>
-            <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
-          </Form>
-        }
-        <div> Club Members: </div>
-        <Row className='justify-content-center'>
-          {members}
-        </Row>
-        <div> Club Owner: </div>
-        <Row className='align-items-center justify-content-center'>
-          {owner}
-        </Row>
       </div>
     );
   }
