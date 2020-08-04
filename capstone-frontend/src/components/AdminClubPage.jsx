@@ -108,7 +108,7 @@ class AdminClubPage extends Component {
       timezone: timezone,
     };
     fetch('/api/meetings', { method: 'post', body: JSON.stringify(meeting) })
-      .then(() => history.push(`/clubpage/${meeting.clubID}`))      
+      .then(() => history.push(`/clubpage/${meeting.clubID}`))
       .catch(e => console.error(e));
   }
 
@@ -135,6 +135,7 @@ class AdminClubPage extends Component {
 
         <div className='description'> Create a Meeting </div>
         <Form onSubmit={this.handleMeetingPost} id='meeting-post-form'>
+          {/* TODO #139: use a controlled form instead*/}
           <Form.Group controlId='formPostMeeting'>
             <Form.Label> Meeting Name </Form.Label>
             <Form.Control name='summary' type='text' placeholder='Enter meeting name here...' />

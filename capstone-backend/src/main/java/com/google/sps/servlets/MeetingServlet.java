@@ -105,7 +105,7 @@ public class MeetingServlet extends HttpServlet {
       DateTime dateTime = new DateTime(endDateTime);
       EventDateTime end = new EventDateTime()
                           .setDateTime(dateTime)
-                         .setTimeZone(jsonObject.get("timezone").getAsString());
+                          .setTimeZone(jsonObject.get("timezone").getAsString());
       event.setEnd(end);
     }
     if (keySet.contains("attendeeEmails")) {
