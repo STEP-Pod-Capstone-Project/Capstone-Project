@@ -75,6 +75,7 @@ class AdminClubPage extends Component {
   }
 
   handleMeetingPost = (e) => {
+    const history = this.props.history;
     e.preventDefault();
     const meeting = {
       token: JSON.parse(window.localStorage.getItem('token')),
