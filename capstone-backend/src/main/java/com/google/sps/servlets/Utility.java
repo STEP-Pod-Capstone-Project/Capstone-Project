@@ -290,10 +290,6 @@ public class Utility {
    */
   public static <T extends BaseEntity> T put(CollectionReference collectionReference, HttpServletRequest request, 
       HttpServletResponse response, GenericClass<T> genericClass) throws IOException {
-        response.setHeader("Access-Control-Allow-Methods", "GET");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin",
-        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     String id = "";
     try {

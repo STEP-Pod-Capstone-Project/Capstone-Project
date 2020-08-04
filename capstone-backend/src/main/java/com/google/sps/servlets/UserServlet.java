@@ -37,7 +37,6 @@ public class UserServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
     try {
 
       JsonObject googleUserTokenObjJSON = Utility.createRequestBodyJson(request);

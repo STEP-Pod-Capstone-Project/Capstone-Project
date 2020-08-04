@@ -75,20 +75,21 @@ export class Home extends Component {
 
   fetchClubBook = (clubs) => {
 
-    clubs.map(async club => {
+    return Promise.all(clubs.map(club => {
       if (club.gbookID.length > 0) {
-        const book = await fetch(`/api/search?gbookId=${club.gbookID}`)
+        return fetch(`/api/search?gbookId=${club.gbookID}`)
           .then(response => response.json())
+          .then(book => {
+            club.bookTitle = book[0].title;
+            return club;
+          })
           .catch(err => console.log(err));
-
-        club.bookTitle = book[0].title;
       }
       else {
         club.bookTitle = "Nothing Yet";
+        return club;
       }
-    });
-
-    return clubs;
+    }));
   }
 
   fetchBookLists = async (type) => {
@@ -122,15 +123,14 @@ export class Home extends Component {
 
     let bookListsMap = new Map();
 
-    await Promise.all(bookLists.map(async bookList => {
+    await Promise.all(bookLists.map(bookList => {
 
       if (bookList.gbookIDs.length === 0) {
         bookListsMap.set(bookList, [])
         return;
       }
 
-      let gBooks = [];
-      let bookIDs;
+      let bookIDs = [];
 
       // Reduce to one element if on mobile
       if (this.state.screenWidth <= 425) {
@@ -145,15 +145,13 @@ export class Home extends Component {
         bookIDs = bookList.gbookIDs.slice(0, 5);
       }
 
-      await Promise.all(bookIDs.map(async gBookId => {
-
-        const gBook = await fetch(`/api/search?gbookId=${gBookId}`).then(resp => resp.json());
-
-        gBooks.push(gBook[0]);
-      }));
-
-      bookListsMap.set(bookList, gBooks);
-    }))
+      Promise.all(bookIDs.map(gBookId => {
+        return fetch(`/api/search?gbookId=${gBookId}`)
+          .then(resp => resp.json())
+          .then(gBook => gBook[0]);
+      }))
+        .then(gBooks => bookListsMap.set(bookList, gBooks));
+    }));
 
     if (type === 'own') {
       this.setState({ myBookListsMap: bookListsMap, fetchingBookListsOwned: false });
