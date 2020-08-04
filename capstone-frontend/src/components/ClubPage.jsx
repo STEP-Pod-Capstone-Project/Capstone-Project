@@ -190,7 +190,7 @@ class ClubPage extends Component {
                         updateInvites={this.updateInvites}
                         club={this.state.club}
                         text='Search/View Members'
-                        checkoutText='Current Members'
+                        checkoutText='Current/Pending Members'
                         btnStyle='btn btn-primary mx-3 my-auto' 
                         addBtnText='Invite to Club' />
                       <SearchBookModal

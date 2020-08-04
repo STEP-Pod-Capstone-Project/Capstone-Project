@@ -80,14 +80,29 @@ export class SearchUserModal extends Component {
 
     // TODO: Update ClubPage based on user input
 
-    if (this.props.club && this.props.type === 'clubs') {
-      if (this.props.club.memberIDs) {
+    if (this.props.club && this.props.type === 'clubs' && this.props.club.memberIDs) {
         if (this.props.club.memberIDs.length > 0) {
           this.fetchMembers();
           this.setState({ pendingInvites: this.props.club.inviteIDs });
+          this.fetchPendingInvites();          
         }
-      }
     }
+  }
+
+  fetchPendingInvites = async () => {
+
+    const invitedUsers = [];
+
+    await Promise.all(this.props.club.inviteIDs.map(async (inviteUserId) => {
+
+      const pendingMember = await fetch(`/api/user?id=${inviteUserId}`).then(resp => resp.json());
+
+      delete pendingMember.tokenObj;
+      invitedUsers.push(pendingMember);
+
+    }));
+
+    this.setState({ addedUsers: [...this.state.addedUsers, ...invitedUsers] });
   }
 
   removeDuplicatesArrayJsonId = (array) => {
@@ -156,7 +171,7 @@ export class SearchUserModal extends Component {
     // Owner cannot be a Member
     members = members.filter((member) => member.id !== this.props.club.ownerID);
 
-    this.setState({ addedUsers: members });
+    this.setState({ addedUsers: [...this.state.addedUsers, ...members] });
   }
 
   arrayContainsJSONId = (array, json) => {
