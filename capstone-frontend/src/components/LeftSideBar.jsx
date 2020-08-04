@@ -178,7 +178,7 @@ export const LeftSideBar = withRouter((props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  const [openList, setOpenList] = React.useState(true);
+  const [openList, setOpenList] = React.useState(false);
   const profileObj = JSON.parse(window.localStorage.getItem("profileObj")) || {};
 
   const handleDrawerOpen = () => {
