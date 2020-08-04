@@ -218,7 +218,7 @@ class ClubPage extends Component {
                       <SearchBookModal
                         objectId={this.props.id}
                         update={this.handleBookChange}
-                        text='Change the Club&quot;s Book'
+                        text='Change the Club&#39;s Book'
                         putURL='/api/clubs'
                         type='club'
                         btnStyle='btn btn-primary my-auto mr-2' />
