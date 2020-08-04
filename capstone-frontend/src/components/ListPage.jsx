@@ -94,6 +94,12 @@ class ListPage extends Component {
     }).catch(err => alert(err));
   }
 
+  updateBookListTitle = (title) => {
+    const bookList = Object.assign(this.state.bookList);
+    bookList.name = title;
+    this.setState({ bookList });
+  }
+
   render() {
     return this.state.loading
       ?
@@ -122,7 +128,9 @@ class ListPage extends Component {
                       bookListId={this.props.id}
                       updateListPage={this.updateListPage}
                       deleteBookList={this.props.deleteBookList}
-                      updateBookLists={this.props.updateBookLists} />
+                      updateBookLists={this.props.updateBookLists}
+                      updateBookListTitle={this.updateBookListTitle}
+                    />
                     <SearchUserModal
                       type='booklists'
                       bookList={this.state.bookList}
@@ -174,7 +182,9 @@ class ListPage extends Component {
                       bookListId={this.props.id}
                       updateListPage={this.updateListPage}
                       deleteBookList={this.props.deleteBookList}
-                      updateBookLists={this.props.updateBookLists} />
+                      updateBookLists={this.props.updateBookLists}
+                      updateBookListTitle={this.updateBookListTitle}
+                    />
                     <SearchUserModal
                       type='booklists'
                       bookList={this.state.bookList}
@@ -207,7 +217,7 @@ class ListPage extends Component {
             <div>
               {
                 this.state.gBooks.map(gBook =>
-                  <BookSearchTile book={gBook} location={'list'} key={gBook.id + this.state.bookList.id} />
+                  <BookSearchTile book={gBook} location={'list'} key={gBook.id + this.state.bookList.id} deleteBook={this.deleteBook} />
                 )
               }
             </div>

@@ -22,18 +22,25 @@ class UpdateList extends Component {
     }
   }
 
-  handleSubmit = () => {
+  handleSubmit = async (event) => {
+    event.preventDefault();
     const updatedBookListJson = {
       id: this.props.bookListId,
       name: this.state.newName,
     }
 
-    fetch(`/api/booklist`, {
+    // Update title in the ListPage
+    this.props.updateBookListTitle(this.state.newName);
+
+    await fetch(`/api/booklist`, {
       method: 'PUT',
       body: JSON.stringify(updatedBookListJson)
     })
 
-    this.props.updateListPage();
+    // Refresh the Booklists in the left side bar
+    this.props.updateBookLists();
+    // TODO #132:Add Error Messaging For Failure to Update Booklist
+    this.setState({ showModal: false, newName: '' });
   }
 
   handleDelete = () => {
@@ -63,7 +70,7 @@ class UpdateList extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form onSubmit={this.handleSubmit}>
               <Form.Group controlId='form-booklist-newname'>
                 <Form.Label>New Booklist Name</Form.Label>
                 <Form.Control type='text' placeholder='Enter Name' onChange={(event) => this.handleNameChange(event)} />
@@ -73,7 +80,6 @@ class UpdateList extends Component {
                   className='text-center'
                   variant='primary'
                   type='submit'
-                  onClick={() => this.handleSubmit()}
                   disabled={this.state.newName.length === 0}>
                   Update Booklist
                 </Button>

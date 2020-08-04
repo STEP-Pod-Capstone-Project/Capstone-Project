@@ -70,7 +70,7 @@ class BookSearchTile extends Component {
           {this.props.location === 'search' &&
             <BookListAddDropdown bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} book={this.props.book} />}
           {this.props.location === 'list' &&
-            <Button className='my-4 w-75' variant='danger' onClick={() => this.deleteBook(this.props.book.id)}>
+            <Button className='my-4 w-75' variant='danger' onClick={() => this.props.deleteBook(this.props.book.id)}>
               Remove Book from List
           </Button>}
           {this.state.hasRead ? 
