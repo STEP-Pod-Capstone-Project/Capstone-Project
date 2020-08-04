@@ -16,10 +16,7 @@ export class BookPage extends Component {
     fetch(`/api/search?gbookId=${this.props.bookId}`)
       .then(response => response.json())
       .then(books => this.setState({ book: books[0] }))
-      .catch(function (err) {
-        //TODO #61: Frontend error logging
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   componentDidMount() {
@@ -47,7 +44,7 @@ export class BookPage extends Component {
                       <a className='text-decoration-none text-body center-horizontal'
                         href={book.canonicalVolumeLink} target='_blank'
                         rel='noopener noreferrer'>
-                        <img className='book-img-lg' src={book.thumbnailLink}
+                        <img className='book-img-lg img-fluid' src={book.thumbnailLink}
                           alt={book.title} />
                       </a>
                     </Row>

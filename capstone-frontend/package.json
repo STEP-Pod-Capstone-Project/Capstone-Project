@@ -8,7 +8,6 @@
     "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
     "clsx": "^1.1.1",
     "moment": "^2.27.0",
     "react": "^16.13.1",
@@ -40,5 +39,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^7.21.6",
+    "@testing-library/user-event": "^7.2.1"
   }
 }

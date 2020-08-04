@@ -5,7 +5,7 @@ import moment from 'moment';
 import '../styles/Groups.css';
 
 
-class MeetingCard extends Component {
+export class MeetingCard extends Component {
   deleteMeeting = () => {
     const deleteToken = {
       token: JSON.parse(window.localStorage.getItem('token')),
@@ -18,8 +18,8 @@ class MeetingCard extends Component {
 
   render() {
     const isOwner = JSON.parse(window.localStorage.getItem('profileObj')).email === this.props.meeting.organizerEmail;
-    const meetingStart = moment(new Date(parseInt(this.props.meeting.startDateTime, 10))).format('MM/DD/YYYY, h:mm a');
-    const meetingEnd = moment(new Date(parseInt(this.props.meeting.endDateTime, 10))).format('MM/DD/YYYY, h:mm a');
+    const meetingStart = moment(new Date(parseInt(this.props.meeting.startDateTime, 10))).format('MMMM Do YYYY, h:mm a');
+    const meetingEnd = moment(new Date(parseInt(this.props.meeting.endDateTime, 10))).format('MMMM Do YYYY, h:mm a');
     return (
       <Col xs={12} md={6} sm={3}>
         <Card className='group-container'>
@@ -30,13 +30,11 @@ class MeetingCard extends Component {
             {isOwner && <Button variant='danger' onClick={this.deleteMeeting}> Delete Meeting </Button>}
           </Card.Body>
           <Card.Footer className='text-muted'> 
-            <div> Start: {meetingStart} </div> 
-            <div> End: {meetingEnd} </div> 
+            <span className='block'> Start: {meetingStart} </span> 
+            <span className='block'> End: {meetingEnd} </span> 
           </Card.Footer>
         </Card>
       </Col>
     );
   }
 }
-
-export default MeetingCard;

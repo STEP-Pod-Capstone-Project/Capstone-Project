@@ -3,57 +3,29 @@ package com.google.sps.servlets;
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.core.ApiFuture;
 import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.Events;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.EventReminder;
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.SetOptions;
-import com.google.cloud.firestore.WriteResult;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import com.google.sps.data.Meeting;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -75,9 +47,10 @@ public class MeetingServlet extends HttpServlet {
     gson = new Gson();
   }
 
-  public Credential createCredentialWithAccessTokenOnly(HttpTransport transport, JsonFactory jsonFactory,
+  private static Credential createCredential(HttpTransport transport, JsonFactory jsonFactory,
       TokenResponse tokenResponse) {
-    return new Credential(BearerToken.authorizationHeaderAccessMethod()).setFromTokenResponse(tokenResponse);
+    return new Credential(BearerToken.authorizationHeaderAccessMethod())
+                  .setFromTokenResponse(tokenResponse);
   }
 
   public Calendar createCalendar(JsonObject jsonObject) {
@@ -87,7 +60,7 @@ public class MeetingServlet extends HttpServlet {
     token.setTokenType(tokenJson.get("token_type").getAsString());
     token.setScope(tokenJson.get("scope").getAsString());
     token.setExpiresInSeconds(tokenJson.get("expires_in").getAsLong());
-    Credential credentials = createCredentialWithAccessTokenOnly(new NetHttpTransport(), new JacksonFactory(), token);
+    Credential credentials = createCredential(new NetHttpTransport(), new JacksonFactory(), token);
     Calendar service = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credentials)
         .setApplicationName("bookbook").build();
     return service;
@@ -139,7 +112,6 @@ public class MeetingServlet extends HttpServlet {
       JsonArray jsonArray = jsonObject.get("attendeeEmails").getAsJsonArray();
       Type listType = new TypeToken<List<String>>() {}.getType();
       List<String> attendeeEmails = gson.fromJson(jsonArray, listType);
-      for (String e : attendeeEmails) System.out.println(e);
       event
           .setAttendees(attendeeEmails.stream().map(e -> new EventAttendee().setEmail(e)).collect(Collectors.toList()));
     }
@@ -183,10 +155,10 @@ public class MeetingServlet extends HttpServlet {
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Utility.delete(meetings, request, response);
-    JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    Calendar service = createCalendar(jsonObject);
-    if (jsonObject.keySet().contains("eventID")) {
-      service.events().delete("primary", jsonObject.get("eventID").getAsString()).execute();
+    JsonObject deleteBody = Utility.createRequestBodyJson(request);
+    Calendar service = createCalendar(deleteBody);
+    if (deleteBody.keySet().contains("eventID")) {
+      service.events().delete("primary", deleteBody.get("eventID").getAsString()).execute();
     }
     else {
       System.err.println("Error: No eventID supplied");

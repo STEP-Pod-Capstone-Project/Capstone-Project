@@ -18,6 +18,7 @@ class AdminClubPage extends Component {
   }
 
   fetchData = () => {
+    // TODO(#131): Refactor fetch to setState once, instead multiple calls.
     fetch(`/api/clubs?id=${this.props.match.params.id}`)
       .then(response => response.json()).then(clubs => {
         const club = clubs[0];
@@ -31,8 +32,7 @@ class AdminClubPage extends Component {
         Promise.all(club.memberIDs.map(m => {
           return fetch(`/api/user?id=${m}`)
             .then(response => response.json())
-            .then(member => member && this.setState({ members: [...this.state.members, member] }))
-            .catch(e => console.log(e));
+            .then(member => member && this.setState({ members: [...this.state.members, member] }));
         }))
       })
       .catch(e => console.log(e));
@@ -56,11 +56,8 @@ class AdminClubPage extends Component {
     }
 
     fetch('/api/clubs', { method: 'put', body: JSON.stringify(data) })
-      .then(history.push(`/clubpage/${data.id}`))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .then(() => history.push(`/clubpage/${data.id}`))
+      .catch(e => console.log(e));
   }
 
   handleDelete = () => {
@@ -70,13 +67,8 @@ class AdminClubPage extends Component {
     }
     const history = this.props.history;
     fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: 'delete' })
-      .then(function () {
-        history.push('/myclubs');
-      })
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .then(() => history.push('/myclubs'))
+      .catch(e => console.log(e));
   }
 
   handleMeetingPost = (e) => {
@@ -117,7 +109,7 @@ class AdminClubPage extends Component {
     };
     fetch('/api/meetings', { method: 'post', body: JSON.stringify(meeting) })
       .then(() => history.push(`/clubpage/${meeting.clubID}`))      
-      .catch(e => console.log(e));
+      .catch(e => console.error(e));
   }
 
   componentDidMount() {

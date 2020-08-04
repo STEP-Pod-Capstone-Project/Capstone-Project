@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
+import { Button, Form, Spinner, Modal, Col, Row, Card } from 'react-bootstrap';
 
-import { Button, Form, Spinner, Modal, Col, Row, Card } from 'react-bootstrap'
-
-import '../styles/SearchUserModal.css'
-import '../styles/Modal.css'
+import '../styles/SearchUserModal.css';
+import '../styles/Modal.css';
 
 export class SearchUserModal extends Component {
 
@@ -16,14 +15,12 @@ export class SearchUserModal extends Component {
       typingTimeout: 0,
       searchTerm: '',
       searchResults: [],
-      addedUsersTracker: [],
       addedUsers: [],
-      addedFriends: [],
       resultsFound: false,
     }
   }
 
-  getBooks = async (searchTerm) => {
+  getUsers = async (searchTerm) => {
 
     this.setState({ fetchingUsers: true });
 
@@ -37,17 +34,25 @@ export class SearchUserModal extends Component {
     else {
       searchResults = await fetch(`/api/userSearch?searchTerm=${searchTerm}`)
         .then(response => response.json())
-        .catch(err => alert(err));
+        .catch(err => console.error(err));
 
       if (typeof searchResults === 'undefined') {
         searchResults = [];
       }
+      // Owner cannot be a Collaborator
+      else if (this.props.type === 'booklists' && this.props.bookList) {
+        searchResults = searchResults.filter(searchItem => searchItem.id !== window.localStorage.getItem('userID'))
+      }
+      // Owner cannot be a Member
+      else if (this.props.type === 'clubs' && this.props.club) {
+        searchResults = searchResults.filter(searchItem => searchItem.id !== window.localStorage.getItem('userID'))
+      }
 
       if (searchResults.length !== 0) {
-        this.setState({ searchResults, fetchingUsers: false, resultsFound: true }) // Guilty
+        this.setState({ searchResults, fetchingUsers: false, resultsFound: true }) // Not Guilty
       }
       else {
-        this.setState({ searchResults, fetchingUsers: false, resultsFound: false }) // Not Guilty
+        this.setState({ searchResults, fetchingUsers: false, resultsFound: false }) // Guilty
       }
     }
   }
@@ -64,60 +69,178 @@ export class SearchUserModal extends Component {
     this.setState({
       searchTerm: event.target.value,
       typingTimeout: setTimeout(async () => {
-        await this.getBooks(this.state.searchTerm)
+        await this.getUsers(this.state.searchTerm)
       }, 500)
     })
   }
 
-  addUserToAddedUsers = (user) => {
+  componentDidMount() {
+    this.fetchCollaborators();
 
-    if (!this.state.addedUsersTracker.includes(user)) {
-      this.setState({ addedUsersTracker: [...this.state.addedUsersTracker, user] })
+    // TODO: Update ClubPage based on user input
+
+    if (this.props.club && this.props.type === 'clubs' && this.props.club.memberIDs) {
+      if (this.props.club.memberIDs.length > 0) {
+        this.fetchMembers();
+      }
     }
-
-    // Rerender
-    this.setState({ addedUsers: [...this.state.addedUsers, user] })
   }
 
-  addUserToAddedFriends = (user) => {
-    if (!this.state.addedUsersTracker.includes(user)) {
-      this.setState({ addedUsersTracker: [...this.state.addedUsersTracker, user] })
+  removeDuplicatesArrayJsonId = (array) => {
+
+    const helperArrayIDs = [];
+    const newArray = [];
+
+    for (const item of array) {
+      if (!helperArrayIDs.includes(item.id)) {
+        helperArrayIDs.push(item.id);
+        newArray.push(item);
+      }
+    }
+
+    return newArray;
+  }
+
+  fetchCollaborators = async () => {
+
+    if (!(this.props.type === 'booklists' && this.props.bookList)) {
+      return;
+    }
+
+    else if (this.props.bookList.collaboratorsIDs.length === 0) {
+      return;
+    }
+
+
+    let collaborators = await Promise.all(this.props.bookList.collaboratorsIDs.map((collaboratorId) => {
+      return fetch(`/api/user?id=${collaboratorId}`).then(resp => resp.json()).then(collaborator => {
+        delete collaborator.tokenObj;
+        return collaborator;
+      });
+    }));
+
+    // Owner cannot be a Collaborator
+    collaborators = collaborators.filter((collaborator) => collaborator.id !== this.props.bookList.userID);
+
+    this.setState({ addedUsers: collaborators });
+  }
+
+  fetchMembers = async () => {
+
+    if (!(this.props.type === 'clubs' && this.props.club)) {
+      return;
+    }
+
+    else if (this.props.club.memberIDs.length === 0) {
+      return;
+    }
+
+    let members = await Promise.all(this.props.club.memberIDs.map((memberId) => {
+      return fetch(`/api/user?id=${memberId}`)
+        .then(resp => resp.json())
+        .then(member => {
+          delete member.tokenObj;
+          return member;
+        });
+    }));
+
+    // Owner cannot be a Member
+    members = members.filter((member) => member.id !== this.props.club.ownerID);
+
+    this.setState({ addedUsers: members });
+  }
+
+  arrayContainsJSONId = (array, json) => {
+
+    for (const item of array) {
+      if (item.id === json.id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  addUserToBookListCollaborators = (bookList, user) => {
+
+    const bookListUpdateJson = {
+      id: bookList.id,
+      add_collaboratorsIDs: user.id,
+    }
+
+    // Add Collaborator to Booklist in Firebase
+    fetch("/api/booklist", {
+      method: 'PUT',
+      body: JSON.stringify(bookListUpdateJson)
+    });
+  }
+
+  removeUserFromBookListCollaborators = (bookList, user) => {
+    const bookListUpdateJson = {
+      id: bookList.id,
+      remove_collaboratorsIDs: user.id,
+    }
+
+    // Remove Collaborator to Booklist in Firebase
+    fetch("/api/booklist", {
+      method: 'PUT',
+      body: JSON.stringify(bookListUpdateJson)
+    });
+  }
+
+  addUserToClubMembers = (club, user) => {
+
+    const clubUpdateJson = {
+      id: club.id,
+      add_memberIDs: user.id,
+    }
+
+    fetch("/api/clubs", {
+      method: 'PUT',
+      body: JSON.stringify(clubUpdateJson)
+    });
+  }
+
+  removeUserFromClubMembers = (club, user) => {
+    const clubUpdateJson = {
+      id: club.id,
+      remove_memberIDs: user.id,
+    }
+
+    fetch("/api/clubs", {
+      method: 'PUT',
+      body: JSON.stringify(clubUpdateJson)
+    });
+  }
+
+  addUserToAddedUsers = (user) => {
+
+    if (this.props.type === 'booklists' && this.props.bookList) {
+      this.addUserToBookListCollaborators(this.props.bookList, user);
+    }
+    else if (this.props.type === 'clubs' && this.props.club) {
+      this.addUserToClubMembers(this.props.club, user);
+      this.props.update(user, 'add');
     }
 
     // Rerender
-    this.setState({ addedFriends: [...this.state.addedFriends, user] })
+    this.setState({ addedUsers: [...this.state.addedUsers, user] });
   }
 
   removeUserFromAddedUsers = (user) => {
 
-    const indexAddedUsers = this.state.addedUsers.indexOf(user);
-    this.state.addedUsers.splice(indexAddedUsers, 1)
+    if (this.props.type === 'booklists' && this.props.bookList) {
+      this.removeUserFromBookListCollaborators(this.props.bookList, user);
+    }
 
-    if (!this.state.addedFriends.includes(user)) {
-      const indexAddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
-      this.state.addedUsersTracker.splice(indexAddedUsersTracker, 1)
+    if (this.props.type === 'clubs' && this.props.club) {
+      this.removeUserFromClubMembers(this.props.club, user);
+      this.props.update(user, 'remove');
     }
 
     // Rerender
-    this.setState({ addedUsers: this.state.addedUsers, addedUsersTracker: this.state.addedUsersTracker })
-
+    this.setState({ addedUsers: this.state.addedUsers.filter(addedUser => addedUser.id !== user.id) });
   }
-
-  removeUserFromAddedFriends = (user) => {
-
-    const index = this.state.addedFriends.indexOf(user);
-    this.state.addedFriends.splice(index, 1)
-
-    if (!this.state.addedUsers.includes(user)) {
-      const indexAddedUsersTracker = this.state.addedUsersTracker.indexOf(user);
-      this.state.addedUsersTracker.splice(indexAddedUsersTracker, 1)
-    }
-
-    // Rerender
-    this.setState({ addedFriends: this.state.addedFriends, addedUsersTracker: this.state.addedUsersTracker })
-  }
-
-
 
   render() {
     return (
@@ -132,7 +255,9 @@ export class SearchUserModal extends Component {
           dialogClassName="modal-style"
           size="lg"
           show={this.state.showModal}
-          onHide={() => this.setState({ showModal: false, searchTerm: '', searchResults: [], addedUsersTracker:[], addedUsers: [], addedFriends: [] })}
+          onHide={() => {
+            this.setState({ showModal: false, searchTerm: '', searchResults: [], });
+          }}
           aria-labelledby='search-users-modal'>
 
           <Modal.Header closeButton>
@@ -142,81 +267,74 @@ export class SearchUserModal extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group controlId='form-search-term'>
-                <Form.Control type='text' placeholder='Search' onChange={(event) => this.handleSearchTermChange(event)} />
-                {this.state.fetchingUsers &&
-                  <div className='text-center'>
-                    <Spinner
-                      as='span'
-                      animation='border'
-                      size='lg'
-                      role='status'
-                      aria-hidden='true'
-                      className='my-5'
-                    />
-                  </div>}
-              </Form.Group>
+              {this.props.userType !== 'viewer' &&
+                <>
+                  <Form.Group controlId='form-search-term'>
+                    <Form.Control type='text' placeholder='Search' onChange={(event) => this.handleSearchTermChange(event)} />
+                    {this.state.fetchingUsers &&
+                      <div className='text-center'>
+                        <Spinner
+                          as='span'
+                          animation='border'
+                          size='lg'
+                          role='status'
+                          aria-hidden='true'
+                          variant='primary'
+                          className='my-5'
+                        />
+                      </div>}
+                  </Form.Group>
 
-              {
-                this.state.searchResults &&
+                  {
+                    this.state.searchResults &&
 
-                <div>
+                    <div>
+                      {this.state.searchResults.length > 0 &&
+                        <h3 className='my-4 px-4'>Search Results</h3>}
 
-                  {this.state.searchResults.length > 0 &&
-                    <h3 className='my-4 px-4'>Search Results</h3>
+                      <Row className='px-3 text-center'>
+                        {(!this.state.resultsFound && this.state.searchTerm !== '') &&
+                          <h4 className='margin-auto py-4'>No Users Found</h4>}
+
+                        {this.state.searchResults.map(user =>
+
+                          <Col key={user.id} md={4} className="px-2 my-0">
+                            <Card >
+                              <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
+                              <Card.Body>
+                                <Card.Title>
+                                  {user.fullName}
+                                </Card.Title>
+                                <Card.Text id='email-text'>
+                                  {user.email}
+                                </Card.Text>
+
+
+                                {(this.arrayContainsJSONId(this.state.addedUsers, user))
+                                  ?
+                                  <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
+                                    {this.props.removeBtnText || 'Remove'}
+                                  </Button>
+                                  :
+                                  <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
+                                    {this.props.addBtnText || 'Add'}
+                                  </Button>}
+                              </Card.Body>
+                            </Card>
+                          </Col>
+                        )}
+                      </Row>
+                    </div>
                   }
-
-                  <Row className='px-3 text-center'>
-                    {(!this.state.resultsFound && this.state.searchTerm !== '') &&
-                      <h4 className='margin-auto py-4'>No Users Found</h4>
-                    }
-
-                    {this.state.searchResults.map(user =>
-
-                      <Col key={user.id} md={4} className="px-2 my-0">
-                        <Card >
-                          <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
-                          <Card.Body>
-                            <Card.Title>
-                              {user.fullName}
-                            </Card.Title>
-                            <Card.Text id='email-text'>
-                              {user.email}
-                            </Card.Text>
-
-
-                            {this.state.addedUsers.includes(user) ?
-                              <Button className="my-2" variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
-                                Remove
-                              </Button>
-                              :
-                              <Button className="my-2" onClick={() => this.addUserToAddedUsers(user)}>
-                                Add
-                              </Button>
-                            }
-                            <br />
-                            {this.state.addedFriends.includes(user) ?
-                              <Button variant='danger' className="mt-2 mb-1" onClick={() => this.removeUserFromAddedFriends(user)}>
-                                Remove Friend
-                              </Button>
-                              :
-                              <Button className="mt-2 mb-1" onClick={() => this.addUserToAddedFriends(user)}>
-                                Add Friend
-                              </Button>}
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    )}
-                  </Row>
-                </div>
+                </>
               }
 
-              {(this.state.addedUsersTracker.length !== 0) &&
+              {(this.state.addedUsers.length !== 0) &&
                 <div>
-                  <h2 className='text-center my-4 px-4'>Added Users</h2>
+                  <h2 className='text-center my-4 px-4 '> {this.props.checkoutText || 'Added Users'}</h2>
                   <Row className='text-center px-3'>
                     {
-                      this.state.addedUsersTracker.map(user =>
+                      this.state.addedUsers.map(user =>
                         <Col key={user.id} md={4} className="px-2 my-0">
                           <Card >
                             <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
@@ -228,17 +346,18 @@ export class SearchUserModal extends Component {
                                 {user.email}
                               </Card.Text>
 
-
-                              {this.state.addedUsers.includes(user) &&
-                                <Button className="my-2"  variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
-                                  Remove
-                                </Button>
-                              }
-                              {this.state.addedFriends.includes(user) &&
-                                <Button className="mt-2 mb-1" variant='danger' onClick={() => this.removeUserFromAddedFriends(user)}>
-                                  Remove Friend
-                                </Button>
-                              }
+                              {this.props.userType !== 'viewer' &&
+                                <>
+                                  {this.arrayContainsJSONId(this.state.addedUsers, user) ?
+                                    <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
+                                      {this.props.removeBtnText || 'Remove'}
+                                    </Button>
+                                    :
+                                    <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
+                                      {this.props.addBtnText || 'Add'}
+                                    </Button>}
+                                  <br />
+                                </>}
                             </Card.Body>
                           </Card>
                         </Col>

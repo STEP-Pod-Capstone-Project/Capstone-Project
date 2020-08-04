@@ -145,11 +145,9 @@ public class UserServlet extends HttpServlet {
     Map<String, Object> update = new HashMap<>();
     if (jsonObject.keySet().contains("add_friendIDs")) {
       update.put("friendIDs", FieldValue.arrayUnion(jsonObject.get("add_friendIDs").getAsString()));
-    }
-    else if (jsonObject.keySet().contains("remove_friendIDs")) {
+    } else if (jsonObject.keySet().contains("remove_friendIDs")) {
       update.put("friendIDs", FieldValue.arrayRemove(jsonObject.get("remove_friendIDs").getAsString()));
-    }
-    else {
+    } else {
       System.err.println("Error: The user put method does not support at least one of the given keys.");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
