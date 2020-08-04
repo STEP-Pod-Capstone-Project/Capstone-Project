@@ -60,7 +60,7 @@ public class MeetingServlet extends HttpServlet {
     token.setTokenType(tokenJson.get("token_type").getAsString());
     token.setScope(tokenJson.get("scope").getAsString());
     token.setExpiresInSeconds(tokenJson.get("expires_in").getAsLong());
-    Credential credentials = createCredentialWithAccessTokenOnly(new NetHttpTransport(), new JacksonFactory(), token);
+    Credential credentials = createCredential(new NetHttpTransport(), new JacksonFactory(), token);
     Calendar service = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credentials)
         .setApplicationName("bookbook").build();
     return service;
@@ -80,23 +80,6 @@ public class MeetingServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    List<String> requiredFields = new ArrayList<String>(Arrays.asList("clubID", "startDateTime", "endDateTime"));
-    Meeting createdMeeting = (Meeting) Utility.postHelper(meetings, jsonObject, response, new GenericClass(Meeting.class),
-        requiredFields);
-    if (createdMeeting != null) {
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(createdMeeting));
-    }
-    TokenResponse token = new TokenResponse();
-    JsonObject tokenJson = jsonObject.get("token").getAsJsonObject();
-    token.setAccessToken(tokenJson.get("access_token").getAsString());
-    token.setTokenType(tokenJson.get("token_type").getAsString());
-    token.setScope(tokenJson.get("scope").getAsString());
-    token.setExpiresInSeconds(tokenJson.get("expires_in").getAsLong());
-    Credential credentials = createCredential(new NetHttpTransport(), new JacksonFactory(), token);
-    Calendar service = new Calendar.Builder(new NetHttpTransport(), new JacksonFactory(), credentials)
-        .setApplicationName("bookbook").build();
-    Set<String> keySet = jsonObject.keySet();
     Event event = new Event();
     Calendar service = createCalendar(jsonObject);
     Set<String> keySet = jsonObject.keySet();

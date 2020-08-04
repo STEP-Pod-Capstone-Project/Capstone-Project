@@ -67,9 +67,7 @@ class AdminClubPage extends Component {
     }
     const history = this.props.history;
     fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: 'delete' })
-      .then(function () {
-        history.push('/myclubs');
-      })
+      .then(history.push('/myclubs'))
       .catch(function (err) {
         //TODO #61: Centralize error output
         alert(err);
@@ -90,7 +88,7 @@ class AdminClubPage extends Component {
       organizerEmail: JSON.parse(window.localStorage.getItem('profileObj')).email, 
     };
     fetch('/api/meetings', {method: 'post', body: JSON.stringify(meeting)})
-        .then(response => response.json())
+        .then(history.push(`/clubpage/${meeting.clubID}`))
         .catch(e => console.log(e));
   }
 
