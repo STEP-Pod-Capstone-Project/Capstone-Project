@@ -31,19 +31,13 @@ class AssignmentCard extends Component {
         comments.push(commentJson);
         this.setState({ comments });
       })
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   fetchComments = () => {
     fetch(`/api/comments?assignmentID=${this.props.assignment.id}`)
       .then(response => response.json()).then(commentsJson => this.setState({ comments: commentsJson }))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   onComplete = () => {
@@ -53,7 +47,7 @@ class AssignmentCard extends Component {
     }
     fetch('/api/assignments', { method: 'put', body: JSON.stringify(completeAssignment) })
       .then(this.setState({ completed: true }))
-      .catch(e => alert(e));
+      .catch(e => console.log(e));
   }
 
   onUncomplete = () => {
@@ -63,7 +57,7 @@ class AssignmentCard extends Component {
     }
     fetch('/api/assignments', { method: 'put', body: JSON.stringify(uncompleteAssignment) })
       .then(this.setState({ completed: false }))
-      .catch(e => alert(e));
+      .catch(e => console.log(e));
   }
 
   componentDidMount() {

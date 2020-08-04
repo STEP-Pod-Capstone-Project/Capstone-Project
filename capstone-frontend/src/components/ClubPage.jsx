@@ -38,57 +38,45 @@ class ClubPage extends Component {
 
   fetchData = async () => {
     this.setState({ fetchData: true });
-
-    await fetch(`/api/clubs?id=${this.props.id}`)
-      .then(response => response.json()).then(clubJson => this.setState({ club: clubJson[0] }))
+    const club = await fetch(`/api/clubs?id=${this.props.id}`)
+      .then(response => response.json()).then(clubJson => clubJson[0])
       .catch(function (err) {
         //TODO #61: Centralize error output
-        console.log(err);
+        alert(err);
       });
 
-    if (!this.state.club) {
+    if (!club) {
       this.setState({ fetchData: false });
       return;
     }
 
-    if (this.state.club.gbookID.length > 0) {
-      await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
+    this.setState({ club });
+
+    if (club.gbookID.length > 0) {
+      fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
-        .catch(function (err) {
-          //TODO #61: Centralize error output
-          console.log(err);
-        });
+        .catch(e => console.log(e));
     }
-
-    await fetch(`/api/assignments?clubID=${this.state.club.id}`)
+    fetch(`/api/assignments?clubID=${club.id}`)
       .then(response => response.json()).then(assignmentJson => this.setState({ assignments: assignmentJson }))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        console.log(err);
-      });
+      .catch(e => console.log(e));
 
-    await fetch(`/api/user?id=${this.state.club.ownerID}`)
+    fetch(`/api/user?id=${club.ownerID}`)
       .then(response => response.json()).then(ownerJson => this.setState({ owner: ownerJson }))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        console.log(err);
-      });
+      .catch(e => console.log(e));
 
     this.setState({ members: [] });
-    for (let i = 0; i < this.state.club.memberIDs.length; i++) {
-      await fetch(`/api/user?id=${this.state.club.memberIDs[i]}`)
+    for (let i = 0; i < club.memberIDs.length; i++) {
+      fetch(`/api/user?id=${club.memberIDs[i]}`)
         .then(response => response.json())
         .then(memberJson => memberJson && this.setState({ members: [...this.state.members, memberJson] }))
-        .catch(function (err) {
-          //TODO #61: Centralize error output
-          console.log(err);
-        });
+        .catch(e => console.log(e));
     }
 
-    await fetch(`/api/meetings?clubID=${this.state.club.id}`)
+    fetch(`/api/meetings?clubID=${club.id}`)
       .then(response => response.json()).then(meetings => this.setState({ meetings }))
       .catch(e => console.log(e));
-    
+
     this.setState({ fetchData: false });
   }
 
@@ -112,10 +100,7 @@ class ClubPage extends Component {
         assignments.push(assignmentJson);
         this.setState({ assignments });
       })
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        console.log(err);
-      });
+      .catch(e => console.log(e));
   }
 
   handleBookChange = async (gbookID) => {
@@ -124,10 +109,19 @@ class ClubPage extends Component {
     this.setState({ club });
     await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
       .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        console.log(err);
-      });
+      .catch(e => console.log(e));
+  }
+
+  leaveClub = () => {
+    const userID = window.localStorage.getItem('userID');
+    const removeMember = {
+      id: this.props.id,
+      remove_memberIDs: userID,
+    };
+    fetch('/api/clubs', { method: 'put', body: JSON.stringify(removeMember)})
+        .then(this.removeMember(userID))
+        .then(this.props.history.push('/'))
+        .catch(e => console.log(e));
   }
 
   deleteMeeting = (meetingID) => {
@@ -146,10 +140,28 @@ class ClubPage extends Component {
 
   render() {
     const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem('userID');
-    const bookTile = this.state.book.authors && <BookSearchTile book={this.state.book} bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} />;
-    const owner = this.state.owner && <UserCard removeMember={this.removeMember} club={this.state.club} user={this.state.owner} />;
-    const members = this.state.members.length && this.state.members.map(m => <UserCard key={m.id} user={m} club={this.state.club} removeMember={this.removeMember} />);
-    const assignments = this.state.assignments.length && <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>;
+    const bookTile = this.state.book.authors 
+      ? <BookSearchTile 
+        book={this.state.book} 
+        bookLists={this.props.bookLists} 
+        updateBookLists={this.props.updateBookLists} />
+      : <div> No book yet! </div>
+    const owner = this.state.owner 
+      && <UserCard 
+            removeMember={this.removeMember} 
+            club={this.state.club} 
+            user={this.state.owner} />;
+    const members = this.state.members.length > 0 
+      ? this.state.members.map(m => 
+        <UserCard 
+          key={m.id} 
+          user={m} 
+          club={this.state.club} 
+          removeMember={this.removeMember} />)
+      : <div> No members yet! </div>;
+    const assignments = this.state.assignments.length > 0 
+      ? <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>
+      : <div> No assignments yet! </div>;
     return (
       <div>
         {this.state.fetchData ?
@@ -209,7 +221,7 @@ class ClubPage extends Component {
                   </CardDeck>
                 {bookTile}
                 {assignments}
-                {isOwner &&
+                {isOwner ?
                   <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
                     <Form.Group controlId='formPostAssignment'>
                       <Form.Label> Post a new assignment! </Form.Label>
@@ -227,7 +239,11 @@ class ClubPage extends Component {
                       />
                     </div>
                     <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
-                  </Form>}
+                  </Form>
+                  : 
+                  <Button variant='danger' onClick={this.leaveClub}>
+                    Leave Club
+                  </Button>}
                 <div> Club Members: </div>
                 <Row className='justify-content-center'>
                   {members}

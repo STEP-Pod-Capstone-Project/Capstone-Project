@@ -24,7 +24,8 @@ class AdminClubPage extends Component {
         Promise.all(club.requestIDs.map(r => {
           return fetch(`/api/user?id=${r}`)
             .then(response => response.json())
-            .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }));
+            .then(member => member && this.setState({ requesters: [...this.state.requesters, member] }))
+            .catch(e => console.log(e));
         }))
         Promise.all(club.memberIDs.map(m => {
           return fetch(`/api/user?id=${m}`)
@@ -54,10 +55,7 @@ class AdminClubPage extends Component {
 
     fetch('/api/clubs', { method: 'put', body: JSON.stringify(data) })
       .then(history.push(`/clubpage/${data.id}`))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   handleDelete = () => {
@@ -68,10 +66,7 @@ class AdminClubPage extends Component {
     const history = this.props.history;
     fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: 'delete' })
       .then(history.push('/myclubs'))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   handleMeetingPost = (e) => {

@@ -120,10 +120,7 @@ export class SearchBookModal extends Component {
         addedBooks: []
       }))
       .then(this.props.update(gbookID))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
 
   }
 

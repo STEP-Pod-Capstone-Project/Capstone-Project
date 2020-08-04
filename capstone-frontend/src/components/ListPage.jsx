@@ -90,7 +90,7 @@ class ListPage extends Component {
     await fetch("/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
-    }).catch(err => alert(err));
+    }).catch(e => console.log(e));
   }
 
   render() {

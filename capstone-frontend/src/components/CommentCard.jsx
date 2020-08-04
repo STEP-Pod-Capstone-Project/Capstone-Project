@@ -14,10 +14,7 @@ class CommentCard extends Component {
   fetchUserData = async () => {
     await fetch(`/api/user?id=${this.props.comment.userID}`)
         .then(response => response.json()).then(userJson => this.setState({user: userJson}))
-        .catch(function(err) {
-            //TODO #61: Centralize error output
-            alert(err); 
-        });
+        .catch(e => console.log(e));
   }
 
   componentDidMount() {

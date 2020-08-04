@@ -16,10 +16,7 @@ export class BookPage extends Component {
     fetch(`/api/search?gbookId=${this.props.bookId}`)
       .then(response => response.json())
       .then(books => this.setState({ book: books[0] }))
-      .catch(function (err) {
-        //TODO #61: Frontend error logging
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   componentDidMount() {
