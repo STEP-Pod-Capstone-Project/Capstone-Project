@@ -65,13 +65,14 @@ class ClubPage extends Component {
       .then(response => response.json()).then(ownerJson => this.setState({ owner: ownerJson }))
       .catch(e => console.error(e));
 
-    this.setState({ members: [] });
-    for (let i = 0; i < club.memberIDs.length; i++) {
-      fetch(`/api/user?id=${club.memberIDs[i]}`)
+    let members = [];
+    Promise.all(club.memberIDs.map(m => 
+      fetch(`/api/user?id=${m}`)
         .then(response => response.json())
-        .then(memberJson => memberJson && this.setState({ members: [...this.state.members, memberJson] }))
-        .catch(e => console.error(e));
-    }
+        .then(member => members.push(member))
+        .catch(e => console.error(e))
+    ))
+      .then(this.setState({ members }));
 
     fetch(`/api/meetings?clubID=${club.id}`)
       .then(response => response.json())
