@@ -128,19 +128,20 @@ class ClubPage extends Component {
   handleMemberChange = (member, type) => {
     if (type === 'add') {
 
-      const club = this.state.club;
+      const club = Object.assign(this.state.club);
       club.memberIDs.push(member.id);
-      
-      this.setState({ members: [...this.state.members, member], club });
-    }
-    else if (type === 'remove') {
 
-      const members = this.state.members.filter(knownMember => knownMember.id !== member.id);
+      this.setState({ members: [...this.state.members, member], club });
+
+    } else if (type === 'remove') {
+
+      const members = this.state.members.filter(
+        knownMember => knownMember.id !== member.id);
 
       const club = this.state.club;
       club.memberIDs = club.memberIDs.filter(memberId => memberId !== member.id);
 
-      this.setState({ members, club});
+      this.setState({ members, club });
     }
   }
 

@@ -34,7 +34,7 @@ export class SearchUserModal extends Component {
     else {
       searchResults = await fetch(`/api/userSearch?searchTerm=${searchTerm}`)
         .then(response => response.json())
-        .catch(err => console.log(err));
+        .catch(err => console.error(err));
 
       if (typeof searchResults === 'undefined') {
         searchResults = [];
@@ -79,19 +79,17 @@ export class SearchUserModal extends Component {
 
     // TODO: Update ClubPage based on user input
 
-    if (this.props.club && this.props.type === 'clubs') {
-      if (this.props.club.memberIDs) {
-        if (this.props.club.memberIDs.length > 0) {
-          this.fetchMembers();
-        }
+    if (this.props.club && this.props.type === 'clubs' && this.props.club.memberIDs) {
+      if (this.props.club.memberIDs.length > 0) {
+        this.fetchMembers();
       }
     }
   }
 
   removeDuplicatesArrayJsonId = (array) => {
 
-    let helperArrayIDs = [];
-    let newArray = [];
+    const helperArrayIDs = [];
+    const newArray = [];
 
     for (const item of array) {
       if (!helperArrayIDs.includes(item.id)) {
@@ -113,15 +111,12 @@ export class SearchUserModal extends Component {
       return;
     }
 
-    let collaborators = [];
 
-    await Promise.all(this.props.bookList.collaboratorsIDs.map(async (collaboratorId) => {
-
-      const collaborator = await fetch(`/api/user?id=${collaboratorId}`).then(resp => resp.json());
-
-      delete collaborator.tokenObj;
-      collaborators.push(collaborator);
-
+    let collaborators = Promise.all(this.props.bookList.collaboratorsIDs.map((collaboratorId) => {
+      return fetch(`/api/user?id=${collaboratorId}`).then(resp => resp.json()).then(collaborator => {
+        delete collaborator.tokenObj;
+        return collaborator;
+      });
     }));
 
     // Owner cannot be a Collaborator
@@ -140,16 +135,16 @@ export class SearchUserModal extends Component {
       return;
     }
 
-    let members = [];
-
-    await Promise.all(this.props.club.memberIDs.map(async (memberId) => {
-
-      const member = await fetch(`/api/user?id=${memberId}`).then(resp => resp.json());
-
-      delete member.tokenObj;
-      members.push(member);
-
+    let members = await Promise.all(this.props.club.memberIDs.map((memberId) => {
+      return fetch(`/api/user?id=${memberId}`)
+        .then(resp => resp.json())
+        .then(member => {
+          delete member.tokenObj;
+          return member;
+        });
     }));
+
+    console.log('members, this.props.club.memberIDs', members, this.props.club.memberIDs);
 
     // Owner cannot be a Member
     members = members.filter((member) => member.id !== this.props.club.ownerID);
