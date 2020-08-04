@@ -17,6 +17,7 @@ class AdminClubPage extends Component {
   }
 
   fetchData = () => {
+    // TODO(#131): Refactor fetch to setState once, instead multiple calls.
     fetch(`/api/clubs?id=${this.props.match.params.id}`)
       .then(response => response.json()).then(clubs => {
         const club = clubs[0];

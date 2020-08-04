@@ -31,12 +31,11 @@ class ListPage extends Component {
       return;
     }
 
-    const gBooks = [];
-
-    await Promise.all(gbookIDs.map(async (gBookID) => {
-      const gBook = await fetch(`/api/search?gbookId=${gBookID}`).then(response => response.json())
-      gBooks.push(gBook[0]);
-    }))
+    const gBooks = await Promise.all(gbookIDs.map((gBookID) => {
+      return fetch(`/api/search?gbookId=${gBookID}`)
+        .then(response => response.json())
+        .then(gBook => gBook[0]);
+    }));
 
     this.setState({ gBooks, bookList: bookList[0], loading: false });
   }

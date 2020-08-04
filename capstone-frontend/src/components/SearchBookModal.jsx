@@ -77,30 +77,25 @@ export class SearchBookModal extends Component {
 
     if (this.state.addedBooksIDs.length !== 0) {
 
-      await Promise.all(this.state.addedBooksIDs.map(async bookId => {
+      await Promise.all(this.state.addedBooksIDs.map(bookId => {
 
-        let updateJson;
-
-        updateJson = {
+        const updateJson = {
           id: this.props.objectId,
           add_gbookIDs: bookId,
         }
         // Update BookList in Firebase
-        await fetch(this.props.putURL, {
+        fetch(this.props.putURL, {
           method: 'PUT',
           body: JSON.stringify(updateJson)
         });
-
       }));
 
       this.setState({ showModal: false, searchTerm: '', searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
 
       await this.props.update();
-
     }
 
     else {
-
       this.setState({ showModal: false, searchTerm: '', searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
     }
   }
