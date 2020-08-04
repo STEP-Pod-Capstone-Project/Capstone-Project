@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, CardDeck, Col, Row, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { ShowClubInvitesModal } from './ShowClubInvitesModal'
+import { ShowClubInvitesModal } from './ShowClubInvitesModal';
 
 import ClubGridItem from './ClubGridItem';
 
@@ -60,7 +60,7 @@ class MyClubs extends Component {
     this.setState({ clubs: allClubs, fetchingClubs: false });
   }
 
-  updateMyClubs = async (newClub ) => {
+  updateMyClubs = async (newClub) => {
 
     const userID = window.localStorage.getItem('userID');
 
@@ -89,17 +89,17 @@ class MyClubs extends Component {
       <div>
         <Row>
           <Col>
-            <h2 className="ml-2">My Clubs</h2>
+            <h2 className='ml-2'>My Clubs</h2>
           </Col>
           <Col className='m-auto p-0 mr-3'>
             <div id='modal-buttons' className='mx-3'>
               <ShowClubInvitesModal
                btnStyle='btn btn-primary mx-3' 
                updateMyClubs={this.updateMyClubs}/>
-              <Link to="/createclub">
-                <Button variant="primary">
+              <Link to='/createclub'>
+                <Button variant='primary'>
                   Create New Club
-              </Button>
+                </Button>
               </Link>
             </div>
           </Col>

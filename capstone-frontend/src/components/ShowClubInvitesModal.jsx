@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, Spinner, Modal, Col, Row, Card } from 'react-bootstrap';
+import { Button, Modal, Col, Row, Card } from 'react-bootstrap';
 
 import '../styles/Modal.css';
 
@@ -81,8 +81,8 @@ export class ShowClubInvitesModal extends Component {
         </button>
 
         <Modal
-          dialogClassName="modal-style"
-          size="lg"
+          dialogClassName='modal-style'
+          size='lg'
           show={this.state.showModal}
           onHide={() => {
             this.setState({ showModal: false, searchTerm: '', searchResults: [], });
@@ -121,7 +121,7 @@ export class ShowClubInvitesModal extends Component {
                               </>}
                           </Card.Text>
                         </Card.Body>
-                        <Card.Footer className="footer text-muted">
+                        <Card.Footer className='footer text-muted'>
                           {inviteClub.memberIDs.length} Members
                         </Card.Footer>
                       </Card>

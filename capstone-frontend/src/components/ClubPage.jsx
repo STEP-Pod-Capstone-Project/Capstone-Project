@@ -137,7 +137,8 @@ class ClubPage extends Component {
 
   updateRemoveMember = (member) => {
 
-    const members = this.state.members.filter(knownMember => knownMember.id !== member.id);
+    const members = this.state.members.filter(
+      knownMember => knownMember.id !== member.id);
 
     const club = Object.assign(this.state.club);
     club.memberIDs = club.memberIDs.filter(memberId => memberId !== member.id);
@@ -152,8 +153,7 @@ class ClubPage extends Component {
     if (type === 'add') {
       club = this.state.club;
       club.inviteIDs.push(user.id);
-    }
-    else if (type === 'cancel') {
+    } else if (type === 'cancel') {
       club = this.state.club;
       club.inviteIDs = club.inviteIDs.filter(inviteId => inviteId !== user.id);
     }

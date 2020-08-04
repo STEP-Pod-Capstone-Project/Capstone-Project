@@ -91,15 +91,11 @@ export class SearchUserModal extends Component {
 
   fetchPendingInvites = async () => {
 
-    const invitedUsers = [];
-
-    await Promise.all(this.props.club.inviteIDs.map(async (inviteUserId) => {
-
-      const pendingMember = await fetch(`/api/user?id=${inviteUserId}`).then(resp => resp.json());
-
-      delete pendingMember.tokenObj;
-      invitedUsers.push(pendingMember);
-
+    const invitedUsers = await Promise.all(this.props.club.inviteIDs.map((inviteUserId) => {
+      return fetch(`/api/user?id=${inviteUserId}`).then(resp => resp.json()).then(pendingMember => {
+        delete pendingMember.tokenObj;
+        return pendingMember;
+      });
     }));
 
     this.setState({ addedUsers: [...this.state.addedUsers, ...invitedUsers] });
@@ -162,8 +158,6 @@ export class SearchUserModal extends Component {
           return member;
         });
     }));
-
-    console.log('members, this.props.club.memberIDs', members, this.props.club.memberIDs);
 
     // Owner cannot be a Member
     members = members.filter((member) => member.id !== this.props.club.ownerID);
@@ -242,7 +236,7 @@ export class SearchUserModal extends Component {
 
     const pendingInvites = this.state.pendingInvites.filter(invite => invite !== user.id);
 
-    const addedUsers = this.state.addedUsers.filter(addedUser => addedUser.id != user.id);
+    const addedUsers = this.state.addedUsers.filter(addedUser => addedUser.id !== user.id);
 
     this.setState({ pendingInvites, addedUsers });
   }
