@@ -6,7 +6,7 @@ import { SearchUserModal } from './SearchUserModal'
 import BookSearchTile from './BookSearchTile';
 import AssignmentCard from './AssignmentCard';
 import { UserCard } from './UserCard';
-import MeetingCard from './MeetingCard';
+import { MeetingCard } from './MeetingCard';
 import TextField from '@material-ui/core/TextField';
 
 import '../styles/Groups.css';
