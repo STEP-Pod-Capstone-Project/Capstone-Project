@@ -136,6 +136,26 @@ class ClubPage extends Component {
     this.setState({ meetings });
   }
 
+  handleMemberChange = (member, type) => {
+    if (type === 'add') {
+
+      const club = Object.assign(this.state.club);
+      club.memberIDs.push(member.id);
+
+      this.setState({ members: [...this.state.members, member], club });
+
+    } else if (type === 'remove') {
+
+      const members = this.state.members.filter(
+        knownMember => knownMember.id !== member.id);
+
+      const club = this.state.club;
+      club.memberIDs = club.memberIDs.filter(memberId => memberId !== member.id);
+
+      this.setState({ members, club });
+    }
+  }
+
   componentDidMount() {
     this.fetchData();
   }
@@ -190,9 +210,12 @@ class ClubPage extends Component {
                         </Button>
                       </Link>
                       <SearchUserModal
+                        type='clubs'
+                        update={this.handleMemberChange}
+                        club={this.state.club}
                         text='Search/View Members'
                         checkoutText='Current Members'
-                        btnStyle="btn btn-primary mx-3 my-aut" />
+                        btnStyle='btn btn-primary mx-3 my-auto' />
                       <SearchBookModal
                         objectId={this.props.id}
                         update={this.handleBookChange}
@@ -206,10 +229,12 @@ class ClubPage extends Component {
                   <Col className='m-auto p-0 mr-3'>
                     <div id='modal-buttons' className='mx-2'>
                       <SearchUserModal
+                        type='clubs'
                         userType='viewer'
+                        club={this.state.club}
                         text='View Members'
                         checkoutText='Current Members'
-                        btnStyle='btn btn-primary mx-3 my-aut' />
+                        btnStyle='btn btn-primary mx-3 my-auto' />
                     </div>
                   </Col>}
               </Row>
