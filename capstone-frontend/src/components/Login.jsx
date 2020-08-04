@@ -12,9 +12,9 @@ export class Login extends Component {
       method: "POST",
       body: JSON.stringify(response.tokenObj),
     });
-
-    window.localStorage.setItem("userID", response.profileObj.googleId);
-    window.localStorage.setItem("profileObj", JSON.stringify(response.profileObj))
+    window.localStorage.setItem('token', JSON.stringify(response.tokenObj));
+    window.localStorage.setItem('userID', response.profileObj.googleId);
+    window.localStorage.setItem('profileObj', JSON.stringify(response.profileObj));
 
     this.props.toggleSignIn();
   }
@@ -34,6 +34,7 @@ export class Login extends Component {
               <br />
               <GoogleLogin
                 className="text-center mt-3"
+                scope={'https://www.googleapis.com/auth/calendar'}
                 clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
                 buttonText="Sign in with Google"
                 onSuccess={this.loginResponseSuccess}
