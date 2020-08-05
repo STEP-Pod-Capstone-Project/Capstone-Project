@@ -20,18 +20,18 @@ class AdminClubPage extends Component {
   fetchData = () => {
     let requesters = [];
     let members = [];
-    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?id=${this.props.id}`)
+    fetch(`/api/clubs?id=${this.props.id}`)
       .then(response => response.json()).then(clubs => {
         const club = clubs[0];
         this.setState({ club })
         Promise.all(club.requestIDs.map(r => {
-          return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${r}`)
+          return fetch(`/api/user?id=${r}`)
             .then(response => response.json())
             .then(member => {requesters.push(member)})
             .catch(e => console.log(e));
         }))
         Promise.all(club.memberIDs.map(m => {
-          return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${m}`)
+          return fetch(`/api/user?id=${m}`)
             .then(response => response.json())
             .then(member => {members.push(member)});
         }))
@@ -68,7 +68,7 @@ class AdminClubPage extends Component {
       return;
     }
     const history = this.props.history;
-    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?id=${this.props.id}`, { method: 'delete' })
+    fetch(`/api/clubs?id=${this.props.id}`, { method: 'delete' })
       .then(() => history.push('/myclubs'))
       .catch(e => console.log(e));
   }

@@ -75,7 +75,7 @@ export class SearchUserModal extends Component {
       this.setState({ searchResults, fetchingUsers: false, resultsFound: false })
     }
     else {
-      searchResults = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/userSearch?searchTerm=${searchTerm}`)
+      searchResults = await fetch(`/api/userSearch?searchTerm=${searchTerm}`)
         .then(response => response.json())
         .catch(err => console.error(err));
 
@@ -120,7 +120,7 @@ export class SearchUserModal extends Component {
   fetchPendingInvites = async () => {
 
     const invitedUsers = await Promise.all(this.props.club.inviteIDs.map((inviteUserId) => {
-      return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${inviteUserId}`).then(resp => resp.json()).then(pendingMember => {
+      return fetch(`/api/user?id=${inviteUserId}`).then(resp => resp.json()).then(pendingMember => {
         delete pendingMember.tokenObj;
         return pendingMember;
       });
@@ -156,7 +156,7 @@ export class SearchUserModal extends Component {
 
 
     let collaborators = await Promise.all(this.props.bookList.collaboratorsIDs.map((collaboratorId) => {
-      return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${collaboratorId}`).then(resp => resp.json()).then(collaborator => {
+      return fetch(`/api/user?id=${collaboratorId}`).then(resp => resp.json()).then(collaborator => {
         delete collaborator.tokenObj;
         return collaborator;
       });
@@ -179,7 +179,7 @@ export class SearchUserModal extends Component {
     }
 
     let members = await Promise.all(this.props.club.memberIDs.map((memberId) => {
-      return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${memberId}`)
+      return fetch(`/api/user?id=${memberId}`)
         .then(resp => resp.json())
         .then(member => {
           delete member.tokenObj;
@@ -212,7 +212,7 @@ export class SearchUserModal extends Component {
     }
 
     // Add Collaborator to Booklist in Firebase
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    fetch("/api/booklist", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
     });
@@ -225,7 +225,7 @@ export class SearchUserModal extends Component {
     }
 
     // Remove Collaborator to Booklist in Firebase
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    fetch("/api/booklist", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
     });
@@ -240,7 +240,7 @@ export class SearchUserModal extends Component {
       add_inviteIDs: user.id,
     }
 
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs", {
+    fetch("/api/clubs", {
       method: 'PUT',
       body: JSON.stringify(clubUpdateJson)
     });
@@ -257,7 +257,7 @@ export class SearchUserModal extends Component {
       remove_inviteIDs: user.id,
     }
 
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs", {
+    fetch("/api/clubs", {
       method: 'PUT',
       body: JSON.stringify(clubUpdateJson)
     });
@@ -275,7 +275,7 @@ export class SearchUserModal extends Component {
       remove_memberIDs: user.id,
     }
 
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs", {
+    fetch("/api/clubs", {
       method: 'PUT',
       body: JSON.stringify(clubUpdateJson)
     });

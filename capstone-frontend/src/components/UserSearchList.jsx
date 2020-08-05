@@ -13,7 +13,7 @@ export class UserSearchList extends Component {
 
   getUsers = () => {
     // Get users by searchQuery
-    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/userSearch?searchTerm=${this.props.searchQuery}`)
+    fetch(`/api/userSearch?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
       .then(users => this._isMounted && this.setState({ users, loading: false }))
       .catch(function (err) {

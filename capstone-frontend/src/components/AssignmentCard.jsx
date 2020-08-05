@@ -25,7 +25,7 @@ class AssignmentCard extends Component {
       "whenCreated": (new Date()).toUTCString()
     };
     e.target[0].value = '';
-    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/comments", { method: "post", body: JSON.stringify(data) })
+    fetch("/api/comments", { method: "post", body: JSON.stringify(data) })
       .then(response => response.json())
       .then(commentJson => {
         let comments = this.state.comments;
@@ -36,7 +36,7 @@ class AssignmentCard extends Component {
   }
 
   fetchComments = () => {
-    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/comments?assignmentID=${this.props.assignment.id}`)
+    fetch(`/api/comments?assignmentID=${this.props.assignment.id}`)
       .then(response => response.json()).then(commentsJson => this.setState({ comments: commentsJson }))
       .catch(e => console.log(e));
   }
