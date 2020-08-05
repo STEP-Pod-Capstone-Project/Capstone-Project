@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { UserCard } from './UserCard';
 import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
@@ -226,4 +226,4 @@ class AdminClubPage extends Component {
   }
 }
 
-export default AdminClubPage;
+export default withRouter(AdminClubPage);
