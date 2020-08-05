@@ -126,7 +126,6 @@ class ListPage extends Component {
                       id='button-list-add'
                       btnStyle='btn btn-primary h-100'
                       bookListId={this.props.id}
-                      updateListPage={this.updateListPage}
                       deleteBookList={this.props.deleteBookList}
                       updateBookLists={this.props.updateBookLists}
                       updateBookListTitle={this.updateBookListTitle}
@@ -180,7 +179,6 @@ class ListPage extends Component {
                       id='button-list-add'
                       btnStyle='btn btn-primary h-100'
                       bookListId={this.props.id}
-                      updateListPage={this.updateListPage}
                       deleteBookList={this.props.deleteBookList}
                       updateBookLists={this.props.updateBookLists}
                       updateBookListTitle={this.updateBookListTitle}
