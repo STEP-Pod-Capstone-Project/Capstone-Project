@@ -126,8 +126,8 @@ export class Home extends Component {
     await Promise.all(bookLists.map(bookList => {
 
       if (bookList.gbookIDs.length === 0) {
-        bookListsMap.set(bookList, [])
-        return;
+        bookListsMap.set(bookList, []);
+        return Promise.resolve("Empty BookList");
       }
 
       let bookIDs = [];
@@ -145,7 +145,7 @@ export class Home extends Component {
         bookIDs = bookList.gbookIDs.slice(0, 5);
       }
 
-      Promise.all(bookIDs.map(gBookId => {
+      return Promise.all(bookIDs.map(gBookId => {
         return fetch(`/api/search?gbookId=${gBookId}`)
           .then(resp => resp.json())
           .then(gBook => gBook[0]);

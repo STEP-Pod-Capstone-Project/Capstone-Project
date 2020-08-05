@@ -21,6 +21,20 @@ export class SearchUserModal extends Component {
     }
   }
 
+  componentDidMount() {
+    this.fetchCollaborators();
+
+    // TODO: Update ClubPage based on user input
+
+    if (this.props.club && this.props.type === 'clubs' && this.props.club.memberIDs) {
+      if (this.props.club.memberIDs.length > 0) {
+        this.fetchMembers();
+        this.setState({ pendingInvites: this.props.club.inviteIDs });
+        this.fetchPendingInvites();
+      }
+    }
+  }
+
   getUsers = async (searchTerm) => {
 
     this.setState({ fetchingUsers: true });
@@ -75,20 +89,6 @@ export class SearchUserModal extends Component {
     })
   }
 
-  componentDidMount() {
-    this.fetchCollaborators();
-
-    // TODO: Update ClubPage based on user input
-
-    if (this.props.club && this.props.type === 'clubs' && this.props.club.memberIDs) {
-        if (this.props.club.memberIDs.length > 0) {
-          this.fetchMembers();
-          this.setState({ pendingInvites: this.props.club.inviteIDs });
-          this.fetchPendingInvites();          
-        }
-    }
-  }
-
   fetchPendingInvites = async () => {
 
     const invitedUsers = await Promise.all(this.props.club.inviteIDs.map((inviteUserId) => {
@@ -127,7 +127,7 @@ export class SearchUserModal extends Component {
     }
 
 
-    let collaborators = Promise.all(this.props.bookList.collaboratorsIDs.map((collaboratorId) => {
+    let collaborators = await Promise.all(this.props.bookList.collaboratorsIDs.map((collaboratorId) => {
       return fetch(`/api/user?id=${collaboratorId}`).then(resp => resp.json()).then(collaborator => {
         delete collaborator.tokenObj;
         return collaborator;

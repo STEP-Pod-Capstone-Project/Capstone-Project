@@ -15,6 +15,10 @@ export class ShowClubInvitesModal extends Component {
     }
   }
 
+  componentDidMount() {
+    this.fetchInviteRequestClubs();
+  }
+
   fetchInviteRequestClubs = async () => {
 
     this.setState({ fetchingInviteClubs: true });
@@ -51,15 +55,13 @@ export class ShowClubInvitesModal extends Component {
     this.props.updateMyClubs(inviteClub);
 
     const inviteRequestClubs = this.state.inviteRequestClubs.filter(club => club.id !== inviteClub.id);
-    this.setState({ inviteRequestClubs, });
 
-    if (this.state.inviteRequestClubs.length === 0) {
-      this.setState({ showModal: false });
+    if (inviteRequestClubs.length === 0) {
+      this.setState({ inviteRequestClubs, showModal: false });
     }
-  }
-
-  componentDidMount() {
-    this.fetchInviteRequestClubs();
+    else {
+      this.setState({ inviteRequestClubs });
+    }
   }
 
   limitDescription = (description) => {
