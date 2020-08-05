@@ -266,7 +266,7 @@ class ClubPage extends Component {
               <hr className='light-gray-border mx-2 my-2' />
 
               <div className='text-center'>
-                <h3 className='mt-3'> Club Descrpition </h3>
+                <h3 className='mt-3'> Descrpition </h3>
                 <span className='description block'> {this.state.club.description} </span>
                 {meetings}
                 <h3 className='mt-4'> Current Book </h3>
