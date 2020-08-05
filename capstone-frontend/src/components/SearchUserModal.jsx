@@ -34,6 +34,35 @@ export class SearchUserModal extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    
+    if (this.props.club && this.props.type === 'clubs') {
+      if (this.props.deletedMemberId && (this.props.deletedMemberId !== prevProps.deletedMemberId)) {
+
+        const deleteMemberIndex = this.indexOfMemberArray(this.state.addedUsers, this.props.deletedMemberId);
+
+        if (deleteMemberIndex >= 0) {
+          const addedUsers = [...this.state.addedUsers];
+          addedUsers.splice(deleteMemberIndex, 1);
+
+          this.setState({ addedUsers });
+        }
+      }
+    }
+  }
+  
+  indexOfMemberArray = (arr, provideMemberId) => {
+    let index = 0
+
+    for (const member of arr) {
+      if (member.id === provideMemberId) {
+        return index;
+      }
+      index += 1;
+    }
+    return -1
+  }
+
   getUsers = async (searchTerm) => {
 
     this.setState({ fetchingUsers: true });
@@ -183,7 +212,7 @@ export class SearchUserModal extends Component {
     }
 
     // Add Collaborator to Booklist in Firebase
-    fetch("/api/booklist", {
+    fetch("/api/clubs", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
     });
@@ -196,7 +225,7 @@ export class SearchUserModal extends Component {
     }
 
     // Remove Collaborator to Booklist in Firebase
-    fetch("/api/booklist", {
+    fetch("/api/clubs", {
       method: 'PUT',
       body: JSON.stringify(bookListUpdateJson)
     });
