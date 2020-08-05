@@ -13,6 +13,7 @@ class App extends Component {
       searchQuery: "",
       bookLists: [],
       collabBookLists: [],
+      userFriends: [],
       isSignedIn: ((window.localStorage.getItem("userID")) && (window.localStorage.getItem("profileObj"))) ? true : false,
     };
   }
@@ -54,10 +55,24 @@ class App extends Component {
     this.setState({ collabBookLists })
   }
 
+  fetchUserFriends = () => {
+    const userID = window.localStorage.getItem('userID');
+    fetch(`/api/user?id=${userID}`, {
+      method: 'GET',
+    }).then(resp => resp.json())
+      .then(user => user.friendIDs && Promise.all(user.friendIDs.map(friendID => {
+        return fetch(`/api/user?id=${friendID}`)
+          .then(response => response.json())
+      })))
+      .then(friends => friends && this.setState({ userFriends: friends }))
+      .catch(e => console.err(e))
+  }
+
   componentDidMount() {
     if (this.state.isSignedIn) {
       this.fetchBookLists();
       this.fetchCollabBookLists();
+      this.fetchUserFriends();
     }
   }
 
@@ -77,7 +92,10 @@ class App extends Component {
               setSearchQuery={this.setSearchQuery}
               bookLists={this.state.bookLists}
               collabBookLists={this.state.collabBookLists}
-              updateBookLists={this.fetchBookLists} />
+              updateBookLists={this.fetchBookLists}
+              friendsList={this.state.userFriends}
+              updateFriendsList={this.fetchUserFriends}
+            />
           )
           :
           (<Login toggleSignIn={this.toggleSignIn} />)

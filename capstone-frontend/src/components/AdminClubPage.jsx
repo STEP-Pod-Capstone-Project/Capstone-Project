@@ -69,7 +69,7 @@ class AdminClubPage extends Component {
       return;
     }
     const history = this.props.history;
-    fetch(`/api/clubs?id=${this.props.match.params.id}`, { method: 'delete' })
+    fetch(`/api/clubs?id=${this.props.id}`, { method: 'delete' })
       .then(() => history.push('/myclubs'))
       .catch(e => console.log(e));
   }
@@ -99,7 +99,7 @@ class AdminClubPage extends Component {
     }
     const meeting = {
       token: JSON.parse(window.localStorage.getItem('token')),
-      clubID: this.props.match.params.id,
+      clubID: this.props.id,
       summary: e.target.summary.value,
       location: e.target.location.value,
       description: e.target.description.value,
@@ -135,7 +135,7 @@ class AdminClubPage extends Component {
       </>
     return (
       <div className='container text-center'>
-        <Link to={`/clubpage/${this.props.match.params.id}`}>
+        <Link to={`/clubpage/${this.props.id}`}>
           <Button className='admin-button' variant='secondary'> Return to Club Page </Button>
         </Link>
         <div className='title'> {this.state.club.name} </div>

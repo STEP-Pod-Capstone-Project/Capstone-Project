@@ -45,7 +45,7 @@ import ClubPage from './ClubPage';
 import AdminClubPage from './AdminClubPage';
 import CreateClub from './CreateClub';
 import CreateList from './CreateList'
-// import RightSideBar from './RightSideBar';
+import { RightSideBar } from './RightSideBar';
 
 import '../styles/LeftSideBar.css'
 
@@ -453,7 +453,9 @@ export const LeftSideBar = withRouter((props) => {
               <Browse
                 bookLists={props.bookLists}
                 updateBookLists={props.updateBookLists}
-                searchQuery={pageProps.match.params.query} />
+                searchQuery={pageProps.match.params.query}
+                updateFriendsList={props.updateFriendsList}
+              />
             )} />
             <Route path='/mybooks' render={() => (
               <MyBooks bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
@@ -468,15 +470,21 @@ export const LeftSideBar = withRouter((props) => {
               <BookPage bookId={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
             )} />
             <Route path='/clubpage/:id' render={(pageProps) => (
-              <ClubPage id={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
+              <ClubPage
+                id={pageProps.match.params.id}
+                bookLists={props.bookLists}
+                updateBookLists={props.updateBookLists}
+                updateFriendsList={props.updateFriendsList}
+              />
             )} />
-            <Route path='/adminclubpage/:id' component={AdminClubPage} />
+            <Route path='/adminclubpage/:id' render={(pageProps) => (
+              <AdminClubPage updateFriendsList={props.updateFriendsList} id={pageProps.match.params.id} />
+            )} />
             <Route path='/createclub' component={CreateClub} />
           </Col>
-          {/* TODO(#86) Add Friends to the Web App and display them in the Right Side Bar */}
-          {/* <div className={classes.sectionDesktop}>
-            <RightSideBar />
-          </div> */}
+          <div className={classes.sectionDesktop}>
+            <RightSideBar friendsList={props.friendsList} />
+          </div>
         </Row>
       </main>
     </div >
