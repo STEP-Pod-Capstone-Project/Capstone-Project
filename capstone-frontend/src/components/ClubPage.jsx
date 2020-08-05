@@ -186,20 +186,26 @@ class ClubPage extends Component {
       ? <BookSearchTile 
         book={this.state.book} 
         bookLists={this.props.bookLists} 
-        updateBookLists={this.props.updateBookLists} />
+        updateBookLists={this.props.updateBookLists} 
+        location={'search'}
+      />
       : <span className='block'> No book yet! </span>
     const owner = this.state.owner 
       && <UserCard 
             removeMember={this.removeMember} 
             club={this.state.club} 
-            user={this.state.owner} />;
+            user={this.state.owner}
+            updateFriendsList={this.props.updateFriendsList}
+          />;
     const members = this.state.members.length > 0 
       ? this.state.members.map(m => 
         <UserCard 
           key={m.id} 
           user={m} 
           club={this.state.club} 
-          removeMember={this.removeMember} />)
+          removeMember={this.removeMember} 
+          updateFriendsList={this.props.updateFriendsList}
+        />)
       : <span className='block'> No members yet! </span>;
     const assignments = this.state.assignments.length > 0 &&
       <>
