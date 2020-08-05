@@ -187,14 +187,18 @@ class ClubPage extends Component {
       && <UserCard 
             removeMember={this.removeMember} 
             club={this.state.club} 
-            user={this.state.owner} />;
+            user={this.state.owner}
+            updateFriendsList={props.updateFriendsList}
+          />;
     const members = this.state.members.length > 0 
       ? this.state.members.map(m => 
         <UserCard 
           key={m.id} 
           user={m} 
           club={this.state.club} 
-          removeMember={this.removeMember} />)
+          removeMember={this.removeMember}
+          updateFriendsList={props.updateFriendsList}
+        />)
       : <div> No members yet! </div>;
     const assignments = this.state.assignments.length > 0 
       ? <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>
