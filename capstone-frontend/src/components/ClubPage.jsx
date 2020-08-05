@@ -180,6 +180,7 @@ class ClubPage extends Component {
         bookLists={this.props.bookLists} 
         updateBookLists={this.props.updateBookLists} />
       : <div> No book yet! </div>
+    // TODO #141: ClubPage elements should be rendered inline instead of in variables
     const owner = this.state.owner 
       && <UserCard 
             removeMember={this.removeMember} 

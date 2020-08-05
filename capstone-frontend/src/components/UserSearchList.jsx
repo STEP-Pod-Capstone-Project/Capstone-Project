@@ -53,7 +53,7 @@ export class UserSearchList extends Component {
         <Container className='text-center'>
           <Row className='justify-content-center'>
             {this.state.users.map(user =>
-              <UserCard key={user.id} user={user} />
+              <UserCard key={user.id} user={user} updateFriendsList={this.props.updateFriendsList} />
             )}
           </Row>
         </Container>

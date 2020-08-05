@@ -23,8 +23,20 @@ const getUserCollabBookLists = () => {
   ];
 };
 
+const getUserFriendsList = () => {
+  return [
+    { id: '7', fullName: 'Mauro Guerrero', email: 'mauroguerrero@google.com', profileImageUrl: 'mauro.com/mauro.jpg'},
+    { id: '8', fullName: 'Antonio Linhart', email: 'antoniolinhart@google.com', profileImageUrl: 'antonio.com/antonio.jpg'},
+    { id: '9', fullName: 'Steven Solar', email: 'stevensolar@google.com', profileImageUrl: 'steven.com/steven.jpg'},
+  ];
+};
+
 test('renders sidebar test', () => {
-  render(<Router> <LeftSideBar bookLists={getUserBookLists()} collabBookLists={getUserCollabBookLists()} /> </Router>, container);
+  render(<Router> <LeftSideBar
+    bookLists={getUserBookLists()}
+    collabBookLists={getUserCollabBookLists()}
+    friendsList={getUserFriendsList()}
+  /> </Router>, container);
 
   const homeLink = document.getElementById("home-link");
   expect(homeLink).toBeInTheDocument();

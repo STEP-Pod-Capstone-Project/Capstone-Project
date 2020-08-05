@@ -57,7 +57,8 @@ export class UserCard extends Component {
       add_friendIDs: this.props.user.id, 
     };
     fetch('/api/user', {method:'put', body: JSON.stringify(addFriend)})
-      .then(this.setState({isFriend: true}))
+      .then(() => this.setState({isFriend: true}))
+      .then(() => this.props.updateFriendsList())
       .catch(e => console.log(e));
   }
 
@@ -67,7 +68,8 @@ export class UserCard extends Component {
       remove_friendIDs: this.props.user.id, 
     }
     fetch('/api/user', {method:'put', body: JSON.stringify(removeFriend)})
-      .then(this.setState({isFriend: false}))
+      .then(() => this.setState({isFriend: false}))
+      .then(() => this.props.updateFriendsList())
       .catch(e => console.log(e));
   }
 
