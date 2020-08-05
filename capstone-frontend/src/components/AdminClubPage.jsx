@@ -20,23 +20,24 @@ class AdminClubPage extends Component {
   fetchData = () => {
     let requesters = [];
     let members = [];
+    let club; 
     fetch(`/api/clubs?id=${this.props.match.params.id}`)
       .then(response => response.json()).then(clubs => {
-        const club = clubs[0];
-        this.setState({ club, requesters: [], members: [] });
+        club = clubs[0];
+        this.setState({ club })
         Promise.all(club.requestIDs.map(r => {
           return fetch(`/api/user?id=${r}`)
             .then(response => response.json())
-            .then(member => requesters.push(member))
+            .then(member => {requesters.push(member)})
             .catch(e => console.log(e));
         }))
         Promise.all(club.memberIDs.map(m => {
           return fetch(`/api/user?id=${m}`)
             .then(response => response.json())
-            .then(member => members.push(member));
+            .then(member => {members.push(member)});
         }))
       })
-      .then(this.setState({ members, requesters }))
+      .then(() => this.setState({ members, requesters }))
       .catch(e => console.log(e));
   }
 
@@ -119,49 +120,61 @@ class AdminClubPage extends Component {
   }
 
   render() {
+    const requesters = this.state.requesters.length > 0 &&
+      <>
+        <h3> Users who have requested to join </h3>
+        <Row className='justify-content-center'>
+          {this.state.requesters.map(r =>
+            <UserCard
+              key={r.id}
+              user={r}
+              club={this.state.club}
+              fetchData={this.fetchData} />
+          )}
+        </Row>
+      </>
     return (
       <div className='container text-center'>
         <Link to={`/clubpage/${this.props.match.params.id}`}>
           <Button className='admin-button' variant='secondary'> Return to Club Page </Button>
         </Link>
         <div className='title'> {this.state.club.name} </div>
+        <h3 className='mt-3'> Update Club Information </h3> 
         <Form onSubmit={this.handleUpdate} id='update-club-form'>
           <Form.Group controlId='formUpdateClub'>
-            <Form.Label> Club Name </Form.Label>
-            <Form.Control name='name' type='text' placeholder='Enter new club name here...' />
-            <Form.Label> Club Description </Form.Label>
-            <Form.Control name='description' as='textarea' rows='3' placeholder='Enter new club description here...' />
+            <Form.Label className='mt-2'> Club Name </Form.Label>
+            <Form.Control className='mt-1' name='name' type='text' placeholder='Enter new club name here...' />
+            <Form.Label className='mt-2'> Club Description </Form.Label>
+            <Form.Control className='mt-1' name='description' as='textarea' rows='3' placeholder='Enter new club description here...' />
           </Form.Group>
           <Button variant='primary' type='submit'> Submit </Button>
         </Form>
 
-        <div className='description'> Create a Meeting </div>
+        <h3 className='mt-5'> Create a Meeting </h3>
         <Form onSubmit={this.handleMeetingPost} id='meeting-post-form'>
           {/* TODO #139: use a controlled form instead*/}
           <Form.Group controlId='formPostMeeting'>
-            <Form.Label> Meeting Name </Form.Label>
-            <Form.Control name='summary' type='text' placeholder='Enter meeting name here...' />
-            <Form.Label> Meeting Location </Form.Label>
-            <Form.Control name='location' type='text' placeholder='Enter meeting location here...' />
-            <Form.Label> Meeting Description </Form.Label>
-            <Form.Control name='description' as='textarea' rows='3' placeholder='Enter meeting description here...' />
-            <div>
+            <Form.Label className='mt-2'> Meeting Name </Form.Label>
+            <Form.Control className='mt-1' name='summary' type='text' placeholder='Enter meeting name here...' />
+            <Form.Label className='mt-2' > Meeting Location </Form.Label>
+            <Form.Control className='mt-1' name='location' type='text' placeholder='Enter meeting location here...' />
+            <Form.Label className='mt-2' > Meeting Description </Form.Label>
+            <Form.Control className='mt-1' name='description' as='textarea' rows='3' placeholder='Enter meeting description here...' />
+            <div className='mt-4'>
               <TextField
                 id='start-datetime'
                 label='Start DateTime'
                 type='datetime-local'
-                defaultValue={new Date().toString()}
                 InputLabelProps={{
                   shrink: true,
                 }}
               />
             </div>
-            <div>
+            <div className='mt-4'>
               <TextField
                 id='end-datetime'
                 label='End DateTime'
                 type='datetime-local'
-                defaultValue={new Date().toString()}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -169,7 +182,7 @@ class AdminClubPage extends Component {
             </div>
           </Form.Group>
           <Form.Group> 
-             <Form.Label as="legend" column xs={12}>
+             <Form.Label className='mt-1' as="legend" column xs={12}>
                 Recurrence
               </Form.Label>
               <Col xs={12}>
@@ -207,16 +220,7 @@ class AdminClubPage extends Component {
           </Form.Group>
           <Button variant='primary' type='submit'> Submit </Button>
         </Form>
-        <div className='description'> Users who have requested to join: </div>
-        <Row className='justify-content-center'>
-          {this.state.requesters.map(r =>
-            <UserCard
-              key={r.id}
-              user={r}
-              club={this.state.club}
-              fetchData={this.fetchData} />
-          )}
-        </Row>
+        {requesters}
         <Button id='delete-club' variant='danger' onClick={this.handleDelete}>Delete Club</Button>
       </div>
     );
