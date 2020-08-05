@@ -47,6 +47,7 @@ class BookSearchTile extends Component {
   }
 
   render() {
+    const deleteBook = this.props.deleteBook;
     return (
       <Row className='text-center border m-5 bg-light light-gray-border'>
         <Col xs={12} sm={6} md={3} className='my-4 p-0 '>
@@ -70,7 +71,7 @@ class BookSearchTile extends Component {
           {this.props.location === 'search' &&
             <BookListAddDropdown bookLists={this.props.bookLists} updateBookLists={this.props.updateBookLists} book={this.props.book} />}
           {this.props.location === 'list' &&
-            <Button className='my-4 w-75' variant='danger' onClick={() => this.deleteBook(this.props.book.id)}>
+            <Button className='my-4 w-75' variant='danger' onClick={() => deleteBook(this.props.book.id)}>
               Remove Book from List
           </Button>}
           {this.state.hasRead ? 

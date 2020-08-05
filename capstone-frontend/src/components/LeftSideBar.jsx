@@ -457,8 +457,12 @@ export const LeftSideBar = withRouter((props) => {
             )} />
             <Route path='/mybooks' render={() => (
               <MyBooks bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
+            )} />            <Route path='/listpage/:id' render={(pageProps) => (
+              <ListPage
+                id={pageProps.match.params.id}
+                deleteBookList={deleteBookList}
+                updateBookLists={props.updateBookLists} />
             )} />
-            <Route path='/listpage/:id' component={ListPage} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' render={(pageProps) => (
               <BookPage bookId={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
