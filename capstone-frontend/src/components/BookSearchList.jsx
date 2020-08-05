@@ -12,7 +12,9 @@ const BookSearchList = ({ books, bookLists, updateBookLists }) => {
         book={book}
         bookLists={bookLists}
         updateBookLists={updateBookLists}
-        key={book.id} />
+        key={book.id}
+        location={'search'}
+      />
     )
   );
 }

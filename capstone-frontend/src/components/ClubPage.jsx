@@ -175,10 +175,12 @@ class ClubPage extends Component {
   render() {
     const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem('userID');
     const bookTile = this.state.book.authors 
-      ? <BookSearchTile 
-        book={this.state.book} 
-        bookLists={this.props.bookLists} 
-        updateBookLists={this.props.updateBookLists} />
+      ? <BookSearchTile
+          book={this.state.book}
+          bookLists={this.props.bookLists}
+          updateBookLists={this.props.updateBookLists}
+          location={'search'}
+        />
       : <div> No book yet! </div>
     // TODO #141: ClubPage elements should be rendered inline instead of in variables
     const owner = this.state.owner 
