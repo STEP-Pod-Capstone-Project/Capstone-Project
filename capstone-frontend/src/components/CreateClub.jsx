@@ -46,9 +46,9 @@ class CreateClub extends Component {
             <Form.Control name="description" as="textarea" rows="3" placeholder="Enter club description..." />
           </Form.Group>
           <Row>
-            <Col xs={12}>
+            {/* <Col xs={12}>
                <Button variant="secondary" id="add-members" onClick={this.addMembers}> Add Members </Button> 
-            </Col>
+            </Col> */}
           </Row>
           <Row>
             <Col xs={12}>
