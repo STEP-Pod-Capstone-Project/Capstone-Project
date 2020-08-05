@@ -38,9 +38,12 @@ class MyClubs extends Component {
           .then(books => books[0])
           .then(book => book.authors && book.authors.length
             ? c.bookTitle = book.title
-            : c.bookTitle = 'Nothing yet'
+            : c.bookTitle = 'Nothing yet!'
           )
-          .catch(e => console.error(e))
+          .catch(e => {
+            console.error(e);
+            c.bookTitle = 'Nothing yet!';
+          })
       )
     )
       .then(this.setState({ clubs: allClubs, fetchingClubs: false }));
@@ -54,9 +57,16 @@ class MyClubs extends Component {
 
     const clubBook = await fetch(`/api/search?gbookId=${newClub.gbookID}`)
         .then(response => response.json())
-        .catch(err => console.log(err));
+        .then(books => books[0])
+        .then(book => book.authors && book.authors.length
+          ? newClub.bookTitle = book.title
+          : newClub.bookTitle = 'Nothing yet!'
+        )
+        .catch(e => {
+          console.error(e);
+          newClub.bookTitle = 'Nothing yet!';
+        });
 
-    newClub.bookTitle = clubBook.title;
     newClub.memberIDs.push(userID);
 
     this.setState({clubs: [...this.state.clubs, newClub], fetchingClubs: false, })
