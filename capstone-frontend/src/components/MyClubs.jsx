@@ -21,11 +21,11 @@ class MyClubs extends Component {
     let memberClubs = [];
     let ownerClubs = [];
     await Promise.all([
-      fetch(`/api/clubs?memberIDs=${window.localStorage.getItem('userID')}`)
+      fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?memberIDs=${window.localStorage.getItem('userID')}`)
         .then(response => response.json())
         .then(clubs => clubs.length ? memberClubs = clubs : this.setState({ fetchingClubs: false }))
         .catch(e => console.error(e)),
-      fetch(`/api/clubs?ownerID=${window.localStorage.getItem('userID')}`)
+      fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?ownerID=${window.localStorage.getItem('userID')}`)
         .then(response => response.json())
         .then(clubs => clubs.length ? ownerClubs = clubs : this.setState({ fetchingClubs: false }))
         .catch(e => console.error(e))
@@ -33,7 +33,7 @@ class MyClubs extends Component {
     let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
     await Promise.all(
       allClubs.map(c =>
-        fetch(`/api/search?gbookId=${c.gbookID}`)
+        fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${c.gbookID}`)
           .then(response => response.json())
           .then(books => books[0])
           .then(book => book.authors && book.authors.length
@@ -55,7 +55,7 @@ class MyClubs extends Component {
 
     this.setState({fetchingClubs: true});
 
-    const clubBook = await fetch(`/api/search?gbookId=${newClub.gbookID}`)
+    const clubBook = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${newClub.gbookID}`)
         .then(response => response.json())
         .then(books => books[0])
         .then(book => book.authors && book.authors.length

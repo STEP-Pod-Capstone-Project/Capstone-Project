@@ -12,10 +12,10 @@ export class MyBooks extends Component {
   }
 
   fetchBooks = () => {
-    fetch(`/api/books?userID=${window.localStorage.getItem('userID')}`)
+    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/books?userID=${window.localStorage.getItem('userID')}`)
       .then(response => response.json())
       .then(bookObjects => Promise.all(bookObjects.map(book => {
-        return fetch(`/api/search?gbookId=${book.gbookID}`)
+        return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${book.gbookID}`)
           .then(response => response.json())
           .then(book => book[0])
       })))

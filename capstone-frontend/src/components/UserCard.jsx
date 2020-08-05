@@ -10,7 +10,7 @@ export class UserCard extends Component {
     this.state = {
       isFriend: false,
     }
-    fetch(`/api/user?id=${window.localStorage.getItem('userID')}`)
+    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${window.localStorage.getItem('userID')}`)
       .then(response => response.json())
       .then(user => this.setState({isFriend: user.friendIDs && user.friendIDs.includes(this.props.user.id)}))
       .catch(e => console.log(e));
