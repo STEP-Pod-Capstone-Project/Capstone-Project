@@ -24,8 +24,6 @@ export class SearchUserModal extends Component {
   componentDidMount() {
     this.fetchCollaborators();
 
-    // TODO: Update ClubPage based on user input
-
     if (this.props.club && this.props.type === 'clubs' && this.props.club.memberIDs) {
       if (this.props.club.memberIDs.length > 0) {
         this.fetchMembers();
