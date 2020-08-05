@@ -142,24 +142,30 @@ class ClubPage extends Component {
     this.setState({ meetings });
   }
 
-  handleMemberChange = (member, type) => {
+  updateRemoveMember = (member) => {
+
+    const members = this.state.members.filter(
+      knownMember => knownMember.id !== member.id);
+
+    const club = Object.assign(this.state.club);
+    club.memberIDs = club.memberIDs.filter(memberId => memberId !== member.id);
+
+    this.setState({ members, club });
+  }
+
+  updateInvites = (user, type) => {
+
+    let club;
+
     if (type === 'add') {
-
-      const club = Object.assign(this.state.club);
-      club.memberIDs.push(member.id);
-
-      this.setState({ members: [...this.state.members, member], club });
-
-    } else if (type === 'remove') {
-
-      const members = this.state.members.filter(
-        knownMember => knownMember.id !== member.id);
-
-      const club = this.state.club;
-      club.memberIDs = club.memberIDs.filter(memberId => memberId !== member.id);
-
-      this.setState({ members, club });
+      club = this.state.club;
+      club.inviteIDs.push(user.id);
+    } else if (type === 'cancel') {
+      club = this.state.club;
+      club.inviteIDs = club.inviteIDs.filter(inviteId => inviteId !== user.id);
     }
+
+    this.setState({ club });
   }
 
   componentDidMount() {
@@ -217,18 +223,21 @@ class ClubPage extends Component {
                       </Link>
                       <SearchUserModal
                         type='clubs'
-                        update={this.handleMemberChange}
+                        updateRemoveMember={this.updateRemoveMember}
+                        updateInvites={this.updateInvites}
                         club={this.state.club}
                         text='Search/View Members'
-                        checkoutText='Current Members'
-                        btnStyle='btn btn-primary mx-3 my-auto' />
+                        checkoutText='Current/Pending Members'
+                        btnStyle='btn btn-primary mx-3 my-auto' 
+                        addBtnText='Invite to Club' />
                       <SearchBookModal
                         objectId={this.props.id}
                         update={this.handleBookChange}
                         text='Change the Club&#39;s Book'
                         putURL='/api/clubs'
                         type='club'
-                        btnStyle='btn btn-primary my-auto mr-2' />
+                        btnStyle='btn btn-primary my-auto mr-2'
+                        addBtnText='Invite to Club' />
                     </div>
                   </Col>
                   :

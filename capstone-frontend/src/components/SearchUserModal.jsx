@@ -16,7 +16,20 @@ export class SearchUserModal extends Component {
       searchTerm: '',
       searchResults: [],
       addedUsers: [],
+      pendingInvites: [],
       resultsFound: false,
+    }
+  }
+
+  componentDidMount() {
+    this.fetchCollaborators();
+
+    if (this.props.club && this.props.type === 'clubs' && this.props.club.memberIDs) {
+      if (this.props.club.memberIDs.length > 0) {
+        this.fetchMembers();
+        this.setState({ pendingInvites: this.props.club.inviteIDs });
+        this.fetchPendingInvites();
+      }
     }
   }
 
@@ -74,16 +87,16 @@ export class SearchUserModal extends Component {
     })
   }
 
-  componentDidMount() {
-    this.fetchCollaborators();
+  fetchPendingInvites = async () => {
 
-    // TODO: Update ClubPage based on user input
+    const invitedUsers = await Promise.all(this.props.club.inviteIDs.map((inviteUserId) => {
+      return fetch(`/api/user?id=${inviteUserId}`).then(resp => resp.json()).then(pendingMember => {
+        delete pendingMember.tokenObj;
+        return pendingMember;
+      });
+    }));
 
-    if (this.props.club && this.props.type === 'clubs' && this.props.club.memberIDs) {
-      if (this.props.club.memberIDs.length > 0) {
-        this.fetchMembers();
-      }
-    }
+    this.setState({ addedUsers: [...this.state.addedUsers, ...invitedUsers] });
   }
 
   removeDuplicatesArrayJsonId = (array) => {
@@ -147,7 +160,7 @@ export class SearchUserModal extends Component {
     // Owner cannot be a Member
     members = members.filter((member) => member.id !== this.props.club.ownerID);
 
-    this.setState({ addedUsers: members });
+    this.setState({ addedUsers: [...this.state.addedUsers, ...members] });
   }
 
   arrayContainsJSONId = (array, json) => {
@@ -188,20 +201,45 @@ export class SearchUserModal extends Component {
     });
   }
 
-  addUserToClubMembers = (club, user) => {
+  sendClubInvitation = (club, user) => {
+
+    this.props.updateInvites(user, 'add');
 
     const clubUpdateJson = {
       id: club.id,
-      add_memberIDs: user.id,
+      add_inviteIDs: user.id,
     }
 
     fetch("/api/clubs", {
       method: 'PUT',
       body: JSON.stringify(clubUpdateJson)
     });
+
+    this.setState({ pendingInvites: [...this.state.pendingInvites, user.id] });
   }
 
-  removeUserFromClubMembers = (club, user) => {
+  cancelInviteRequest = (club, user) => {
+
+    this.props.updateInvites(user, 'cancel');
+
+    const clubUpdateJson = {
+      id: club.id,
+      remove_inviteIDs: user.id,
+    }
+
+    fetch("/api/clubs", {
+      method: 'PUT',
+      body: JSON.stringify(clubUpdateJson)
+    });
+
+    const pendingInvites = this.state.pendingInvites.filter(invite => invite !== user.id);
+
+    const addedUsers = this.state.addedUsers.filter(addedUser => addedUser.id !== user.id);
+
+    this.setState({ pendingInvites, addedUsers });
+  }
+
+  removeUserFromClub = (club, user) => {
     const clubUpdateJson = {
       id: club.id,
       remove_memberIDs: user.id,
@@ -213,29 +251,28 @@ export class SearchUserModal extends Component {
     });
   }
 
-  addUserToAddedUsers = (user) => {
+  addUser = (user) => {
 
     if (this.props.type === 'booklists' && this.props.bookList) {
       this.addUserToBookListCollaborators(this.props.bookList, user);
     }
     else if (this.props.type === 'clubs' && this.props.club) {
-      this.addUserToClubMembers(this.props.club, user);
-      this.props.update(user, 'add');
+      this.sendClubInvitation(this.props.club, user);
     }
 
     // Rerender
     this.setState({ addedUsers: [...this.state.addedUsers, user] });
   }
 
-  removeUserFromAddedUsers = (user) => {
+  removeUser = (user) => {
 
     if (this.props.type === 'booklists' && this.props.bookList) {
       this.removeUserFromBookListCollaborators(this.props.bookList, user);
     }
 
     if (this.props.type === 'clubs' && this.props.club) {
-      this.removeUserFromClubMembers(this.props.club, user);
-      this.props.update(user, 'remove');
+      this.removeUserFromClub(this.props.club, user);
+      this.props.updateRemoveMember(user);
     }
 
     // Rerender
@@ -243,6 +280,7 @@ export class SearchUserModal extends Component {
   }
 
   render() {
+
     return (
       <div>
         <button className={this.props.btnStyle} onClick={() => this.setState({ showModal: true })}>
@@ -285,9 +323,7 @@ export class SearchUserModal extends Component {
                       </div>}
                   </Form.Group>
 
-                  {
-                    this.state.searchResults &&
-
+                  {this.state.searchResults &&
                     <div>
                       {this.state.searchResults.length > 0 &&
                         <h3 className='my-4 px-4'>Search Results</h3>}
@@ -310,61 +346,71 @@ export class SearchUserModal extends Component {
                                 </Card.Text>
 
 
-                                {(this.arrayContainsJSONId(this.state.addedUsers, user))
+                                {this.arrayContainsJSONId(this.state.addedUsers, user)
                                   ?
-                                  <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
-                                    {this.props.removeBtnText || 'Remove'}
-                                  </Button>
+                                  <>
+                                    {!this.state.pendingInvites.includes(user.id) ?
+                                      <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUser(user)}>
+                                        {this.props.removeBtnText || 'Remove'}
+                                      </Button>
+                                      :
+                                      <Button variant='danger' className='my-2 w-75' onClick={() => this.cancelInviteRequest(this.props.club, user)}>
+                                        Cancel Invite
+                                      </Button>}
+                                  </>
                                   :
-                                  <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
+                                  <Button className='my-2 w-75' onClick={() => this.addUser(user)}>
                                     {this.props.addBtnText || 'Add'}
                                   </Button>}
                               </Card.Body>
                             </Card>
-                          </Col>
-                        )}
+                          </Col>)}
                       </Row>
-                    </div>
-                  }
-                </>
-              }
+                    </div>}
+                </>}
 
               {(this.state.addedUsers.length !== 0) &&
                 <div>
                   <h2 className='text-center my-4 px-4 '> {this.props.checkoutText || 'Added Users'}</h2>
                   <Row className='text-center px-3'>
-                    {
-                      this.state.addedUsers.map(user =>
-                        <Col key={user.id} md={4} className="px-2 my-0">
-                          <Card >
-                            <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
-                            <Card.Body>
-                              <Card.Title>
-                                {user.fullName}
-                              </Card.Title>
-                              <Card.Text id='email-text'>
-                                {user.email}
-                              </Card.Text>
+                    {this.state.addedUsers.map(user =>
+                      <Col key={user.id} md={4} className="px-2 my-0">
+                        <Card >
+                          <Card.Img variant="top" src={user.profileImageUrl} className='img-fluid rounded-circle w-50 margin-auto mt-3' />
+                          <Card.Body>
+                            <Card.Title>
+                              {user.fullName}
+                            </Card.Title>
+                            <Card.Text id='email-text'>
+                              {user.email}
+                            </Card.Text>
 
-                              {this.props.userType !== 'viewer' &&
-                                <>
-                                  {this.arrayContainsJSONId(this.state.addedUsers, user) ?
-                                    <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUserFromAddedUsers(user)}>
-                                      {this.props.removeBtnText || 'Remove'}
-                                    </Button>
-                                    :
-                                    <Button className='my-2 w-75' onClick={() => this.addUserToAddedUsers(user)}>
-                                      {this.props.addBtnText || 'Add'}
-                                    </Button>}
-                                  <br />
-                                </>}
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      )}
+                            {this.props.userType !== 'viewer' &&
+                              <>
+                                {this.arrayContainsJSONId(this.state.addedUsers, user)
+                                  ?
+                                  <>
+                                    {!this.state.pendingInvites.includes(user.id) ?
+                                      <Button className='my-2 w-75' variant='danger' onClick={() => this.removeUser(user)}>
+                                        {this.props.removeBtnText || 'Remove'}
+                                      </Button>
+                                      :
+                                      <Button variant='danger' className='my-2 w-75' onClick={() => this.cancelInviteRequest(this.props.club, user)}>
+                                        Cancel Invite
+                                      </Button>}
+                                  </>
+                                  :
+                                  <Button className='my-2 w-75' onClick={() => this.addUser(user)}>
+                                    {this.props.addBtnText || 'Add'}
+                                  </Button>}
+                                <br />
+                              </>}
+                          </Card.Body>
+                        </Card>
+                      </Col>)}
                   </Row>
-                </div>
-              }
+                </div>}
+
             </Form>
           </Modal.Body>
         </Modal>

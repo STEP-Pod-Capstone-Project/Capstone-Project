@@ -84,7 +84,7 @@ export class SearchBookModal extends Component {
           add_gbookIDs: bookId,
         }
         // Update BookList in Firebase
-        fetch(this.props.putURL, {
+        return fetch(this.props.putURL, {
           method: 'PUT',
           body: JSON.stringify(updateJson)
         });
