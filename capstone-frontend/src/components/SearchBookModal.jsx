@@ -33,15 +33,12 @@ export class SearchBookModal extends Component {
       this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
     else {
-      searchResults = await fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
-        .then(response => response.json())
-        .catch(err => alert(err));
-
-      if (typeof searchResults === 'undefined') {
-        searchResults = [];
-      }
-
-      this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
+      fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
+        .then(response => response.status === 200 ? response.json() : [])
+        .then(searchResults => {
+          this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
+        })
+        .catch(err => console.log(err));
     }
   }
 
@@ -80,30 +77,25 @@ export class SearchBookModal extends Component {
 
     if (this.state.addedBooksIDs.length !== 0) {
 
-      await Promise.all(this.state.addedBooksIDs.map(async bookId => {
+      await Promise.all(this.state.addedBooksIDs.map(bookId => {
 
-        let updateJson;
-
-        updateJson = {
+        const updateJson = {
           id: this.props.objectId,
           add_gbookIDs: bookId,
         }
         // Update BookList in Firebase
-        await fetch(this.props.putURL, {
+        return fetch(this.props.putURL, {
           method: 'PUT',
           body: JSON.stringify(updateJson)
         });
-
       }));
 
       this.setState({ showModal: false, searchTerm: '', searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
 
       await this.props.update();
-
     }
 
     else {
-
       this.setState({ showModal: false, searchTerm: '', searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
     }
   }
@@ -123,10 +115,7 @@ export class SearchBookModal extends Component {
         addedBooks: []
       }))
       .then(this.props.update(gbookID))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
 
   }
 
@@ -163,6 +152,7 @@ export class SearchBookModal extends Component {
                       size='lg'
                       role='status'
                       aria-hidden='true'
+                      variant='primary'
                       className='my-5'
                     />
                   </div>}

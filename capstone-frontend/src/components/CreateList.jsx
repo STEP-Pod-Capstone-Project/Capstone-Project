@@ -49,21 +49,18 @@ class CreateList extends Component {
 
     let searchResults;
 
-    if (searchTerm === "") {
+    if (searchTerm === '') {
       searchResults = [];
 
       this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
     else {
-      searchResults = await fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
-        .then(response => response.json())
-        .catch(err => alert(err));
-
-      if (typeof searchResults === "undefined") {
-        searchResults = [];
-      }
-
-      this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
+      fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
+        .then(response => response.status === 200 ? response.json() : [])
+        .then(searchResults => {
+          this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
+        })
+        .catch(err => console.log(err));
     }
   }
 
@@ -142,7 +139,7 @@ class CreateList extends Component {
         {!this.props.sideBar ?
           <button className={this.props.btnStyle} onClick={() => { this.initialSelectedBook(); this.setState({ showModal: true }) }}>
             <div className={this.props.textStyle}>
-              <span id="create-list-modal"> Create New List </span>
+              <span id="create-list-modal"> Create New BookList </span>
             </div>
           </button>
           :
@@ -185,6 +182,7 @@ class CreateList extends Component {
                       size="lg"
                       role="status"
                       aria-hidden="true"
+                      variant="primary"
                       className="my-5"
                     />
                   </div>}
@@ -223,7 +221,7 @@ class CreateList extends Component {
 
                       <Col md={3} className="px-2 my-0 border" key={addedBook.id}>
                         <BookDescriptionOverlay book={addedBook}>
-                          <img className="img-responsive mt-3 p-0 rounded book-img-sm" src={addedBook.thumbnailLink} alt={addedBook.title} />
+                          <img className="img-fluid mt-3 p-0 rounded book-img-sm" src={addedBook.thumbnailLink} alt={addedBook.title} />
                         </BookDescriptionOverlay>
                         <h5 className="mt-4"> {addedBook.title} </h5>
                         <p className="my-1"> {addedBook.authors.join(', ')} </p>

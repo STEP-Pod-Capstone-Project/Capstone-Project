@@ -19,10 +19,7 @@ class ClubGridItem extends Component {
     };
     fetch(`/api/clubs`, { method: "put", body: JSON.stringify(putBody) })
       .then(this.setState({ requested: true }))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   unRequestJoin = () => {
@@ -32,10 +29,7 @@ class ClubGridItem extends Component {
     };
     fetch(`/api/clubs`, { method: "put", body: JSON.stringify(putBody)})
         .then(this.setState({ requested: false }))
-        .catch(function (err) {
-          //TODO #61: Centralize error output
-          alert(err);
-        });
+        .catch(e => console.log(e));
   }
 
   render() {

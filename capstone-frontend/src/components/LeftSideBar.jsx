@@ -34,10 +34,10 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { Route, Link } from 'react-router-dom';
 import { Row, Col } from 'react-bootstrap'
 
-import Home from './Home';
+import { Home } from './Home';
 import { Logout } from './Logout';
 import { Browse } from './Browse';
-import MyBooks from './MyBooks';
+import { MyBooks } from './MyBooks';
 import MyClubs from './MyClubs';
 import { BookPage } from './BookPage';
 import ListPage from './ListPage'
@@ -177,7 +177,7 @@ export const LeftSideBar = withRouter((props) => {
 
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [openList, setOpenList] = React.useState(true);
   const profileObj = JSON.parse(window.localStorage.getItem("profileObj")) || {};
 
@@ -352,7 +352,7 @@ export const LeftSideBar = withRouter((props) => {
             </ListItem>
           </Link>
 
-          <Link to="/myreads" className="remove-link-style" id="mybooks-link">
+          <Link to="/mybooks" className="remove-link-style" id="mybooks-link">
             <ListItem button >
 
               <ListItemIcon>
@@ -398,19 +398,23 @@ export const LeftSideBar = withRouter((props) => {
                   </Link>
                 )
               }
-              <Divider />
 
-              {props.collabBookLists.map(collabBookList =>
+              {props.collabBookLists.length !== 0 &&
+                <>
+                  <Divider />
+                  {props.collabBookLists.map(collabBookList =>
 
-                <Link to={`/listpage/${collabBookList.id}`} key={collabBookList.id} className='remove-link-style'>
-                  <ListItem button className={classes.nested} >
-                    <ListItemIcon>
-                      <CollectionsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={collabBookList.name} />
-                  </ListItem>
-                </Link>
-              )}
+                    <Link to={`/listpage/${collabBookList.id}`} key={collabBookList.id} className='remove-link-style'>
+                      <ListItem button className={classes.nested} >
+                        <ListItemIcon>
+                          <CollectionsIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={collabBookList.name} />
+                      </ListItem>
+                    </Link>
+                  )}
+                </>
+              }
 
               <Divider />
               <CreateList updateBookLists={props.updateBookLists} sideBar={true} closeSideBar={handleDrawerClose} />
@@ -442,7 +446,9 @@ export const LeftSideBar = withRouter((props) => {
       <main className={classes.content}>
         <Row>
           <Col id="main-body">
-            <Route exact path='/' component={Home} />
+            <Route exact path='/' render={(pageProps) => (
+              <Home updateBookLists={props.updateBookLists} />
+            )} />
             <Route path='/browse/:query' render={(pageProps) => (
               <Browse
                 bookLists={props.bookLists}
@@ -451,8 +457,14 @@ export const LeftSideBar = withRouter((props) => {
                 updateFriendsList={props.updateFriendsList}
               />
             )} />
-            <Route path='/mybooks' component={MyBooks} />
-            <Route path='/listpage/:id' component={ListPage} />
+            <Route path='/mybooks' render={() => (
+              <MyBooks bookLists={props.bookLists} updateBookLists={props.updateBookLists} />
+            )} />            <Route path='/listpage/:id' render={(pageProps) => (
+              <ListPage
+                id={pageProps.match.params.id}
+                deleteBookList={deleteBookList}
+                updateBookLists={props.updateBookLists} />
+            )} />
             <Route path='/myclubs' component={MyClubs} />
             <Route path='/bookpage/:id' render={(pageProps) => (
               <BookPage bookId={pageProps.match.params.id} bookLists={props.bookLists} updateBookLists={props.updateBookLists} />

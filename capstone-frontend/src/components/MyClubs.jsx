@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Button, CardDeck, Col, Row } from 'react-bootstrap';
+import { Button, CardDeck, Col, Row, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { ShowClubInvitesModal } from './ShowClubInvitesModal';
 
 import ClubGridItem from './ClubGridItem';
 
@@ -10,53 +11,55 @@ class MyClubs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clubs: []
+      clubs: [],
+      fetchingClubs: false, // Spinner
     }
   }
 
   getMyClubs = async () => {
-    let memberClubs = await fetch(`/api/clubs?memberIDs=${window.localStorage.getItem("userID")}`)
-      .then(response => response.json())
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
-
-    let ownerClubs = await fetch(`/api/clubs?ownerID=${window.localStorage.getItem("userID")}`)
-      .then(response => response.json())
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
-    if (!memberClubs) memberClubs = [];
-    if (!ownerClubs) ownerClubs = [];
-    let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
-    let c;
-    for (c of allClubs) {
-      let owner = await fetch(`/api/user?id=${c.ownerID}`)
+    this.setState({ fetchingClubs: true });
+    let memberClubs = [];
+    let ownerClubs = [];
+    await Promise.all([
+      fetch(`/api/clubs?memberIDs=${window.localStorage.getItem('userID')}`)
         .then(response => response.json())
-        .catch(function (err) {
-          //TODO #61: Centralize error output
-          alert(err);
-        });
-      let book;
-      if (c.gbookID === '') {
-        book = { title: 'Nothing yet' };
-      }
-      else {
-        book = await fetch(`/api/search?gbookId=${c.gbookID}`)
+        .then(clubs => clubs.length ? memberClubs = clubs : this.setState({ fetchingClubs: false }))
+        .catch(e => console.error(e)),
+      fetch(`/api/clubs?ownerID=${window.localStorage.getItem('userID')}`)
+        .then(response => response.json())
+        .then(clubs => clubs.length ? ownerClubs = clubs : this.setState({ fetchingClubs: false }))
+        .catch(e => console.error(e))
+    ]);
+    let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
+    await Promise.all(
+      allClubs.map(c =>
+        fetch(`/api/search?gbookId=${c.gbookID}`)
           .then(response => response.json())
           .then(books => books[0])
-          .catch(function (err) {
-            //TODO #61: Centralize error output
-            alert(err);
-          });
-      }
+          .then(book => book.authors && book.authors.length
+            ? c.bookTitle = book.title
+            : c.bookTitle = 'Nothing yet'
+          )
+          .catch(e => console.error(e))
+      )
+    )
+      .then(this.setState({ clubs: allClubs, fetchingClubs: false }));
+  }
 
-      c.ownerName = owner.fullName;
-      c.bookTitle = book.title;
-    }
-    this.setState({ clubs: allClubs });
+  updateMyClubs = async (newClub) => {
+
+    const userID = window.localStorage.getItem('userID');
+
+    this.setState({fetchingClubs: true});
+
+    const clubBook = await fetch(`/api/search?gbookId=${newClub.gbookID}`)
+        .then(response => response.json())
+        .catch(err => console.log(err));
+
+    newClub.bookTitle = clubBook.title;
+    newClub.memberIDs.push(userID);
+
+    this.setState({clubs: [...this.state.clubs, newClub], fetchingClubs: false, })
   }
 
   componentDidMount() {
@@ -69,18 +72,36 @@ class MyClubs extends Component {
       clubArray.push(<ClubGridItem key={c.id} club={c} />);
     });
     return (
-      <div className="page-container">
+      <div>
         <Row>
-          <Col xs={12} className="title"> My Clubs </Col>
+          <Col>
+            <h2 className='ml-2'>My Clubs</h2>
+          </Col>
+          <Col className='m-auto p-0 mr-3'>
+            <div id='modal-buttons' className='mx-3'>
+              <ShowClubInvitesModal
+               btnStyle='btn btn-primary mx-3' 
+               updateMyClubs={this.updateMyClubs}/>
+              <Link to='/createclub'>
+                <Button variant='primary'>
+                  Create New Club
+                </Button>
+              </Link>
+            </div>
+          </Col>
         </Row>
-        <Link to="/createclub">
-          <Button variant="primary">
-            Create New Club
-          </Button>
-        </Link>
-        <CardDeck className="groups-list-container"> {clubArray} </CardDeck>
-      </div>
+        <hr className='light-gray-border mx-2 my-2' />
 
+        <div className="page-container">
+          {this.state.fetchingClubs ?
+            (<div className="text-center mt-4">
+              <Spinner variant="primary" animation="border" role="status" />
+            </div>)
+            :
+            <CardDeck className="groups-list-container"> {clubArray} </CardDeck>
+          }
+        </div>
+      </div>
     );
   }
 }

@@ -16,10 +16,7 @@ export class BookPage extends Component {
     fetch(`/api/search?gbookId=${this.props.bookId}`)
       .then(response => response.json())
       .then(books => this.setState({ book: books[0] }))
-      .catch(function (err) {
-        //TODO #61: Frontend error logging
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   componentDidMount() {
@@ -56,7 +53,7 @@ export class BookPage extends Component {
                         updateBookLists={this.props.updateBookLists} book={book} />
                     </Row>
                     <Row>
-                      <a className='btn btn-primary btn-margin center-horizontal'
+                      <a className='w-75 btn btn-primary btn-margin center-horizontal'
                         href={book.webReaderLink} target='_blank'
                         rel='noopener noreferrer'>
                         Web Reader

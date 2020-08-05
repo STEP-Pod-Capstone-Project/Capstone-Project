@@ -13,7 +13,7 @@ export class UserCard extends Component {
     fetch(`/api/user?id=${window.localStorage.getItem('userID')}`)
       .then(response => response.json())
       .then(user => this.setState({isFriend: user.friendIDs && user.friendIDs.includes(this.props.user.id)}))
-      .catch(e => alert(e));
+      .catch(e => console.log(e));
   }
 
   removeMember = () => {
@@ -23,10 +23,7 @@ export class UserCard extends Component {
     }
     fetch('/api/clubs', { method: 'put', body: JSON.stringify(removal) })
       .then(this.props.removeMember(this.props.user.id))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   acceptMember = () => {
@@ -41,10 +38,7 @@ export class UserCard extends Component {
     };
     fetch('/api/clubs', { method: 'put', body: JSON.stringify(acceptance) })
       .then(this.props.fetchData)
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   rejectMember = () => {
@@ -54,10 +48,7 @@ export class UserCard extends Component {
     };
     fetch('/api/clubs', { method: 'put', body: JSON.stringify(rejection) })
       .then(this.props.fetchData)
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
   }
 
   addFriend = () => {
@@ -68,7 +59,7 @@ export class UserCard extends Component {
     fetch('/api/user', {method:'put', body: JSON.stringify(addFriend)})
       .then(() => this.setState({isFriend: true}))
       .then(() => this.props.updateFriendsList())
-      .catch(e => alert(e));
+      .catch(e => console.log(e));
   }
 
   removeFriend = () => {

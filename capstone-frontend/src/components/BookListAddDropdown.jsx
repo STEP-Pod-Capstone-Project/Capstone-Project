@@ -22,7 +22,7 @@ const addBookToBookList = async (book, bookList) => {
 const BookListAddDropdown = ({ book, bookLists, updateBookLists }) => {
   if (bookLists.length > 0) {
     return (
-      <DropdownButton id='button-list-add' className='btn btn-primary mt-4 width-75'
+      <DropdownButton id='button-list-add' className='btn btn-primary mt-4 width-75 mx-auto'
         title='Add to List'>
         {
           bookLists.map(bookList =>
@@ -36,8 +36,13 @@ const BookListAddDropdown = ({ book, bookLists, updateBookLists }) => {
     );
   } else {
     return (
-      <CreateList id='button-list-add' selectedBookID={book.id} selectedBook={book} updateBookLists={updateBookLists} className='dropdown-add'
-        btnStyle='btn btn-success btn-margin center-horizontal' />
+      <CreateList
+        id='button-list-add'
+        selectedBookID={book.id}
+        selectedBook={book}
+        updateBookLists={updateBookLists}
+        className='dropdown-add'
+        btnStyle='btn btn-success btn-margin center-horizontal w-75' />
     );
   }
 }
