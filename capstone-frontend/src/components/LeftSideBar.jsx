@@ -341,17 +341,6 @@ export const LeftSideBar = withRouter((props) => {
             </ListItem>
           </Link>
 
-          <Link to="/browse" className="remove-link-style" id="browse-link">
-            <ListItem button>
-
-              <ListItemIcon>
-                <SearchIcon />
-              </ListItemIcon>
-              <ListItemText primary="Search" />
-
-            </ListItem>
-          </Link>
-
           <Link to="/mybooks" className="remove-link-style" id="mybooks-link">
             <ListItem button >
 

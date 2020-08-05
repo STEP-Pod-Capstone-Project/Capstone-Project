@@ -20,7 +20,7 @@ class AdminClubPage extends Component {
   fetchData = () => {
     let requesters = [];
     let members = [];
-    fetch(`/api/clubs?id=${this.props.match.params.id}`)
+    fetch(`/api/clubs?id=${this.props.id}`)
       .then(response => response.json()).then(clubs => {
         const club = clubs[0];
         this.setState({ club })

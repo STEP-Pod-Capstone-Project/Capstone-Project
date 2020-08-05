@@ -24,6 +24,7 @@ class AssignmentCard extends Component {
       "userID": window.localStorage.getItem("userID"),
       "whenCreated": (new Date()).toUTCString()
     };
+    e.target[0].value = '';
     fetch("/api/comments", { method: "post", body: JSON.stringify(data) })
       .then(response => response.json())
       .then(commentJson => {
