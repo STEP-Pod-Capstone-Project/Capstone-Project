@@ -17,9 +17,7 @@ export class ClubSearchList extends Component {
     // Get clubs by searchQuery
     let clubs = await fetch(`/api/clubs?searchTerm=${this.props.searchQuery}`)
       .then(response => response.json())
-      .catch(function (err) {
-        console.log(err)
-      });
+      .catch(e => console.log(e));
 
     // Get clubs by checking to see if any clubs are reading the books found in Google Books API search
     await Promise.all(this.props.books.map(book => {
@@ -30,9 +28,7 @@ export class ClubSearchList extends Component {
             clubs = clubs.concat(clubsWithBook)
           }
         })
-        .catch(function (err) {
-          console.log(err)
-        });
+        .catch(e => console.log(e));
     }));
 
     // Fill in book title and club owner for all clubs
@@ -41,17 +37,13 @@ export class ClubSearchList extends Component {
         return fetch(`/api/search?gbookId=${club.gbookID}`)
           .then(response => response.json())
           .then(book => club.bookTitle = book[0].title)
-          .catch(function (err) {
-            alert(err)
-          });
+          .catch(e => console.log(e));
       }
       if (club.ownerID.length > 0) {
         return fetch(`/api/user?id=${club.ownerID}`)
           .then(response => response.json())
           .then(owner => club.ownerName = owner.fullName)
-          .catch(function (err) {
-            alert(err)
-          });
+          .catch(e => console.log(e));
       }
       return Promise.resolve();
     }));

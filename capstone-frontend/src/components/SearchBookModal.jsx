@@ -77,30 +77,25 @@ export class SearchBookModal extends Component {
 
     if (this.state.addedBooksIDs.length !== 0) {
 
-      await Promise.all(this.state.addedBooksIDs.map(async bookId => {
+      await Promise.all(this.state.addedBooksIDs.map(bookId => {
 
-        let updateJson;
-
-        updateJson = {
+        const updateJson = {
           id: this.props.objectId,
           add_gbookIDs: bookId,
         }
         // Update BookList in Firebase
-        await fetch(this.props.putURL, {
+        return fetch(this.props.putURL, {
           method: 'PUT',
           body: JSON.stringify(updateJson)
         });
-
       }));
 
       this.setState({ showModal: false, searchTerm: '', searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
 
       await this.props.update();
-
     }
 
     else {
-
       this.setState({ showModal: false, searchTerm: '', searchResults: [], displayBooks: false, addedBooksIDs: [], addedBooks: [] })
     }
   }
@@ -120,10 +115,7 @@ export class SearchBookModal extends Component {
         addedBooks: []
       }))
       .then(this.props.update(gbookID))
-      .catch(function (err) {
-        //TODO #61: Centralize error output
-        alert(err);
-      });
+      .catch(e => console.log(e));
 
   }
 
