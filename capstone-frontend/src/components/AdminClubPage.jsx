@@ -67,7 +67,7 @@ class AdminClubPage extends Component {
       return;
     }
     const history = this.props.history;
-    fetch(`/api/clubs?id=${this.props.id}`, { method: "delete" })
+    fetch(`/api/clubs?id=${this.props.id}`, { method: 'delete' })
       .then(function () {
         history.push("/myclubs");
       })
@@ -105,7 +105,8 @@ class AdminClubPage extends Component {
               user={r}
               club={this.state.club}
               fetchData={this.fetchData}
-              updateFriendsList={this.props.updateFriendsList} />
+              updateFriendsList={this.props.updateFriendsList}
+            />
           )}
         </Row>
         <Button id="delete-club" variant="danger" onClick={this.handleDelete}>Delete Club</Button>
