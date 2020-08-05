@@ -174,15 +174,22 @@ class ClubPage extends Component {
 
   render() {
     const isOwner = this.state.owner && this.state.club.ownerID === window.localStorage.getItem('userID');
+    const meetings = this.state.meetings.length > 0 &&
+      <>
+        <h3> Upcoming Meetings: </h3>
+        <CardDeck className='groups-list-container'>
+          {this.state.meetings.map(m => <MeetingCard meeting={m} deleteMeeting={this.deleteMeeting} />)}
+        </CardDeck>
+      </>;
+      
     const bookTile = this.state.book.authors 
-      ? <BookSearchTile
-          book={this.state.book}
-          bookLists={this.props.bookLists}
-          updateBookLists={this.props.updateBookLists}
-          location={'search'}
-        />
-      : <div> No book yet! </div>
-    // TODO #141: ClubPage elements should be rendered inline instead of in variables
+      ? <BookSearchTile 
+        book={this.state.book} 
+        bookLists={this.props.bookLists} 
+        updateBookLists={this.props.updateBookLists} 
+        location={'search'}
+      />
+      : <span className='block'> No book yet! </span>
     const owner = this.state.owner 
       && <UserCard 
             removeMember={this.removeMember} 
@@ -196,13 +203,15 @@ class ClubPage extends Component {
           key={m.id} 
           user={m} 
           club={this.state.club} 
-          removeMember={this.removeMember}
+          removeMember={this.removeMember} 
           updateFriendsList={this.props.updateFriendsList}
         />)
-      : <div> No members yet! </div>;
-    const assignments = this.state.assignments.length > 0 
-      ? <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>
-      : <div> No assignments yet! </div>;
+      : <span className='block'> No members yet! </span>;
+    const assignments = this.state.assignments.length > 0 &&
+      <>
+        <h3> Current Assignments </h3> 
+        <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div> 
+      </>; 
     return (
       <div>
         {this.state.fetchData ?
@@ -263,17 +272,17 @@ class ClubPage extends Component {
               <hr className='light-gray-border mx-2 my-2' />
 
               <div className='text-center'>
+                <h3 className='mt-3'> Descrpition </h3>
                 <span className='description block'> {this.state.club.description} </span>
-                <span className='block'> Upcoming Meetings: </span>
-                  <CardDeck className='groups-list-container'>
-                    {this.state.meetings.map(m => <MeetingCard meeting={m} deleteMeeting={this.deleteMeeting} />)}
-                  </CardDeck>
+                {meetings}
+                <h3 className='mt-4'> Current Book </h3>
                 {bookTile}
                 {assignments}
                 {isOwner ?
+                  <div className='mt-5 mb-5'>
+                    <h3> Post a new assignment </h3>
                   <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
                     <Form.Group controlId='formPostAssignment'>
-                      <Form.Label> Post a new assignment! </Form.Label>
                       <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
                     </Form.Group>
                     <div>
@@ -281,7 +290,6 @@ class ClubPage extends Component {
                         id='due-date'
                         label='Due Date'
                         type='datetime-local'
-                        defaultValue={new Date().toString()}
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -289,15 +297,16 @@ class ClubPage extends Component {
                     </div>
                     <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
                   </Form>
+                  </div>
                   : 
-                  <Button variant='danger' onClick={this.leaveClub}>
+                  <Button className='mt-5' variant='danger' onClick={this.leaveClub}>
                     Leave Club
                   </Button>}
-                <span className='block'> Club Members: </span>
+                <h3 className='mt-5'> Club Members </h3>
                 <Row className='justify-content-center'>
                   {members}
                 </Row>
-                <span className='block'> Club Owner: </span>
+                <h3 className='mt-5'> Club Owner </h3>
                 <Row className='align-items-center justify-content-center'>
                   {owner}
                 </Row>
