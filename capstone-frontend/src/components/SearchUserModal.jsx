@@ -24,10 +24,11 @@ export class SearchUserModal extends Component {
   componentDidMount() {
     this.fetchCollaborators();
 
-    if (this.props.club && this.props.type === 'clubs' && this.props.club.memberIDs) {
-      if (this.props.club.memberIDs.length > 0) {
+    if (this.props.club && this.props.type === 'clubs') {
+      if (this.props.club.memberIDs && this.props.club.memberIDs.length > 0) {
         this.fetchMembers();
-        this.setState({ pendingInvites: this.props.club.inviteIDs });
+      }
+      if (this.props.club.inviteIDs && this.props.club.inviteIDs.length > 0) {
         this.fetchPendingInvites();
       }
     }
@@ -96,7 +97,7 @@ export class SearchUserModal extends Component {
       });
     }));
 
-    this.setState({ addedUsers: [...this.state.addedUsers, ...invitedUsers] });
+    this.setState({ addedUsers: [...this.state.addedUsers, ...invitedUsers], pendingInvites: this.props.club.inviteIDs });
   }
 
   removeDuplicatesArrayJsonId = (array) => {
