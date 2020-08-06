@@ -65,7 +65,7 @@ class App extends Component {
           .then(response => response.json())
       })))
       .then(friends => friends && this.setState({ userFriends: friends }))
-      .catch(e => console.err(e))
+      .catch(e => console.error(e))
   }
 
   componentDidMount() {

@@ -31,45 +31,18 @@ class MyClubs extends Component {
         .catch(e => console.error(e))
     ]);
     let allClubs = memberClubs.concat(ownerClubs.filter((item) => memberClubs.indexOf(item) < 0));
-    await Promise.all(
-      allClubs.map(c =>
-        fetch(`/api/search?gbookId=${c.gbookID}`)
-          .then(response => response.json())
-          .then(books => books[0])
-          .then(book => book.authors && book.authors.length
-            ? c.bookTitle = book.title
-            : c.bookTitle = 'Nothing yet!'
-          )
-          .catch(e => {
-            console.error(e);
-            c.bookTitle = 'Nothing yet!';
-          })
-      )
-    )
-      .then(this.setState({ clubs: allClubs, fetchingClubs: false }));
+    this.setState({ clubs: allClubs, fetchingClubs: false });
   }
 
   updateMyClubs = async (newClub) => {
 
     const userID = window.localStorage.getItem('userID');
 
-    this.setState({fetchingClubs: true});
-
-    const clubBook = await fetch(`/api/search?gbookId=${newClub.gbookID}`)
-        .then(response => response.json())
-        .then(books => books[0])
-        .then(book => book.authors && book.authors.length
-          ? newClub.bookTitle = book.title
-          : newClub.bookTitle = 'Nothing yet!'
-        )
-        .catch(e => {
-          console.error(e);
-          newClub.bookTitle = 'Nothing yet!';
-        });
+    this.setState({ fetchingClubs: true });
 
     newClub.memberIDs.push(userID);
 
-    this.setState({clubs: [...this.state.clubs, newClub], fetchingClubs: false, })
+    this.setState({ clubs: [...this.state.clubs, newClub], fetchingClubs: false, })
   }
 
   componentDidMount() {
@@ -90,8 +63,8 @@ class MyClubs extends Component {
           <Col className='m-auto p-0 mr-3'>
             <div id='modal-buttons' className='mx-3'>
               <ShowClubInvitesModal
-               btnStyle='btn btn-primary mx-3' 
-               updateMyClubs={this.updateMyClubs}/>
+                btnStyle='btn btn-primary mx-3'
+                updateMyClubs={this.updateMyClubs} />
               <Link to='/createclub'>
                 <Button variant='primary'>
                   Create New Club
