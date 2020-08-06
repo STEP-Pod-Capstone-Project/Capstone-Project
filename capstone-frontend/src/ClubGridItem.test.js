@@ -15,7 +15,7 @@ document.body.appendChild(container);
 const club = {
   name: "name",
   description: "description",
-  gbook: "gbook", 
+  gbookID: "gbook", 
   memberIDs: ["one", "two", "three"], 
   requestIDs: ["four", "five"],
 };

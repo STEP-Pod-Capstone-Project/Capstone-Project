@@ -22,6 +22,7 @@ class ClubPage extends Component {
       owner: {},
       members: [],
       meetings: [],
+      deletedMemberId: '',
       fetchingData: false, // Spinner
     }
   }
@@ -33,7 +34,11 @@ class ClubPage extends Component {
     if (index > -1) {
       memberArray.splice(index, 1);
     }
-    this.setState({ members: memberArray });
+
+    const club = this.state.club;
+    club.memberIDs = club.memberIDs.filter(clubMemberId => clubMemberId !== memberID);
+
+    this.setState({ members: memberArray, club, deletedMemberId: memberID });
   }
 
   fetchData = async () => {
@@ -244,6 +249,7 @@ class ClubPage extends Component {
                         updateRemoveMember={this.updateRemoveMember}
                         updateInvites={this.updateInvites}
                         club={this.state.club}
+                        deletedMemberId={this.state.deletedMemberId}
                         text='Search/View Members'
                         checkoutText='Current/Pending Members'
                         btnStyle='btn btn-primary mx-3 my-auto'

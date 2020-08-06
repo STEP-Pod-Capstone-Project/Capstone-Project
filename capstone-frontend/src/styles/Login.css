@@ -1,5 +1,5 @@
 #login-card {
-  margin: 0 auto;
+  margin: auto;
   transform: translateY(50%);
   width: 45em;
 }
@@ -10,4 +10,40 @@
 
 #sign-in-text button{
   font-size: 18px !important;
+}
+
+/* Tablet */
+@media only screen and (max-width: 768px) {
+  #login-card {
+    margin: auto;
+    transform: translateY(50%);
+    width: 35rem;
+  }
+}
+
+/* Large/Medium Phones */
+@media only screen and (max-width: 425px) {
+  #login-card {
+    margin: auto;
+    transform: translateY(50%);
+    width: 20rem;
+  }
+  #login-title-text {
+    font-size: 2rem;
+  }
+}
+
+/* Small Phones */
+@media only screen and (max-width: 320px) {
+  #login-card {
+    margin: auto;
+    transform: translateY(50%);
+    width: 16rem;
+  }
+  #login-title-text {
+    font-size: 1.75rem;
+  }
+  #login-subtitle-text {
+    font-size: 1.5rem;
+  }
 }
