@@ -34,6 +34,17 @@ export class SearchUserModal extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+
+    if (this.props.club && this.props.type === 'clubs') {
+      if (this.props.deletedMemberId && (this.props.deletedMemberId !== prevProps.deletedMemberId)) {
+
+        const addedUsers = this.state.addedUsers.filter(addedUser => addedUser.id !== this.props.deletedMemberId);
+        this.setState({ addedUsers });
+      }
+    }
+  }
+
   getUsers = async (searchTerm) => {
 
     this.setState({ fetchingUsers: true });

@@ -41,9 +41,6 @@ test('renders sidebar test', () => {
   const homeLink = document.getElementById("home-link");
   expect(homeLink).toBeInTheDocument();
 
-  const browseLink = document.getElementById("browse-link");
-  expect(browseLink).toBeInTheDocument();
-
   const myBooksLink = document.getElementById("mybooks-link");
   expect(myBooksLink).toBeInTheDocument();
 
