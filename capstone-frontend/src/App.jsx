@@ -46,7 +46,7 @@ class App extends Component {
     let collabBookLists = await fetch(`/api/booklist?collaboratorsIDs=${userID}`, {
       method: "GET",
     }).then(resp => resp.json())
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
 
     if (typeof collabBookLists === 'undefined') {
       collabBookLists = [];

@@ -27,10 +27,10 @@ export class Login extends Component {
         </Navbar>
 
         <Card id="login-card" className="text-center">
-          <Card.Header><h1 className="my-4">Welcome to BookBook</h1></Card.Header>
+          <Card.Header><h1 id="login-title-text" className="my-4">Welcome to BookBook</h1></Card.Header>
           <Card.Body>
             <Card.Text id="sign-in-text">
-              <span className="h3">To Get Started</span>
+              <span id="login-subtitle-text" className="h3">To Get Started</span>
               <br />
               <GoogleLogin
                 className="text-center mt-3"
