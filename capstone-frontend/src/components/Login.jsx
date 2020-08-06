@@ -38,7 +38,8 @@ export class Login extends Component {
                 clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
                 buttonText="Sign in with Google"
                 onSuccess={this.loginResponseSuccess}
-                isSignedIn={false}
+                onFailure={() => console.log("Failure")}
+                isSignedIn={true}
                 cookiePolicy={"single_host_origin"} />
             </Card.Text>
           </Card.Body>
