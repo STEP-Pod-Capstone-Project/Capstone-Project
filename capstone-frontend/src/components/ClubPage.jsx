@@ -52,8 +52,8 @@ class ClubPage extends Component {
 
     this.setState({ club });
 
-    if (club.ownerID !== window.localStorage.getItem('userID') 
-        && !club.memberIDs.includes(window.localStorage.getItem('userID'))) {
+    if (club.ownerID !== window.localStorage.getItem('userID')
+      && !club.memberIDs.includes(window.localStorage.getItem('userID'))) {
       alert('You are not a member of this club!');
       this.props.history.push('/myclubs');
     }
@@ -72,7 +72,7 @@ class ClubPage extends Component {
       .catch(e => console.error(e));
 
     let members = [];
-    Promise.all(club.memberIDs.map(m => 
+    Promise.all(club.memberIDs.map(m =>
       fetch(`/api/user?id=${m}`)
         .then(response => response.json())
         .then(member => members.push(member))
@@ -126,10 +126,10 @@ class ClubPage extends Component {
       id: this.props.id,
       remove_memberIDs: userID,
     };
-    fetch('/api/clubs', { method: 'put', body: JSON.stringify(removeMember)})
-        .then(this.removeMember(userID))
-        .then(this.props.history.push('/'))
-        .catch(e => console.error(e));
+    fetch('/api/clubs', { method: 'put', body: JSON.stringify(removeMember) })
+      .then(this.removeMember(userID))
+      .then(this.props.history.push('/'))
+      .catch(e => console.error(e));
   }
 
   deleteMeeting = (meetingID) => {
@@ -181,37 +181,37 @@ class ClubPage extends Component {
           {this.state.meetings.map(m => <MeetingCard meeting={m} deleteMeeting={this.deleteMeeting} />)}
         </CardDeck>
       </>;
-      
-    const bookTile = this.state.book.authors 
-      ? <BookSearchTile 
-        book={this.state.book} 
-        bookLists={this.props.bookLists} 
-        updateBookLists={this.props.updateBookLists} 
+
+    const bookTile = this.state.book.authors
+      ? <BookSearchTile
+        book={this.state.book}
+        bookLists={this.props.bookLists}
+        updateBookLists={this.props.updateBookLists}
         location={'search'}
       />
       : <span className='block'> No book yet! </span>
-    const owner = this.state.owner 
-      && <UserCard 
-            removeMember={this.removeMember} 
-            club={this.state.club} 
-            user={this.state.owner}
-            updateFriendsList={this.props.updateFriendsList}
-          />;
-    const members = this.state.members.length > 0 
-      ? this.state.members.map(m => 
-        <UserCard 
-          key={m.id} 
-          user={m} 
-          club={this.state.club} 
-          removeMember={this.removeMember} 
+    const owner = this.state.owner
+      && <UserCard
+        removeMember={this.removeMember}
+        club={this.state.club}
+        user={this.state.owner}
+        updateFriendsList={this.props.updateFriendsList}
+      />;
+    const members = this.state.members.length > 0
+      ? this.state.members.map(m =>
+        <UserCard
+          key={m.id}
+          user={m}
+          club={this.state.club}
+          removeMember={this.removeMember}
           updateFriendsList={this.props.updateFriendsList}
         />)
       : <span className='block'> No members yet! </span>;
     const assignments = this.state.assignments.length > 0 &&
       <>
-        <h3> Current Assignments </h3> 
-        <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div> 
-      </>; 
+        <h3> Current Assignments </h3>
+        <div> {this.state.assignments.map(a => <AssignmentCard key={a.id} assignment={a} />)} </div>
+      </>;
     return (
       <div>
         {this.state.fetchData ?
@@ -232,11 +232,13 @@ class ClubPage extends Component {
                 {isOwner ?
                   <Col className='m-auto p-0 mr-3'>
                     <div id='modal-buttons' className='mx-2'>
-                      <Link to={`/adminclubpage/${this.state.club.id}`}>
-                        <Button className='admin-button my-auto' variant='secondary'>
-                          Admin page
+                      <Col>
+                        <Link to={`/adminclubpage/${this.state.club.id}`}>
+                          <Button className='admin-button my-auto' variant='secondary'>
+                            Admin page
                         </Button>
-                      </Link>
+                        </Link>
+                      </Col>
                       <SearchUserModal
                         type='clubs'
                         updateRemoveMember={this.updateRemoveMember}
@@ -244,7 +246,7 @@ class ClubPage extends Component {
                         club={this.state.club}
                         text='Search/View Members'
                         checkoutText='Current/Pending Members'
-                        btnStyle='btn btn-primary mx-3 my-auto' 
+                        btnStyle='btn btn-primary mx-3 my-auto'
                         addBtnText='Invite to Club' />
                       <SearchBookModal
                         objectId={this.props.id}
@@ -272,33 +274,41 @@ class ClubPage extends Component {
               <hr className='light-gray-border mx-2 my-2' />
 
               <div className='text-center'>
-                <h3 className='mt-3'> Descrpition </h3>
-                <span className='description block'> {this.state.club.description} </span>
-                {meetings}
+                <h3 className='mt-3'> Description </h3>
+                <Row>
+                  <Col>
+                    <span className='description block'> {this.state.club.description} </span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    {meetings}
+                  </Col>
+                </Row>
                 <h3 className='mt-4'> Current Book </h3>
                 {bookTile}
                 {assignments}
                 {isOwner ?
                   <div className='mt-5 mb-5'>
                     <h3> Post a new assignment </h3>
-                  <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
-                    <Form.Group controlId='formPostAssignment'>
-                      <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
-                    </Form.Group>
-                    <div>
-                      <TextField
-                        id='due-date'
-                        label='Due Date'
-                        type='datetime-local'
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    </div>
-                    <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
-                  </Form>
+                    <Form onSubmit={this.handleAssignmentPost} id='assignment-post-form'>
+                      <Form.Group controlId='formPostAssignment'>
+                        <Form.Control as='textarea' rows='3' placeholder='Enter assignment text...' />
+                      </Form.Group>
+                      <div>
+                        <TextField
+                          id='due-date'
+                          label='Due Date'
+                          type='datetime-local'
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </div>
+                      <Button className='mt-3' variant='primary' type='submit'> Submit </Button>
+                    </Form>
                   </div>
-                  : 
+                  :
                   <Button className='mt-5' variant='danger' onClick={this.leaveClub}>
                     Leave Club
                   </Button>}
