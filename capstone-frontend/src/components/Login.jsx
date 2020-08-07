@@ -35,9 +35,10 @@ export class Login extends Component {
               <GoogleLogin
                 className="text-center mt-3"
                 scope={'https://www.googleapis.com/auth/calendar'}
-                clientId="962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"
+                clientId="118832340668-gq8e44ooi8c1gmi8187sjmokstllj83m.apps.googleusercontent.com"
                 buttonText="Sign in with Google"
                 onSuccess={this.loginResponseSuccess}
+                onFailure={() => console.log("Login Failure")}
                 isSignedIn={true}
                 cookiePolicy={"single_host_origin"} />
             </Card.Text>

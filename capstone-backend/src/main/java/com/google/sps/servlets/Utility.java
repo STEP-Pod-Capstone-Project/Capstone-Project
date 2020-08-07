@@ -46,11 +46,11 @@ public class Utility {
     }
 
     FileInputStream serviceAccount = new FileInputStream(
-        "./sopa-capstone-step-2020-firebase-adminsdk-f2rym-883a473e3d.json");
+        "./book-book-app-firebase-adminsdk-bxss1-5f14a019be.json");
 
     FirebaseOptions options = new FirebaseOptions.Builder()
       .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-      .setDatabaseUrl("https://sopa-capstone-step-2020.firebaseio.com")
+      .setDatabaseUrl("https://book-book-app.firebaseio.com")
       .build();
 
     FirebaseApp.initializeApp(options);

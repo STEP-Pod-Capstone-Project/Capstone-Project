@@ -52,7 +52,7 @@ public class UserServlet extends HttpServlet {
       GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
           .setAudience(
               // Client ID URL
-              Collections.singletonList("962122785123-t0pm10o610q77epuh9d1jjs29hamm1nf.apps.googleusercontent.com"))
+              Collections.singletonList("118832340668-gq8e44ooi8c1gmi8187sjmokstllj83m.apps.googleusercontent.com"))
           .build();
 
       GoogleIdToken googleIdToken = verifier.verify(tokenId);
