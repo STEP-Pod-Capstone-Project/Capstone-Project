@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 import '../styles/Groups.css';
 
+const defaultTitle = 'Nothing yet!';
+
 class ClubGridItem extends Component {
   constructor(props) {
     super(props);
@@ -35,19 +37,19 @@ class ClubGridItem extends Component {
 
   fetchBook = () => {
     if (this.props.club.gbookID.length === 0) {
-      this.setState({ title: 'Nothing yet!' });
+      this.setState({ title: defaultTitle });
     } else {
       fetch(`/api/search?gbookId=${this.props.club.gbookID}`)
         .then(response => response.json())
         .then(books => books[0])
         .then(book => book.authors && book.authors.length > 0 
           ? book.title
-          : 'Nothing yet!'
+          : defaultTitle
         )
         .then(title => this.setState({ title }))
         .catch(e => {
           console.error(e);
-          return 'Nothing yet!';
+          return defaultTitle;
         });
     }
   }
@@ -57,14 +59,13 @@ class ClubGridItem extends Component {
   }
 
   render() {
-    console.log(this.props.club);
     const userID = window.localStorage.getItem("userID");
     const isOwner = this.props.club.ownerID === userID
     const isMember = this.props.club.memberIDs.includes(userID);
     const isViewer = !isOwner && !isMember;
     const isRequester = this.props.club.requestIDs.includes(userID);
     const title = this.state.title && this.state.title.length > 0 ?
-      this.state.title : 'Nothing yet!';
+      this.state.title : defaultTitle;
     return (
       <Col xs={12} sm={6} md={3}>
         <Card className="group-container">
