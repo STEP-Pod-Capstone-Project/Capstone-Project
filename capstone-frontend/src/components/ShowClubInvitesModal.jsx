@@ -113,6 +113,7 @@ export class ShowClubInvitesModal extends Component {
                             {inviteClub.description ?
                               <>
                                 {this.limitDescription(inviteClub.description)}
+                                <br />
                                 <Button className='mt-3' variant='success' onClick={() => this.acceptInvite(inviteClub)}>
                                   Accept Invite
                                 </Button>
@@ -120,6 +121,7 @@ export class ShowClubInvitesModal extends Component {
                               :
                               <>
                                 No provided description
+                                <br />
                                 <Button className='mt-3' variant='success' onClick={() => this.acceptInvite(inviteClub)}>
                                   Accept Invite
                                 </Button>
