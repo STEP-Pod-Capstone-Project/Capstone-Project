@@ -23,6 +23,12 @@ export class MyBooks extends Component {
       .catch(e => console.log(e))
   }
 
+  deleteReadBook = (gbookID) => {
+    // Remove read book without refetching the entire page of books
+    const readBooks = this.state.books.filter(book => book.id !== gbookID);
+    this.setState({ books: readBooks });
+  }
+
   componentDidMount() {
     this._isMounted = true;
     this.setState({ loading: true });
@@ -38,7 +44,9 @@ export class MyBooks extends Component {
       location='search'
       bookLists={this.props.bookLists}
       updateBookLists={this.props.updateBookLists}
-      key={b.id} />)
+      deleteReadBook={this.deleteReadBook}
+      key={b.id}
+      />)
       : <p> You haven't read any books yet, better start reading! </p>
     return (
       <>

@@ -28,8 +28,13 @@ class BookSearchTile extends Component {
 
   markUnread = () => {
     fetch(`/api/books?id=${this.state.bookObject.id}`, {method: 'delete'})
-        .then(this.setState({hasRead: false, bookObject: {}}))
-        .catch(e => console.log(e));
+        .then(() => this.setState({hasRead: false, bookObject: {}}))
+        .catch(e => console.error(e));
+
+    // Remove book from MyBooks state if on that page
+    if (this.props.deleteReadBook && window.location.pathname.includes('/myreads')) {
+      this.props.deleteReadBook(this.state.bookObject.id);
+    }
   }
 
   componentDidMount() {
