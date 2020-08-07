@@ -88,9 +88,8 @@ class ClubPage extends Component {
     fetch(`/api/meetings?clubID=${club.id}`)
       .then(response => response.json())
       .then(meetings => this.setState({ meetings }))
+      .then(this.setState({ fetchData: false }))
       .catch(e => console.error(e));
-
-    this.setState({ fetchData: false });
   }
 
   handleAssignmentPost = (e) => {
