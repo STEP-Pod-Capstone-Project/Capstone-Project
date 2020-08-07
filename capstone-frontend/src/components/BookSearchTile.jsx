@@ -32,7 +32,7 @@ class BookSearchTile extends Component {
         .catch(e => console.error(e));
 
     // Remove book from MyBooks state if on that page
-    if (this.props.deleteReadBook && window.location.pathname.includes('/myreads')) {
+    if (this.props.deleteReadBook && window.location.pathname.includes('/mybooks')) {
       this.props.deleteReadBook(this.state.bookObject.id);
     }
   }
