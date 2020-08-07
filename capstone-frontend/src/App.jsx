@@ -77,9 +77,14 @@ class App extends Component {
   }
 
   toggleSignIn = () => {
-    this.setState({ isSignedIn: !this.state.isSignedIn })
-  }
+    this.setState({ isSignedIn: !this.state.isSignedIn });
 
+    if (this.state.isSignedIn) {
+      this.fetchBookLists();
+      this.fetchCollabBookLists();
+      this.fetchUserFriends();
+    }
+  }
 
   render() {
     return (
