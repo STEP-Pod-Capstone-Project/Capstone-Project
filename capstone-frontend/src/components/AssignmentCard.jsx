@@ -83,10 +83,10 @@ class AssignmentCard extends Component {
         {this.state.comments.map(c => <CommentCard key={c.id} comment={c} />)}
         <Form id="comment-form" onSubmit={this.onComment}>
           <Form.Group as={Row} controlId="formComment">
-            <Col xs={{ "offset": 1, "span": 9 }}>
+            <Col xs={{ "offset": 1, "span": 7 }}>
               <Form.Control type="text" placeholder="Enter a comment..." />
             </Col>
-            <Col xs={1}>
+            <Col>
               <Button variant="primary" type="Submit"> Post </Button>
             </Col>
           </Form.Group>
