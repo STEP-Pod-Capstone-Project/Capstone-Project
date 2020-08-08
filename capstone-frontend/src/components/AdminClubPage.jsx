@@ -109,7 +109,6 @@ class AdminClubPage extends Component {
       recurrence: rrule,
       timezone: timezone,
     };
-    console.log('meeting', meeting)
     fetch('/api/meetings', { method: 'post', body: JSON.stringify(meeting) })
       .then(() => history.push(`/clubpage/${meeting.clubID}`))
       .catch(e => console.error(e));

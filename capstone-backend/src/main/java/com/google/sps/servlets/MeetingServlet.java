@@ -110,7 +110,6 @@ public class MeetingServlet extends HttpServlet {
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     JsonObject tokenObject = extractTokenFromFirestore(jsonObject.get("organizerID").getAsString());
     Event event = new Event();
-    System.out.println("Creating Calendar");
     Calendar service = createCalendar(tokenObject);
     Set<String> keySet = jsonObject.keySet();
     if (keySet.contains("summary")) {
