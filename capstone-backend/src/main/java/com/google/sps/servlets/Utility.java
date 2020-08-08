@@ -46,7 +46,7 @@ public class Utility {
     }
 
     FileInputStream serviceAccount = new FileInputStream(
-        "./book-book-app-firebase-adminsdk-bxss1-5f14a019be.json");
+        "./firebase-admin-service-account-key.json");
 
     FirebaseOptions options = new FirebaseOptions.Builder()
       .setCredentials(GoogleCredentials.fromStream(serviceAccount))
