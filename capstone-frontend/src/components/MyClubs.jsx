@@ -21,11 +21,11 @@ class MyClubs extends Component {
     let memberClubs = [];
     let ownerClubs = [];
     await Promise.all([
-      fetch(`/api/clubs?memberIDs=${window.localStorage.getItem('userID')}`)
+      fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?memberIDs=${window.localStorage.getItem('userID')}`)
         .then(response => response.json())
         .then(clubs => clubs.length ? memberClubs = clubs : this.setState({ fetchingClubs: false }))
         .catch(e => console.error(e)),
-      fetch(`/api/clubs?ownerID=${window.localStorage.getItem('userID')}`)
+      fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?ownerID=${window.localStorage.getItem('userID')}`)
         .then(response => response.json())
         .then(clubs => clubs.length ? ownerClubs = clubs : this.setState({ fetchingClubs: false }))
         .catch(e => console.error(e))

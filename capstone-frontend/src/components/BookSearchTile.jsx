@@ -27,7 +27,7 @@ class BookSearchTile extends Component {
   }
 
   markUnread = () => {
-    fetch(`/api/books?id=${this.state.bookObject.id}`, {method: 'delete'})
+    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/books?id=${this.state.bookObject.id}`, {method: 'delete'})
         .then(() => this.setState({hasRead: false, bookObject: {}}))
         .catch(e => console.error(e));
 
@@ -42,7 +42,7 @@ class BookSearchTile extends Component {
   }
 
   fetchBook = () => {
-    fetch(`/api/books?userID=${window.localStorage.getItem('userID')}&gbookID=${this.props.book.id}`)
+    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/books?userID=${window.localStorage.getItem('userID')}&gbookID=${this.props.book.id}`)
       .then(response => response.json()).then(books => {
         if (books.length === 1) {
           this.setState({hasRead: true, bookObject: books[0]});

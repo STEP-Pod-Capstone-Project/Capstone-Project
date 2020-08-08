@@ -14,7 +14,9 @@ class App extends Component {
       bookLists: [],
       collabBookLists: [],
       userFriends: [],
-      isSignedIn: ((window.localStorage.getItem("userID")) && (Date.now() < JSON.parse(window.localStorage.getItem('token')).expires_at)) ? true : false,
+      isSignedIn: ((window.localStorage.getItem("userID")) &&
+        JSON.parse(window.localStorage.getItem('token')) &&
+        (Date.now() < JSON.parse(window.localStorage.getItem('token')).expires_at)) ? true : false,
     };
   }
 
@@ -28,7 +30,7 @@ class App extends Component {
 
     const userID = window.localStorage.getItem("userID");
 
-    let bookLists = await fetch(`/api/booklist?userID=${userID}`, {
+    let bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`, {
       method: "GET",
     }).then(resp => resp.json()).catch(err => console.log(err));
 
@@ -43,7 +45,7 @@ class App extends Component {
 
     const userID = window.localStorage.getItem('userID');
 
-    let collabBookLists = await fetch(`/api/booklist?collaboratorsIDs=${userID}`, {
+    let collabBookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?collaboratorsIDs=${userID}`, {
       method: "GET",
     }).then(resp => resp.json())
       .catch(err => console.error(err));
@@ -57,11 +59,11 @@ class App extends Component {
 
   fetchUserFriends = () => {
     const userID = window.localStorage.getItem('userID');
-    fetch(`/api/user?id=${userID}`, {
+    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${userID}`, {
       method: 'GET',
     }).then(resp => resp.json())
       .then(user => user.friendIDs && Promise.all(user.friendIDs.map(friendID => {
-        return fetch(`/api/user?id=${friendID}`)
+        return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${friendID}`)
           .then(response => response.json())
       })))
       .then(friends => friends && this.setState({ userFriends: friends }))

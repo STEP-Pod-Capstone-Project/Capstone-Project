@@ -37,6 +37,11 @@ public class UserServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    response.setHeader("Access-Control-Allow-Methods", "GET");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
     try {
 
       JsonObject googleUserTokenObjJSON = Utility.createRequestBodyJson(request);
@@ -46,6 +51,7 @@ public class UserServlet extends HttpServlet {
       String access_token = googleUserTokenObjJSON.get("access_token").getAsString();
       String scope = googleUserTokenObjJSON.get("scope").getAsString();
       String idpId = googleUserTokenObjJSON.get("idpId").getAsString();
+      String expires_at = googleUserTokenObjJSON.get("expires_at").getAsString();
 
       User googleUser;
 
@@ -74,6 +80,7 @@ public class UserServlet extends HttpServlet {
               .put("scope", scope)
               .put("token_id", tokenId)
               .put("token_type", token_type)
+              .put("expires_at", expires_at)
               .build());
 
       } else {
@@ -95,6 +102,11 @@ public class UserServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    response.setHeader("Access-Control-Allow-Methods", "GET");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Origin",
+        "https://3000-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io");
 
     String userID = request.getParameter("id");
     Map<String, Object> user = new HashMap<>();

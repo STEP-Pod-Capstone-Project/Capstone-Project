@@ -21,7 +21,7 @@ class ListPage extends Component {
 
   fetchBooks = async () => {
 
-    const bookList = await fetch(`/api/booklist?id=${this.props.id}`, {
+    const bookList = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?id=${this.props.id}`, {
       method: "GET",
     }).then(resp => resp.json());
 
@@ -33,7 +33,7 @@ class ListPage extends Component {
     }
 
     const gBooks = await Promise.all(gbookIDs.map((gBookID) => {
-      return fetch(`/api/search?gbookId=${gBookID}`)
+      return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${gBookID}`)
         .then(response => response.json())
         .then(gBook => gBook[0]);
     }));
@@ -87,7 +87,7 @@ class ListPage extends Component {
     }
 
     // Remove BookList in Firebase
-    await fetch("/api/booklist", {
+    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
       method: "PUT",
       body: JSON.stringify(bookListUpdateJson)
     }).catch(e => console.log(e));

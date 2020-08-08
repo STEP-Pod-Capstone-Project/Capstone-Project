@@ -14,7 +14,7 @@ export class Browse extends Component {
   }
 
   getSearchedBooks = (searchQuery) => {
-    fetch(`/api/search?searchTerm=${searchQuery}`)
+    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?searchTerm=${searchQuery}`)
       .then(response => response.status === 200 ? response.json() : [])
       .then(searchedBooks => this._isMounted && this.setState({ searchedBooks, loading: false }))
       .catch(e => console.log(e));

@@ -52,7 +52,7 @@ export class Home extends Component {
     if (type === 'own') {
       this.setState({ fetchingClubsOwned: true });
 
-      let clubsOwned = await fetch(`/api/clubs?ownerID=${userID}`)
+      let clubsOwned = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?ownerID=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
 
@@ -63,7 +63,7 @@ export class Home extends Component {
     else if (type === 'shared') {
       this.setState({ fetchingClubsMember: true });
 
-      let clubsMember = await fetch(`/api/clubs?memberIDs=${userID}`)
+      let clubsMember = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?memberIDs=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
 
@@ -77,7 +77,7 @@ export class Home extends Component {
 
     return Promise.all(clubs.map(club => {
       if (club.gbookID.length > 0) {
-        return fetch(`/api/search?gbookId=${club.gbookID}`)
+        return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${club.gbookID}`)
           .then(response => response.json())
           .then(book => {
             club.bookTitle = book[0].title;
@@ -101,7 +101,7 @@ export class Home extends Component {
     if (type === 'own') {
       this.setState({ fetchingBookListsOwned: true });
 
-      bookLists = await fetch(`/api/booklist?userID=${userID}`)
+      bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
 
@@ -112,7 +112,7 @@ export class Home extends Component {
     else if (type === 'shared') {
       this.setState({ fetchingBookListsShared: true });
 
-      bookLists = await fetch(`/api/booklist?collaboratorsIDs=${userID}`)
+      bookLists = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?collaboratorsIDs=${userID}`)
         .then(resp => resp.json())
         .catch(err => console.log(err));
 
@@ -146,7 +146,7 @@ export class Home extends Component {
       }
 
       return Promise.all(bookIDs.map(gBookId => {
-        return fetch(`/api/search?gbookId=${gBookId}`)
+        return fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${gBookId}`)
           .then(resp => resp.json())
           .then(gBook => gBook[0]);
       }))

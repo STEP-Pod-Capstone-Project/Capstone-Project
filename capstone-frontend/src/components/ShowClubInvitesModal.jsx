@@ -23,7 +23,7 @@ export class ShowClubInvitesModal extends Component {
 
     this.setState({ fetchingInviteClubs: true });
 
-    const inviteRequestClubs = await fetch(`/api/clubs?inviteIDs=${window.localStorage.getItem("userID")}`)
+    const inviteRequestClubs = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?inviteIDs=${window.localStorage.getItem("userID")}`)
       .then(resp => resp.json())
       .catch(err => console.log(err));
 
@@ -47,7 +47,7 @@ export class ShowClubInvitesModal extends Component {
       add_memberIDs: userID,
     }
 
-    fetch("/api/clubs", {
+    fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs", {
       method: 'PUT',
       body: JSON.stringify(inviteClubUpdateJson),
     });

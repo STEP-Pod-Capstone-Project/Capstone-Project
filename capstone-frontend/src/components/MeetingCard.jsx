@@ -11,7 +11,7 @@ export class MeetingCard extends Component {
       token: JSON.parse(window.localStorage.getItem('token')),
       eventID: this.props.meeting.eventID,
     };
-    fetch(`/api/meetings?id=${this.props.meeting.id}`, { method: 'delete', body: JSON.stringify(deleteToken) })
+    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/meetings?id=${this.props.meeting.id}`, { method: 'delete', body: JSON.stringify(deleteToken) })
       .then(this.props.deleteMeeting(this.props.meeting.id))
       .catch(e => console.log(e));
   }
