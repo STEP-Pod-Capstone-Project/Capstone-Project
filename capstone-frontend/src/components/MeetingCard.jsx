@@ -8,7 +8,7 @@ import '../styles/Groups.css';
 export class MeetingCard extends Component {
   deleteMeeting = () => {
     const deleteToken = {
-      userID: window.localStorage.getItem('userID'),
+      organizerID: window.localStorage.getItem('userID'),
       eventID: this.props.meeting.eventID,
     };
     fetch(`/api/meetings?id=${this.props.meeting.id}`, { method: 'delete', body: JSON.stringify(deleteToken) })

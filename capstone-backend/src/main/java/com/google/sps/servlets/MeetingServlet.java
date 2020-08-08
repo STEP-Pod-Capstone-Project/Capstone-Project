@@ -58,9 +58,11 @@ public class MeetingServlet extends HttpServlet {
     return new Credential(BearerToken.authorizationHeaderAccessMethod()).setFromTokenResponse(tokenResponse);
   }
 
-  public Calendar createCalendar(JsonObject jsonObject) {
+  public Calendar createCalendar(JsonObject tokenJson) {
     TokenResponse token = new TokenResponse();
-    JsonObject tokenJson = jsonObject.get("token").getAsJsonObject();
+    System.out.println("Token JSON\t" + tokenJson.toString() + "\t" + tokenJson.get("access_token").getAsString() + "\t"
+        + tokenJson.get("access_token").toString());
+
     token.setAccessToken(tokenJson.get("access_token").getAsString());
     token.setTokenType(tokenJson.get("token_type").getAsString());
     token.setScope(tokenJson.get("scope").getAsString());
@@ -81,17 +83,17 @@ public class MeetingServlet extends HttpServlet {
 
       Map<String, Object> user = document.getData();
 
-      System.out.println("Token Object:\t" + user.get("tokenObj").toString());
+      // Delete '{}'
+      StringBuilder tokenString = new StringBuilder(user.get("tokenObj").toString());
+      tokenString.deleteCharAt(0);
+      tokenString.deleteCharAt(tokenString.length() - 1);
 
-      Map<String, String> tokenMap = Arrays.stream(user.get("tokenObj").toString().split(",")).map(s -> s.split("="))
-          .collect(Collectors.toMap(s -> s[0], s -> s[1]));
+      Map<String, String> tokenMap = Arrays.stream(tokenString.toString().split(",")).map(s -> s.split("="))
+          .collect(Collectors.toMap(s -> s[0].replaceAll("\\s", ""), s -> s[1]));
 
-      System.out.println("TOKEN MAP:\t" + Joiner.on(",").withKeyValueSeparator("=").join(tokenMap));
-
-      tokenObject.addProperty("access_token", tokenMap.get("access_token"));
-      tokenObject.addProperty("token_type", tokenMap.get("token_type"));
-      tokenObject.addProperty("scope", tokenMap.get("scope"));
-      tokenObject.addProperty("expires_in", tokenMap.get("expires_in"));
+      for (String key : tokenMap.keySet()) {
+        tokenObject.addProperty(key, tokenMap.get(key));
+      }
 
     } catch (ExecutionException | InterruptedException e) {
       System.err.println("Error:\t" + e.getMessage());
@@ -114,7 +116,7 @@ public class MeetingServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
-    JsonObject tokenObject = extractTokenFromFirestore(jsonObject.get("userID").getAsString());
+    JsonObject tokenObject = extractTokenFromFirestore(jsonObject.get("organizerID").getAsString());
     Event event = new Event();
     System.out.println("Creating Calendar");
     Calendar service = createCalendar(tokenObject);
@@ -191,7 +193,7 @@ public class MeetingServlet extends HttpServlet {
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Utility.delete(meetings, request, response);
     JsonObject deleteBody = Utility.createRequestBodyJson(request);
-    JsonObject tokenObject = extractTokenFromFirestore(deleteBody.get("tokenObject").getAsString());
+    JsonObject tokenObject = extractTokenFromFirestore(deleteBody.get("organizerID").getAsString());
     Calendar service = createCalendar(tokenObject);
     if (deleteBody.keySet().contains("eventID")) {
       service.events().delete("primary", deleteBody.get("eventID").getAsString()).execute();

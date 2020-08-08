@@ -6,6 +6,7 @@ import java.util.List;
 public class Meeting extends BaseEntity {
   private final String eventID;
   private final String clubID;
+  private final String organizerID;
   private String summary;
   private String location;
   private String description;
@@ -16,12 +17,13 @@ public class Meeting extends BaseEntity {
   private String recurrence;
   private String timezone; 
 
-  public Meeting(String eventID, String clubID, String summary, String location,
+  public Meeting(String eventID, String clubID, String organizerID, String summary, String location,
       String description, String startDateTime, String endDateTime, 
       List<String> attendeeEmails, String organizerEmail, String recurrence, 
       String timezone) {
     this.eventID = eventID;
     this.clubID = clubID;
+    this.organizerID = organizerID;
     this.summary = summary;
     this.location = location;
     this.description = description;
@@ -33,13 +35,13 @@ public class Meeting extends BaseEntity {
     this.timezone = timezone;
   }
 
-  public Meeting(String eventID, String clubID, String summary, String startDateTime, 
+  public Meeting(String eventID, String clubID, String organizerID, String summary, String startDateTime, 
       String endDateTime, List<String> attendeeEmails, String organizerEmail) {
-    this(eventID, clubID, summary, "", "", startDateTime, endDateTime, attendeeEmails, organizerEmail, "", "");    
+    this(eventID, clubID, organizerID, summary, "", "", startDateTime, endDateTime, attendeeEmails, organizerEmail, "", "");    
   }
 
   public Meeting() {
-    this("", "", "", "", "", new ArrayList<>(), "");
+    this("", "", "", "", "", "", new ArrayList<>(), "");
   }
 
   public String getEventID() {
@@ -48,6 +50,10 @@ public class Meeting extends BaseEntity {
 
   public String getClubID() {
     return clubID;
+  }
+
+  public String getOrganizerID() {
+    return organizerID;
   }
 
   public String getSummary() {
