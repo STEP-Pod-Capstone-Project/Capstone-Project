@@ -16,11 +16,9 @@ import com.google.api.services.calendar.model.EventReminder;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
-import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import com.google.sps.data.Meeting;
@@ -29,7 +27,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,9 +57,6 @@ public class MeetingServlet extends HttpServlet {
 
   public Calendar createCalendar(JsonObject tokenJson) {
     TokenResponse token = new TokenResponse();
-    System.out.println("Token JSON\t" + tokenJson.toString() + "\t" + tokenJson.get("access_token").getAsString() + "\t"
-        + tokenJson.get("access_token").toString());
-
     token.setAccessToken(tokenJson.get("access_token").getAsString());
     token.setTokenType(tokenJson.get("token_type").getAsString());
     token.setScope(tokenJson.get("scope").getAsString());

@@ -14,9 +14,7 @@ class App extends Component {
       bookLists: [],
       collabBookLists: [],
       userFriends: [],
-      isSignedIn: ((window.localStorage.getItem("userID")) &&
-        JSON.parse(window.localStorage.getItem('token')) &&
-        (Date.now() < JSON.parse(window.localStorage.getItem('token')).expires_at)) ? true : false,
+      isSignedIn: ((window.localStorage.getItem("userID")) && (Date.now() < window.localStorage.getItem('tokenExpiration'))) ? true : false,
     };
   }
 
