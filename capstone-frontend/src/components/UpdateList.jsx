@@ -32,7 +32,7 @@ class UpdateList extends Component {
     // Update title in the ListPage
     this.props.updateBookListTitle(this.state.newName);
 
-    await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist`, {
+    await fetch(`/api/booklist`, {
       method: 'PUT',
       body: JSON.stringify(updatedBookListJson)
     })

@@ -8,10 +8,10 @@ import '../styles/Groups.css';
 export class MeetingCard extends Component {
   deleteMeeting = () => {
     const deleteToken = {
-      token: JSON.parse(window.localStorage.getItem('token')),
+      userID: window.localStorage.getItem('userID'),
       eventID: this.props.meeting.eventID,
     };
-    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/meetings?id=${this.props.meeting.id}`, { method: 'delete', body: JSON.stringify(deleteToken) })
+    fetch(`/api/meetings?id=${this.props.meeting.id}`, { method: 'delete', body: JSON.stringify(deleteToken) })
       .then(this.props.deleteMeeting(this.props.meeting.id))
       .catch(e => console.log(e));
   }

@@ -14,7 +14,9 @@ import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.EventReminder;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -26,8 +28,11 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import javax.servlet.annotation.WebServlet;
@@ -66,10 +71,37 @@ public class MeetingServlet extends HttpServlet {
     return service;
   }
 
+  private JsonObject extractTokenFromFirestore(String userID) {
+
+    Map<String, Object> user = new HashMap<>();
+
+    try {
+
+      DocumentSnapshot document = db.collection("users").document(userID).get().get();
+
+      user = document.getData();
+
+      System.out.println(Joiner.on(",").withKeyValueSeparator("=").join(user));
+
+    } catch(ExecutionException | InterruptedException e) {
+      System.err.println("Error:\t" + e.getMessage());
+    }
+
+    JsonObject tokenObject = new JsonObject();
+
+    tokenObject.addProperty("access_token", user.get("access_token").toString());
+    tokenObject.addProperty("token_type", user.get("token_type").toString());
+    tokenObject.addProperty("scope", user.get("scope").toString());
+    tokenObject.addProperty("expires_in", user.get("expires_in").toString());
+
+    return tokenObject;
+  }
+
 
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     List<Meeting> retrievedMeetings = Utility.get(meetings, request, response, new GenericClass(Meeting.class));
     if (retrievedMeetings != null) {
       response.setContentType("application/json;");
@@ -79,9 +111,12 @@ public class MeetingServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
+    JsonObject tokenObject = extractTokenFromFirestore(jsonObject.get("userID").getAsString());
     Event event = new Event();
-    Calendar service = createCalendar(jsonObject);
+    System.out.println("Creating Calendar");
+    Calendar service = createCalendar(tokenObject);
     Set<String> keySet = jsonObject.keySet();
     if (keySet.contains("summary")) {
       event.setSummary(jsonObject.get("summary").getAsString());
@@ -156,7 +191,8 @@ public class MeetingServlet extends HttpServlet {
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Utility.delete(meetings, request, response);
     JsonObject deleteBody = Utility.createRequestBodyJson(request);
-    Calendar service = createCalendar(deleteBody);
+    JsonObject tokenObject = extractTokenFromFirestore(deleteBody.get("tokenObject").getAsString());
+    Calendar service = createCalendar(tokenObject);
     if (deleteBody.keySet().contains("eventID")) {
       service.events().delete("primary", deleteBody.get("eventID").getAsString()).execute();
     }

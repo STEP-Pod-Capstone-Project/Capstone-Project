@@ -43,7 +43,7 @@ class ClubPage extends Component {
 
   fetchData = async () => {
     this.setState({ fetchData: true });
-    const club = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/clubs?id=${this.props.id}`)
+    const club = await fetch(`/api/clubs?id=${this.props.id}`)
       .then(response => response.json()).then(clubJson => clubJson[0])
       .catch(function (err) {
         //TODO #61: Centralize error output
@@ -64,28 +64,28 @@ class ClubPage extends Component {
     }
 
     if (club.gbookID.length > 0) {
-      fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${this.state.club.gbookID}`)
+      fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
         .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
         .catch(e => console.error(e));
     }
-    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/assignments?clubID=${club.id}`)
+    fetch(`/api/assignments?clubID=${club.id}`)
       .then(response => response.json()).then(assignmentJson => this.setState({ assignments: assignmentJson }))
       .catch(e => console.error(e));
 
-    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${club.ownerID}`)
+    fetch(`/api/user?id=${club.ownerID}`)
       .then(response => response.json()).then(ownerJson => this.setState({ owner: ownerJson }))
       .catch(e => console.error(e));
 
     let members = [];
     Promise.all(club.memberIDs.map(m =>
-      fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/user?id=${m}`)
+      fetch(`/api/user?id=${m}`)
         .then(response => response.json())
         .then(member => members.push(member))
         .catch(e => console.error(e))
     ))
       .then(this.setState({ members }));
 
-    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/meetings?clubID=${club.id}`)
+    fetch(`/api/meetings?clubID=${club.id}`)
       .then(response => response.json())
       .then(meetings => this.setState({ meetings }))
       .then(this.setState({ fetchData: false }))
@@ -105,7 +105,7 @@ class ClubPage extends Component {
       whenCreated: (new Date()).toUTCString(),
       whenDue: dueDate,
     };
-    fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/assignments`, { method: 'post', body: JSON.stringify(data) })
+    fetch(`/api/assignments`, { method: 'post', body: JSON.stringify(data) })
       .then(response => response.json())
       .then(assignmentJson => {
         let assignments = this.state.assignments;
@@ -119,7 +119,7 @@ class ClubPage extends Component {
     let club = this.state.club;
     club.gbookID = gbookID;
     this.setState({ club });
-    await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?gbookId=${this.state.club.gbookID}`)
+    await fetch(`/api/search?gbookId=${this.state.club.gbookID}`)
       .then(response => response.json()).then(bookJson => this.setState({ book: bookJson[0] }))
       .catch(e => console.error(e));
   }

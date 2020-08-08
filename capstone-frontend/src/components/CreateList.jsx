@@ -55,7 +55,7 @@ class CreateList extends Component {
       this.setState({ searchResults, displayBooks: false, fetchingBooks: false })
     }
     else {
-      fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
+      fetch(`/api/search?searchTerm=${searchTerm}&maxResults=${4}`)
         .then(response => response.status === 200 ? response.json() : [])
         .then(searchResults => {
           this.setState({ searchResults, displayBooks: true, fetchingBooks: false })
@@ -117,12 +117,12 @@ class CreateList extends Component {
     }
 
     // Store BookList in Firebase
-    await fetch("https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist", {
+    await fetch("/api/booklist", {
       method: "POST",
       body: JSON.stringify(newBooklist)
     });
 
-    const createdBookList = await fetch(`https://8080-bbaec244-5a54-4467-aed6-91c386e88c1a.ws-us02.gitpod.io/api/booklist?userID=${userID}&name=${name}`, {
+    const createdBookList = await fetch(`/api/booklist?userID=${userID}&name=${name}`, {
       method: "GET",
     }).then(resp => resp.json());
 
