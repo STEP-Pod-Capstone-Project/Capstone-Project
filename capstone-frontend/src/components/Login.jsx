@@ -14,7 +14,7 @@ export class Login extends Component {
     });
 
     window.localStorage.setItem('userID', response.profileObj.googleId);
-    window.localStorage.setItem('tokenExpiration', Number(response.tokenObj.expires_at));
+    window.localStorage.setItem('tokenExpiration', response.tokenObj.expires_at);
     window.localStorage.setItem('profileObj', JSON.stringify(response.profileObj));
 
     this.props.toggleSignIn();
