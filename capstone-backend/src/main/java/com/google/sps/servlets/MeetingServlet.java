@@ -20,6 +20,7 @@ import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import com.google.sps.data.Meeting;
@@ -54,8 +55,7 @@ public class MeetingServlet extends HttpServlet {
 
   private static Credential createCredential(HttpTransport transport, JsonFactory jsonFactory,
       TokenResponse tokenResponse) {
-    return new Credential(BearerToken.authorizationHeaderAccessMethod())
-                  .setFromTokenResponse(tokenResponse);
+    return new Credential(BearerToken.authorizationHeaderAccessMethod()).setFromTokenResponse(tokenResponse);
   }
 
   public Calendar createCalendar(JsonObject jsonObject) {
@@ -73,31 +73,32 @@ public class MeetingServlet extends HttpServlet {
 
   private JsonObject extractTokenFromFirestore(String userID) {
 
-    Map<String, Object> user = new HashMap<>();
+    JsonObject tokenObject = new JsonObject();
 
     try {
 
       DocumentSnapshot document = db.collection("users").document(userID).get().get();
 
-      user = document.getData();
+      Map<String, Object> user = document.getData();
 
-      System.out.println(Joiner.on(",").withKeyValueSeparator("=").join(user));
+      System.out.println("Token Object:\t" + user.get("tokenObj").toString());
 
-    } catch(ExecutionException | InterruptedException e) {
+      Map<String, String> tokenMap = Arrays.stream(user.get("tokenObj").toString().split(",")).map(s -> s.split("="))
+          .collect(Collectors.toMap(s -> s[0], s -> s[1]));
+
+      System.out.println("TOKEN MAP:\t" + Joiner.on(",").withKeyValueSeparator("=").join(tokenMap));
+
+      tokenObject.addProperty("access_token", tokenMap.get("access_token"));
+      tokenObject.addProperty("token_type", tokenMap.get("token_type"));
+      tokenObject.addProperty("scope", tokenMap.get("scope"));
+      tokenObject.addProperty("expires_in", tokenMap.get("expires_in"));
+
+    } catch (ExecutionException | InterruptedException e) {
       System.err.println("Error:\t" + e.getMessage());
     }
 
-    JsonObject tokenObject = new JsonObject();
-
-    tokenObject.addProperty("access_token", user.get("access_token").toString());
-    tokenObject.addProperty("token_type", user.get("token_type").toString());
-    tokenObject.addProperty("scope", user.get("scope").toString());
-    tokenObject.addProperty("expires_in", user.get("expires_in").toString());
-
     return tokenObject;
   }
-
-
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -130,22 +131,21 @@ public class MeetingServlet extends HttpServlet {
     if (keySet.contains("startDateTime")) {
       long startDateTime = jsonObject.get("startDateTime").getAsLong();
       DateTime dateTime = new DateTime(startDateTime);
-      EventDateTime start = new EventDateTime()
-                              .setDateTime(dateTime)
-                              .setTimeZone(jsonObject.get("timezone").getAsString());
+      EventDateTime start = new EventDateTime().setDateTime(dateTime)
+          .setTimeZone(jsonObject.get("timezone").getAsString());
       event.setStart(start);
     }
     if (keySet.contains("endDateTime")) {
       long endDateTime = jsonObject.get("endDateTime").getAsLong();
       DateTime dateTime = new DateTime(endDateTime);
-      EventDateTime end = new EventDateTime()
-                          .setDateTime(dateTime)
-                          .setTimeZone(jsonObject.get("timezone").getAsString());
+      EventDateTime end = new EventDateTime().setDateTime(dateTime)
+          .setTimeZone(jsonObject.get("timezone").getAsString());
       event.setEnd(end);
     }
     if (keySet.contains("attendeeEmails")) {
       JsonArray jsonArray = jsonObject.get("attendeeEmails").getAsJsonArray();
-      Type listType = new TypeToken<List<String>>() {}.getType();
+      Type listType = new TypeToken<List<String>>() {
+      }.getType();
       List<String> attendeeEmails = gson.fromJson(jsonArray, listType);
       event
           .setAttendees(attendeeEmails.stream().map(e -> new EventAttendee().setEmail(e)).collect(Collectors.toList()));
@@ -162,7 +162,7 @@ public class MeetingServlet extends HttpServlet {
     }
     event.setOrganizer(organizer);
     if (keySet.contains("recurrence") && jsonObject.get("recurrence").getAsString().length() > 0) {
-      String[] recurrence = new String[] {jsonObject.get("recurrence").getAsString()};
+      String[] recurrence = new String[] { jsonObject.get("recurrence").getAsString() };
       event.setRecurrence(Arrays.asList(recurrence));
     }
     String calendarId = "primary";
@@ -170,8 +170,8 @@ public class MeetingServlet extends HttpServlet {
     String eventID = event.getId();
     jsonObject.addProperty("eventID", eventID);
     List<String> requiredFields = new ArrayList<String>(Arrays.asList("clubID", "startDateTime", "endDateTime"));
-    Meeting createdMeeting = (Meeting) Utility.postHelper(meetings, jsonObject, response, new GenericClass(Meeting.class),
-        requiredFields);
+    Meeting createdMeeting = (Meeting) Utility.postHelper(meetings, jsonObject, response,
+        new GenericClass(Meeting.class), requiredFields);
     if (createdMeeting != null) {
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(createdMeeting));
@@ -195,8 +195,7 @@ public class MeetingServlet extends HttpServlet {
     Calendar service = createCalendar(tokenObject);
     if (deleteBody.keySet().contains("eventID")) {
       service.events().delete("primary", deleteBody.get("eventID").getAsString()).execute();
-    }
-    else {
+    } else {
       System.err.println("Error: No eventID supplied");
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
