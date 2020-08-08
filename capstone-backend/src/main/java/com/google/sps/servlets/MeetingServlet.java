@@ -98,7 +98,6 @@ public class MeetingServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     List<Meeting> retrievedMeetings = Utility.get(meetings, request, response, new GenericClass(Meeting.class));
     if (retrievedMeetings != null) {
       response.setContentType("application/json;");
@@ -108,7 +107,6 @@ public class MeetingServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     JsonObject jsonObject = Utility.createRequestBodyJson(request);
     JsonObject tokenObject = extractTokenFromFirestore(jsonObject.get("organizerID").getAsString());
     Event event = new Event();
@@ -127,21 +125,22 @@ public class MeetingServlet extends HttpServlet {
     if (keySet.contains("startDateTime")) {
       long startDateTime = jsonObject.get("startDateTime").getAsLong();
       DateTime dateTime = new DateTime(startDateTime);
-      EventDateTime start = new EventDateTime().setDateTime(dateTime)
-          .setTimeZone(jsonObject.get("timezone").getAsString());
+      EventDateTime start = new EventDateTime()
+                              .setDateTime(dateTime)
+                              .setTimeZone(jsonObject.get("timezone").getAsString());
       event.setStart(start);
     }
     if (keySet.contains("endDateTime")) {
       long endDateTime = jsonObject.get("endDateTime").getAsLong();
       DateTime dateTime = new DateTime(endDateTime);
-      EventDateTime end = new EventDateTime().setDateTime(dateTime)
-          .setTimeZone(jsonObject.get("timezone").getAsString());
+      EventDateTime end = new EventDateTime()
+                            .setDateTime(dateTime)
+                            .setTimeZone(jsonObject.get("timezone").getAsString());
       event.setEnd(end);
     }
     if (keySet.contains("attendeeEmails")) {
       JsonArray jsonArray = jsonObject.get("attendeeEmails").getAsJsonArray();
-      Type listType = new TypeToken<List<String>>() {
-      }.getType();
+      Type listType = new TypeToken<List<String>>() {}.getType();
       List<String> attendeeEmails = gson.fromJson(jsonArray, listType);
       event
           .setAttendees(attendeeEmails.stream().map(e -> new EventAttendee().setEmail(e)).collect(Collectors.toList()));
