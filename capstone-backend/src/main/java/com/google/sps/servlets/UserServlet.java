@@ -116,6 +116,7 @@ public class UserServlet extends HttpServlet {
     try {
       DocumentSnapshot document = db.collection("users").document(userID).get().get();
       user = document.getData();
+      user.remove("tokenObj");
 
     } catch (ExecutionException | InterruptedException e) {
       System.err.println("Error:\t" + e.getMessage());
