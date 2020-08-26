@@ -46,6 +46,9 @@ public class UserServlet extends HttpServlet {
       String access_token = googleUserTokenObjJSON.get("access_token").getAsString();
       String scope = googleUserTokenObjJSON.get("scope").getAsString();
       String idpId = googleUserTokenObjJSON.get("idpId").getAsString();
+      String expires_at = googleUserTokenObjJSON.get("expires_at").getAsString();
+      String expires_in = googleUserTokenObjJSON.get("expires_in").getAsString();
+      String first_issued_at = googleUserTokenObjJSON.get("first_issued_at").getAsString();
 
       User googleUser;
 
@@ -74,6 +77,9 @@ public class UserServlet extends HttpServlet {
               .put("scope", scope)
               .put("token_id", tokenId)
               .put("token_type", token_type)
+              .put("expires_at", expires_at)
+              .put("expires_in", expires_in)
+              .put("first_issued_at", first_issued_at)
               .build());
 
       } else {
@@ -110,6 +116,7 @@ public class UserServlet extends HttpServlet {
     try {
       DocumentSnapshot document = db.collection("users").document(userID).get().get();
       user = document.getData();
+      user.remove("tokenObj");
 
     } catch (ExecutionException | InterruptedException e) {
       System.err.println("Error:\t" + e.getMessage());

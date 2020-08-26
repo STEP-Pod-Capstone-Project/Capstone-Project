@@ -13,7 +13,6 @@ export class Logout extends Component {
 
   logoutResponseSuccess = () => {
     window.localStorage.removeItem("userID");
-    window.localStorage.removeItem("token");
     window.localStorage.removeItem("profileObj");
     this.props.toggleSignIn();
     this.setState({ profileObj: {} });

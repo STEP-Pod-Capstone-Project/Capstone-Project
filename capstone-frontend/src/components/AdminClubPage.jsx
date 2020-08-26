@@ -97,7 +97,7 @@ class AdminClubPage extends Component {
       rrule = '';
     }
     const meeting = {
-      token: JSON.parse(window.localStorage.getItem('token')),
+      organizerID: window.localStorage.getItem('userID'),
       clubID: this.props.id,
       summary: e.target.summary.value,
       location: e.target.location.value,
